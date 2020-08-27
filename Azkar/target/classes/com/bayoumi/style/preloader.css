@@ -1,0 +1,22 @@
+.root{
+    -fx-background-color: #141e2a;
+}
+.jfx-progress-bar > .track {
+    -fx-background-color: #1e2b3c;
+}
+
+.jfx-progress-bar > .bar {
+    -fx-background-color: #95ccff;
+}
+
+
+/*.progress-bar > .bar {
+    -fx-background-color: linear-gradient(
+        from 0px .75em to .75em 0px,
+        repeat,
+        -fx-accent 0%,
+        -fx-accent 49%,
+        derive(-fx-accent, 30%) 50%,
+        derive(-fx-accent, 30%) 99%
+    );
+}*/
