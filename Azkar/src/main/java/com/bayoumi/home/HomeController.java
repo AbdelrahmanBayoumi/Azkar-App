@@ -1,21 +1,28 @@
 package com.bayoumi.home;
 
+import com.bayoumi.util.notfication.Notification;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeController implements Initializable {
+    int i = 0;
     @FXML
     private StackPane sp;
     @FXML
@@ -31,19 +38,42 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        sp.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener((observable, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        Stage window = (Stage) newWindow;
+//                        window.setOnCloseRequest(event -> {
+//                            System.exit(0);
+//                        });
+                        Timer timer = new Timer();
+                        TimerTask myTask = new TimerTask() {
+                            @Override
+                            public void run() {
+
+                                Platform.runLater(() -> {
+                                    Notification.create(window,
+                                            "اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد",
+                                            new Image("/com/bayoumi/images/icons8_basilica_50px.png"));
+                                });
+                            }
+                        };
+
+                        timer.schedule(myTask, 2000, (long) 200000);
+                        System.out.println(444);
+                    }
+                });
+            }
+        });
     }
+
 
     @FXML
     private void goToMorningAzkar(ActionEvent event) {
-//        System.out.println(frequencyLabel.getFont());
-//        frequencyLabel.setFont(Font.font("System", FontWeight.BOLD, frequencyLabel.getFont().getSize() * 1.5 > 90 ? frequencyLabel.getFont().getSize() : frequencyLabel.getFont().getSize() * 1.5));
     }
 
     @FXML
     private void goToNightAzkar(ActionEvent event) {
-//        System.out.println(frequencyLabel.getFont());
-//        frequencyLabel.setFont(Font.font("System", FontWeight.BOLD, frequencyLabel.getFont().getSize() * (2 / 3.0) < 11 ? frequencyLabel.getFont().getSize() : frequencyLabel.getFont().getSize() * (2 / 3.0)));
-//        frequencyLabel.setFont(Font.font("System", FontWeight.BOLD, frequencyLabel.getFont().getSize() * (2 / 3.0) < 11 ? frequencyLabel.getFont().getSize() : frequencyLabel.getFont().getSize() * (2 / 3.0)));
     }
 
     @FXML
@@ -62,6 +92,10 @@ public class HomeController implements Initializable {
 
     @FXML
     private void goToSettings(ActionEvent event) {
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Notification.create(window,
+                "اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد",
+                new Image("/com/bayoumi/images/icons8_basilica_50px.png"));
     }
 
     @FXML

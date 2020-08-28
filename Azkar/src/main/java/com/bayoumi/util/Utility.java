@@ -1,11 +1,13 @@
 package com.bayoumi.util;
 
 import com.bayoumi.main.Launcher;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -32,6 +34,13 @@ public class Utility {
         };
         hashMap.put(kc1, rn1);
         scene.getAccelerators().putAll(hashMap);
+    }
+
+
+    public static void setStageToBottom(Stage s, double w, double h) {
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        s.setX(bounds.getWidth() - (w) - 30);
+        s.setY(bounds.getHeight() - (h) - 50);
     }
 
     public static void SetAppDecoration(Stage stage) {

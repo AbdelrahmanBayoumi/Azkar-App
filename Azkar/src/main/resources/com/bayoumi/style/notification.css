@@ -1,0 +1,44 @@
+* {
+    /* ====== Colors ====== */
+     -fx-red: #C91A29;
+
+}
+.parent-bg {
+    -fx-background-color: transparent;
+}
+
+.message-box {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);
+}
+/*=====Button =====*/
+.close-button-stage {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 20 0 0;
+-fx-text-fill:#ababab;
+-fx-font-size:11;
+-fx-font-weight:bold;
+}
+
+.close-button-stage:hover {
+    -fx-background-color: gray;
+	-fx-text-fill:white;
+}
+
+.close-button-stage .glyph-icon {
+    -fx-fill: white;
+    -fx-font-family: "FontAwesome";
+    -fx-font-size: 1.5em;
+}
+
+.close-button-stage:hover .glyph-icon {
+    -fx-fill: white;
+}
+/*========= message =========*/
+.message{
+-fx-fill:black;
+-fx-font-size:17;
+-fx-font-weight:bold;
+-fx-text-alignment: justify;
+}

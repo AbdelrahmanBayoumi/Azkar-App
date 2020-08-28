@@ -39,6 +39,7 @@
 /* ============ label ============ */
 .label {
     -fx-text-fill: -fx-primary-text;
+
 }
 
 .error-label {
