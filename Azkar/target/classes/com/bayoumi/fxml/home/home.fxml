@@ -28,14 +28,14 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 30 دقيقة">
+                              <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 15 دقيقة">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
                               <HBox alignment="CENTER" style="-fx-background-radius: 20; -fx-background-color: derive( -fx-secondary-text,-5%);">
                                  <children>
-                                    <JFXButton fx:id="highFrequency" focusTraversable="false" onAction="#highFrequencyAction" prefWidth="76.0" styleClass="frequency-btn-selected" text="عالي">
+                                    <JFXButton fx:id="highFrequency" focusTraversable="false" onAction="#highFrequencyAction" prefWidth="76.0" styleClass="frequency-btn" text="عالي">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
