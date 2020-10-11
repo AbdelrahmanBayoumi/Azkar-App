@@ -1,6 +1,7 @@
 package com.bayoumi.preloader;
 
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXProgressBar;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
@@ -38,6 +39,7 @@ public class CustomPreloader extends Preloader {
         preloaderStage.setOnCloseRequest((event) -> {
             System.exit(0);
         });
+        SingleInstance.getInstance().setCurrentStage(primaryStage);
     }
 
     @Override

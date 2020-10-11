@@ -2,19 +2,23 @@
 
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMouseDragged="#RootMouseDragged" onMousePressed="#RootMousePressed" prefHeight="360.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.preloader.SplashScreenController">
-   <ImageView fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Image url="@../../images/sky_stars_background_points_85061_1920x1200.jpg" />
+<AnchorPane onMouseDragged="#RootMouseDragged" onMousePressed="#RootMousePressed" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.preloader.SplashScreenController">
+   <ImageView pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Image url="@../../images/ryan-pradipta-putra-MWJ7JpFBlGk-unsplash.png" />
    </ImageView>
-   <JFXProgressBar fx:id="progressBarInstance" layoutX="51.0" layoutY="263.0" prefHeight="24.0" prefWidth="600.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-   <Label fx:id="progressLabel" text="Loading 0%" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
+   <JFXProgressBar fx:id="progressBarInstance" layoutX="51.0" layoutY="263.0" prefHeight="40.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+   <Label fx:id="progressLabel" layoutX="10.0" layoutY="451.0" text="Loading 0%" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
       <font>
          <Font name="Comic Sans MS Bold" size="15.0" />
       </font>
+      <effect>
+         <DropShadow height="10.0" radius="4.5" spread="0.95" width="10.0" />
+      </effect>
    </Label>
 </AnchorPane>

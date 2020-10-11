@@ -1,139 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.*?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<StackPane id="sp" fx:id="sp" nodeOrientation="RIGHT_TO_LEFT" stylesheets="@../../style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.home.HomeController">
-   <children>
-      <AnchorPane prefWidth="500.0" styleClass="root">
-         <children>
-            <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="49.0" prefHeight="291.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="49.0">
-               <content>
-                  <VBox alignment="TOP_CENTER" minHeight="289.0" minWidth="465.0" styleClass="root">
-                     <children>
-                        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);">
-                           <children>
-                              <Label text="معدل ظهور الأذكار">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 15 دقيقة">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER" style="-fx-background-radius: 20; -fx-background-color: derive( -fx-secondary-text,-5%);">
-                                 <children>
-                                    <JFXButton fx:id="highFrequency" focusTraversable="false" onAction="#highFrequencyAction" prefWidth="76.0" styleClass="frequency-btn" text="عالي">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </JFXButton>
-                                    <JFXButton fx:id="midFrequency" focusTraversable="false" onAction="#midFrequencyAction" prefWidth="76.0" styleClass="frequency-btn" text="متوسط">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </JFXButton>
-                                    <JFXButton fx:id="lowFrequency" focusTraversable="false" onAction="#lowFrequencyAction" prefWidth="76.0" styleClass="frequency-btn" text="منخفض">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </JFXButton>
-                                    <JFXButton fx:id="rearFrequency" focusTraversable="false" onAction="#rearFrequencyAction" prefWidth="76.0" styleClass="frequency-btn" text="نادر">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </JFXButton>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<StackPane id="sp" fx:id="sp" nodeOrientation="RIGHT_TO_LEFT" stylesheets="@../../style/style.css"
+           xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.bayoumi.home.HomeController">
+    <children>
+        <AnchorPane prefWidth="500.0" styleClass="root">
+            <children>
+                <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="49.0" prefHeight="291.0" styleClass="root"
+                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="49.0">
+                    <content>
+                        <VBox alignment="TOP_CENTER" minHeight="289.0" minWidth="465.0" styleClass="root">
+                            <children>
+                                <VBox alignment="CENTER" spacing="10.0"
+                                      style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);">
+                                    <children>
+                                        <Label text="معدل ظهور الأذكار">
+                                            <font>
+                                                <Font name="System Bold" size="20.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;"
+                                               text="ظهور كل 15 دقيقة">
+                                            <font>
+                                                <Font name="System Bold" size="15.0"/>
+                                            </font>
+                                        </Label>
+                                        <HBox alignment="CENTER"
+                                              style="-fx-background-radius: 20; -fx-background-color: derive( -fx-secondary-text,-5%);">
+                                            <children>
+                                                <JFXButton fx:id="highFrequency" focusTraversable="false"
+                                                           onAction="#highFrequencyAction" prefWidth="76.0"
+                                                           styleClass="frequency-btn" text="عالي">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0"/>
+                                                    </font>
+                                                </JFXButton>
+                                                <JFXButton fx:id="midFrequency" focusTraversable="false"
+                                                           onAction="#midFrequencyAction" prefWidth="76.0"
+                                                           styleClass="frequency-btn" text="متوسط">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0"/>
+                                                    </font>
+                                                </JFXButton>
+                                                <JFXButton fx:id="lowFrequency" focusTraversable="false"
+                                                           onAction="#lowFrequencyAction" prefWidth="76.0"
+                                                           styleClass="frequency-btn" text="منخفض">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0"/>
+                                                    </font>
+                                                </JFXButton>
+                                                <JFXButton fx:id="rearFrequency" focusTraversable="false"
+                                                           onAction="#rearFrequencyAction" prefWidth="76.0"
+                                                           styleClass="frequency-btn" text="نادر">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0"/>
+                                                    </font>
+                                                </JFXButton>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </padding>
+                                </VBox>
+                                <HBox alignment="CENTER" spacing="32.0">
+                                    <children>
+                                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0"
+                                                   onAction="#goToMorningAzkar" prefHeight="100.0" prefWidth="130.0"
+                                                   styleClass="box-noraml" text="أذكار الصباح">
+                                            <graphic>
+                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../images/icons8_sun_50px.png"/>
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <font>
+                                                <Font name="System Bold" size="15.0"/>
+                                            </font>
+                                        </JFXButton>
+                                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0"
+                                                   onAction="#goToNightAzkar" prefHeight="100.0" prefWidth="130.0"
+                                                   styleClass="box-noraml" text="أذكار المساء">
+                                            <graphic>
+                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../images/icons8_night_50px.png"/>
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <font>
+                                                <Font name="System Bold" size="15.0"/>
+                                            </font>
+                                        </JFXButton>
+                                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0"
+                                                   onAction="#goToPrayerTimes" prefHeight="100.0" prefWidth="130.0"
+                                                   styleClass="box-noraml" text="مواقيت الصلاة">
+                                            <graphic>
+                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../images/icons8_basilica_50px.png"/>
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <font>
+                                                <Font name="System Bold" size="15.0"/>
+                                            </font>
+                                        </JFXButton>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0"/>
+                                    </padding>
+                                </HBox>
+                            </children>
                         </VBox>
-                        <HBox alignment="CENTER" spacing="32.0">
-                           <children>
-                              <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" onAction="#goToMorningAzkar" prefHeight="100.0" prefWidth="130.0" styleClass="box-noraml" text="أذكار الصباح">
-                                 <graphic>
-                                    <ImageView pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/icons8_sun_50px.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXButton>
-                              <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" onAction="#goToNightAzkar" prefHeight="100.0" prefWidth="130.0" styleClass="box-noraml" text="أذكار المساء">
-                                 <graphic>
-                                    <ImageView pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/icons8_night_50px.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXButton>
-                              <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" onAction="#goToPrayerTimes" prefHeight="100.0" prefWidth="130.0" styleClass="box-noraml" text="مواقيت الصلاة">
-                                 <graphic>
-                                    <ImageView pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/icons8_basilica_50px.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXButton>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
+                    </content>
+                </ScrollPane>
+                <HBox alignment="CENTER_RIGHT" layoutX="294.0" layoutY="93.0"
+                      style="-fx-background-color: -fx-secondary-hover; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 20, 0, 0, 0);"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <HBox HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label alignment="CENTER" contentDisplay="TEXT_ONLY"
+                                       style="-fx-text-fill: -fx-secondary-text;" text="أذكار" wrapText="true">
+                                    <font>
+                                        <Font name="Arial Bold" size="34.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets bottom="5.0" left="20.0" right="20.0" top="5.0"/>
+                            </padding>
                         </HBox>
-                     </children>
-                  </VBox>
-               </content>
-            </ScrollPane>
-            <HBox alignment="CENTER_RIGHT" layoutX="294.0" layoutY="93.0" style="-fx-background-color: -fx-secondary-hover; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <HBox HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="TEXT_ONLY" style="-fx-text-fill: -fx-secondary-text;" text="أذكار" wrapText="true">
-                           <font>
-                              <Font name="Arial Bold" size="34.0" />
-                           </font>
+                        <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="TEXT_ONLY"
+                               style="-fx-text-fill: -fx-secondary-text;" text="00:00:00" wrapText="true">
+                            <font>
+                                <Font name="Arial Bold" size="20.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets right="30.0"/>
+                            </HBox.margin>
                         </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-                     </padding>
-                  </HBox>
-                  <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#goToSettings" styleClass="transparent-button">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="GEAR" size="30" style="-fx-fill: -fx-secondary-text;" />
-                     </graphic>
-                  </JFXButton>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
-   </children>
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#goToAzkar"
+                                   styleClass="transparent-button">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="BOOK" size="30" style="-fx-fill: -fx-secondary-text;"/>
+                            </graphic>
+                        </JFXButton>
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#goToSettings"
+                                   styleClass="transparent-button">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="GEAR" size="30" style="-fx-fill: -fx-secondary-text;"/>
+                            </graphic>
+                        </JFXButton>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </children>
 </StackPane>

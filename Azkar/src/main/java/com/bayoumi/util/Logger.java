@@ -26,7 +26,7 @@ public class Logger {
 
     public static void init() {
         try {
-            PRINT_WRITER = new PrintWriter(new FileWriter("debug.log", true));
+            PRINT_WRITER = new PrintWriter(new FileWriter("debug.txt", true));
         } catch (IOException ex) {
             System.err.println(ex);
         }

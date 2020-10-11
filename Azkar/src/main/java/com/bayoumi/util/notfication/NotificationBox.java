@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -83,13 +85,9 @@ public class NotificationBox extends AnchorPane {
         try {
             //Setting Translate Transition
             TranslateTransition translate = new TranslateTransition(Duration.millis(2000), this);
-            double layoutY = this.getLayoutX();
-            this.setTranslateX(100000);
-            translate.setToX(layoutY);
-            //Setting Fade Transition
-            FadeTransition fade = new FadeTransition(Duration.millis(2500), this);
-            fade.setFromValue(0);
-            fade.setToValue(10);
+            double layoutY = this.getLayoutY();
+            this.setTranslateY(Screen.getPrimary().getVisualBounds().getHeight()+1000);
+            translate.setToY(layoutY);
             //Setting Pause Transition
             PauseTransition pause = new PauseTransition(Duration.seconds(10));
             pause.setOnFinished(event -> {
@@ -100,7 +98,7 @@ public class NotificationBox extends AnchorPane {
                 fade2.setOnFinished(this::closeAction);
             });
             //Setting Parallel Transition
-            ParallelTransition parallelTransition = new ParallelTransition(this, pause, translate, fade);
+            ParallelTransition parallelTransition = new ParallelTransition(this, pause, translate);
             parallelTransition.play();
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,6 +107,7 @@ public class NotificationBox extends AnchorPane {
     }
 
     private void closeAction(Event event) {
+        System.out.println("Closing Notification ...");
         ((Stage) (text).getScene().getWindow()).close();
     }
 

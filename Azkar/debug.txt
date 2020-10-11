@@ -1,0 +1,65 @@
+[20-09-2020] [04:14:14 PM] => App Launched
+[11-10-2020] [04:51:17 PM] => App Launched
+[11-10-2020] [04:53:29 PM] => App closed - Used for 132631 ms
+
+[11-10-2020] [05:14:09 PM] => App Launched
+[11-10-2020] [05:14:25 PM] => App Launched
+[11-10-2020] [05:22:02 PM] => App Launched
+[11-10-2020] [05:22:32 PM] => App closed - Used for 30268 ms
+
+[11-10-2020] [05:25:56 PM] => App Launched
+[11-10-2020] [05:26:39 PM] => App closed - Used for 43028 ms
+
+[11-10-2020] [05:28:30 PM] => App Launched
+[11-10-2020] [10:24:02 PM] => App Launched
+[11-10-2020] [10:24:33 PM] => App closed - Used for 31157 ms
+
+[11-10-2020] [10:32:27 PM] => App Launched
+[11-10-2020] [10:33:05 PM] => App closed - Used for 37429 ms
+
+[11-10-2020] [10:55:04 PM] => App Launched
+[11-10-2020] [10:55:44 PM] => Exception[ [SQLITE_BUSY]  The database file is locked (database is locked) ] in => com.bayoumi.datamodel.AbsoluteZekrinsert(text: سبحان الله وبحمده سبحان الله العظيم)
+[11-10-2020] [10:59:34 PM] => App Launched
+[11-10-2020] [11:00:11 PM] => App closed - Used for 37711 ms
+
+[11-10-2020] [11:03:01 PM] => App Launched
+[11-10-2020] [11:03:51 PM] => App closed - Used for 49540 ms
+
+[11-10-2020] [11:17:25 PM] => App Launched
+[11-10-2020] [11:17:48 PM] => Exception[ [SQLITE_BUSY]  The database file is locked (database is locked) ] in => com.bayoumi.datamodel.AbsoluteZekrdelete(id: 12)
+[11-10-2020] [11:18:38 PM] => App Launched
+[11-10-2020] [11:48:14 PM] => App Launched
+[11-10-2020] [11:49:30 PM] => App Launched
+[11-10-2020] [11:51:28 PM] => App Launched
+[11-10-2020] [11:51:41 PM] => App Launched
+[11-10-2020] [11:54:33 PM] => App Launched
+[11-10-2020] [11:54:43 PM] => Exception[ [SQLITE_BUSY]  The database file is locked (database is locked) ] in => com.bayoumi.datamodel.AbsoluteZekrinsert(text: ee)
+[12-10-2020] [12:18:45 AM] => App Launched
+[12-10-2020] [12:19:26 AM] => App Launched
+[12-10-2020] [12:41:04 AM] => App Launched
+[12-10-2020] [12:42:22 AM] => App Launched
+[12-10-2020] [12:42:55 AM] => App Launched
+[12-10-2020] [12:46:00 AM] => App Launched
+[12-10-2020] [12:46:24 AM] => App Launched
+[12-10-2020] [12:46:42 AM] => App Launched
+[12-10-2020] [12:47:13 AM] => App Launched
+[12-10-2020] [12:47:45 AM] => App Launched
+[12-10-2020] [12:53:23 AM] => App Launched
+[12-10-2020] [01:04:50 AM] => App Launched
+[12-10-2020] [01:04:59 AM] => App Launched
+[12-10-2020] [01:06:00 AM] => App Launched
+[12-10-2020] [01:06:18 AM] => App Launched
+[12-10-2020] [01:12:45 AM] => App Launched
+[12-10-2020] [01:18:38 AM] => App Launched
+[12-10-2020] [01:19:03 AM] => App Launched
+[12-10-2020] [01:30:38 AM] => App Launched
+[12-10-2020] [01:30:47 AM] => App Launched
+[12-10-2020] [01:31:22 AM] => App Launched
+[12-10-2020] [01:31:36 AM] => App Launched
+[12-10-2020] [01:31:56 AM] => App Launched
+[12-10-2020] [01:35:39 AM] => App Launched
+[12-10-2020] [01:39:02 AM] => App Launched
+[12-10-2020] [01:41:46 AM] => App Launched
+[12-10-2020] [01:42:50 AM] => App Launched
+[12-10-2020] [01:46:57 AM] => App Launched
+[12-10-2020] [01:50:35 AM] => App Launched

@@ -1,13 +1,10 @@
 package com.bayoumi.util.notfication;
 
 import com.bayoumi.util.Utility;
-import javafx.application.Platform;
 import javafx.geometry.NodeOrientation;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -42,6 +39,7 @@ public class Notification {
         }
         oldStage = stage;
         stage.show();
-        Utility.setStageToBottom(stage,notification.getWidth(),notification.getHeight());
+        System.out.println("Opening Notification ...");
+        Utility.setStageToBottom(stage, notification.getWidth(), notification.getHeight());
     }
 }

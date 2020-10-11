@@ -41,8 +41,8 @@ public class Utility {
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         s.setX(bounds.getWidth() - (w));
         s.setY(bounds.getHeight() - (h));
-        System.out.println((s.getWidth()));
-        System.out.println((s.getHeight()));
+//        System.out.println((s.getWidth()));
+//        System.out.println((s.getHeight()));
     }
 
     public static void SetAppDecoration(Stage stage) {

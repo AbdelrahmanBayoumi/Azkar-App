@@ -1,16 +1,16 @@
 package com.bayoumi.main;
 
 import com.bayoumi.preloader.CustomPreloader;
-import com.bayoumi.util.db.DatabaseHandler;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.db.DatabaseHandler;
 import com.bayoumi.util.tray.TrayUtil;
+import com.bayoumi.util.validation.SingleInstance;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -28,6 +28,7 @@ public class Launcher extends Application {
 
     @Override
     public void stop() {
+        System.out.println("stop()...");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Long exitTime = System.currentTimeMillis();
             Logger.info("App closed - Used for "
@@ -37,37 +38,49 @@ public class Launcher extends Application {
 
     @Override
     public void init() {
-
         workFine.addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 Utility.exitProgramAction();
             }
         });
+        incrementPreloader();
         startTime = System.currentTimeMillis();
+
         Logger.init();
         Logger.info("App Launched");
-        preloaderProgress += 0.1;
-        LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(preloaderProgress));
+
+        incrementPreloader();
         // connect to db
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         if (!databaseHandler.connectToDatabase()) {
             workFine.setValue(false);
         }
-        preloaderProgress += 0.1;
-        LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(preloaderProgress));
+        incrementPreloader();
         try {
             // load FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/fxml/home/home.fxml"));
-            Parent root = loader.load();
-//            HomeController homeController = loader.getController();
-            scene = new Scene(root);
+            scene = new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/fxml/home/home.fxml")));
             scene.getStylesheets().add("/com/bayoumi/style/style.css");
+            incrementPreloader();
+//            Thread.sleep(1500);
+//            incrementPreloader();
+//            Thread.sleep(1500);
+//            incrementPreloader();
+//            Thread.sleep(1500);
+//            incrementPreloader();
+//            Thread.sleep(1500);
+//            incrementPreloader();
+//            Thread.sleep(1500);
+            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             workFine.setValue(false);
         }
     }
 
+    private void incrementPreloader() {
+        preloaderProgress += 0.1;
+        LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(preloaderProgress));
+    }
 
     public void start(Stage primaryStage) {
         // initialize tray icon
@@ -76,6 +89,7 @@ public class Launcher extends Application {
         primaryStage.setResizable(false);
         Utility.SetAppDecoration(primaryStage);
         primaryStage.show();
+        SingleInstance.getInstance().setCurrentStage(primaryStage);
     }
 
 

@@ -6,7 +6,6 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
-import javax.rmi.CORBA.Util;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -80,6 +79,7 @@ public class TrayUtil {
         // tray icon (removing the tray icon will also shut down AWT).
         java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
         exitItem.addActionListener(event -> {
+            System.out.println(event);
             tray.remove(trayIcon);
             Utility.exitProgramAction();
         });

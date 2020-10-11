@@ -1,4 +1,5 @@
 package com.bayoumi.util;
+
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,18 +8,18 @@ import java.util.function.Supplier;
 /**
  * {@link TimerTask} with modifiable execution period.
  *
- * @author Datz
+ * @author Bayoumi
  */
 public class EditablePeriodTimerTask extends TimerTask {
 
-    private Runnable task;
-    private Supplier<Long> period;
-    private Long oldP;
+    private final Runnable task;
+    private final Supplier<Long> period;
+    private Timer timer;
 
     /**
      * Constructor with task and supplier for period
      *
-     * @param task the task to execute in {@link TimerTask#run()}
+     * @param task   the task to execute in {@link TimerTask#run()}
      * @param period a provider for the period between task executions
      */
     public EditablePeriodTimerTask(Runnable task, Supplier<Long> period) {
@@ -27,28 +28,32 @@ public class EditablePeriodTimerTask extends TimerTask {
         Objects.requireNonNull(period);
         this.task = task;
         this.period = period;
+        timer = new Timer();
     }
 
-    private EditablePeriodTimerTask(Runnable task, Supplier<Long> period, Long oldP) {
-        this(task, period);
-        this.oldP = oldP;
-    }
-
-    public final void updateTimer() {
+    public final void updateTimer(String s) {
+        // ### REMOVE STRING S PARAMETER IN PRODUCTION ###
         Long p = period.get();
         Objects.requireNonNull(p);
-        if (oldP == null || !oldP.equals(p)) {
-            System.out.println(String.format("Period set to: %d s", p / 1000));
-            cancel();
-            new Timer().schedule(new EditablePeriodTimerTask(task, period, p), p, p);
-            // new Timer().scheduleAtFixedRate(new EditablePeriodTimerTask(task, period), p, p);
+        System.out.println("updateTimer():- " + "From : " + s);
+        System.out.println("updateTimer():- " + Thread.currentThread().getName());
+        System.out.println("updateTimer():- " + "new : " + p);
+        System.out.println(String.format("Period set to: %d s", p / 1000));
+        if (timer != null) {
+//            this.cancel();
+            timer.cancel();
+            timer.purge();
         }
+        timer = null;
+        timer = new Timer();
+        timer.schedule(new EditablePeriodTimerTask(task, period), p, p);
     }
 
     @Override
     public void run() {
         task.run();
-        updateTimer();
+        System.out.println("run():- "+Thread.currentThread().getName());
+//        updateTimer("run()");
     }
 
 }
