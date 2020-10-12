@@ -213,14 +213,18 @@
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
-
+.box-noraml .glyph-icon{
+    -fx-fill: -fx-primary-text;
+}
 .box-noraml:hover {
     -fx-background-color: -fx-primary;
     -fx-text-fill: -fx-secondary-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
-
+.box-noraml:hover .glyph-icon{
+    -fx-fill: -fx-secondary-text;
+}
 /* ============ check-box ============ */
 .check-box {
     -jfx-checked-color: -fx-secondary;

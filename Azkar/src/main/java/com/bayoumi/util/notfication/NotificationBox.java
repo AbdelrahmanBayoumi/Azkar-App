@@ -78,6 +78,8 @@ public class NotificationBox extends AnchorPane {
     public NotificationBox(String msg, Image img) {
         this(msg);
         this.image = new ImageView(img);
+        this.image.setFitHeight(50);
+        this.image.setFitWidth(50);
         this.notificationBox.getChildren().add(0, this.image);
     }
 
@@ -107,7 +109,7 @@ public class NotificationBox extends AnchorPane {
     }
 
     private void closeAction(Event event) {
-        System.out.println("Closing Notification ...");
+//        System.out.println("Closing Notification ...");
         ((Stage) (text).getScene().getWindow()).close();
     }
 

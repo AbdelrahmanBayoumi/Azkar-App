@@ -1,6 +1,8 @@
 package com.bayoumi.home;
 
+import com.bayoumi.azkar.timed.TimedAzkarController;
 import com.bayoumi.datamodel.AbsoluteZekr;
+import com.bayoumi.main.Launcher;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -16,7 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -35,13 +37,11 @@ import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
 
-    private Timeline timeline_debug;
-    private LocalTime time_debug = LocalTime.parse("00:00:00");
+//    private Timeline timeline_debug;
+//    private LocalTime time_debug = LocalTime.parse("00:00:00");
     private EditablePeriodTimerTask absoluteAzkarTask;
     @FXML
     private Label timeLabel;
-    @FXML
-    private StackPane sp;
     @FXML
     private Label frequencyLabel;
     @FXML
@@ -69,22 +69,27 @@ public class HomeController implements Initializable {
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
-        AbsoluteZekr.fetchData();
+        if (!AbsoluteZekr.fetchData()) {
+            Launcher.workFine.setValue(false);
+            return;
+        }
         absoluteAzkarTask = new EditablePeriodTimerTask(() ->
                 Platform.runLater(() ->
                         Notification.create(
                                 AbsoluteZekr.absoluteZekrObservableList.get(
                                         new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText()
-                                , null))
+                                , new Image("/com/bayoumi/images/"
+                                        + (new Random().nextInt(10) % 2 == 0 ? "11" : "22")
+                                        + ".png")))
                 , this::getPeriod);
         absoluteAzkarTask.updateTimer("initialize()");
 
-        timeline_debug = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
-            time_debug = time_debug.plusSeconds(1);
-            System.out.println(time_debug.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        }));
-        timeline_debug.setCycleCount(Animation.INDEFINITE);
-        timeline_debug.play();
+//        timeline_debug = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
+//            time_debug = time_debug.plusSeconds(1);
+//            System.out.println(time_debug.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+//        }));
+//        timeline_debug.setCycleCount(Animation.INDEFINITE);
+//        timeline_debug.play();
 
         initClock();
     }
@@ -125,23 +130,31 @@ public class HomeController implements Initializable {
 
     @FXML
     private void goToMorningAzkar() {
-        System.out.println("goToMorningAzkar");
+        showTimedAzkar("morning");
     }
+
 
     @FXML
     private void goToNightAzkar() {
-        System.out.println("goToNightAzkar");
+        showTimedAzkar("night");
     }
 
-    @FXML
-    private void goToPrayerTimes() {
-        System.out.println("goToPrayerTimes");
+    private void showTimedAzkar(String type) {
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/fxml/azkar/timed/TimedAzkar.fxml"));
+            stage.setScene(new Scene(loader.load()));
+            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Utility.SetIcon(stage);
+            TimedAzkarController controller = loader.getController();
+            controller.setData(type);
+            stage.showAndWait();
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".showTimedAzkar()");
+        }
     }
 
-    @FXML
-    private void goToSettings() {
-        System.out.println("goToSettings");
-    }
 
     @FXML
     private void highFrequencyAction() {
@@ -177,9 +190,9 @@ public class HomeController implements Initializable {
         currentFrequency = b;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
-        timeline_debug.stop();
-        time_debug = LocalTime.parse("00:00:00");
-        timeline_debug.play();
+//        timeline_debug.stop();
+//        time_debug = LocalTime.parse("00:00:00");
+//        timeline_debug.play();
 
         absoluteAzkarTask.updateTimer("toggle()");
     }
@@ -198,5 +211,16 @@ public class HomeController implements Initializable {
             Logger.error(null, e, getClass().getName() + ".goToAzkar()");
         }
 
+    }
+
+
+    @FXML
+    private void goToPrayerTimes() {
+        System.out.println("goToPrayerTimes");
+    }
+
+    @FXML
+    private void goToSettings() {
+        System.out.println("goToSettings");
     }
 }

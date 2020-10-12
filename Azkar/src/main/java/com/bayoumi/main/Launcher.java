@@ -18,7 +18,7 @@ public class Launcher extends Application {
 
     public static double preloaderProgress = 0;
     public static Long startTime;
-    private final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
+    public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
     private Scene scene = null;
 
 

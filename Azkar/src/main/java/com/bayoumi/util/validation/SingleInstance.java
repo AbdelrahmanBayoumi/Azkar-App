@@ -115,6 +115,10 @@ public class SingleInstance {
         } else if (currentStage.isIconified()) {
             System.out.println("isIconified");
             currentStage.setIconified(false);
+        } else if (!currentStage.isShowing()) {
+            System.out.println("not isShowing");
+            currentStage.show();
+            currentStage.toFront();
         } else {
             System.out.println("setAlwaysOnTop");
             currentStage.setAlwaysOnTop(true);

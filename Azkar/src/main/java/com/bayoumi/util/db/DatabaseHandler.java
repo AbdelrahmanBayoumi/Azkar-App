@@ -8,7 +8,6 @@ import java.sql.*;
 public class DatabaseHandler {
 
     private static DatabaseHandler handler = null;  // static
-    public ResultSet result = null;
     public PreparedStatement stat = null;
     public Connection con = null;
 

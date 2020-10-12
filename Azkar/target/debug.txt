@@ -1,7 +1,0 @@
-[30-09-2020] [12:03:40 PM] => App Launched
-[01-10-2020] [01:32:51 PM] => App Launched
-[01-10-2020] [01:32:51 PM] => App Launched
-[01-10-2020] [01:33:02 PM] => App closed - Used for 10958 ms
-
-[01-10-2020] [01:48:52 PM] => App closed - Used for 961296 ms
-
