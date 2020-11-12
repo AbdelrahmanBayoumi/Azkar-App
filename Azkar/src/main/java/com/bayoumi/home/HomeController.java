@@ -26,7 +26,6 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.chrono.HijrahChronology;
 import java.time.chrono.HijrahDate;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +33,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 public class HomeController implements Initializable {
 
@@ -73,15 +83,15 @@ public class HomeController implements Initializable {
             Launcher.workFine.setValue(false);
             return;
         }
-        absoluteAzkarTask = new EditablePeriodTimerTask(() ->
-                Platform.runLater(() ->
-                        Notification.create(
-                                AbsoluteZekr.absoluteZekrObservableList.get(
-                                        new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText()
-                                , new Image("/com/bayoumi/images/"
-                                        + (new Random().nextInt(10) % 2 == 0 ? "11" : "22")
-                                        + ".png")))
-                , this::getPeriod);
+        absoluteAzkarTask = new EditablePeriodTimerTask(()
+                -> Platform.runLater(()
+                        -> Notification.create(
+                        AbsoluteZekr.absoluteZekrObservableList.get(
+                                new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                        new Image("/com/bayoumi/images/"
+                                + (new Random().nextInt(10) % 2 == 0 ? "11" : "22")
+                                + ".png"))),
+                this::getPeriod);
         absoluteAzkarTask.updateTimer("initialize()");
 
 //        timeline_debug = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
@@ -90,7 +100,6 @@ public class HomeController implements Initializable {
 //        }));
 //        timeline_debug.setCycleCount(Animation.INDEFINITE);
 //        timeline_debug.play();
-
         initClock();
     }
 
@@ -104,35 +113,33 @@ public class HomeController implements Initializable {
     }
 
     private Long getPeriod() {
-//        if (currentFrequency.equals(highFrequency)) {
-//            return 900000L;
-//        } else if (currentFrequency.equals(midFrequency)) {
-//            return 1800000L;
-//        } else if (currentFrequency.equals(lowFrequency)) {
-//            return 3600000L;
-//        } else if (currentFrequency.equals(rearFrequency)) {
-//            return 7200000L;
-//        }
-//        return 900000L;
-
         if (currentFrequency.equals(highFrequency)) {
-            return 5000L;
+            return 900000L;
         } else if (currentFrequency.equals(midFrequency)) {
-            return 20000L;
+            return 1800000L;
         } else if (currentFrequency.equals(lowFrequency)) {
-            return 25000L;
+            return 3600000L;
         } else if (currentFrequency.equals(rearFrequency)) {
-            return 30000L;
+            return 7200000L;
         }
-        return 5000L;
-    }
+        return 900000L;
 
+//        if (currentFrequency.equals(highFrequency)) {
+//            return 5000L;
+//        } else if (currentFrequency.equals(midFrequency)) {
+//            return 20000L;
+//        } else if (currentFrequency.equals(lowFrequency)) {
+//            return 25000L;
+//        } else if (currentFrequency.equals(rearFrequency)) {
+//            return 30000L;
+//        }
+//        return 5000L;
+    }
 
     @FXML
     private void goToMorningAzkar() {
         showTimedAzkar("morning");
     }
-
 
     @FXML
     private void goToNightAzkar() {
@@ -155,7 +162,6 @@ public class HomeController implements Initializable {
         }
     }
 
-
     @FXML
     private void highFrequencyAction() {
         String msg = "ظهور كل" + " " + 15 + " " + "دقيقة";
@@ -177,7 +183,6 @@ public class HomeController implements Initializable {
         toggleFrequencyBTN(lowFrequency);
     }
 
-
     @FXML
     private void rearFrequencyAction() {
         String msg = "ظهور كل" + " " + 2 + " " + "ساعة";
@@ -193,7 +198,6 @@ public class HomeController implements Initializable {
 //        timeline_debug.stop();
 //        time_debug = LocalTime.parse("00:00:00");
 //        timeline_debug.play();
-
         absoluteAzkarTask.updateTimer("toggle()");
     }
 
@@ -213,10 +217,71 @@ public class HomeController implements Initializable {
 
     }
 
+    private boolean isLoaded;
 
     @FXML
     private void goToPrayerTimes() {
+        isLoaded = false;
         System.out.println("goToPrayerTimes");
+        WebView webView = new WebView();
+        WebEngine engine = webView.getEngine();
+        webView.setZoom(1.5);  //zoom in 25%.
+        engine.load("https://prayer-times-bayoumi.herokuapp.com");
+        engine.setUserAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
+
+        VBox root = new VBox();
+        root.setAlignment(Pos.CENTER);
+        VBox.setVgrow(root, Priority.ALWAYS);
+
+        String s = "Loading ";
+        Label label = new Label(s);
+        label.setFont(Font.font("system", FontWeight.BOLD, 30));
+
+        engine.getLoadWorker().stateProperty().addListener(
+                new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if (newValue == Worker.State.SUCCEEDED) {
+                    isLoaded = true;
+                    root.getChildren().remove(label);
+                    webView.setVisible(true);
+                }
+            }
+        }
+        );
+        webView.setContextMenuEnabled(false);
+        webView.setVisible(false);
+        root.getChildren().addAll(label, webView);
+        Scene scene = new Scene(root, 540, 580);
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        Utility.SetAppDecoration(stage);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.setOnCloseRequest((event) -> {
+            isLoaded = true;
+        });
+        stage.show();
+        new Thread(() -> {
+            int x = 0;
+            while (!isLoaded) {
+                for (int i = 0; i < 3; i++) {
+                    Platform.runLater(() -> {
+                        label.setText(label.getText() + ".");
+                    });
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException ex) {
+                        java.util.logging.Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                Platform.runLater(() -> {
+                    label.setText(s);
+                });
+                x = 0;
+            }
+        }).start();
+
     }
 
     @FXML

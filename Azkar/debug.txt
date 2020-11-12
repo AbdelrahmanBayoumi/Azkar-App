@@ -114,3 +114,47 @@
 [12-10-2020] [08:20:10 PM] => App Launched
 [12-10-2020] [08:23:40 PM] => App Launched
 [12-10-2020] [08:24:55 PM] => App Launched
+[19-10-2020] [11:15:42 PM] => App Launched
+[19-10-2020] [11:18:22 PM] => App Launched
+[12-11-2020] [10:24:07 PM] => App Launched
+[12-11-2020] [10:24:45 PM] => App closed - Used for 37819 ms
+
+[12-11-2020] [10:24:54 PM] => App Launched
+[12-11-2020] [10:30:16 PM] => App Launched
+[12-11-2020] [10:36:34 PM] => App Launched
+[12-11-2020] [10:39:28 PM] => App Launched
+[12-11-2020] [10:42:03 PM] => App closed - Used for 154532 ms
+
+[12-11-2020] [10:42:11 PM] => App Launched
+[12-11-2020] [10:44:24 PM] => App closed - Used for 132576 ms
+
+[12-11-2020] [10:44:58 PM] => App Launched
+[12-11-2020] [10:45:31 PM] => App closed - Used for 33693 ms
+
+[12-11-2020] [10:47:12 PM] => App Launched
+[12-11-2020] [10:50:16 PM] => App closed - Used for 184698 ms
+
+[12-11-2020] [11:08:53 PM] => App Launched
+[12-11-2020] [11:10:24 PM] => App Launched
+[12-11-2020] [11:12:19 PM] => App Launched
+[12-11-2020] [11:13:26 PM] => App closed - Used for 67678 ms
+
+[12-11-2020] [11:14:20 PM] => App Launched
+[12-11-2020] [11:15:06 PM] => App Launched
+[12-11-2020] [11:17:30 PM] => App Launched
+[12-11-2020] [11:18:22 PM] => App Launched
+[12-11-2020] [11:19:12 PM] => App Launched
+[12-11-2020] [11:19:36 PM] => App Launched
+[12-11-2020] [11:20:32 PM] => App Launched
+[12-11-2020] [11:20:35 PM] => App closed - Used for 3929 ms
+
+[12-11-2020] [11:20:42 PM] => App Launched
+[12-11-2020] [11:22:16 PM] => App Launched
+[12-11-2020] [11:22:40 PM] => App Launched
+[12-11-2020] [11:23:55 PM] => App Launched
+[12-11-2020] [11:24:47 PM] => App Launched
+[12-11-2020] [11:25:33 PM] => App Launched
+[12-11-2020] [11:27:19 PM] => App Launched
+[12-11-2020] [11:28:32 PM] => App Launched
+[12-11-2020] [11:30:40 PM] => App Launched
+[12-11-2020] [11:31:22 PM] => App Launched

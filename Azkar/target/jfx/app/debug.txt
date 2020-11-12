@@ -1,0 +1,22 @@
+[19-10-2020] [11:19:23 PM] => App Launched
+[19-10-2020] [11:19:25 PM] => Exception[ [SQLITE_ERROR] SQL error or missing database (no such table: absolute_zekr) ] in => com.bayoumi.datamodel.AbsoluteZekr.fetchData()
+[19-10-2020] [11:19:25 PM] => App closed - Used for 1152 ms
+
+[19-10-2020] [11:20:30 PM] => App Launched
+[20-10-2020] [01:14:13 PM] => App Launched
+[31-10-2020] [12:38:07 AM] => App Launched
+[31-10-2020] [07:32:46 PM] => App Launched
+[02-11-2020] [04:01:24 PM] => App Launched
+[03-11-2020] [02:29:08 PM] => App Launched
+[03-11-2020] [05:58:15 PM] => App Launched
+[03-11-2020] [09:37:26 PM] => App Launched
+[04-11-2020] [10:20:58 PM] => App Launched
+[07-11-2020] [09:58:13 PM] => App Launched
+[09-11-2020] [04:47:41 PM] => App Launched
+[09-11-2020] [10:28:40 PM] => App Launched
+[10-11-2020] [11:07:58 PM] => App Launched
+[11-11-2020] [01:42:20 PM] => App Launched
+[11-11-2020] [09:15:24 PM] => App Launched
+[12-11-2020] [08:05:33 PM] => App Launched
+[12-11-2020] [09:24:02 PM] => App closed - Used for 4708738 ms
+
