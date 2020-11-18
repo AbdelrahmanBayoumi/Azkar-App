@@ -1,6 +1,7 @@
 package com.bayoumi.util;
 
 import com.bayoumi.main.Launcher;
+import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -13,10 +14,8 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Utility {
 
@@ -41,8 +40,6 @@ public class Utility {
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         s.setX(bounds.getWidth() - (w));
         s.setY(bounds.getHeight() - (h));
-//        System.out.println((s.getWidth()));
-//        System.out.println((s.getHeight()));
     }
 
     public static void SetAppDecoration(Stage stage) {
@@ -65,19 +62,54 @@ public class Utility {
         System.exit(0);
     }
 
-    public static String getTimeNow() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss a");
-        LocalTime time = LocalTime.now();
-        return formatter.format(time);
-    }
-
-    public static String getDateNow() {
-        return LocalDate.now().toString();
-    }
-
     public static void copyToClipboard(String text) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(text), null);
+    }
+
+    public static String getTime(String language, Date date) {
+        return new SimpleDateFormat("hh:mm:ss a", new Locale(language)).format(date);
+    }
+
+    public static String getDateAndTime(String language, Date date) {
+        return getGregorianDate(language) + " - " + getHijriDate(language) + " - " + new SimpleDateFormat("hh:mm:ss a", new Locale(language)).format(date);
+    }
+
+    public static String getGregorianDate(String language) {
+        Calendar cal = new GregorianCalendar();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y", new Locale(language));
+        dateFormat.setCalendar(cal);
+        return dateFormat.format(cal.getTime());
+    }
+
+    public static String getDay(String language, Date date) {
+        // get the day of week from the Date based on specific locale.
+        return new SimpleDateFormat("EEEE", new Locale(language)).format(date);
+    }
+
+    public static String getHijriDate(String language) {
+        Calendar cal = new UmmalquraCalendar();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM y", new Locale(language));
+        dateFormat.setCalendar(cal);
+        return dateFormat.format(cal.getTime());
+    }
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        System.out.println(getHijriDate("ar"));
+        System.out.println(getHijriDate("en"));
+        System.out.println("==================");
+        System.out.println(getGregorianDate("ar"));
+        System.out.println(getGregorianDate("en"));
+        System.out.println("==================");
+        System.out.println(getDay("ar", date));
+        System.out.println(getDay("en", date));
+        System.out.println("==================");
+        System.out.println(getTime("en", date));
+        System.out.println(getTime("ar", date));
+        System.out.println("==================");
+        System.out.println(getDateAndTime("en", date));
+        System.out.println(getDateAndTime("ar", date));
     }
 }
 

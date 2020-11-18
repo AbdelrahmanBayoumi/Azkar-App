@@ -16,6 +16,7 @@ com\bayoumi\util\Utility.class
 com\bayoumi\main\HttpClientExample.class
 com\bayoumi\util\db\DatabaseHandler.class
 com\bayoumi\preloader\SplashScreenController.class
+com\bayoumi\home\HomeController$1.class
 com\bayoumi\util\Logger.class
 com\bayoumi\datamodel\TimedZekr.class
 com\bayoumi\azkar\absolute\AbsoluteAzkarController.class

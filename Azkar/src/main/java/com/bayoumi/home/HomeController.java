@@ -13,43 +13,41 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.HijrahChronology;
-import java.time.chrono.HijrahDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.*;
+import java.util.logging.Level;
 
 public class HomeController implements Initializable {
 
-//    private Timeline timeline_debug;
+    //    private Timeline timeline_debug;
 //    private LocalTime time_debug = LocalTime.parse("00:00:00");
     private EditablePeriodTimerTask absoluteAzkarTask;
+    @FXML
+    private Label hijriDate;
+    @FXML
+    private Label day;
+    @FXML
+    private Label gregorianDate;
     @FXML
     private Label timeLabel;
     @FXML
@@ -63,16 +61,9 @@ public class HomeController implements Initializable {
     @FXML
     private JFXButton rearFrequency;
     private JFXButton currentFrequency;
+    private boolean isLoaded;
 
-    public static void main(String[] args) {
-        Date date = new Date(); // Gregorian date
 
-        Calendar cl = Calendar.getInstance();
-        cl.setTime(date);
-
-        HijrahDate islamicDate = HijrahChronology.INSTANCE.date(LocalDate.of(cl.get(Calendar.YEAR), cl.get(Calendar.MONTH) + 1, cl.get(Calendar.DATE)));
-        System.out.println(islamicDate);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,12 +76,13 @@ public class HomeController implements Initializable {
         }
         absoluteAzkarTask = new EditablePeriodTimerTask(()
                 -> Platform.runLater(()
-                        -> Notification.create(
-                        AbsoluteZekr.absoluteZekrObservableList.get(
-                                new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                        new Image("/com/bayoumi/images/"
-                                + (new Random().nextInt(10) % 2 == 0 ? "11" : "22")
-                                + ".png"))),
+                -> Notification.create(
+                AbsoluteZekr.absoluteZekrObservableList.get(
+                        new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                new Image("/com/bayoumi/images/"
+//                        + (new Random().nextInt(10) % 2 == 0 ? "11" : "22")
+                        + "22"
+                        + ".png"))),
                 this::getPeriod);
         absoluteAzkarTask.updateTimer("initialize()");
 
@@ -101,12 +93,18 @@ public class HomeController implements Initializable {
 //        timeline_debug.setCycleCount(Animation.INDEFINITE);
 //        timeline_debug.play();
         initClock();
+
+        Date date = new Date();
+        day.setText(Utility.getDay("ar", date));
+        hijriDate.setText(Utility.getGregorianDate("ar"));
+        gregorianDate.setText(Utility.getHijriDate("ar"));
     }
 
     private void initClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a");
-            timeLabel.setText(LocalDateTime.now().format(formatter));
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a");
+//            timeLabel.setText(LocalDateTime.now().format(formatter));
+            timeLabel.setText(Utility.getTime("ar", new Date()));
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
@@ -114,26 +112,26 @@ public class HomeController implements Initializable {
 
     private Long getPeriod() {
         if (currentFrequency.equals(highFrequency)) {
-            return 900000L;
+            return 300000L; // 5 min
         } else if (currentFrequency.equals(midFrequency)) {
-            return 1800000L;
+            return 600000L; // 10 min
         } else if (currentFrequency.equals(lowFrequency)) {
-            return 3600000L;
+            return 1200000L; // 20 min
         } else if (currentFrequency.equals(rearFrequency)) {
-            return 7200000L;
+            return 1800000L; // 30 min
         }
-        return 900000L;
+        return 300000L;
 
 //        if (currentFrequency.equals(highFrequency)) {
-//            return 5000L;
+//            return 15000L;
 //        } else if (currentFrequency.equals(midFrequency)) {
-//            return 20000L;
-//        } else if (currentFrequency.equals(lowFrequency)) {
-//            return 25000L;
-//        } else if (currentFrequency.equals(rearFrequency)) {
 //            return 30000L;
+//        } else if (currentFrequency.equals(lowFrequency)) {
+//            return 40000L;
+//        } else if (currentFrequency.equals(rearFrequency)) {
+//            return 50000L;
 //        }
-//        return 5000L;
+//        return 50000L;
     }
 
     @FXML
@@ -164,28 +162,28 @@ public class HomeController implements Initializable {
 
     @FXML
     private void highFrequencyAction() {
-        String msg = "ظهور كل" + " " + 15 + " " + "دقيقة";
+        String msg = "ظهور كل" + " " + 5 + " " + "دقائق";
         frequencyLabel.setText(msg);
         toggleFrequencyBTN(highFrequency);
     }
 
     @FXML
     private void midFrequencyAction() {
-        String msg = "ظهور كل" + " " + 30 + " " + "دقيقة";
+        String msg = "ظهور كل" + " " + 10 + " " + "دقائق";
         frequencyLabel.setText(msg);
         toggleFrequencyBTN(midFrequency);
     }
 
     @FXML
     private void lowFrequencyAction() {
-        String msg = "ظهور كل" + " " + 1 + " " + "ساعة";
+        String msg = "ظهور كل" + " " +  20 + " " + "دقيقة";
         frequencyLabel.setText(msg);
         toggleFrequencyBTN(lowFrequency);
     }
 
     @FXML
     private void rearFrequencyAction() {
-        String msg = "ظهور كل" + " " + 2 + " " + "ساعة";
+        String msg = "ظهور كل" + " " +  30 + " " + "دقيقة";
         frequencyLabel.setText(msg);
         toggleFrequencyBTN(rearFrequency);
     }
@@ -217,8 +215,6 @@ public class HomeController implements Initializable {
 
     }
 
-    private boolean isLoaded;
-
     @FXML
     private void goToPrayerTimes() {
         isLoaded = false;
@@ -239,15 +235,15 @@ public class HomeController implements Initializable {
 
         engine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (newValue == Worker.State.SUCCEEDED) {
-                    isLoaded = true;
-                    root.getChildren().remove(label);
-                    webView.setVisible(true);
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                        if (newValue == Worker.State.SUCCEEDED) {
+                            isLoaded = true;
+                            root.getChildren().remove(label);
+                            webView.setVisible(true);
+                        }
+                    }
                 }
-            }
-        }
         );
         webView.setContextMenuEnabled(false);
         webView.setVisible(false);
@@ -258,27 +254,19 @@ public class HomeController implements Initializable {
         Utility.SetAppDecoration(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-        stage.setOnCloseRequest((event) -> {
-            isLoaded = true;
-        });
+        stage.setOnCloseRequest((event) -> isLoaded = true);
         stage.show();
         new Thread(() -> {
-            int x = 0;
             while (!isLoaded) {
                 for (int i = 0; i < 3; i++) {
-                    Platform.runLater(() -> {
-                        label.setText(label.getText() + ".");
-                    });
+                    Platform.runLater(() -> label.setText(label.getText() + "."));
                     try {
                         Thread.sleep(300);
                     } catch (InterruptedException ex) {
                         java.util.logging.Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                Platform.runLater(() -> {
-                    label.setText(s);
-                });
-                x = 0;
+                Platform.runLater(() -> label.setText(s));
             }
         }).start();
 

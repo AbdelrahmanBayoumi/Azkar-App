@@ -13,8 +13,34 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane nodeOrientation="RIGHT_TO_LEFT" prefWidth="500.0" styleClass="root" stylesheets="@../../style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.home.HomeController">
-    <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="49.0" prefHeight="291.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="49.0">
-        <VBox alignment="TOP_CENTER" minHeight="289.0" minWidth="465.0" styleClass="root">
+    <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="49.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="49.0">
+        <VBox alignment="TOP_CENTER" minWidth="465.0" styleClass="root">
+         <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT">
+            <children>
+               <Label fx:id="hijriDate" text="03 ربيع الثاني 1442">
+                  <font>
+                     <Font name="System Bold" size="17.0" />
+                  </font>
+               </Label>
+               <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                  <children>
+                     <Label fx:id="day" text="الأربعاء">
+                        <font>
+                           <Font name="System Bold" size="17.0" />
+                        </font>
+                     </Label>
+                  </children>
+               </HBox>
+               <Label fx:id="gregorianDate" text="18 نوفمبر 2020">
+                  <font>
+                     <Font name="System Bold" size="17.0" />
+                  </font>
+               </Label>
+            </children>
+            <padding>
+               <Insets left="25.0" right="25.0" top="5.0" />
+            </padding>
+         </HBox>
             <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);">
                 <VBox.margin>
                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -27,7 +53,7 @@
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
-                <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 15 دقيقة">
+                <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 5 دقائق">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -90,20 +116,43 @@
                     </font>
                 </JFXButton>
             </HBox>
+         <HBox alignment="CENTER" spacing="32.0">
+            <padding>
+               <Insets bottom="10.0" />
+            </padding>
+            <children>
+               <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" prefHeight="41.0" prefWidth="290.0" styleClass="box-noraml" text="إعدادات الأذكار">
+                  <font>
+                     <Font name="System Bold" size="15.0" />
+                  </font>
+                  <graphic>
+                     <FontAwesomeIconView glyphName="BOOK" size="30" />
+                  </graphic>
+               </JFXButton>
+               <JFXButton contentDisplay="RIGHT" disable="true" focusTraversable="false" graphicTextGap="15.0" onAction="#goToSettings" prefWidth="130.0" styleClass="box-noraml" text="الإعدادات">
+                  <font>
+                     <Font name="System Bold" size="15.0" />
+                  </font>
+                  <graphic>
+                     <FontAwesomeIconView glyphName="GEAR" size="30" />
+                  </graphic>
+               </JFXButton>
+            </children>
+         </HBox>
         </VBox>
     </ScrollPane>
     <HBox alignment="CENTER_RIGHT" layoutX="294.0" layoutY="93.0" style="-fx-background-color: -fx-secondary-hover; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <HBox HBox.hgrow="ALWAYS">
             <padding>
-                <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                <Insets bottom="7.0" left="20.0" right="20.0" top="7.0" />
             </padding>
-            <Label alignment="CENTER" contentDisplay="TEXT_ONLY" style="-fx-text-fill: -fx-secondary-text;" text="أذكار" wrapText="true">
+            <Label alignment="CENTER" contentDisplay="TEXT_ONLY" style="-fx-text-fill: -fx-secondary-text;" text="بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ" wrapText="true">
                 <font>
-                    <Font name="Arial Bold" size="34.0" />
+                    <Font name="Arial Bold" size="25.0" />
                 </font>
             </Label>
         </HBox>
-        <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="TEXT_ONLY" style="-fx-text-fill: -fx-secondary-text;" text="00:00:00" wrapText="true">
+        <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="TEXT_ONLY" style="-fx-text-fill: -fx-secondary-text;" text="11:36:36 م" wrapText="true">
             <font>
                 <Font name="Arial Bold" size="20.0" />
             </font>
@@ -111,15 +160,5 @@
                 <Insets right="30.0" />
             </HBox.margin>
         </Label>
-        <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#goToAzkar" styleClass="transparent-button">
-            <graphic>
-                <FontAwesomeIconView glyphName="BOOK" size="30" style="-fx-fill: -fx-secondary-text;" />
-            </graphic>
-        </JFXButton>
-        <JFXButton contentDisplay="GRAPHIC_ONLY" disable="true" focusTraversable="false" onAction="#goToSettings" styleClass="transparent-button">
-            <graphic>
-                <FontAwesomeIconView glyphName="GEAR" size="30" style="-fx-fill: -fx-secondary-text;" />
-            </graphic>
-        </JFXButton>
     </HBox>
 </AnchorPane>

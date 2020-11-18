@@ -38,7 +38,7 @@ public class EditablePeriodTimerTask extends TimerTask {
 //        System.out.println("updateTimer():- " + "From : " + s);
 //        System.out.println("updateTimer():- " + Thread.currentThread().getName());
 //        System.out.println("updateTimer():- " + "new : " + p);
-//        System.out.println(String.format("Period set to: %d s", p / 1000));
+        System.out.println(String.format("Period set to: %d s", p / 1000));
         if (timer != null) {
 //            this.cancel();
             timer.cancel();

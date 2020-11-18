@@ -1,0 +1,6 @@
+[19-11-2020] [12:30:31 AM] => App Launched
+[19-11-2020] [12:31:09 AM] => App closed - Used for 37714 ms
+
+[19-11-2020] [12:33:39 AM] => App Launched
+[19-11-2020] [12:34:24 AM] => App closed - Used for 45356 ms
+
