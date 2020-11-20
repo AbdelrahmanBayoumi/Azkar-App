@@ -1,4 +1,4 @@
-<h1 align="center"> Azkar App 🕌 برنامج الأذاكر </h1>
+<h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1>
 
 
 
@@ -17,6 +17,9 @@ Desktop Application 💻 for:
 
 </div>
 
+
+## EXE Installer 
+- [Google Drive](https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing)
 
 ## Screenshots
 
