@@ -2,7 +2,6 @@ package com.bayoumi.azkar.timed;
 
 import com.bayoumi.datamodel.TimedZekr;
 import com.bayoumi.util.Logger;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +14,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -31,13 +31,11 @@ public class TimedAzkarController implements Initializable {
     @FXML
     private StackPane sp;
     @FXML
-    private VBox boxContainer;
+    private FlowPane boxContainer;
     @FXML
     private ImageView image;
     @FXML
     private Label title;
-    @FXML
-    private JFXButton settingsBTN;
 
     private Image morningImage;
     private Image nightImage;
@@ -58,8 +56,8 @@ public class TimedAzkarController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        morningImage = new Image("/com/bayoumi/images/icons8_sun_50px.png");
-        nightImage = new Image("/com/bayoumi/images/icons8_night_50px.png");
+        morningImage = new Image("/com/bayoumi/images/sun_50px.png");
+        nightImage = new Image("/com/bayoumi/images/night_50px.png");
     }
 
     private void initAzkarContainer(ObservableList<TimedZekr> list) {
@@ -83,7 +81,7 @@ public class TimedAzkarController implements Initializable {
         ObservableList<Text> list = FXCollections.observableArrayList();
         ObservableList<Node> ZekrBoxNodes = boxContainer.getChildren();
         for (Node zekrBox : ZekrBoxNodes) {
-            list.add((Text) ((TextFlow) ((VBox) zekrBox).getChildren().get(0)).getChildren().get(0));
+            list.add((Text) ((TextFlow) ((HBox) ((VBox) zekrBox).getChildren().get(0)).getChildren().get(0)).getChildren().get(0));
         }
         return list;
     }
@@ -93,13 +91,15 @@ public class TimedAzkarController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/fxml/azkar/timed/Settings.fxml"));
             HBox pane = loader.load();
-            SettingsController controller = loader.getController();
-            controller.setTextList(getTextList());
+
             JFXDialog dialog = new JFXDialog(sp, pane, JFXDialog.DialogTransition.TOP);
+
+            SettingsController controller = loader.getController();
+            controller.setData(getTextList(), dialog);
+
             dialog.show();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            Logger.error(null, ex, getClass().getName() + ".initAzkarContainer()");
+            Logger.error(null, ex, getClass().getName() + ".openSettings()");
         }
     }
 

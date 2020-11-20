@@ -39,20 +39,25 @@ public class EditablePeriodTimerTask extends TimerTask {
 //        System.out.println("updateTimer():- " + Thread.currentThread().getName());
 //        System.out.println("updateTimer():- " + "new : " + p);
         System.out.println(String.format("Period set to: %d s", p / 1000));
+        stopTask();
+        timer = new Timer(); // 60000
+        timer.schedule(new EditablePeriodTimerTask(task, period), p, p);
+    }
+
+    public void stopTask() {
         if (timer != null) {
 //            this.cancel();
             timer.cancel();
             timer.purge();
         }
         timer = null;
-        timer = new Timer();
-        timer.schedule(new EditablePeriodTimerTask(task, period), p, p);
     }
 
     @Override
     public void run() {
+
         task.run();
-//        System.out.println("run():- "+Thread.currentThread().getName());
+        System.out.println("run():- "+Thread.currentThread().getName());
 //        updateTimer("run()");
     }
 

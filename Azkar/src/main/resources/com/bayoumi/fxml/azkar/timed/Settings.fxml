@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" spacing="20.0" style="-fx-border-color: -fx-secondary; -fx-border-width: 5;" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.azkar.timed.SettingsController">
+<HBox alignment="CENTER" onKeyReleased="#keyEventAction" spacing="20.0" style="-fx-border-color: -fx-secondary; -fx-border-width: 5;" styleClass="root" stylesheets="@../../../style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.azkar.timed.SettingsController">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
-   <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#minimizeFont">
+   <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#minimizeFont">
       <graphic>
          <FontAwesomeIconView glyphName="MINUS" size="30" style="-fx-fill: -fx-secondary-text;" />
       </graphic>
@@ -24,7 +24,7 @@
          <Font name="System Bold" size="20.0" />
       </font>
    </Label>
-   <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#maximizeFont">
+   <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#maximizeFont">
       <graphic>
          <FontAwesomeIconView glyphName="PLUS" size="30" style="-fx-fill: -fx-secondary-text;" />
       </graphic>

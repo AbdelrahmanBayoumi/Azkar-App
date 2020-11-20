@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 
@@ -37,6 +38,9 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
             while (res.next()) {
                 absoluteZekrObservableList.add(new AbsoluteZekr(res.getInt(1), res.getString(2)));
             }
+//            if (!absoluteZekrObservableList.isEmpty()) {
+//                absoluteZekrObservableList.get(0).delete.setDisable(true);
+//            }
             return true;
         } catch (Exception ex) {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + ".fetchData()");
@@ -61,7 +65,6 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
 
     private void delete(Event event) {
         try {
-            //
             if (BuilderUI.showConfirmAlert(true, "حذف الذكر ؟")) {
                 DatabaseHandler.getInstance().con
                         .prepareStatement("DELETE FROM absolute_zekr WHERE id =" + this.id)

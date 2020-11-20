@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Notification {
-
     private static Stage oldStage = null;
 
     public static void create(String msg, Image image) {
@@ -39,7 +38,8 @@ public class Notification {
         }
         oldStage = stage;
         stage.show();
-//        System.out.println("Opening Notification ...");
+
+        System.out.println("Opening Notification ...");
         Utility.setStageToBottom(stage, notification.getWidth(), notification.getHeight());
     }
 }

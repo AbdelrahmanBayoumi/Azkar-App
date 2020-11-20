@@ -40,7 +40,7 @@ public class TrayUtil {
 
             // set up a system tray icon.
             tray = java.awt.SystemTray.getSystemTray();
-            BufferedImage trayIconImage = ImageIO.read(TrayUtil.class.getResource("/com/bayoumi/images/icons8_basilica_50px.png"));
+            BufferedImage trayIconImage = ImageIO.read(TrayUtil.class.getResource("/com/bayoumi/images/icon.png"));
             int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
             trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
 

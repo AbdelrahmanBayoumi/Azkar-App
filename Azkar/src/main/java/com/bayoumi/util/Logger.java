@@ -26,9 +26,9 @@ public class Logger {
 
     public static void init() {
         try {
-            PRINT_WRITER = new PrintWriter(new FileWriter("debug.txt", true));
+            PRINT_WRITER = new PrintWriter(new FileWriter("jarFiles/logs/debug.txt", true));
         } catch (IOException ex) {
-            System.err.println(ex);
+            System.err.println(ex.getLocalizedMessage());
         }
     }
 

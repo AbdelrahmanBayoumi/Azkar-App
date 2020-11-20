@@ -47,6 +47,9 @@
           <needShortcut>true</needShortcut>
           <mainClass>com.bayoumi.main.Launcher</mainClass>
           <additionalAppResources>addFolder</additionalAppResources>
+          <bundleArguments>
+            <icon>${project.basedir}/src/main/deploy/package/windows/Azkar.ico</icon>
+          </bundleArguments>
         </configuration>
       </plugin>
     </plugins>

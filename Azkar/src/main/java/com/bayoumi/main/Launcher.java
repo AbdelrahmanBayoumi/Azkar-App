@@ -14,11 +14,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class Launcher extends Application {
 
+    public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
     public static double preloaderProgress = 0;
     public static Long startTime;
-    public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
     private Scene scene = null;
 
 
@@ -36,6 +39,14 @@ public class Launcher extends Application {
         }));
     }
 
+    private void createDirectory(String path) {
+        try {
+            Files.createDirectories(Paths.get(path));
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
     @Override
     public void init() {
         workFine.addListener((observable, oldValue, newValue) -> {
@@ -43,6 +54,11 @@ public class Launcher extends Application {
                 Utility.exitProgramAction();
             }
         });
+
+        createDirectory("jarFiles/logs");
+        createDirectory("jarFiles/db");
+        createDirectory("jarFiles/audio");
+
         incrementPreloader();
         startTime = System.currentTimeMillis();
 

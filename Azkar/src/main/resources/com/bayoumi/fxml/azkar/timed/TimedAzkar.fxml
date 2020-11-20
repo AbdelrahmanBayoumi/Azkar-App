@@ -9,6 +9,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -20,57 +21,24 @@
    <AnchorPane>
       <VBox layoutX="19.0" layoutY="9.0" prefHeight="530.0" prefWidth="800.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" focusTraversable="false" styleClass="root" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-            <VBox fx:id="boxContainer" alignment="TOP_CENTER" onScroll="#incrementScrollSpeed" spacing="30.0" styleClass="root">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-               <VBox alignment="CENTER" maxWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;">
-                  <TextFlow textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
-                        <font>
-                           <Font name="System Bold" size="25.0" />
-                        </font>
-                     </Text>
-                  </TextFlow>
-                  <HBox spacing="50.0" style="-fx-background-color: -fx-primary; -fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
-                     <padding>
-                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
-                     </padding>
-                     <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="9000.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="نسخ">
-                        <graphic>
-                           <FontAwesomeIconView glyphName="COPY" size="20" style="-fx-fill: -fx-secondary-text;" />
-                        </graphic>
-                        <font>
-                           <Font name="System Bold" size="18.0" />
-                        </font>
-                     </JFXButton>
-                     <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="9000.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="التكرار     (1)">
-                        <font>
-                           <Font name="System Bold" size="18.0" />
-                        </font>
-                     </JFXButton>
-                  </HBox>
-               </VBox>
-               <VBox alignment="CENTER" maxWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;">
-                  <TextFlow textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
-                        <font>
-                           <Font name="System Bold" size="25.0" />
-                        </font>
-                     </Text>
-                  </TextFlow>
-                  <HBox spacing="50.0" style="-fx-background-color: -fx-primary; -fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
-                     <padding>
-                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
-                     </padding>
-                     <children>
-                        <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="9000.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="نسخ">
+            <FlowPane fx:id="boxContainer" alignment="CENTER" hgap="20.0" nodeOrientation="RIGHT_TO_LEFT" onScroll="#incrementScrollSpeed" vgap="20.0">
+               <children>
+                  <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;">
+                     <TextFlow textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                        <padding>
+                           <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        </padding>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Text>
+                     </TextFlow>
+                     <HBox alignment="CENTER" style="-fx-background-color: -fx-primary; -fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
+                        <padding>
+                           <Insets bottom="5.0" top="5.0" />
+                        </padding>
+                        <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="370.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="نسخ">
                            <graphic>
                               <FontAwesomeIconView glyphName="COPY" size="20" style="-fx-fill: -fx-secondary-text;" />
                            </graphic>
@@ -78,34 +46,30 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="9000.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="التكرار     (1)">
+                        <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="370.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="التكرار     (1)">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </JFXButton>
-                     </children>
-                  </HBox>
-               </VBox>
-               <VBox alignment="CENTER" maxWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;">
-                  <children>
+                     </HBox>
+                  </VBox>
+                  <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;">
                      <TextFlow textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                        <children>
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
-                              <font>
-                                 <Font name="System Bold" size="25.0" />
-                              </font>
-                           </Text>
-                        </children>
                         <padding>
                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                         </padding>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Text>
                      </TextFlow>
                      <HBox spacing="50.0" style="-fx-background-color: -fx-primary; -fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
                         <padding>
                            <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                         </padding>
                         <children>
-                           <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="9000.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="نسخ">
+                           <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="250.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="نسخ">
                               <graphic>
                                  <FontAwesomeIconView glyphName="COPY" size="20" style="-fx-fill: -fx-secondary-text;" />
                               </graphic>
@@ -113,16 +77,55 @@
                                  <Font name="System Bold" size="18.0" />
                               </font>
                            </JFXButton>
-                           <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="9000.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="التكرار     (1)">
+                           <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="250.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="التكرار     (1)">
                               <font>
                                  <Font name="System Bold" size="18.0" />
                               </font>
                            </JFXButton>
                         </children>
                      </HBox>
-                  </children>
-               </VBox>
-            </VBox>
+                  </VBox>
+                  <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;">
+                     <children>
+                        <TextFlow textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </TextFlow>
+                        <HBox spacing="50.0" style="-fx-background-color: -fx-primary; -fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
+                           <padding>
+                              <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
+                           </padding>
+                           <children>
+                              <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="250.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="نسخ">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="COPY" size="20" style="-fx-fill: -fx-secondary-text;" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXButton focusTraversable="false" graphicTextGap="20.0" prefWidth="250.0" style="-fx-text-fill: -fx-secondary-text;" styleClass="transparent-button" text="التكرار     (1)">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </FlowPane>
          </ScrollPane>
       </VBox>
       <HBox alignment="CENTER" minHeight="70.0" spacing="20.0" style="-fx-background-color: -fx-secondary;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -132,7 +135,7 @@
          <children>
             <ImageView fx:id="image" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../images/icons8_sun_50px.png" />
+                  <Image url="@../../../images/sun_50px.png" />
                </image>
             </ImageView>
             <Label fx:id="title" style="-fx-text-fill: -fx-secondary-text;" text="أذكار الصباح">
@@ -142,7 +145,7 @@
             </Label>
          </children>
       </HBox>
-      <JFXButton fx:id="settingsBTN" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#openSettings" styleClass="box-noraml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
+      <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#openSettings" styleClass="box-noraml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
          <graphic>
             <FontAwesomeIconView glyphName="GEAR" size="40" />
          </graphic>

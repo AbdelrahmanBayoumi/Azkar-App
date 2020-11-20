@@ -20,7 +20,7 @@
          <children>
             <ImageView fx:id="image" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/icons8_night_50px.png" />
+                  <Image url="@../../images/night_50px.png" />
                </image>
                <HBox.margin>
                   <Insets />

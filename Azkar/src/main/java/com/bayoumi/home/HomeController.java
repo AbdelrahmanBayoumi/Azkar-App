@@ -9,6 +9,7 @@ import com.bayoumi.util.Utility;
 import com.bayoumi.util.notfication.Notification;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXProgressBar;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,11 +23,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
@@ -34,8 +32,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.*;
-import java.util.logging.Level;
+import java.util.Date;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
 
@@ -61,8 +60,6 @@ public class HomeController implements Initializable {
     @FXML
     private JFXButton rearFrequency;
     private JFXButton currentFrequency;
-    private boolean isLoaded;
-
 
 
     @Override
@@ -75,14 +72,17 @@ public class HomeController implements Initializable {
             return;
         }
         absoluteAzkarTask = new EditablePeriodTimerTask(()
-                -> Platform.runLater(()
-                -> Notification.create(
-                AbsoluteZekr.absoluteZekrObservableList.get(
-                        new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                new Image("/com/bayoumi/images/"
-//                        + (new Random().nextInt(10) % 2 == 0 ? "11" : "22")
-                        + "22"
-                        + ".png"))),
+                -> {
+            System.out.println("ZekrList.isEmpty() : " + AbsoluteZekr.absoluteZekrObservableList.isEmpty());
+            if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
+                return;
+            }
+            Platform.runLater(()
+                    -> Notification.create(
+                    AbsoluteZekr.absoluteZekrObservableList.get(
+                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                    null));
+        },
                 this::getPeriod);
         absoluteAzkarTask.updateTimer("initialize()");
 
@@ -101,11 +101,8 @@ public class HomeController implements Initializable {
     }
 
     private void initClock() {
-        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a");
-//            timeLabel.setText(LocalDateTime.now().format(formatter));
-            timeLabel.setText(Utility.getTime("ar", new Date()));
-        }), new KeyFrame(Duration.seconds(1)));
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e ->
+                timeLabel.setText(Utility.getTime("ar", new Date()))), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
     }
@@ -176,14 +173,14 @@ public class HomeController implements Initializable {
 
     @FXML
     private void lowFrequencyAction() {
-        String msg = "ظهور كل" + " " +  20 + " " + "دقيقة";
+        String msg = "ظهور كل" + " " + 20 + " " + "دقيقة";
         frequencyLabel.setText(msg);
         toggleFrequencyBTN(lowFrequency);
     }
 
     @FXML
     private void rearFrequencyAction() {
-        String msg = "ظهور كل" + " " +  30 + " " + "دقيقة";
+        String msg = "ظهور كل" + " " + 30 + " " + "دقيقة";
         frequencyLabel.setText(msg);
         toggleFrequencyBTN(rearFrequency);
     }
@@ -217,29 +214,26 @@ public class HomeController implements Initializable {
 
     @FXML
     private void goToPrayerTimes() {
-        isLoaded = false;
         System.out.println("goToPrayerTimes");
         WebView webView = new WebView();
         WebEngine engine = webView.getEngine();
         webView.setZoom(1.5);  //zoom in 25%.
         engine.load("https://prayer-times-bayoumi.herokuapp.com");
+//        engine.load("https://www.google.com");
         engine.setUserAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
 
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         VBox.setVgrow(root, Priority.ALWAYS);
 
-        String s = "Loading ";
-        Label label = new Label(s);
-        label.setFont(Font.font("system", FontWeight.BOLD, 30));
+        JFXProgressBar progressBar = new JFXProgressBar();
 
         engine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                         if (newValue == Worker.State.SUCCEEDED) {
-                            isLoaded = true;
-                            root.getChildren().remove(label);
+                            root.getChildren().remove(progressBar);
                             webView.setVisible(true);
                         }
                     }
@@ -247,29 +241,15 @@ public class HomeController implements Initializable {
         );
         webView.setContextMenuEnabled(false);
         webView.setVisible(false);
-        root.getChildren().addAll(label, webView);
+        root.getChildren().addAll(progressBar, webView);
         Scene scene = new Scene(root, 540, 580);
         Stage stage = new Stage();
         stage.setResizable(false);
         Utility.SetAppDecoration(stage);
+        stage.initOwner(SingleInstance.getInstance().getCurrentStage());
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-        stage.setOnCloseRequest((event) -> isLoaded = true);
         stage.show();
-        new Thread(() -> {
-            while (!isLoaded) {
-                for (int i = 0; i < 3; i++) {
-                    Platform.runLater(() -> label.setText(label.getText() + "."));
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException ex) {
-                        java.util.logging.Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                Platform.runLater(() -> label.setText(s));
-            }
-        }).start();
-
     }
 
     @FXML

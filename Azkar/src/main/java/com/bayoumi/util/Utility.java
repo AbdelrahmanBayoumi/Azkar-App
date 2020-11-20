@@ -49,7 +49,7 @@ public class Utility {
 
     public static void SetIcon(Stage stage) {
         stage.getIcons().clear();
-        stage.getIcons().add(new Image("/com/bayoumi/images/icons8_mosque_50px.png"));
+        stage.getIcons().add(new Image("/com/bayoumi/images/masjid_icon.png"));
     }
 
     public static void exitProgramAction() {

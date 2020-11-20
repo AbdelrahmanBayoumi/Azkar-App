@@ -1,3 +1,0 @@
-[19-11-2020] [12:29:47 AM] => App Launched
-[19-11-2020] [12:30:26 AM] => App closed - Used for 39403 ms
-

@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +18,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -26,15 +27,18 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
+
 
 public class NotificationBox extends AnchorPane {
 
+    private static final MediaPlayer MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/notification.mp3").toURI().toString()));
+    private final TextFlow textFlow;
+    private final HBox notificationBox;
     private double xOffset = 0;
     private double yOffset = 0;
     private Text text;
-    private TextFlow textFlow;
     private ImageView image;
-    private HBox notificationBox;
 
     public NotificationBox(String message) {
         text = new Text(message);
@@ -72,6 +76,8 @@ public class NotificationBox extends AnchorPane {
         this.setOnMousePressed(this::RootMousePressed);
 //        this.setOnMouseReleased(this::closeAction);
         Platform.runLater(this::initAnimation);
+
+        MEDIA_PLAYER.play();
     }
 
 
@@ -88,7 +94,7 @@ public class NotificationBox extends AnchorPane {
             //Setting Translate Transition
             TranslateTransition translate = new TranslateTransition(Duration.millis(2000), this);
             double layoutY = this.getLayoutY();
-            this.setTranslateY(Screen.getPrimary().getVisualBounds().getHeight()+1000);
+            this.setTranslateY(Screen.getPrimary().getVisualBounds().getHeight() + 1000);
             translate.setToY(layoutY);
             //Setting Pause Transition
             PauseTransition pause = new PauseTransition(Duration.seconds(10));
@@ -109,7 +115,8 @@ public class NotificationBox extends AnchorPane {
     }
 
     private void closeAction(Event event) {
-//        System.out.println("Closing Notification ...");
+        System.out.println("Closing Notification ...");
+        MEDIA_PLAYER.stop();
         ((Stage) (text).getScene().getWindow()).close();
     }
 
@@ -122,8 +129,8 @@ public class NotificationBox extends AnchorPane {
 
     public void RootMouseDragged(Event event) {
         MouseEvent e = (MouseEvent) event;
-        ((Stage) (((Node) (event.getSource())).getScene().getWindow())).setX(e.getScreenX() - xOffset);
-        ((Stage) (((Node) (event.getSource())).getScene().getWindow())).setY(e.getScreenY() - yOffset);
+        ((Node) (event.getSource())).getScene().getWindow().setX(e.getScreenX() - xOffset);
+        ((Node) (event.getSource())).getScene().getWindow().setY(e.getScreenY() - yOffset);
     }
 
     public Text getText() {
@@ -138,9 +145,6 @@ public class NotificationBox extends AnchorPane {
         return textFlow;
     }
 
-    public void setTextFlow(TextFlow textFlow) {
-        this.textFlow = textFlow;
-    }
 
     public ImageView getImage() {
         return image;
@@ -150,11 +154,4 @@ public class NotificationBox extends AnchorPane {
         this.image = image;
     }
 
-    public HBox getNotificationBox() {
-        return notificationBox;
-    }
-
-    public void setNotificationBox(HBox notificationBox) {
-        this.notificationBox = notificationBox;
-    }
 }

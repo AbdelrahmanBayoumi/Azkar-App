@@ -29,11 +29,11 @@
             <version>8.9</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>8.40.15</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.controlsfx</groupId>-->
+<!--            <artifactId>controlsfx</artifactId>-->
+<!--            <version>8.40.15</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.xerial</groupId>
@@ -41,17 +41,17 @@
             <version>3.32.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.10.6</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>joda-time</groupId>-->
+<!--            <artifactId>joda-time</artifactId>-->
+<!--            <version>2.10.6</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.10</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpclient</artifactId>-->
+<!--            <version>4.5.10</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.github.msarhan</groupId>
@@ -114,6 +114,9 @@
                     <needShortcut>true</needShortcut>
                     <mainClass>com.bayoumi.main.Launcher</mainClass>
                     <additionalAppResources>addFolder</additionalAppResources>
+                    <bundleArguments>
+                        <icon>${project.basedir}/src/main/deploy/package/windows/Azkar.ico</icon>
+                    </bundleArguments>
                 </configuration>
             </plugin>
         </plugins>

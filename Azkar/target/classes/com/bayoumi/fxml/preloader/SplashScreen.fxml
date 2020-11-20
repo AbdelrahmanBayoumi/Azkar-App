@@ -10,7 +10,7 @@
 
 <AnchorPane onMouseDragged="#RootMouseDragged" onMousePressed="#RootMousePressed" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.preloader.SplashScreenController">
    <ImageView pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Image url="@../../images/ryan-pradipta-putra-MWJ7JpFBlGk-unsplash.png" />
+      <Image url="@../../images/Al-Masjid_an-Nabawi.png" />
    </ImageView>
    <JFXProgressBar fx:id="progressBarInstance" layoutX="51.0" layoutY="263.0" prefHeight="40.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    <Label fx:id="progressLabel" layoutX="10.0" layoutY="451.0" text="Loading 0%" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
