@@ -1,3 +1,3 @@
-Azkar/.idea
-Azkar/target
-Azkar/addFolder
+Azkar/.idea/*
+Azkar/target/*
+Azkar/addFolder/*
