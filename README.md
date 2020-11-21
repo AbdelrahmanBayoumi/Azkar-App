@@ -1,5 +1,10 @@
-<h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1>
+<a href="https://www.abdelrahmanbayoumi.ml/Azkar-App/"><h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1></a>
 
+
+- [EXE installer (Google Drive)](https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing)
+- [Website](https://www.abdelrahmanbayoumi.ml/Azkar-App/)
+
+<br>
 
 
 Desktop Application 💻 for: 
@@ -18,8 +23,6 @@ Desktop Application 💻 for:
 </div>
 
 
-## EXE Installer 
-- [Google Drive](https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing)
 
 ## Screenshots
 
@@ -39,6 +42,7 @@ Desktop Application 💻 for:
 
 ## Tools & Technologies
 -  [JFoenix 8.0.8](http://www.jfoenix.com/) library is an open source Java library, that implements Google Material Design using Java components .
+- [FontawesomeFX 8.9](https://bitbucket.org/Jerady/fontawesomefx/src/master/) for Icons
 -  [Ummalqura-Calendar 1.1.9](https://github.com/msarhan/ummalqura-calendar) for Hijri Calender.
 -  [sqlite](https://www.sqlite.org/) SQL database engine.
 
@@ -58,7 +62,9 @@ Please ⭐️ this repo and share it with others
 
 <br>
 
+
 <p align="center">
+ <a align="center" href="https://www.abdelrahmanbayoumi.ml/Azkar-App/"><img alt="Website"  align="center" src="https://img.shields.io/website?color=black&down_color=black&label=%20&logo=google-earth&logoColor=white&up_color=black&up_message=Website&url=https://www.abdelrahmanbayoumi.ml/Azkar-App/"></a> 
      <a align="center" href="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/LICENSE?token=ALTMLCHZLY3KNLQS27OW2B27YFOCG"><img alt="License MIT"  align="center" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
      <a align="center" href="(https://hits.seeyoufarm.com"><img alt="HITS"  align="center" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAbdelrahmanBayoumi%2FAzkar-App&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=PAGE+VIEWS&edge_flat=false"></a>
 </p>
