@@ -1,6 +1,6 @@
 package com.bayoumi.util;
 
-import com.bayoumi.util.notfication.Notification;
+import com.bayoumi.util.gui.notfication.Notification;
 import javafx.application.Platform;
 
 import java.util.Timer;

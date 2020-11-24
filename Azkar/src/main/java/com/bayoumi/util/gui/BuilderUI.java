@@ -1,9 +1,8 @@
 package com.bayoumi.util.gui;
 
-import com.bayoumi.alert.confirm.ConfirmAlertController;
-import com.bayoumi.alert.edit.textfield.EditTextFieldController;
+import com.bayoumi.controllers.alert.confirm.ConfirmAlertController;
+import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utility;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -18,8 +17,8 @@ public class BuilderUI {
         try {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            Utility.SetIcon(stage);
-            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/fxml/alert/confirm/ConfirmAlert.fxml"));
+            HelperMethods.SetIcon(stage);
+            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/alert/confirm/ConfirmAlert.fxml"));
             stage.setScene(new Scene(loader.load()));
             ConfirmAlertController controller = loader.getController();
             controller.setData(isDanger, text);
@@ -36,8 +35,8 @@ public class BuilderUI {
         try {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            Utility.SetIcon(stage);
-            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/fxml/alert/edit/textfield/EditTextField.fxml"));
+            HelperMethods.SetIcon(stage);
+            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/alert/edit/textfield/EditTextField.fxml"));
             stage.setScene(new Scene(loader.load()));
             EditTextFieldController controller = loader.getController();
             controller.setData(prompt, value);

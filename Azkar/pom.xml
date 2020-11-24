@@ -47,11 +47,34 @@
 <!--            <version>2.10.6</version>-->
 <!--        </dependency>-->
 
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>3.11.04</version>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>org.apache.httpcomponents</groupId>-->
 <!--            <artifactId>httpclient</artifactId>-->
 <!--            <version>4.5.10</version>-->
 <!--        </dependency>-->
+
+        <!--  Gson: Java to Json conversion -->
+        <!--        <dependency>-->
+        <!--            <groupId>com.google.code.gson</groupId>-->
+        <!--            <artifactId>gson</artifactId>-->
+        <!--            <version>2.8.6</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
+
+
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+<!--        <dependency>-->
+<!--            <groupId>org.json</groupId>-->
+<!--            <artifactId>json</artifactId>-->
+<!--            <version>20190722</version>-->
+<!--        </dependency>-->
+
 
         <dependency>
             <groupId>com.github.msarhan</groupId>
@@ -93,7 +116,7 @@
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.bayoumi.main.Launcher</mainClass>
+                                    <mainClass>com.bayoumi.Launcher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -112,7 +135,7 @@
                     <description>Azkar</description>
                     <needMenu>true</needMenu>
                     <needShortcut>true</needShortcut>
-                    <mainClass>com.bayoumi.main.Launcher</mainClass>
+                    <mainClass>com.bayoumi.Launcher</mainClass>
                     <additionalAppResources>addFolder</additionalAppResources>
                     <bundleArguments>
                         <icon>${project.basedir}/src/main/deploy/package/windows/Azkar.ico</icon>
