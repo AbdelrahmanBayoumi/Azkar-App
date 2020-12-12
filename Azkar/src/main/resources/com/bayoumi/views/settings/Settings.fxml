@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane nodeOrientation="RIGHT_TO_LEFT" prefHeight="600.0" prefWidth="750.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <JFXButton contentDisplay="TOP" disable="true" focusTraversable="false" graphicTextGap="20.0" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" styleClass="secondary-button" text="المدينة" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="GLOBE" size="40" />
+                     </graphic></JFXButton>
+                  <JFXButton contentDisplay="TOP" disable="true" focusTraversable="false" graphicTextGap="20.0" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" styleClass="secondary-button" text="الأذان" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="VOLUME_UP" size="40" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="20.0" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" styleClass="primary-button" text="الأذكار" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BOOK" size="40" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton contentDisplay="TOP" disable="true" focusTraversable="false" graphicTextGap="20.0" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" styleClass="secondary-button" text="أخرى" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="GEAR" size="40" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <AnchorPane HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" layoutX="123.0" layoutY="206.0" spacing="20.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <HBox alignment="CENTER" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <VBox alignment="CENTER" spacing="35.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <VBox alignment="CENTER" spacing="2.0">
+                                       <children>
+                                          <HBox alignment="CENTER" spacing="20.0">
+                                             <children>
+                                                <Label text="ظهور الأذكار كل:" textAlignment="CENTER" wrapText="true">
+                                                   <font>
+                                                      <Font name="System Bold" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox alignment="CENTER" spacing="5.0">
+                                                   <children>
+                                                      <Spinner focusTraversable="false" prefWidth="90.0" />
+                                                      <Label text="دقيقة" textAlignment="CENTER" wrapText="true">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </HBox>
+                                          <Label text="وضع الدقائق على (صفر) يلغي الظهور التلقائي للأذكار" textAlignment="CENTER" wrapText="true">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <HBox alignment="CENTER" spacing="30.0">
+                                       <children>
+                                          <Label prefWidth="284.0" text="صوت التنبيه للأذكار" textAlignment="CENTER" wrapText="true">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox prefWidth="279.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <JFXComboBox focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" spacing="30.0">
+                                       <children>
+                                          <Label prefWidth="284.0" text="التذكير بأذكار المساء (بعد صلاة العصر)" textAlignment="CENTER" wrapText="true">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <JFXComboBox focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" spacing="30.0">
+                                       <children>
+                                          <Label prefWidth="284.0" text="التذكير بأذكار الصباح (بعد صلاة الفجر)" textAlignment="CENTER" wrapText="true">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <JFXComboBox focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</StackPane>

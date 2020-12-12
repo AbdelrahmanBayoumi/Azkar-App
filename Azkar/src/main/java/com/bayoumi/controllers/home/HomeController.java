@@ -11,24 +11,15 @@ import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXProgressBar;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -41,17 +32,17 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
 
     private final String LANGUAGE = "ar";
+    @FXML
+    public Label hijriDate;
+    @FXML
+    public Label day;
+    @FXML
+    public Label gregorianDate;
+    @FXML
+    public Label timeLabel;
     //    private Timeline timeline_debug;
 //    private LocalTime time_debug = LocalTime.parse("00:00:00");
     private EditablePeriodTimerTask absoluteAzkarTask;
-    @FXML
-    private Label hijriDate;
-    @FXML
-    private Label day;
-    @FXML
-    private Label gregorianDate;
-    @FXML
-    private Label timeLabel;
     @FXML
     private Label frequencyLabel;
     @FXML
@@ -120,27 +111,27 @@ public class HomeController implements Initializable {
     }
 
     private Long getPeriod() {
-//        if (currentFrequency.equals(highFrequency)) {
-//            return 300000L; // 5 min
-//        } else if (currentFrequency.equals(midFrequency)) {
-//            return 600000L; // 10 min
-//        } else if (currentFrequency.equals(lowFrequency)) {
-//            return 1200000L; // 20 min
-//        } else if (currentFrequency.equals(rearFrequency)) {
-//            return 1800000L; // 30 min
-//        }
-//        return 300000L;
-
         if (currentFrequency.equals(highFrequency)) {
-            return 15000L;
+            return 300000L; // 5 min
         } else if (currentFrequency.equals(midFrequency)) {
-            return 30000L;
+            return 600000L; // 10 min
         } else if (currentFrequency.equals(lowFrequency)) {
-            return 40000L;
+            return 1200000L; // 20 min
         } else if (currentFrequency.equals(rearFrequency)) {
-            return 50000L;
+            return 1800000L; // 30 min
         }
-        return 50000L;
+        return 300000L;
+
+//        if (currentFrequency.equals(highFrequency)) {
+//            return 15000L;
+//        } else if (currentFrequency.equals(midFrequency)) {
+//            return 30000L;
+//        } else if (currentFrequency.equals(lowFrequency)) {
+//            return 40000L;
+//        } else if (currentFrequency.equals(rearFrequency)) {
+//            return 50000L;
+//        }
+//        return 50000L;
     }
 
     @FXML
@@ -226,42 +217,17 @@ public class HomeController implements Initializable {
 
     @FXML
     private void goToPrayerTimes() {
-        System.out.println("goToPrayerTimes");
-        WebView webView = new WebView();
-        WebEngine engine = webView.getEngine();
-        webView.setZoom(1.5);  //zoom in 25%.
-        engine.load("https://prayer-times-bayoumi.herokuapp.com");
-//        engine.load("https://www.google.com");
-        engine.setUserAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
-
-        VBox root = new VBox();
-        root.setAlignment(Pos.CENTER);
-        VBox.setVgrow(root, Priority.ALWAYS);
-
-        JFXProgressBar progressBar = new JFXProgressBar();
-
-        engine.getLoadWorker().stateProperty().addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                        if (newValue == Worker.State.SUCCEEDED) {
-                            root.getChildren().remove(progressBar);
-                            webView.setVisible(true);
-                        }
-                    }
-                }
-        );
-        webView.setContextMenuEnabled(false);
-        webView.setVisible(false);
-        root.getChildren().addAll(progressBar, webView);
-        Scene scene = new Scene(root, 540, 580);
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        HelperMethods.SetAppDecoration(stage);
-        stage.initOwner(SingleInstance.getInstance().getCurrentStage());
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.show();
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/prayertimes/PrayerTimes.fxml"));
+            stage.setScene(new Scene(loader.load()));
+            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            HelperMethods.SetIcon(stage);
+            stage.showAndWait();
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".goToPrayerTimes()");
+        }
     }
 
     @FXML

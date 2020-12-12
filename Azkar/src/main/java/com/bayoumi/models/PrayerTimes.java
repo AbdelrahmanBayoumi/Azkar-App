@@ -1,6 +1,9 @@
 package com.bayoumi.models;
 
+import com.bayoumi.util.time.HijriDate;
+
 public class PrayerTimes {
+    private HijriDate hijriDate;
     private String fajr;
     private String sunrise;
     private String dhuhr;
@@ -8,7 +11,8 @@ public class PrayerTimes {
     private String maghrib;
     private String isha;
 
-    public PrayerTimes(String fajr, String sunrise, String dhuhr, String asr, String maghrib, String isha) {
+    public PrayerTimes(HijriDate hijriDate, String fajr, String sunrise, String dhuhr, String asr, String maghrib, String isha) {
+        this.hijriDate = hijriDate;
         this.fajr = fajr;
         this.sunrise = sunrise;
         this.dhuhr = dhuhr;
@@ -19,6 +23,14 @@ public class PrayerTimes {
 
     public static PrayerTimesBuilder builder() {
         return new PrayerTimesBuilder();
+    }
+
+    public HijriDate getHijriDate() {
+        return hijriDate;
+    }
+
+    public void setHijriDate(HijriDate hijriDate) {
+        this.hijriDate = hijriDate;
     }
 
     public String getFajr() {

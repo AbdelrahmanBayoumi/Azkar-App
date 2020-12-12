@@ -1,3 +1,7 @@
+@font-face {
+    font-family: 'Alameen-Demibold';
+    src: url('../fonts/Alameen.ttf');
+}
 
 * {
     /* ====== Colors ====== */
@@ -5,7 +9,7 @@
     -fx-primary-dark: derive(#2A9D8F, -40%);
     -fx-primary-light: derive(#2A9D8F, 40%);
 
-    -fx-secondary: #264653;
+    -fx-secondary: #33485d;
     -fx-secondary-hover: derive(#264653, -40%);
     -fx-secondary-light: derive(#264653, -40%);
 
@@ -21,6 +25,7 @@
     -fx-secondary-text: #ffffff;
     /* ====== Button ====== */
     -fx-primary-button: linear-gradient(-fx-primary-light, -fx-primary);
+    /**/
     -fx-primary-button-text: -fx-secondary-text;
     -fx-primary-button-hover: -fx-primary-dark;
     /* ====== Table ====== */
@@ -42,7 +47,6 @@
 /* ============ label ============ */
 .label {
     -fx-text-fill: -fx-primary-text;
-
 }
 
 .error-label {
@@ -55,6 +59,10 @@
     -fx-background-radius: 20;
     -fx-text-fill: -fx-primary-button-text;
     -fx-cursor: hand;
+}
+
+.button .glyph-icon{
+    -fx-fill: -fx-primary-button-text;
 }
 
 .button:hover {
@@ -135,21 +143,6 @@
     -fx-background-radius: 20 20 0 0;
 }
 
-.login-button {
-    -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
-}
-
-.login-button:hover {
-    -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-}
-
-.button-special {
-    /*-fx-background-color: radial-gradient(radius 180%, -fx-primary, derive(-fx-primary, -20%), derive(-fx-primary, 20%));*/
-    -fx-background-color: linear-gradient(-fx-primary-light, -fx-primary);
-}
-
 .close-button {
     -fx-background-color: linear-gradient(red, -fx-red);;
 }
@@ -166,8 +159,21 @@
     -fx-background-color: derive(green, -20%);
 }
 
+.primary-button {
+    -fx-background-color: linear-gradient(-fx-primary-light, -fx-primary);
+}
+.primary-button .glyph-icon{
+    -fx-fill: -fx-secondary-text;
+}
+.primary-button:hover {
+    -fx-background-color: derive(-fx-primary, -10%);
+}
+
 .secondary-button {
     -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
+}
+.secondary-button .glyph-icon{
+    -fx-fill: -fx-secondary-text;
 }
 
 .secondary-button:hover {
@@ -213,18 +219,22 @@
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
-.box-noraml .glyph-icon{
+
+.box-noraml .glyph-icon {
     -fx-fill: -fx-primary-text;
 }
+
 .box-noraml:hover {
     -fx-background-color: -fx-primary;
     -fx-text-fill: -fx-secondary-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
-.box-noraml:hover .glyph-icon{
+
+.box-noraml:hover .glyph-icon {
     -fx-fill: -fx-secondary-text;
 }
+
 /* ============ check-box ============ */
 .check-box {
     -jfx-checked-color: -fx-secondary;
@@ -458,4 +468,39 @@
     -fx-background-color: derive(#4D4C4F, 10.0%);
     -fx-background-insets: 2.0, 0.0, 0.0;
     -fx-background-radius: 2.0em;
+}
+
+/* == Prayer Times == */
+.dark-bg {
+    -fx-background-color: -fx-secondary;
+}
+
+.dark-bg .label{
+    -fx-font-family: Alameen-Demibold;
+    -fx-font-size: 24;
+}
+.box-prayer {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-secondary-text;
+    -fx-border-radius: 5;
+    -fx-border-width: 0 0 1 0;
+}
+
+.box-prayer .label {
+    -fx-font-family: Alameen-Demibold;
+    -fx-font-size: 26;
+}
+
+.prayer-label-text {
+    -fx-text-fill: -fx-third;
+}
+
+.prayer-label-time {
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.box-prayer-selected {
+    -fx-border-color: -fx-third;
+    -fx-border-width: 3;
 }

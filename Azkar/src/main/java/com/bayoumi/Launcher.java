@@ -1,5 +1,6 @@
 package com.bayoumi;
 
+import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
@@ -18,10 +19,10 @@ import javafx.stage.Stage;
 public class Launcher extends Application {
 
     public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
+    public static HomeController homeController;
     public static double preloaderProgress = 0;
     public static Long startTime;
     private Scene scene = null;
-
 
     public static void main(String[] args) {
         LauncherImpl.launchApplication(Launcher.class, CustomPreloaderMain.class, args);
@@ -65,8 +66,10 @@ public class Launcher extends Application {
         incrementPreloader();
         try {
             // load FXML
-            scene = new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/home/home.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/home/home.fxml"));
+            scene = new Scene(loader.load());
             scene.getStylesheets().add("/com/bayoumi/css/style.css");
+            homeController = loader.getController();
             incrementPreloader();
             long tempTime = 200;
 //            Thread.sleep(tempTime);
