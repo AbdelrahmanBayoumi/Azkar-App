@@ -1,6 +1,6 @@
 <a href="https://www.abdelrahmanbayoumi.ml/Azkar-App/"><h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1></a>
 
-
+- Powerd by [ ![install4j](https://www.ej-technologies.com/images/product_banners/install4j_large.png) ](https://www.ej-technologies.com/products/install4j/overview.html) multi-platform installer builder
 - [EXE installer (Google Drive)](https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing)
 - [Website](https://www.abdelrahmanbayoumi.ml/Azkar-App/)
 
