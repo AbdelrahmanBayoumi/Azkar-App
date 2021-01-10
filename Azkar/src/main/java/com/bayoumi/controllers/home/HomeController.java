@@ -3,6 +3,7 @@ package com.bayoumi.controllers.home;
 import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.OtherSettings;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
@@ -30,8 +31,6 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
-
-    private final String LANGUAGE = "ar";
     @FXML
     public Label hijriDate;
     @FXML
@@ -40,6 +39,7 @@ public class HomeController implements Initializable {
     public Label gregorianDate;
     @FXML
     public Label timeLabel;
+    private OtherSettings otherSettings;
     //    private Timeline timeline_debug;
 //    private LocalTime time_debug = LocalTime.parse("00:00:00");
     private EditablePeriodTimerTask absoluteAzkarTask;
@@ -55,8 +55,11 @@ public class HomeController implements Initializable {
     private JFXButton rearFrequency;
     private JFXButton currentFrequency;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        otherSettings = new OtherSettings();
+
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
@@ -87,23 +90,32 @@ public class HomeController implements Initializable {
         initClock();
 
         Date date = new Date();
-        day.setText(Utilities.getDay(LANGUAGE, date));
-        hijriDate.setText(Utilities.getGregorianDate(LANGUAGE, date));
-        gregorianDate.setText(HijriDate.getHijriDateString(LANGUAGE));
+        day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
+        hijriDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
+        gregorianDate.setText(HijriDate.getHijriDateString(otherSettings.getLanguageLocal()));
     }
 
     private void initClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             Date date = new Date();
-            String timeNow = Utilities.getTime(LANGUAGE, date);
+            String timeNow;
+            if (OtherSettings.isUpdated) {
+                otherSettings = new OtherSettings();
+                OtherSettings.isUpdated = false;
+            }
+            if (otherSettings.isEnable24Format()) {
+                timeNow = Utilities.getTime24(otherSettings.getLanguageLocal(), date);
+            } else {
+                timeNow = Utilities.getTime(otherSettings.getLanguageLocal(), date);
+            }
             timeLabel.setText(timeNow);
 
             // Is it new day? => change Dates and the prayer times
-            if (timeNow.equals("12:00:00 AM") || timeNow.equals("12:00:00 ص")) {
+            if (timeNow.equals("12:00:00 AM") || timeNow.equals("12:00:00 ص") || timeNow.equals("00:00:00")) {
                 System.out.println("NEW DAY ...");
-                day.setText(Utilities.getDay("ar", date));
-                hijriDate.setText(Utilities.getGregorianDate("ar", date));
-                gregorianDate.setText(HijriDate.getHijriDateString("ar"));
+                day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
+                hijriDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
+                gregorianDate.setText(HijriDate.getHijriDateString(otherSettings.getLanguageLocal()));
             }
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
@@ -232,6 +244,17 @@ public class HomeController implements Initializable {
 
     @FXML
     private void goToSettings() {
-        System.out.println("goToSettings");
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/Settings.fxml"));
+            stage.setScene(new Scene(loader.load()));
+            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            HelperMethods.SetIcon(stage);
+            stage.showAndWait();
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".goToSettings()");
+        }
     }
+
 }

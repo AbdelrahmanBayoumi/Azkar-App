@@ -2,7 +2,9 @@ package com.bayoumi.util;
 
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.util.time.HijriDate;
-import kong.unirest.*;
+import kong.unirest.GetRequest;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import kong.unirest.json.JSONObject;
 
 public class WebService {
@@ -11,23 +13,26 @@ public class WebService {
     // http://api.aladhan.com/v1/timings/19-09-2020?latitude=31.2000924&longitude=29.9187387&method=5
     private static final String PRAYER_TIMES_END_POINT = "http://api.aladhan.com/v1/hijriCalendarByCity";
 
-    public static PrayerTimes getPrayerTimesToday(String city, String country, String method) {
-        String language = "ar";
+    public static PrayerTimes getPrayerTimesToday() {
+        PrayerTimes.PrayerTimeSettings prayerTimeSettings = new PrayerTimes.PrayerTimeSettings();
         try {
             JSONObject jsonRoot = getJsonResponse("http://api.aladhan.com/v1/timingsByCity"
-                    , new Query("country", country), new Query("method", method), new Query("city", city));
+                    , new Query("country", prayerTimeSettings.getCountry())
+                    , new Query("city", prayerTimeSettings.getCity())
+                    , new Query("method", String.valueOf(prayerTimeSettings.getMethod().getId()))
+                    , new Query("school", String.valueOf(prayerTimeSettings.getAsrJuristic())));
 
             if (jsonRoot.has("code")) {
                 if (jsonRoot.getString("code").equals("200")) {
                     if (jsonRoot.has("data")) { // Is Data founded?
                         JSONObject timingsResult = jsonRoot.getJSONObject("data").getJSONObject("timings");
                         return PrayerTimes.builder()
-                                .fajr(Utilities.formatTime24To12String(language, timingsResult.getString("Fajr")))
-                                .sunrise(Utilities.formatTime24To12String(language, timingsResult.getString("Sunrise")))
-                                .dhuhr(Utilities.formatTime24To12String(language, timingsResult.getString("Dhuhr")))
-                                .asr(Utilities.formatTime24To12String(language, timingsResult.getString("Asr")))
-                                .maghrib(Utilities.formatTime24To12String(language, timingsResult.getString("Maghrib")))
-                                .isha(Utilities.formatTime24To12String(language, timingsResult.getString("Isha")))
+                                .fajr(timingsResult.getString("Fajr"))
+                                .sunrise(timingsResult.getString("Sunrise"))
+                                .dhuhr(timingsResult.getString("Dhuhr"))
+                                .asr(timingsResult.getString("Asr"))
+                                .maghrib(timingsResult.getString("Maghrib"))
+                                .isha(timingsResult.getString("Isha"))
                                 .build();
                     }
                 }
@@ -50,9 +55,10 @@ public class WebService {
         for (Query q : query) {
             getRequest = getRequest.queryString(q.getKey(), q.getValue());
         }
-
+        System.out.println("URL: " + getRequest.getUrl());
         return new JSONObject(getRequest.asJson().getBody().toString());
     }
+
     public static PrayerTimes getPrayerTimesMonth(String city, String country, String method, HijriDate hijriDate) {
         String language = "ar";
         try {
@@ -93,6 +99,7 @@ public class WebService {
                 .isha("--:--")
                 .build();
     }
+
     public static PrayerTimes getPrayerTimes(String city, String country, String method, HijriDate hijriDate) {
         String language = "ar";
         try {
@@ -134,10 +141,10 @@ public class WebService {
                 .build();
     }
 
-    public static void main(String[] args) {
-        String language = "ar";
-        PrayerTimes prayerTimes = getPrayerTimes("Alexandria", "Egypt", "5", HijriDate.getHijriDate(language));
-        System.out.println(prayerTimes);
-        System.out.println(getJsonResponse("http://api.aladhan.com/v1/timingsByCity", new Query("country", "Egypt"), new Query("method", "5"), new Query("city", "Alexandria")));
-    }
+//    public static void main(String[] args) {
+//        String language = "ar";
+//        PrayerTimes prayerTimes = getPrayerTimes("Alexandria", "Egypt", "5", HijriDate.getHijriDate(language));
+//        System.out.println(prayerTimes);
+//        System.out.println(getJsonResponse("http://api.aladhan.com/v1/timingsByCity", new Query("country", "Egypt"), new Query("method", "5"), new Query("city", "Alexandria")));
+//    }
 }

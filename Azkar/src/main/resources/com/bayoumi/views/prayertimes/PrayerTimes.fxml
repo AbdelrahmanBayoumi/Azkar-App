@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.layout.HBox?>
@@ -8,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.prayertimes.PrayerTimesController">
+<StackPane fx:id="stackPane" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.prayertimes.PrayerTimesController">
    <children>
       <VBox alignment="CENTER" prefHeight="630.0" prefWidth="460.0" styleClass="dark-bg" StackPane.alignment="CENTER">
          <VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: #30425d;">
@@ -181,6 +184,28 @@
                <Insets bottom="30.0" left="50.0" right="50.0" top="30.0" />
             </padding>
          </VBox>
+         <HBox alignment="CENTER_RIGHT">
+            <children>
+               <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Button">
+                  <graphic>
+                     <FontAwesomeIconView glyphName="INFO_CIRCLE" onMouseClicked="#showInfo" size="25">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                     </FontAwesomeIconView>
+                  </graphic>
+                  <padding>
+                     <Insets bottom="1.0" left="11.0" right="7.0" top="1.0" />
+                  </padding>
+               </Button>
+            </children>
+            <padding>
+               <Insets bottom="5.0" right="10.0" />
+            </padding>
+            <VBox.margin>
+               <Insets top="-20.0" />
+            </VBox.margin>
+         </HBox>
       </VBox>
       <VBox fx:id="loadingBox" alignment="CENTER" spacing="20.0" style="-fx-background-color: rgba(0, 0, 0, 0.7);" StackPane.alignment="CENTER">
          <children>

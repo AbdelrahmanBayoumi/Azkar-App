@@ -1,6 +1,7 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.db.DatabaseHandler;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -28,15 +29,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.sql.ResultSet;
 
 
 public class NotificationBox extends AnchorPane {
 
-    private static final MediaPlayer MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/notification.mp3").toURI().toString()));
-
-    static {
-        MEDIA_PLAYER.setVolume(0.5);
-    }
+    //    private static MediaPlayer MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/notification01.mp3").toURI().toString()));
+    private static MediaPlayer MEDIA_PLAYER;
 
     private final TextFlow textFlow;
     private final HBox notificationBox;
@@ -79,12 +78,10 @@ public class NotificationBox extends AnchorPane {
         this.getStylesheets().add("/com/bayoumi/css/notification.css");
         this.setOnMouseDragged(this::RootMouseDragged);
         this.setOnMousePressed(this::RootMousePressed);
-//        this.setOnMouseReleased(this::closeAction);
         Platform.runLater(this::initAnimation);
 
-        MEDIA_PLAYER.play();
+        setAlarmSound();
     }
-
 
     public NotificationBox(String msg, Image img) {
         this(msg);
@@ -92,6 +89,27 @@ public class NotificationBox extends AnchorPane {
         this.image.setFitHeight(50);
         this.image.setFitWidth(50);
         this.notificationBox.getChildren().add(0, this.image);
+    }
+
+    public void setAlarmSound() {
+        String fileName = getSelectedAlarmSound();
+        if (!fileName.equals("بدون صوت")) {
+            MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
+            MEDIA_PLAYER.setVolume(0.5);
+            MEDIA_PLAYER.play();
+        }
+    }
+
+    private String getSelectedAlarmSound() {
+        try {
+            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
+            if (res.next()) {
+                return res.getString(3);
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, getClass().getName() + ".getSelectedAlarmSound()");
+        }
+        return "بدون صوت";
     }
 
     private void initAnimation() {
@@ -121,7 +139,9 @@ public class NotificationBox extends AnchorPane {
 
     private void closeAction(Event event) {
         System.out.println("Closing Notification ...");
-        MEDIA_PLAYER.stop();
+        if (MEDIA_PLAYER != null) {
+            MEDIA_PLAYER.stop();
+        }
         ((Stage) (text).getScene().getWindow()).close();
     }
 

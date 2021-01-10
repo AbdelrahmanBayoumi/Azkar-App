@@ -256,6 +256,15 @@
     -fx-font-size: 20;
 }
 
+.radio-button-normal {
+    -jfx-selected-color: -fx-secondary;
+    -jfx-unselected-color: -fx-secondary;
+    -fx-text-fill: -fx-primary-text;
+    -fx-font-size:15;
+    -fx-font-weight:bold;
+}
+
+
 .radio-button:selected {
     -fx-font-weight: bold;
     -fx-font-size: 20;

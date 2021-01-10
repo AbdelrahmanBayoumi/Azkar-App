@@ -1,19 +1,31 @@
 package com.bayoumi.controllers.prayertimes;
 
 import com.bayoumi.Launcher;
+import com.bayoumi.controllers.prayertimes.info.InfoController;
+import com.bayoumi.models.OtherSettings;
 import com.bayoumi.models.PrayerTimes;
+import com.bayoumi.util.Logger;
 import com.bayoumi.util.WebService;
+import com.jfoenix.controls.JFXDialog;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PrayerTimesController implements Initializable {
 
+    private PrayerTimes prayerTimes;
+    @FXML
+    private StackPane stackPane;
+    @FXML
+    private VBox infoBox;
     @FXML
     private Label day;
     @FXML
@@ -52,11 +64,18 @@ public class PrayerTimesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         new Thread(() -> {
-            String language = "ar";
-//            PrayerTimes prayerTimes = WebService.getPrayerTimes("Alexandria", "Egypt", "5", HijriDate.getHijriDate(language));
-            PrayerTimes prayerTimes = WebService.getPrayerTimesToday("Alexandria", "Egypt", "5");
-            System.out.println("EE: " + prayerTimes);
+            prayerTimes = WebService.getPrayerTimesToday();
+            System.out.println("fetched: " + prayerTimes);
+
             Platform.runLater(() -> {
+                if (prayerTimes.getPrayerTimeSettings().isSummerTiming()) {
+                    prayerTimes.enableSummerTime();
+                }
+
+                OtherSettings otherSettings = new OtherSettings();
+                if (!otherSettings.isEnable24Format()) {
+                    prayerTimes.formatTime24To12( otherSettings.getLanguageLocal());
+                }
                 fajrTime.setText(prayerTimes.getFajr());
                 sunriseTime.setText(prayerTimes.getSunrise());
                 dhuhrTime.setText(prayerTimes.getDhuhr());
@@ -73,5 +92,17 @@ public class PrayerTimesController implements Initializable {
         }).start();
     }
 
-
+    @FXML
+    private void showInfo() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/prayertimes/info/Info.fxml"));
+            JFXDialog dialog = new JFXDialog(stackPane, loader.load(), JFXDialog.DialogTransition.TOP);
+            InfoController infoController = loader.getController();
+            infoController.setData(prayerTimes.getPrayerTimeSettings());
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Logger.error(null, ex, getClass().getName() + ".showInfo()");
+        }
+    }
 }
