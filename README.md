@@ -1,8 +1,6 @@
 <a href="https://www.abdelrahmanbayoumi.ml/Azkar-App/"><h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1></a>
 
-- Powerd by [ ![install4j](https://www.ej-technologies.com/images/product_banners/install4j_large.png) ](https://www.ej-technologies.com/products/install4j/overview.html) multi-platform installer builder
-- [EXE installer](https://azkar-server.herokuapp.com/release/Azkar_windows-x64_1_0_1.exe)
-- [EXE installer (Google Drive)](https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing)
+[How to Install](#how-to-install)
 - [Website](https://www.abdelrahmanbayoumi.ml/Azkar-App/)
 
 <br>
@@ -32,8 +30,15 @@ Desktop Application 💻 for:
 </div>
 
 
+## How to Install
 
-## Installation
+- [EXE installer](https://azkar-server.herokuapp.com/release/Azkar_windows-x64_1_0_1.exe)
+- [EXE installer (Google Drive)](https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing)
+
+| *Note* | Thanks <a href="https://www.ej-technologies.com/products/install4j/overview.html"> <img alt="install4j" src="https://www.ej-technologies.com/images/product_banners/install4j_large.png" width="80px" /></a> for providing us open source license for the installers used in Azkar distribution. |
+| --- | --- |
+
+## Installation for development
 1. Download the repository files (project) from the download section or clone this project by typing in the bash the following command:
 
        git clone https://github.com/AbdelrahmanBayoumi/Azkar-App.git
@@ -48,7 +53,7 @@ Desktop Application 💻 for:
 -  [sqlite](https://www.sqlite.org/) SQL database engine.
 
 ## Requirements
-* Java +8
+* Java 8
 * Internet connection (for prayer times)
 
 
