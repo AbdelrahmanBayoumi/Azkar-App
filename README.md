@@ -1,6 +1,6 @@
 <a href="https://www.abdelrahmanbayoumi.ml/Azkar-App/"><h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1></a>
 
-[How to Install](#how-to-install)
+- [How to Install](#how-to-install)
 - [Website](https://www.abdelrahmanbayoumi.ml/Azkar-App/)
 
 <br>
