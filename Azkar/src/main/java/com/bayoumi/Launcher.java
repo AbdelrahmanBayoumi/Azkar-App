@@ -2,11 +2,14 @@ package com.bayoumi;
 
 import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.preloader.CustomPreloaderMain;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
+import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.bayoumi.util.db.DatabaseHandler;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
+import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.bayoumi.util.validation.SingleInstance;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
@@ -17,11 +20,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
-
+    // preloader flags
     public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
-    public static HomeController homeController;
     public static double preloaderProgress = 0;
+    // for logging purpose
     public static Long startTime;
+    public static HomeController homeController;
+    // Program characteristics
+    private final String VERSION = "1.0.4_2";
+    // GUI Objects
     private Scene scene = null;
 
     public static void main(String[] args) {
@@ -47,45 +54,47 @@ public class Launcher extends Application {
                 Utilities.exitProgramAction();
             }
         });
-
         incrementPreloader();
-        // Create Needed Folder if not exist.
-        Utilities.createDirectory("jarFiles/logs");
-        Utilities.createDirectory("jarFiles/db");
-        Utilities.createDirectory("jarFiles/audio");
 
-        Logger.init();
-        Logger.info("App Launched");
-
-        incrementPreloader();
-        // connect to db
-        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-        if (!databaseHandler.connectToDatabase()) {
-            workFine.setValue(false);
-        }
-        incrementPreloader();
         try {
-            // load FXML
+            // Create Needed Folder if not exist.
+            Utilities.createDirectory(Constants.assetsPath + "/logs");
+            Utilities.createDirectory(Constants.assetsPath + "/db");
+            Utilities.createDirectory(Constants.assetsPath + "/audio");
+
+            Logger.init();
+            Logger.info("App Launched");
+            incrementPreloader();
+
+            Constants.copyAssetsDBToAppData(); // TODO in Production remove comment for this line.
+
+            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
+            if (!databaseAssetsManager.init()) {
+                workFine.setValue(false);
+            }
+            // validate version
+            databaseAssetsManager.setVersion(VERSION);
+            incrementPreloader();
+
+            // connect to db (READ ONLY DB)
+            DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+            if (!databaseHandler.connectToDatabase()) {
+                workFine.setValue(false);
+            }
+            incrementPreloader();
+
+            // load  Homepage FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/home/home.fxml"));
             scene = new Scene(loader.load());
             scene.getStylesheets().add("/com/bayoumi/css/style.css");
             homeController = loader.getController();
             incrementPreloader();
-            long tempTime = 200;
-//            Thread.sleep(tempTime);
-//            incrementPreloader();
-//            Thread.sleep(tempTime);
-//            incrementPreloader();
-//            Thread.sleep(tempTime);
-//            incrementPreloader();
-//            Thread.sleep(tempTime);
-//            incrementPreloader();
-//            Thread.sleep(tempTime);
-//            incrementPreloader();
-//            Thread.sleep(tempTime);
-//            incrementPreloader();
+
+            // Get Prayer Times
+            new PrayerTimesValidation().start();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
+            ex.printStackTrace();
             workFine.setValue(false);
         }
     }
@@ -107,7 +116,7 @@ public class Launcher extends Application {
         primaryStage.setResizable(false);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
-        primaryStage.show();
+//        primaryStage.show();
         // assign current primaryStage to SingleInstance Class
         SingleInstance.getInstance().setCurrentStage(primaryStage);
     }

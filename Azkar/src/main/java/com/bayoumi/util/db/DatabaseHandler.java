@@ -24,11 +24,6 @@ public class DatabaseHandler {
     public boolean connectToDatabase() {
         try {
             if (con == null) {
-//                .... Connect To Server ....
-//                Class.forName("com.mysql.cj.jdbc.Driver");
-//                String dbName = "azkar", user = "root", pass = "";
-//                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName + "?useUnicode=true&characterEncoding=utf-8&serverTimezone=EST5EDT", user, pass);
-
 //                .... Connect to SQlLite ....
                 Class.forName("org.sqlite.JDBC");
                 con = DriverManager.getConnection("jdbc:sqlite:jarFiles/db/data.db");

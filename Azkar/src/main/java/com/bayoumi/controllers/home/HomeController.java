@@ -91,8 +91,8 @@ public class HomeController implements Initializable {
 
         Date date = new Date();
         day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
-        hijriDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
-        gregorianDate.setText(HijriDate.getHijriDateString(otherSettings.getLanguageLocal()));
+        gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
+        hijriDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
     }
 
     private void initClock() {
@@ -115,7 +115,7 @@ public class HomeController implements Initializable {
                 System.out.println("NEW DAY ...");
                 day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
                 hijriDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
-                gregorianDate.setText(HijriDate.getHijriDateString(otherSettings.getLanguageLocal()));
+                gregorianDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
             }
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
@@ -209,22 +209,6 @@ public class HomeController implements Initializable {
 //        time_debug = LocalTime.parse("00:00:00");
 //        timeline_debug.play();
         absoluteAzkarTask.updateTimer();
-    }
-
-    @FXML
-    private void goToAzkar() {
-        System.out.println("goToAzkar() ..");
-        try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/azkar/absolute/AbsoluteAzkar.fxml"))));
-            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
-            HelperMethods.SetIcon(stage);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".goToAzkar()");
-        }
-
     }
 
     @FXML

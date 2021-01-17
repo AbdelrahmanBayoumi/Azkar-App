@@ -21,12 +21,12 @@ public class Logger {
     /**
      * initialize printWriter object to log data in a file
      */
-    public Logger() { 
+    public Logger() {
     }
 
     public static void init() {
         try {
-            PRINT_WRITER = new PrintWriter(new FileWriter("jarFiles/logs/debug.txt", true));
+            PRINT_WRITER = new PrintWriter(new FileWriter(Constants.assetsPath + "/logs/debug.txt", true));
         } catch (IOException ex) {
             System.err.println(ex.getLocalizedMessage());
         }

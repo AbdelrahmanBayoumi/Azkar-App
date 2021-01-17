@@ -2,6 +2,7 @@ package com.bayoumi.util;
 
 import com.bayoumi.Launcher;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.util.time.HijriDate;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -24,6 +26,7 @@ public class Utilities {
     public static String getTime(String language, Date date) {
         return new SimpleDateFormat("hh:mm:ss a", new Locale(language)).format(date);
     }
+
     public static String getTime24(String language, Date date) {
         return new SimpleDateFormat("HH:mm:ss", new Locale(language)).format(date);
     }
@@ -63,8 +66,8 @@ public class Utilities {
         return "00:00 am";
     }
 
-    public static String formatTimeOnly(String language, String timeString) {
-        return formatTime24To12String(language, timeString.substring(0, timeString.indexOf('(')).trim());
+    public static String formatTimeOnly(String timeString) {
+        return timeString.substring(0, timeString.indexOf('(')).trim();
     }
 
     public static void copyToClipboard(String text) {
@@ -89,20 +92,54 @@ public class Utilities {
         return val;
     }
 
-    public static void main(String[] args) {
-        Date date = new Date();
-        System.out.println("==================");
-        System.out.println(getGregorianDate("ar", date));
-        System.out.println(getGregorianDate("en", date));
-        System.out.println("==================");
-        System.out.println(getDay("ar", date));
-        System.out.println(getDay("en", date));
-        System.out.println("==================");
-        System.out.println(getTime("en", date));
-        System.out.println(getTime("ar", date));
-        System.out.println("==================");
-//
-        System.out.println("==================");
+    public static String formatIntToTwoDigit(int i) {
+        return String.format("%02d", i);
     }
+
+    public static int daysBetween(Calendar day1, Calendar day2) {
+        Calendar dayOne = (Calendar) day1.clone(),
+                dayTwo = (Calendar) day2.clone();
+
+        if (dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR)) {
+            return Math.abs(dayOne.get(Calendar.DAY_OF_YEAR) - dayTwo.get(Calendar.DAY_OF_YEAR));
+        } else {
+            if (dayTwo.get(Calendar.YEAR) > dayOne.get(Calendar.YEAR)) {
+                //swap them
+                Calendar temp = dayOne;
+                dayOne = dayTwo;
+                dayTwo = temp;
+            }
+            int extraDays = 0;
+
+            int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
+
+            while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
+                dayOne.add(Calendar.YEAR, -1);
+                // getActualMaximum() important for leap years
+                extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
+            }
+
+            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
+        }
+    }
+
+
+//    public static void main(String[] args) {
+//        Date date = new Date();
+//        System.out.println("==================");
+//        System.out.println(getGregorianDate("ar", date));
+//        System.out.println(getGregorianDate("en", date));
+//        System.out.println("==================");
+//        System.out.println(getDay("ar", date));
+//        System.out.println(getDay("en", date));
+//        System.out.println("==================");
+//        System.out.println(getTime("en", date));
+//        System.out.println(getTime("ar", date));
+//        System.out.println("==================");
+//        HijriDate dateToday = new HijriDate();
+//        HijriDate dateRandom = new HijriDate(1442, 6, 1);
+//        System.out.println(daysBetween(dateToday.getCalendar(), dateRandom.getCalendar()));
+//        System.out.println("==================");
+//    }
 }
 

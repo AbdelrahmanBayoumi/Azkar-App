@@ -1,6 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.bayoumi.util.db.DatabaseHandler;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.button.TableViewButton;
@@ -33,13 +34,10 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
     public static boolean fetchData() {
         absoluteZekrObservableList.clear();
         try {
-            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM absolute_zekr").executeQuery();
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM absolute_zekr").executeQuery();
             while (res.next()) {
                 absoluteZekrObservableList.add(new AbsoluteZekr(res.getInt(1), res.getString(2)));
             }
-//            if (!absoluteZekrObservableList.isEmpty()) {
-//                absoluteZekrObservableList.get(0).delete.setDisable(true);
-//            }
             return true;
         } catch (Exception ex) {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + ".fetchData()");
@@ -51,10 +49,10 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
         try {
             String newValue = BuilderUI.showEditTextField("الذكر", this.text);
             if (!newValue.equals("")) {
-                DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-                databaseHandler.stat = databaseHandler.con.prepareStatement("UPDATE absolute_zekr set text = ? WHERE id =" + this.id);
-                databaseHandler.stat.setString(1, newValue);
-                databaseHandler.stat.executeUpdate();
+                DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
+                databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE absolute_zekr set text = ? WHERE id =" + this.id);
+                databaseAssetsManager.stat.setString(1, newValue);
+                databaseAssetsManager.stat.executeUpdate();
                 AbsoluteZekr.fetchData();
             }
         } catch (SQLException ex) {
@@ -65,7 +63,7 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
     private void delete(Event event) {
         try {
             if (BuilderUI.showConfirmAlert(true, "حذف الذكر ؟")) {
-                DatabaseHandler.getInstance().con
+                DatabaseAssetsManager.getInstance().con
                         .prepareStatement("DELETE FROM absolute_zekr WHERE id =" + this.id)
                         .executeUpdate();
                 AbsoluteZekr.fetchData();
@@ -77,10 +75,10 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
 
     public void insert() {
         try {
-            DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-            databaseHandler.stat = databaseHandler.con.prepareStatement("INSERT INTO absolute_zekr (TEXT) VALUES(?)");
-            databaseHandler.stat.setString(1, this.text);
-            databaseHandler.stat.execute();
+            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
+            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("INSERT INTO absolute_zekr (TEXT) VALUES(?)");
+            databaseAssetsManager.stat.setString(1, this.text);
+            databaseAssetsManager.stat.execute();
         } catch (SQLException ex) {
             Logger.error(null, ex, getClass().getName() + ".insert(text: " + this.text + ")");
         }

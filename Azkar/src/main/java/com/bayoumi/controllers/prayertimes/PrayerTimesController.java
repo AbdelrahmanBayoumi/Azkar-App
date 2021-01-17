@@ -4,10 +4,12 @@ import com.bayoumi.Launcher;
 import com.bayoumi.controllers.prayertimes.info.InfoController;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.models.PrayerTimes;
+import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.WebService;
+import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.jfoenix.controls.JFXDialog;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -61,12 +62,36 @@ public class PrayerTimesController implements Initializable {
     @FXML
     private VBox loadingBox;
 
+    private boolean isFetched = false;
+    private ChangeListener<Number> changeListener;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        new Thread(() -> {
-            prayerTimes = WebService.getPrayerTimesToday();
-            System.out.println("fetched: " + prayerTimes);
+        initChangeListener();
+        loadingBox.visibleProperty().bind(PrayerTimesValidation.PRAYERTIMES_STATUS.isNotEqualTo(1));
+        PrayerTimesValidation.PRAYERTIMES_STATUS.addListener(changeListener);
 
+        if (!isFetched && PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == 1) {
+            initUI();
+            isFetched = true;
+        } else if (!isFetched && PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == -1) {
+            Logger.error("ERROR in fetching prayertimes", null, getClass().getName() + ".initialize()");
+        }
+    }
+
+    private void initChangeListener() {
+        changeListener =  (observable, oldValue, newValue) -> {
+            System.out.println(observable);
+            if (!isFetched && newValue.intValue() == 1) {
+                initUI();
+                isFetched = true;
+            }
+        };
+    }
+
+    private void initUI() {
+        new Thread(() -> {
+            prayerTimes = PrayerTimesDBManager.getPrayerTimesForToday();
+            System.out.println("fetched from DB: " + prayerTimes);
             Platform.runLater(() -> {
                 if (prayerTimes.getPrayerTimeSettings().isSummerTiming()) {
                     prayerTimes.enableSummerTime();
@@ -74,7 +99,7 @@ public class PrayerTimesController implements Initializable {
 
                 OtherSettings otherSettings = new OtherSettings();
                 if (!otherSettings.isEnable24Format()) {
-                    prayerTimes.formatTime24To12( otherSettings.getLanguageLocal());
+                    prayerTimes.formatTime24To12(otherSettings.getLanguageLocal());
                 }
                 fajrTime.setText(prayerTimes.getFajr());
                 sunriseTime.setText(prayerTimes.getSunrise());
@@ -87,7 +112,7 @@ public class PrayerTimesController implements Initializable {
                 hijriDate.textProperty().bind(Launcher.homeController.hijriDate.textProperty());
                 gregorianDate.textProperty().bind(Launcher.homeController.gregorianDate.textProperty());
                 time.textProperty().bind(Launcher.homeController.timeLabel.textProperty());
-                loadingBox.setVisible(false);
+                PrayerTimesValidation.PRAYERTIMES_STATUS.removeListener(changeListener);
             });
         }).start();
     }

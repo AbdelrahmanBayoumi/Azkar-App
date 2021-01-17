@@ -1,14 +1,19 @@
 package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseHandler;
+import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -44,6 +49,11 @@ public class AzkarSettingsController implements Initializable {
         azkarPeriod.setDisable(true);
         nightAzkarTimeComboBox.setDisable(true);
         morningAzkarTimeComboBox.setDisable(true);
+
+        azkarAlarmComboBox.setOnAction(event -> {
+            System.out.println("event: " + event);
+            System.out.println("value: " + azkarAlarmComboBox.getValue());
+        });
     }
 
     private void initAudioFiles() {
@@ -64,13 +74,13 @@ public class AzkarSettingsController implements Initializable {
     @FXML
     private void save() {
         try {
-            DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-            databaseHandler.stat = databaseHandler.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, azkar_period = ?");
-            databaseHandler.stat.setString(1, morningAzkarTimeComboBox.getValue());
-            databaseHandler.stat.setString(2, nightAzkarTimeComboBox.getValue());
-            databaseHandler.stat.setString(3, azkarAlarmComboBox.getValue());
-            databaseHandler.stat.setInt(4, azkarPeriod.getValue());
-            databaseHandler.stat.executeUpdate();
+            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
+            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, azkar_period = ?");
+            databaseAssetsManager.stat.setString(1, morningAzkarTimeComboBox.getValue());
+            databaseAssetsManager.stat.setString(2, nightAzkarTimeComboBox.getValue());
+            databaseAssetsManager.stat.setString(3, azkarAlarmComboBox.getValue());
+            databaseAssetsManager.stat.setInt(4, azkarPeriod.getValue());
+            databaseAssetsManager.stat.executeUpdate();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
         }
@@ -84,7 +94,7 @@ public class AzkarSettingsController implements Initializable {
 
     private void loadSettings() {
         try {
-            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
             if (res.next()) {
                 morningAzkarTimeComboBox.setValue(res.getString(1));
                 nightAzkarTimeComboBox.setValue(res.getString(2));
@@ -93,6 +103,20 @@ public class AzkarSettingsController implements Initializable {
             }
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
+        }
+    }
+
+    @FXML
+    private void goToAzkar() {
+        try {
+            Stage stage = new Stage();
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/azkar/absolute/AbsoluteAzkar.fxml"))));
+            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
+            HelperMethods.SetIcon(stage);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".goToAzkar()");
         }
     }
 }

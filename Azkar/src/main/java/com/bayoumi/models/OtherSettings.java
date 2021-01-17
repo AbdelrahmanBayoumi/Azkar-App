@@ -1,7 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseHandler;
+import com.bayoumi.util.db.DatabaseAssetsManager;
 
 import java.sql.ResultSet;
 
@@ -17,7 +17,7 @@ public class OtherSettings {
 
     private void loadSettings() {
         try {
-            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
             if (res.next()) {
                 language = res.getString(1);
                 enableDarkMode = res.getInt(2) == 1;
@@ -30,12 +30,12 @@ public class OtherSettings {
 
     public void save() {
         try {
-            DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-            databaseHandler.stat = databaseHandler.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?");
-            databaseHandler.stat.setString(1, this.language);
-            databaseHandler.stat.setInt(2, this.enableDarkMode ? 1 : 0);
-            databaseHandler.stat.setInt(3, this.enable24Format ? 1 : 0);
-            databaseHandler.stat.executeUpdate();
+            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
+            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?");
+            databaseAssetsManager.stat.setString(1, this.language);
+            databaseAssetsManager.stat.setInt(2, this.enableDarkMode ? 1 : 0);
+            databaseAssetsManager.stat.setInt(3, this.enable24Format ? 1 : 0);
+            databaseAssetsManager.stat.executeUpdate();
             isUpdated = true;
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");

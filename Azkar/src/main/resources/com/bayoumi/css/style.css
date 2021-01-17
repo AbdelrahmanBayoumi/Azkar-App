@@ -61,7 +61,7 @@
     -fx-cursor: hand;
 }
 
-.button .glyph-icon{
+.button .glyph-icon {
     -fx-fill: -fx-primary-button-text;
 }
 
@@ -162,9 +162,11 @@
 .primary-button {
     -fx-background-color: linear-gradient(-fx-primary-light, -fx-primary);
 }
-.primary-button .glyph-icon{
+
+.primary-button .glyph-icon {
     -fx-fill: -fx-secondary-text;
 }
+
 .primary-button:hover {
     -fx-background-color: derive(-fx-primary, -10%);
 }
@@ -172,7 +174,8 @@
 .secondary-button {
     -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
 }
-.secondary-button .glyph-icon{
+
+.secondary-button .glyph-icon {
     -fx-fill: -fx-secondary-text;
 }
 
@@ -212,7 +215,15 @@
 .back-button:hover .glyph-icon {
     -fx-fill: -fx-primary-button-text;
 }
-
+.box-normal-noshadow {
+    -fx-background-color: -fx-secondary-text;
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-radius: 30;
+}
+.box-normal-noshadow:hover {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-secondary-text;
+}
 .box-noraml {
     -fx-background-color: -fx-secondary-text;
     -fx-text-fill: -fx-primary-text;
@@ -225,7 +236,7 @@
 }
 
 .box-noraml:hover {
-    -fx-background-color: -fx-primary;
+    -fx-background-color: -fx-primary-light;
     -fx-text-fill: -fx-secondary-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
@@ -260,8 +271,8 @@
     -jfx-selected-color: -fx-secondary;
     -jfx-unselected-color: -fx-secondary;
     -fx-text-fill: -fx-primary-text;
-    -fx-font-size:15;
-    -fx-font-weight:bold;
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
 }
 
 
@@ -427,6 +438,10 @@
     -fx-background-color: transparent;
 }
 
+.scroll-pane {
+    -fx-background-color: -fx-bg;
+}
+
 /* ============ Scroll Pane ============ */
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
@@ -479,15 +494,17 @@
     -fx-background-radius: 2.0em;
 }
 
+
 /* == Prayer Times == */
 .dark-bg {
     -fx-background-color: -fx-secondary;
 }
 
-.dark-bg .label{
+.dark-bg .label {
     -fx-font-family: Alameen-Demibold;
     -fx-font-size: 24;
 }
+
 .box-prayer {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 5;

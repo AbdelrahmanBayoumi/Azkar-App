@@ -8,86 +8,102 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-    <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
-        <HBox alignment="CENTER" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-            <VBox alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
-                <Label text="أدخل الدولة والمدينة" textAlignment="CENTER" wrapText="true">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-                <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
-                    <JFXTextField fx:id="country" labelFloat="true" nodeOrientation="RIGHT_TO_LEFT" promptText="الدولة (باللغة الإنجليزية)" styleClass="text-field-normal" HBox.hgrow="ALWAYS" />
-                    <JFXTextField fx:id="city" labelFloat="true" nodeOrientation="RIGHT_TO_LEFT" promptText="المدينة (باللغة الإنجليزية)" styleClass="text-field-normal" HBox.hgrow="ALWAYS" />
-                </HBox>
-            </VBox>
-        </HBox>
-      <VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
-         <children>
-                <HBox alignment="CENTER" spacing="15.0">
-                    <Label minWidth="252.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
-                        <font>
-                            <Font name="System Bold" size="18.0" />
-                        </font>
-                    </Label>
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                  <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0; -fx-font-weight: bold;" styleClass="text-field-normal" />
-                    </VBox>
-                </HBox>
-            <HBox alignment="CENTER" spacing="15.0">
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="482.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController">
+   <content>
+      <VBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" styleClass="root" stylesheets="@../../../css/style.css">
+          <padding>
+              <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+          </padding>
+          <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+              <HBox alignment="CENTER" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
+                  <padding>
+                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </padding>
+                  <VBox alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
+                      <Label text="أدخل الدولة والمدينة" textAlignment="CENTER" wrapText="true">
+                          <font>
+                              <Font name="System Bold" size="18.0" />
+                          </font>
+                      </Label>
+                      <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+                          <JFXTextField fx:id="country" labelFloat="true" nodeOrientation="RIGHT_TO_LEFT" promptText="الدولة (باللغة الإنجليزية)" styleClass="text-field-normal" HBox.hgrow="ALWAYS" />
+                          <JFXTextField fx:id="city" labelFloat="true" nodeOrientation="RIGHT_TO_LEFT" promptText="المدينة (باللغة الإنجليزية)" styleClass="text-field-normal" HBox.hgrow="ALWAYS" />
+                      </HBox>
+                  </VBox>
+              </HBox>
+            <VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
                <children>
-                  <Label minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <HBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+                      <HBox alignment="CENTER" spacing="15.0">
+                          <Label minWidth="252.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
+                              <font>
+                                  <Font name="System Bold" size="18.0" />
+                              </font>
+                          </Label>
+                          <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0; -fx-font-weight: bold;" styleClass="text-field-normal" />
+                          </VBox>
+                      </HBox>
+                  <HBox alignment="CENTER" spacing="15.0">
                      <children>
-                        <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" selected="true" style="-fx-font-size: 15; -fx-font-weight: bold;" styleClass="radio-button-normal" text="شافعي, مالكي, حنبلي">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="asrJuristic" />
-                           </toggleGroup>
-                        </JFXRadioButton>
-                        <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-size: 15; -fx-font-weight: bold;" styleClass="radio-button-normal" text="حنفي" toggleGroup="$asrJuristic" />
+                        <Label minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" selected="true" style="-fx-font-size: 15; -fx-font-weight: bold;" styleClass="radio-button-normal" text="شافعي, مالكي, حنبلي">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="asrJuristic" />
+                                 </toggleGroup>
+                              </JFXRadioButton>
+                              <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-size: 15; -fx-font-weight: bold;" styleClass="radio-button-normal" text="حنفي" toggleGroup="$asrJuristic" />
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets left="40.0" right="40.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <Label text="يتم مراعاة التوقيت الصيفي تلقائيا حسب الدولة" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <JFXCheckBox fx:id="summerTiming" nodeOrientation="LEFT_TO_RIGHT" text="زيادة (+1 ساعة) على أي حال" wrapText="true" />
                </children>
-            </HBox>
-            <JFXCheckBox fx:id="summerTiming" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" text="مراعاة التوقيت الصيفي (+1 ساعة)" />
-         </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+          </VBox>
+          <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="50.0">
+              <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#save" prefWidth="200.0" styleClass="confirm-button" text="حفظ">
+                  <font>
+                      <Font name="System Bold" size="18.0" />
+                  </font>
+                  <graphic>
+                      <FontAwesomeIconView glyphName="SAVE" size="25" />
+                  </graphic>
+              </JFXButton>
+              <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#close" prefWidth="200.0" styleClass="back-button" text="إغلاق">
+                  <font>
+                      <Font name="System Bold" size="18.0" />
+                  </font>
+                  <graphic>
+                      <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                  </graphic>
+              </JFXButton>
+          </HBox>
       </VBox>
-    </VBox>
-    <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="50.0">
-        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#save" prefWidth="200.0" styleClass="confirm-button" text="حفظ">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-            <graphic>
-                <FontAwesomeIconView glyphName="SAVE" size="25" />
-            </graphic>
-        </JFXButton>
-        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#close" prefWidth="200.0" styleClass="back-button" text="إغلاق">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-            <graphic>
-                <FontAwesomeIconView glyphName="CLOSE" size="25" />
-            </graphic>
-        </JFXButton>
-    </HBox>
-</VBox>
+   </content>
+</ScrollPane>

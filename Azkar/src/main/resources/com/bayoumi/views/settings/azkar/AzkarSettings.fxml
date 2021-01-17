@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="412.0" prefWidth="653.0" spacing="20.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.azkar.AzkarSettingsController">
+<VBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="480.0" prefWidth="660.0" spacing="20.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.azkar.AzkarSettingsController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="40.0" left="20.0" right="20.0" top="20.0" />
             </padding>
             <VBox alignment="CENTER" spacing="35.0" HBox.hgrow="ALWAYS">
                 <VBox alignment="CENTER" spacing="2.0">
@@ -83,8 +83,20 @@
             </VBox>
         </HBox>
     </VBox>
-    <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="50.0">
-        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#save" prefWidth="200.0" styleClass="confirm-button" text="حفظ">
+    <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
+      <HBox HBox.hgrow="ALWAYS">
+         <children>
+            <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" prefWidth="200.0" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="BOOK" size="30" />
+               </graphic>
+            </JFXButton>
+         </children>
+      </HBox>
+        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#save" prefHeight="43.0" prefWidth="150.0" styleClass="confirm-button" text="حفظ">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
@@ -92,7 +104,7 @@
                 <FontAwesomeIconView glyphName="SAVE" size="25" />
             </graphic>
         </JFXButton>
-        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#close" prefWidth="200.0" styleClass="back-button" text="إغلاق">
+        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#close" prefHeight="43.0" prefWidth="150.0" styleClass="back-button" text="إغلاق">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>

@@ -1,6 +1,7 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.bayoumi.util.db.DatabaseHandler;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.FadeTransition;
@@ -102,7 +103,7 @@ public class NotificationBox extends AnchorPane {
 
     private String getSelectedAlarmSound() {
         try {
-            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
             if (res.next()) {
                 return res.getString(3);
             }
@@ -138,7 +139,7 @@ public class NotificationBox extends AnchorPane {
     }
 
     private void closeAction(Event event) {
-        System.out.println("Closing Notification ...");
+        System.out.println("Closing Notification ..."); // TODO : Delete println
         if (MEDIA_PLAYER != null) {
             MEDIA_PLAYER.stop();
         }
