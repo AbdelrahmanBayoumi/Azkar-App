@@ -25,10 +25,11 @@ public class Launcher extends Application {
     public static double preloaderProgress = 0;
     // for logging purpose
     public static Long startTime;
+    // GUI Object
     public static HomeController homeController;
     // Program characteristics
     private final String VERSION = "1.0.4_2";
-    // GUI Objects
+    // GUI Object
     private Scene scene = null;
 
     public static void main(String[] args) {

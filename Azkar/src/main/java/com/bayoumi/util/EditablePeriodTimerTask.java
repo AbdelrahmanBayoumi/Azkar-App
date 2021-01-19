@@ -32,7 +32,6 @@ public class EditablePeriodTimerTask extends TimerTask {
     }
 
     public final void updateTimer() {
-        // ### REMOVE STRING S PARAMETER IN PRODUCTION ###
         Long p = period.get();
         Objects.requireNonNull(p);
 //        System.out.println("updateTimer():- " + Thread.currentThread().getName());
@@ -55,7 +54,7 @@ public class EditablePeriodTimerTask extends TimerTask {
     @Override
     public void run() {
         task.run();
-//        System.out.println("run():- "+Thread.currentThread().getName());
+        System.out.println("run():- " + Thread.currentThread().getName());
 //        updateTimer("run()");
     }
 

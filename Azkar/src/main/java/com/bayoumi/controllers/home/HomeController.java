@@ -3,6 +3,7 @@ package com.bayoumi.controllers.home;
 import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.AzkarSettings;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
@@ -21,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,7 +32,9 @@ import java.util.Date;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable {
+public class
+HomeController implements Initializable {
+
     @FXML
     public Label hijriDate;
     @FXML
@@ -39,10 +43,11 @@ public class HomeController implements Initializable {
     public Label gregorianDate;
     @FXML
     public Label timeLabel;
-    private OtherSettings otherSettings;
-    //    private Timeline timeline_debug;
-//    private LocalTime time_debug = LocalTime.parse("00:00:00");
+    @FXML
+    private VBox periodBox;
     private EditablePeriodTimerTask absoluteAzkarTask;
+    private OtherSettings otherSettings;
+    private AzkarSettings azkarSettings;
     @FXML
     private Label frequencyLabel;
     @FXML
@@ -59,27 +64,21 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         otherSettings = new OtherSettings();
+        azkarSettings = new AzkarSettings();
 
-        currentFrequency = highFrequency;
+        currentFrequency = getSelectedButton();
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
         if (!AbsoluteZekr.fetchData()) {
             Launcher.workFine.setValue(false);
             return;
         }
-        absoluteAzkarTask = new EditablePeriodTimerTask(()
-                -> {
-            if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
-                return;
-            }
-            Platform.runLater(()
-                    -> Notification.create(
-                    AbsoluteZekr.absoluteZekrObservableList.get(
-                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                    null));
-        },
-                this::getPeriod);
-        absoluteAzkarTask.updateTimer();
+
+        if (!azkarSettings.isStopped()) {
+            initAzkarThread();
+        } else {
+            periodBox.setDisable(true);
+        }
 
 //        timeline_debug = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
 //            time_debug = time_debug.plusSeconds(1);
@@ -93,6 +92,24 @@ public class HomeController implements Initializable {
         day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
         gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
         hijriDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
+    }
+
+    private void initAzkarThread() {
+        setFrequencyLabel("initAzkarThread");
+        absoluteAzkarTask = null;
+        absoluteAzkarTask = new EditablePeriodTimerTask(()
+                -> {
+            if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
+                return;
+            }
+            Platform.runLater(()
+                    -> Notification.create(
+                    AbsoluteZekr.absoluteZekrObservableList.get(
+                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                    null));
+        },
+                this::getPeriod);
+        absoluteAzkarTask.updateTimer();
     }
 
     private void initClock() {
@@ -117,22 +134,49 @@ public class HomeController implements Initializable {
                 hijriDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
                 gregorianDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
             }
+
+            if (AzkarSettings.isUpdated) {
+                azkarSettings = new AzkarSettings();
+                AzkarSettings.isUpdated = false;
+                if (absoluteAzkarTask != null) {
+                    absoluteAzkarTask.stopTask();
+                }
+                if (azkarSettings.isStopped()) {
+                    periodBox.setDisable(true);
+                } else {
+                    initAzkarThread();
+                    periodBox.setDisable(false);
+                }
+            }
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
     }
 
+    private JFXButton getSelectedButton() {
+        if (azkarSettings.getSelectedPeriod().equals(highFrequency.getText())) {
+            return highFrequency;
+        } else if (azkarSettings.getSelectedPeriod().equals(midFrequency.getText())) {
+            return midFrequency;
+        } else if (azkarSettings.getSelectedPeriod().equals(lowFrequency.getText())) {
+            return lowFrequency;
+        } else if (azkarSettings.getSelectedPeriod().equals(rearFrequency.getText())) {
+            return rearFrequency;
+        }
+        return highFrequency;
+    }
+
     private Long getPeriod() {
         if (currentFrequency.equals(highFrequency)) {
-            return 300000L; // 5 min
+            return azkarSettings.getHighPeriod() * 60000L; // 5 min
         } else if (currentFrequency.equals(midFrequency)) {
-            return 600000L; // 10 min
+            return azkarSettings.getMidPeriod() * 60000L; // 10 min
         } else if (currentFrequency.equals(lowFrequency)) {
-            return 1200000L; // 20 min
+            return azkarSettings.getLowPeriod() * 60000L; // 20 min
         } else if (currentFrequency.equals(rearFrequency)) {
-            return 1800000L; // 30 min
+            return azkarSettings.getRearPeriod() * 60000L; // 30 min
         }
-        return 300000L;
+        return 300000L; // 5 min
 
 //        if (currentFrequency.equals(highFrequency)) {
 //            return 15000L;
@@ -172,31 +216,38 @@ public class HomeController implements Initializable {
         }
     }
 
+    private void setFrequencyLabel(String s) {
+        System.out.println("S: " + s);
+        String msg = "";
+        if (currentFrequency.equals(highFrequency)) {
+            msg = "ظهور كل" + " " + azkarSettings.getHighPeriod() + " " + "دقائق";
+        } else if (currentFrequency.equals(midFrequency)) {
+            msg = "ظهور كل" + " " + azkarSettings.getMidPeriod() + " " + "دقائق";
+        } else if (currentFrequency.equals(lowFrequency)) {
+            msg = "ظهور كل" + " " + azkarSettings.getLowPeriod() + " " + "دقيقة";
+        } else if (currentFrequency.equals(rearFrequency)) {
+            msg = "ظهور كل" + " " + azkarSettings.getRearPeriod() + " " + "دقيقة";
+        }
+        frequencyLabel.setText(msg);
+    }
+
     @FXML
     private void highFrequencyAction() {
-        String msg = "ظهور كل" + " " + 5 + " " + "دقائق";
-        frequencyLabel.setText(msg);
         toggleFrequencyBTN(highFrequency);
     }
 
     @FXML
     private void midFrequencyAction() {
-        String msg = "ظهور كل" + " " + 10 + " " + "دقائق";
-        frequencyLabel.setText(msg);
         toggleFrequencyBTN(midFrequency);
     }
 
     @FXML
     private void lowFrequencyAction() {
-        String msg = "ظهور كل" + " " + 20 + " " + "دقيقة";
-        frequencyLabel.setText(msg);
         toggleFrequencyBTN(lowFrequency);
     }
 
     @FXML
     private void rearFrequencyAction() {
-        String msg = "ظهور كل" + " " + 30 + " " + "دقيقة";
-        frequencyLabel.setText(msg);
         toggleFrequencyBTN(rearFrequency);
     }
 
@@ -208,7 +259,11 @@ public class HomeController implements Initializable {
 //        timeline_debug.stop();
 //        time_debug = LocalTime.parse("00:00:00");
 //        timeline_debug.play();
+
         absoluteAzkarTask.updateTimer();
+        setFrequencyLabel("toggleFrequencyBTN");
+        azkarSettings.setSelectedPeriod(currentFrequency.getText());
+        azkarSettings.saveSelectedPeriod();
     }
 
     @FXML

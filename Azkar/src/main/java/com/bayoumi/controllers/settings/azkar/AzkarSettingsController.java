@@ -1,9 +1,11 @@
 package com.bayoumi.controllers.settings.azkar;
 
+import com.bayoumi.models.AzkarSettings;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.validation.SingleInstance;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,18 +15,32 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 public class AzkarSettingsController implements Initializable {
 
+    private AzkarSettings azkarSettings;
+    private JFXButton currentFrequency;
+    @FXML
+    private VBox periodBox;
+    @FXML
+    private JFXButton highFrequency;
+    @FXML
+    private JFXButton midFrequency;
+    @FXML
+    private JFXButton lowFrequency;
+    @FXML
+    private JFXButton rearFrequency;
     @FXML
     private Spinner<Integer> azkarPeriod;
+    @FXML
+    private JFXCheckBox stopAzkar;
     @FXML
     private JFXComboBox<String> azkarAlarmComboBox;
     @FXML
@@ -34,26 +50,28 @@ public class AzkarSettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        periodBox.disableProperty().bind(stopAzkar.selectedProperty());
         // init Spinner Values
-        azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 240, 0));
+        azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 240, 1));
+
         initAudioFiles();
         // init morning and night azkar reminder
         nightAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
-        nightAzkarTimeComboBox.setValue("لا تذكير");
         morningAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
-        morningAzkarTimeComboBox.setValue("لا تذكير");
 
-        loadSettings();
+        // init Saved data form DB
+        azkarSettings = new AzkarSettings();
+        morningAzkarTimeComboBox.setValue(azkarSettings.getMorningAzkarReminder());
+        nightAzkarTimeComboBox.setValue(azkarSettings.getNightAzkarReminder());
+        azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod());
+        stopAzkar.setSelected(azkarSettings.isStopped());
+        currentFrequency = highFrequency;
+        currentFrequency.getStyleClass().add("frequency-btn-selected");
 
         // disable unsupported features
-        azkarPeriod.setDisable(true);
         nightAzkarTimeComboBox.setDisable(true);
         morningAzkarTimeComboBox.setDisable(true);
-
-        azkarAlarmComboBox.setOnAction(event -> {
-            System.out.println("event: " + event);
-            System.out.println("value: " + azkarAlarmComboBox.getValue());
-        });
     }
 
     private void initAudioFiles() {
@@ -72,15 +90,55 @@ public class AzkarSettingsController implements Initializable {
     }
 
     @FXML
+    private void highFrequencyAction() {
+        toggleFrequencyBTN(highFrequency);
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod());
+    }
+
+    @FXML
+    private void lowFrequencyAction() {
+        toggleFrequencyBTN(lowFrequency);
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getLowPeriod());
+    }
+
+    @FXML
+    private void midFrequencyAction() {
+        toggleFrequencyBTN(midFrequency);
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getMidPeriod());
+    }
+
+    @FXML
+    private void rearFrequencyAction() {
+        toggleFrequencyBTN(rearFrequency);
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getRearPeriod());
+    }
+
+    private void toggleFrequencyBTN(JFXButton b) {
+        // save data
+        if (currentFrequency.equals(highFrequency)) {
+            azkarSettings.setHighPeriod(azkarPeriod.getValue());
+        } else if (currentFrequency.equals(midFrequency)) {
+            azkarSettings.setMidPeriod(azkarPeriod.getValue());
+        } else if (currentFrequency.equals(lowFrequency)) {
+            azkarSettings.setLowPeriod(azkarPeriod.getValue());
+        } else if (currentFrequency.equals(rearFrequency)) {
+            azkarSettings.setRearPeriod(azkarPeriod.getValue());
+        }
+        // toggle style to selected button
+        currentFrequency.getStyleClass().remove("frequency-btn-selected");
+        currentFrequency = b;
+        currentFrequency.getStyleClass().add("frequency-btn-selected");
+    }
+
+    @FXML
     private void save() {
         try {
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, azkar_period = ?");
-            databaseAssetsManager.stat.setString(1, morningAzkarTimeComboBox.getValue());
-            databaseAssetsManager.stat.setString(2, nightAzkarTimeComboBox.getValue());
-            databaseAssetsManager.stat.setString(3, azkarAlarmComboBox.getValue());
-            databaseAssetsManager.stat.setInt(4, azkarPeriod.getValue());
-            databaseAssetsManager.stat.executeUpdate();
+            highFrequency.fire();
+            azkarSettings.setMorningAzkarReminder(morningAzkarTimeComboBox.getValue());
+            azkarSettings.setNightAzkarReminder(nightAzkarTimeComboBox.getValue());
+            azkarSettings.setAudioName(azkarAlarmComboBox.getValue());
+            azkarSettings.setStopped(stopAzkar.isSelected());
+            azkarSettings.save();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
         }
@@ -90,20 +148,6 @@ public class AzkarSettingsController implements Initializable {
     @FXML
     private void close() {
         ((Stage) azkarPeriod.getScene().getWindow()).close();
-    }
-
-    private void loadSettings() {
-        try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
-            if (res.next()) {
-                morningAzkarTimeComboBox.setValue(res.getString(1));
-                nightAzkarTimeComboBox.setValue(res.getString(2));
-                azkarAlarmComboBox.setValue(res.getString(3));
-                azkarPeriod.getValueFactory().setValue(res.getInt(4));
-            }
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + ".loadSettings()");
-        }
     }
 
     @FXML

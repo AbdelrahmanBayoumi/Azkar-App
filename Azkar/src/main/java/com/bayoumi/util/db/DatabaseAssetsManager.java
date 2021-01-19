@@ -28,11 +28,14 @@ public class DatabaseAssetsManager {
                 throw new Exception("Cannot init DatabaseManager");
             }
             // create tables azkar_settings
-            if (!createTable("CREATE TABLE IF NOT EXISTS azkar_settings (" +
-                    "morning_reminder TEXT NOT NULL DEFAULT 'لا تذكير'" +
-                    ", night_reminder TEXT NOT NULL DEFAULT 'لا تذكير'" +
-                    ", audio_name TEXT NOT NULL DEFAULT 'بدون صوت'" +
-                    ", azkar_period INTEGER NOT NULL DEFAULT 15 );") ||
+            if (!createTable("CREATE TABLE IF NOT EXISTS azkar_settings ( " +
+                    "morning_reminder TEXT NOT NULL DEFAULT 'لا تذكير', " +
+                    "night_reminder TEXT NOT NULL DEFAULT 'لا تذكير'," +
+                    "audio_name TEXT NOT NULL DEFAULT 'بدون صوت'," +
+                    "high_period INTEGER NOT NULL DEFAULT 5, " +
+                    "mid_period INTEGER NOT NULL DEFAULT 10, " +
+                    "low_period INTEGER NOT NULL DEFAULT 20, " +
+                    "rear_period INTEGER NOT NULL DEFAULT 30 );") ||
                     !insertDefault("azkar_settings")) {
                 throw new Exception("ERROR in CREATE azkar_settings TABLE");
             }
@@ -137,5 +140,18 @@ public class DatabaseAssetsManager {
         } catch (SQLException ex) {
             Logger.error(null, ex, getClass().getName() + ".setVersion(version: " + version + ")");
         }
+    }
+
+    public String getVersion() {
+        try {
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM program_characteristics").executeQuery();
+            if (res.next()) {
+                return res.getString("version");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Logger.error(null, ex, getClass().getName() + ".getVersion()");
+        }
+        return "0.0.0";
     }
 }

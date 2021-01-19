@@ -17,7 +17,7 @@ public class Constants {
             } else {
                 assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
             }
-            assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
+//            assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
         } catch (Exception ex) {
             System.out.println(ex.getLocalizedMessage());
         }

@@ -92,7 +92,6 @@ public class WebService {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        System.out.println("Get Prayer Times: Size of Fetched data= " + prayerTimes.size()); // TODO DELETE THIS PRINTLN
         return prayerTimes;
     }
 

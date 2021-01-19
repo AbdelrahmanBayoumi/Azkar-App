@@ -1,11 +1,13 @@
 package com.bayoumi.controllers.settings.other;
 
 import com.bayoumi.models.OtherSettings;
+import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -19,6 +21,8 @@ public class OtherSettingsController implements Initializable {
     private JFXCheckBox format24;
     @FXML
     private JFXCheckBox darkTheme;
+    @FXML
+    private Label version;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -32,6 +36,8 @@ public class OtherSettingsController implements Initializable {
 
         darkTheme.setSelected(otherSettings.isEnableDarkMode());
         darkTheme.setDisable(true);
+
+        version.setText(DatabaseAssetsManager.getInstance().getVersion());
     }
 
     @FXML

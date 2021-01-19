@@ -37,7 +37,7 @@
                     </font>
                 </Label>
             </HBox>
-            <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);">
+            <VBox fx:id="periodBox" alignment="CENTER" spacing="10.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);">
                 <VBox.margin>
                     <Insets bottom="20.0" top="20.0" />
                 </VBox.margin>

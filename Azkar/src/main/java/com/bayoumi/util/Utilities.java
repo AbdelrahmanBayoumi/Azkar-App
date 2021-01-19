@@ -2,7 +2,6 @@ package com.bayoumi.util;
 
 import com.bayoumi.Launcher;
 import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.util.time.HijriDate;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -50,6 +49,11 @@ public class Utilities {
     }
 
     public static void exitProgramAction() {
+//        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+//        System.out.println("=========================");
+//        threadSet.forEach(thread -> System.out.println(thread.getName()));
+//        System.out.println("=========================");
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Long exitTime = System.currentTimeMillis();
             Logger.info("App closed - Used for "
