@@ -1,6 +1,7 @@
 package com.bayoumi.controllers.settings.other;
 
 import com.bayoumi.models.OtherSettings;
+import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
@@ -10,6 +11,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -52,6 +55,15 @@ public class OtherSettingsController implements Initializable {
         otherSettings.setEnableDarkMode(darkTheme.isSelected());
         otherSettings.save();
         close();
+    }
+
+    @FXML
+    private void openWebsite() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://abdelrahmanbayoumi.github.io/"));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".openWebsite()");
+        }
     }
 
 }

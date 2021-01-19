@@ -32,7 +32,7 @@ Desktop Application 💻 for:
 
 ## How to Install
 
-- [EXE installer](https://azkar-server.herokuapp.com/release/Azkar_windows-x64_1_0_4_1.exe)
+- [64-bit EXE installer v1.0.4_2](https://azkar-server.herokuapp.com/release/Azkar_windows-x64_1_0_4_2.exe)
 
 | *Note* | Thanks <a href="https://www.ej-technologies.com/products/install4j/overview.html"> <img alt="install4j" src="https://www.ej-technologies.com/images/product_banners/install4j_large.png" width="80px" /></a> for providing us open source license for the installers used in Azkar distribution. |
 | --- | --- |
