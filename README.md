@@ -46,10 +46,15 @@ Desktop Application 💻 for:
 
 
 ## Tools & Technologies
+-  [sqlite](https://www.sqlite.org/) SQL database engine.
 -  [JFoenix 8.0.8](http://www.jfoenix.com/) library is an open source Java library, that implements Google Material Design using Java components .
 - [FontawesomeFX 8.9](https://bitbucket.org/Jerady/fontawesomefx/src/master/) for Icons
 -  [Ummalqura-Calendar 1.1.9](https://github.com/msarhan/ummalqura-calendar) for Hijri Calender.
--  [sqlite](https://www.sqlite.org/) SQL database engine.
+-  [aladhan.com API for prayer times](https://aladhan.com/prayer-times-api)
+
+## Inspired From
+-  [Quran Tab (Google Chrome Extension)](https://chrome.google.com/webstore/detail/quran-tab/afaihcdgkjebgabomemccdneglknjkdd) Quran Tab is an Islamic new tab page that will keep you inspired by a verse from the Quran every time you open a new tab.
+-  [Prayer Times Desktop application](https://github.com/HouariZegai/PrayerTimes) for calculating Muslim prayer times in **Algeria** and setting an alarm (Adhan) for the prayer times.
 
 ## Requirements
 * Java 8
