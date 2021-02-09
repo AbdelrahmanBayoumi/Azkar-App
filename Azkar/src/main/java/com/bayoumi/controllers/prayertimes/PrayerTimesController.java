@@ -4,8 +4,8 @@ import com.bayoumi.Launcher;
 import com.bayoumi.controllers.prayertimes.info.InfoController;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.models.PrayerTimes;
-import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.jfoenix.controls.JFXDialog;
 import javafx.application.Platform;
@@ -64,6 +64,7 @@ public class PrayerTimesController implements Initializable {
 
     private boolean isFetched = false;
     private ChangeListener<Number> changeListener;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initChangeListener();
@@ -79,7 +80,7 @@ public class PrayerTimesController implements Initializable {
     }
 
     private void initChangeListener() {
-        changeListener =  (observable, oldValue, newValue) -> {
+        changeListener = (observable, oldValue, newValue) -> {
             System.out.println(observable);
             if (!isFetched && newValue.intValue() == 1) {
                 initUI();

@@ -1,6 +1,5 @@
 package com.bayoumi.util.gui;
 
-import com.bayoumi.util.Utilities;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -13,14 +12,12 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 
 public class HelperMethods {
+
     public static void ExitKeyCodeCombination(Scene scene, Stage stage) {
         HashMap<KeyCombination, Runnable> hashMap = new HashMap<>();
-        // CTRL + Q
-        KeyCombination kc1 = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
-        Runnable rn1 = () -> {
-            Utilities.exitProgramAction();
-            stage.close();
-        };
+        // CTRL + W
+        KeyCombination kc1 = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
+        Runnable rn1 = stage::close;
         hashMap.put(kc1, rn1);
         scene.getAccelerators().putAll(hashMap);
     }

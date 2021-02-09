@@ -3,23 +3,24 @@ package com.bayoumi.controllers.settings.azkar;
 import com.bayoumi.models.AzkarSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.IntegerSpinner;
+import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -40,6 +41,12 @@ public class AzkarSettingsController implements Initializable {
     @FXML
     private Spinner<Integer> azkarPeriod;
     @FXML
+    private Label minPlurality;
+    @FXML
+    private Spinner<Integer> azkarPeriod_hour;
+    @FXML
+    private Label hourPlurality;
+    @FXML
     private JFXCheckBox stopAzkar;
     @FXML
     private JFXComboBox<String> azkarAlarmComboBox;
@@ -52,9 +59,15 @@ public class AzkarSettingsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         periodBox.disableProperty().bind(stopAzkar.selectedProperty());
         // init Spinner Values
-        azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 240, 1));
+        IntegerSpinner.init(azkarPeriod);
+        IntegerSpinner.init(azkarPeriod_hour);
+        azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 1));
+        azkarPeriod_hour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+        azkarPeriod.valueProperty().addListener((observable, oldValue, newValue) -> minPlurality.setText(Utilities.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
+        azkarPeriod_hour.valueProperty().addListener((observable, oldValue, newValue) -> hourPlurality.setText(Utilities.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
+        azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(Utilities.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
+        azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(Utilities.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
 
-        initAudioFiles();
         // init morning and night azkar reminder
         nightAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
         morningAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
@@ -64,65 +77,63 @@ public class AzkarSettingsController implements Initializable {
         morningAzkarTimeComboBox.setValue(azkarSettings.getMorningAzkarReminder());
         nightAzkarTimeComboBox.setValue(azkarSettings.getNightAzkarReminder());
         azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
-        azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod());
+        azkarAlarmComboBox.setItems(AzkarSettings.getAudioList());
+
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod() % 60);
+        azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getHighPeriod() / 60);
+
         stopAzkar.setSelected(azkarSettings.isStopped());
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
         // disable unsupported features
-        nightAzkarTimeComboBox.setDisable(true);
-        morningAzkarTimeComboBox.setDisable(true);
-    }
-
-    private void initAudioFiles() {
-        ObservableList<String> audioFiles = FXCollections.observableArrayList();
-        audioFiles.add("بدون صوت");
-        File folder = new File("jarFiles/audio");
-        File[] listOfFiles = folder.listFiles();
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                if (file.isFile()) {
-                    audioFiles.add(file.getName());
-                }
-            }
-        }
-        azkarAlarmComboBox.setItems(audioFiles);
+//        nightAzkarTimeComboBox.setDisable(true);
+//        morningAzkarTimeComboBox.setDisable(true);
     }
 
     @FXML
     private void highFrequencyAction() {
         toggleFrequencyBTN(highFrequency);
-        azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod());
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod() % 60);
+        azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getHighPeriod() / 60);
     }
 
     @FXML
     private void lowFrequencyAction() {
         toggleFrequencyBTN(lowFrequency);
-        azkarPeriod.getValueFactory().setValue(azkarSettings.getLowPeriod());
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getLowPeriod() % 60);
+        azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getLowPeriod() / 60);
     }
 
     @FXML
     private void midFrequencyAction() {
         toggleFrequencyBTN(midFrequency);
-        azkarPeriod.getValueFactory().setValue(azkarSettings.getMidPeriod());
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getMidPeriod() % 60);
+        azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getMidPeriod() / 60);
     }
 
     @FXML
     private void rearFrequencyAction() {
         toggleFrequencyBTN(rearFrequency);
-        azkarPeriod.getValueFactory().setValue(azkarSettings.getRearPeriod());
+        azkarPeriod.getValueFactory().setValue(azkarSettings.getRearPeriod() % 60);
+        azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getRearPeriod() / 60);
     }
 
     private void toggleFrequencyBTN(JFXButton b) {
+        azkarPeriod.getValueFactory().setValue(Integer.valueOf(azkarPeriod.getEditor().getText()));
+        azkarPeriod_hour.getValueFactory().setValue(Integer.valueOf(azkarPeriod_hour.getEditor().getText()));
+        if (azkarPeriod.getEditor().getText().equals("0") && azkarPeriod_hour.getEditor().getText().equals("0")) {
+            azkarPeriod.getValueFactory().setValue(1);
+        }
         // save data
         if (currentFrequency.equals(highFrequency)) {
-            azkarSettings.setHighPeriod(azkarPeriod.getValue());
+            azkarSettings.setHighPeriod(azkarPeriod.getValueFactory().getValue() + azkarPeriod_hour.getValueFactory().getValue() * 60);
         } else if (currentFrequency.equals(midFrequency)) {
-            azkarSettings.setMidPeriod(azkarPeriod.getValue());
+            azkarSettings.setMidPeriod(azkarPeriod.getValueFactory().getValue() + azkarPeriod_hour.getValueFactory().getValue() * 60);
         } else if (currentFrequency.equals(lowFrequency)) {
-            azkarSettings.setLowPeriod(azkarPeriod.getValue());
+            azkarSettings.setLowPeriod(azkarPeriod.getValueFactory().getValue() + azkarPeriod_hour.getValueFactory().getValue() * 60);
         } else if (currentFrequency.equals(rearFrequency)) {
-            azkarSettings.setRearPeriod(azkarPeriod.getValue());
+            azkarSettings.setRearPeriod(azkarPeriod.getValueFactory().getValue() + azkarPeriod_hour.getValueFactory().getValue() * 60);
         }
         // toggle style to selected button
         currentFrequency.getStyleClass().remove("frequency-btn-selected");

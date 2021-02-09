@@ -42,7 +42,8 @@ public class DatabaseAssetsManager {
             if (!createTable("CREATE TABLE IF NOT EXISTS other_settings (" +
                     "language TEXT NOT NULL DEFAULT 'عربي - Arabic', " +
                     "enable_darkmode INTEGER NOT NULL DEFAULT 0" +
-                    ", enable24 INTEGER NOT NULL DEFAULT 0 ); ") ||
+                    ", enable24 INTEGER NOT NULL DEFAULT 0" +
+                    ", hijri_offset INTEGER NOT NULL DEFAULT 0 ); ") ||
                     !insertDefault("other_settings")) {
                 throw new Exception("ERROR in CREATE other_settings TABLE");
             }

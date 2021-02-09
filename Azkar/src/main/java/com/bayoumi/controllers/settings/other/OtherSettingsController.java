@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -23,6 +25,10 @@ public class OtherSettingsController implements Initializable {
     @FXML
     private JFXCheckBox format24;
     @FXML
+    private JFXCheckBox minimizeAtStart;
+    @FXML
+    private Spinner<Integer> hijriDateOffset;
+    @FXML
     private JFXCheckBox darkTheme;
     @FXML
     private Label version;
@@ -30,6 +36,9 @@ public class OtherSettingsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         otherSettings = new OtherSettings();
+
+        hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 0));
+        hijriDateOffset.getValueFactory().setValue(otherSettings.getHijriOffset());
 
         languageComboBox.setItems(FXCollections.observableArrayList("عربي - Arabic", "إنجليزي - English"));
         languageComboBox.setValue(otherSettings.getLanguage());
@@ -53,6 +62,7 @@ public class OtherSettingsController implements Initializable {
         otherSettings.setLanguage(languageComboBox.getValue());
         otherSettings.setEnable24Format(format24.isSelected());
         otherSettings.setEnableDarkMode(darkTheme.isSelected());
+        otherSettings.setHijriOffset(hijriDateOffset.getValue());
         otherSettings.save();
         close();
     }

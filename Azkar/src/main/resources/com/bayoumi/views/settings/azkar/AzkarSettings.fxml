@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
@@ -58,13 +59,23 @@
                     </font>
                 </Label>
                 <HBox alignment="CENTER" spacing="5.0">
-                    <Spinner fx:id="azkarPeriod" focusTraversable="false" prefWidth="90.0" />
-                    <Label text="دقيقة" textAlignment="CENTER" wrapText="true">
+                    <Spinner fx:id="azkarPeriod" editable="true" focusTraversable="false" prefWidth="90.0" />
+                    <Label fx:id="minPlurality" text="دقيقة" textAlignment="CENTER" wrapText="true">
                         <font>
                             <Font name="System Bold" size="18.0" />
                         </font>
                     </Label>
                 </HBox>
+            <HBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Spinner fx:id="azkarPeriod_hour" editable="true" focusTraversable="false" prefWidth="90.0" />
+                  <Label fx:id="hourPlurality" text="ساعة" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
             </HBox>
         </VBox>
         <Separator />
@@ -72,6 +83,9 @@
            <font>
                <Font size="16.0" />
            </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
         </JFXCheckBox>
     </VBox>
      <HBox alignment="CENTER" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
@@ -95,7 +109,10 @@
                      </font>
                  </Label>
                  <VBox alignment="CENTER" GridPane.columnIndex="1">
-                     <JFXComboBox fx:id="azkarAlarmComboBox" focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal" />
+                     <JFXComboBox fx:id="azkarAlarmComboBox" focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor></JFXComboBox>
                  </VBox>
                  <Label text="التذكير بأذكار المساء (بعد صلاة العصر)" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2">
                      <font>
@@ -103,7 +120,10 @@
                      </font>
                  </Label>
                  <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <JFXComboBox fx:id="nightAzkarTimeComboBox" focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal" />
+                     <JFXComboBox fx:id="nightAzkarTimeComboBox" focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor></JFXComboBox>
                  </VBox>
                  <Label text="التذكير بأذكار الصباح (بعد صلاة الفجر)" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
                      <font>
@@ -111,7 +131,10 @@
                      </font>
                  </Label>
                  <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <JFXComboBox fx:id="morningAzkarTimeComboBox" focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal" />
+                     <JFXComboBox fx:id="morningAzkarTimeComboBox" focusTraversable="false" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor></JFXComboBox>
                  </VBox>
              </GridPane>
          </VBox>

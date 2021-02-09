@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 public class Utilities {
 
@@ -48,11 +49,13 @@ public class Utilities {
         return new SimpleDateFormat("EEEE", new Locale(language)).format(date);
     }
 
+    public static void printAllRunningThreads() {
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        threadSet.forEach(thread -> System.out.println(thread.getName()));
+    }
+
     public static void exitProgramAction() {
-//        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-//        System.out.println("=========================");
-//        threadSet.forEach(thread -> System.out.println(thread.getName()));
-//        System.out.println("=========================");
+//        printAllRunningThreads();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Long exitTime = System.currentTimeMillis();

@@ -6,10 +6,11 @@ import com.bayoumi.util.db.DatabaseAssetsManager;
 import java.sql.ResultSet;
 
 public class OtherSettings {
+    public static boolean isUpdated = false;
     private String language;
     private boolean enableDarkMode;
     private boolean enable24Format;
-    public static boolean isUpdated= false;
+    private int hijriOffset;
 
     public OtherSettings() {
         loadSettings();
@@ -22,6 +23,7 @@ public class OtherSettings {
                 language = res.getString(1);
                 enableDarkMode = res.getInt(2) == 1;
                 enable24Format = res.getInt(3) == 1;
+                hijriOffset = res.getInt(4);
             }
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
@@ -31,10 +33,11 @@ public class OtherSettings {
     public void save() {
         try {
             DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?");
+            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?, hijri_offset = ?");
             databaseAssetsManager.stat.setString(1, this.language);
             databaseAssetsManager.stat.setInt(2, this.enableDarkMode ? 1 : 0);
             databaseAssetsManager.stat.setInt(3, this.enable24Format ? 1 : 0);
+            databaseAssetsManager.stat.setInt(4, this.hijriOffset);
             databaseAssetsManager.stat.executeUpdate();
             isUpdated = true;
         } catch (Exception ex) {
@@ -80,5 +83,13 @@ public class OtherSettings {
 
     public void setEnable24Format(boolean enable24Format) {
         this.enable24Format = enable24Format;
+    }
+
+    public int getHijriOffset() {
+        return hijriOffset;
+    }
+
+    public void setHijriOffset(int hijriOffset) {
+        this.hijriOffset = hijriOffset;
     }
 }

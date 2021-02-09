@@ -1,5 +1,6 @@
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.models.AzkarSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseAssetsManager;
 import com.bayoumi.util.db.DatabaseHandler;
@@ -103,10 +104,7 @@ public class NotificationBox extends AnchorPane {
 
     private String getSelectedAlarmSound() {
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
-            if (res.next()) {
-                return res.getString(3);
-            }
+            return new AzkarSettings().getAudioName();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".getSelectedAlarmSound()");
         }

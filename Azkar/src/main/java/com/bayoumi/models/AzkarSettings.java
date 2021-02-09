@@ -2,11 +2,21 @@ package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
+import com.bayoumi.util.prayertimes.PrayerTimesValidation;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 
+import java.io.File;
 import java.sql.ResultSet;
+import java.time.LocalTime;
 
 public class AzkarSettings {
     public static boolean isUpdated = false;
+    private static AzkarReminderService morningAzkarReminderService;
+    private static AzkarReminderService nightAzkarReminderService;
+    private static AzkarReminderService testReminderService;
     private String morningAzkarReminder;
     private String nightAzkarReminder;
     private String audioName;
@@ -17,9 +27,65 @@ public class AzkarSettings {
     private int rearPeriod;
     private boolean isStopped;
 
-
     public AzkarSettings() {
+        System.out.println("AzkarSettings()");
         loadSettings();
+
+        /*
+        AzkarReminderService.clearAllTasks();
+
+        Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
+        Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
+
+        if (PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == 1) {
+            int fajrOffset = getOffset(morningAzkarReminder);
+            int asrOffset = getOffset(nightAzkarReminder);
+            PrayerTimes prayerTimesForToday = PrayerTimesDBManager.getPrayerTimesForToday();
+            if (fajrOffset != 0) {
+                morningAzkarReminderService = new AzkarReminderService(LocalTime.parse(prayerTimesForToday.getFajr()).plusHours(fajrOffset).toString(), "أذكار الصباح", morningImage);
+            }
+            if (asrOffset != 0) {
+                nightAzkarReminderService = new AzkarReminderService(LocalTime.parse(prayerTimesForToday.getAsr()).plusHours(asrOffset).toString(), "أذكار المساء", nightImage);
+            }
+        } else {
+            morningAzkarReminderService = new AzkarReminderService(LocalTime.of(6, 0).toString(), "أذكار الصباح", morningImage);
+            nightAzkarReminderService = new AzkarReminderService(LocalTime.of(18, 0).toString(), "أذكار المساء", nightImage);
+        }
+        // test
+        testReminderService = new AzkarReminderService(LocalTime.now().plusMinutes(1).toString(), "تجربة الأذكار", morningImage);*/
+    }
+
+    public static ObservableList<String> getAudioList() {
+        ObservableList<String> audioFiles = FXCollections.observableArrayList();
+        audioFiles.add("بدون صوت");
+        File folder = new File("jarFiles/audio");
+        File[] listOfFiles = folder.listFiles();
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    audioFiles.add(file.getName());
+                }
+            }
+        }
+        return audioFiles;
+    }
+
+    public int getMorningAzkarOffset() {
+        return getOffset(morningAzkarReminder);
+    }
+
+    public int getNightAzkarOffset() {
+        return getOffset(nightAzkarReminder);
+    }
+
+    private int getOffset(String reminder) {
+        int offset = 0;
+        if (reminder.equals("بـ نصف ساعة")) {
+            offset = 30;
+        } else if (reminder.equals("بـ ساعة")) {
+            offset = 60;
+        }
+        return offset;
     }
 
     private void loadSettings() {
@@ -89,7 +155,10 @@ public class AzkarSettings {
     }
 
     public String getAudioName() {
-        return audioName;
+        if (getAudioList().contains(audioName)) {
+            return audioName;
+        }
+        return "بدون صوت";
     }
 
     public void setAudioName(String audioName) {

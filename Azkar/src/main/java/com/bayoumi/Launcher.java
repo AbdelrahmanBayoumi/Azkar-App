@@ -117,7 +117,7 @@ public class Launcher extends Application {
         primaryStage.setResizable(false);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
-//        primaryStage.show();
+        primaryStage.show();
         // assign current primaryStage to SingleInstance Class
         SingleInstance.getInstance().setCurrentStage(primaryStage);
     }

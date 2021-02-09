@@ -2,14 +2,14 @@ package com.bayoumi.controllers.home;
 
 import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
-import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.models.AzkarSettings;
-import com.bayoumi.models.OtherSettings;
+import com.bayoumi.models.*;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.notfication.Notification;
+import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
+import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
@@ -22,12 +22,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -60,9 +62,23 @@ HomeController implements Initializable {
     private JFXButton rearFrequency;
     private JFXButton currentFrequency;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+   /*
+        //Build PopOver look and feel
+        VBox vBox = new VBox();
+        //Create PopOver and add look and feel
+        PopOver popOver = new PopOver(vBox);
+        frequencyLabel.setOnMouseEntered(mouseEvent -> {
+            //Show PopOver when mouse enters label
+            popOver.show(frequencyLabel);
+        });
+
+        frequencyLabel.setOnMouseExited(mouseEvent -> {
+            //Hide PopOver when mouse exits label
+            popOver.hide();
+        });*/
+
         otherSettings = new OtherSettings();
         azkarSettings = new AzkarSettings();
 
@@ -80,18 +96,39 @@ HomeController implements Initializable {
             periodBox.setDisable(true);
         }
 
-//        timeline_debug = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
-//            time_debug = time_debug.plusSeconds(1);
-//            System.out.println(time_debug.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-//        }));
-//        timeline_debug.setCycleCount(Animation.INDEFINITE);
-//        timeline_debug.play();
         initClock();
-
+        initReminders();
         Date date = new Date();
         day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
         gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
         hijriDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
+    }
+
+    private void initReminders() {
+        System.out.println("==============");
+        System.out.println("initReminders() ... ");
+
+        AzkarReminderService.clearAllTasks();
+        if (PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == 1) {
+            Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
+            Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
+            PrayerTimes prayerTimesForToday = PrayerTimesDBManager.getPrayerTimesForToday();
+            if (azkarSettings.getMorningAzkarOffset() != 0) {
+                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getFajr()).plusMinutes(azkarSettings.getMorningAzkarOffset()).toString(), "أذكار الصباح", morningImage);
+            }
+            if (azkarSettings.getNightAzkarOffset() != 0) {
+                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getAsr()).plusMinutes(azkarSettings.getNightAzkarOffset()).toString(), "أذكار المساء", nightImage);
+            }
+            // test
+            AzkarReminderService.create(LocalTime.now().plusMinutes(1).toString(), "تجربة الأذكار", nightImage);
+        } else {
+            PrayerTimesValidation.PRAYERTIMES_STATUS.addListener((observable, oldValue, newValue) -> {
+                if (newValue.intValue() == 1) {
+                    initReminders();
+                }
+            });
+        }
+        System.out.println("==============");
     }
 
     private void initAzkarThread() {
@@ -147,6 +184,7 @@ HomeController implements Initializable {
                     initAzkarThread();
                     periodBox.setDisable(false);
                 }
+                initReminders();
             }
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
@@ -164,6 +202,21 @@ HomeController implements Initializable {
             return rearFrequency;
         }
         return highFrequency;
+    }
+
+    private void setFrequencyLabel(String s) {
+        System.out.println("S: " + s);
+        String msg = "ظهور كل" + " ";
+        if (currentFrequency.equals(highFrequency)) {
+            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getHighPeriod());
+        } else if (currentFrequency.equals(midFrequency)) {
+            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getMidPeriod());
+        } else if (currentFrequency.equals(lowFrequency)) {
+            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getLowPeriod());
+        } else if (currentFrequency.equals(rearFrequency)) {
+            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getRearPeriod());
+        }
+        frequencyLabel.setText(msg);
     }
 
     private Long getPeriod() {
@@ -210,25 +263,11 @@ HomeController implements Initializable {
             HelperMethods.SetIcon(stage);
             TimedAzkarController controller = loader.getController();
             controller.setData(type);
+            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".showTimedAzkar()");
         }
-    }
-
-    private void setFrequencyLabel(String s) {
-        System.out.println("S: " + s);
-        String msg = "";
-        if (currentFrequency.equals(highFrequency)) {
-            msg = "ظهور كل" + " " + azkarSettings.getHighPeriod() + " " + "دقائق";
-        } else if (currentFrequency.equals(midFrequency)) {
-            msg = "ظهور كل" + " " + azkarSettings.getMidPeriod() + " " + "دقائق";
-        } else if (currentFrequency.equals(lowFrequency)) {
-            msg = "ظهور كل" + " " + azkarSettings.getLowPeriod() + " " + "دقيقة";
-        } else if (currentFrequency.equals(rearFrequency)) {
-            msg = "ظهور كل" + " " + azkarSettings.getRearPeriod() + " " + "دقيقة";
-        }
-        frequencyLabel.setText(msg);
     }
 
     @FXML
@@ -256,10 +295,6 @@ HomeController implements Initializable {
         currentFrequency = b;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
-//        timeline_debug.stop();
-//        time_debug = LocalTime.parse("00:00:00");
-//        timeline_debug.play();
-
         absoluteAzkarTask.updateTimer();
         setFrequencyLabel("toggleFrequencyBTN");
         azkarSettings.setSelectedPeriod(currentFrequency.getText());
@@ -275,6 +310,7 @@ HomeController implements Initializable {
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
+            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".goToPrayerTimes()");
@@ -290,6 +326,8 @@ HomeController implements Initializable {
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
+            stage.setResizable(false);
+            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".goToSettings()");

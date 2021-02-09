@@ -50,7 +50,7 @@ public class HijriDate {
         return this.getYear() + "-" + Utilities.formatIntToTwoDigit(this.getMonth() + 1) + "-" + Utilities.formatIntToTwoDigit(this.getDay());
     }
 
-
+/*
     private String getHijriYear(Calendar cal) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("y");
         dateFormat.setCalendar(cal);
@@ -73,7 +73,7 @@ public class HijriDate {
         Calendar cal = new UmmalquraCalendar(hijriDate.getYear(), hijriDate.getMonth(), hijriDate.getDay());
         return getHijriYear(cal) + getHijriMonth(cal, language) + getHijriDayOfMonth(cal);
     }
-
+*/
     public int getYear() {
         return year;
     }
