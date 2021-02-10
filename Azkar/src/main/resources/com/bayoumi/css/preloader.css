@@ -1,5 +1,5 @@
 .root{
-    -fx-background-color: #141e2a;
+    -fx-background-color: transparent;
 }
 .jfx-progress-bar > .track {
     -fx-background-color: #1e2b3c;

@@ -50,7 +50,7 @@
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></JFXCheckBox>
-                        <JFXCheckBox fx:id="minimizeAtStart" disable="true" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" text="دائما تصغير البرنامج عند البدء">
+                        <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" text="دائما تصغير البرنامج عند البدء">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -88,12 +88,12 @@
                <children>
                   <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
                      <children>
-                        <Label alignment="CENTER" text="Developed By ">
+                        <Label alignment="CENTER" text="website: ">
                            <font>
                               <Font size="17.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: blue;" text="Abdelrahman Bayoumi ©" textFill="#1d0968" underline="true">
+                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: blue;" text="abdelrahmanbayoumi.ml/Azkar-App" textFill="#1d0968" underline="true">
                            <font>
                               <Font size="17.0" />
                            </font>

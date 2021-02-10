@@ -1,6 +1,7 @@
 package com.bayoumi;
 
 import com.bayoumi.controllers.home.HomeController;
+import com.bayoumi.models.OtherSettings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
@@ -28,7 +29,7 @@ public class Launcher extends Application {
     // GUI Object
     public static HomeController homeController;
     // Program characteristics
-    private final String VERSION = "1.0.4_2";
+    private final String VERSION = "1.0.4_3";
     // GUI Object
     private Scene scene = null;
 
@@ -93,6 +94,10 @@ public class Launcher extends Application {
 
             // Get Prayer Times
             new PrayerTimesValidation().start();
+
+
+            Thread.sleep(500);
+            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             ex.printStackTrace();
@@ -117,7 +122,10 @@ public class Launcher extends Application {
         primaryStage.setResizable(false);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
-        primaryStage.show();
+        OtherSettings otherSettings = new OtherSettings();
+        if (!otherSettings.isMinimized()) {
+            primaryStage.show();
+        }
         // assign current primaryStage to SingleInstance Class
         SingleInstance.getInstance().setCurrentStage(primaryStage);
     }

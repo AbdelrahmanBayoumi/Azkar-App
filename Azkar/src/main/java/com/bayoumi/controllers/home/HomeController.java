@@ -105,7 +105,6 @@ HomeController implements Initializable {
     }
 
     private void initReminders() {
-        System.out.println("==============");
         System.out.println("initReminders() ... ");
 
         AzkarReminderService.clearAllTasks();
@@ -119,8 +118,6 @@ HomeController implements Initializable {
             if (azkarSettings.getNightAzkarOffset() != 0) {
                 AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getAsr()).plusMinutes(azkarSettings.getNightAzkarOffset()).toString(), "أذكار المساء", nightImage);
             }
-            // test
-            AzkarReminderService.create(LocalTime.now().plusMinutes(1).toString(), "تجربة الأذكار", nightImage);
         } else {
             PrayerTimesValidation.PRAYERTIMES_STATUS.addListener((observable, oldValue, newValue) -> {
                 if (newValue.intValue() == 1) {
@@ -128,7 +125,6 @@ HomeController implements Initializable {
                 }
             });
         }
-        System.out.println("==============");
     }
 
     private void initAzkarThread() {

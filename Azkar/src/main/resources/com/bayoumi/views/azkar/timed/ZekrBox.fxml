@@ -29,11 +29,11 @@
    </HBox>
    <HBox alignment="CENTER" minHeight="49.0"
          style="-fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
-      <JFXButton focusTraversable="false" graphicTextGap="20.0" minHeight="49.0" onAction="#copy" prefWidth="370.0"
+      <JFXButton fx:id="copyBTN" focusTraversable="false" graphicTextGap="20.0" minHeight="49.0" onAction="#copy" prefWidth="370.0"
                  style="-fx-text-fill: -fx-secondary-text; -fx-background-radius: 0 0 0 20;"
                  styleClass="transparent-button" text="نسخ">
          <graphic>
-            <FontAwesomeIconView glyphName="COPY" size="25" style="-fx-fill: -fx-secondary-text;"/>
+            <FontAwesomeIconView fx:id="copyIcon" glyphName="COPY" size="25" style="-fx-fill: -fx-secondary-text;"/>
          </graphic>
          <font>
             <Font name="System Bold" size="20.0"/>

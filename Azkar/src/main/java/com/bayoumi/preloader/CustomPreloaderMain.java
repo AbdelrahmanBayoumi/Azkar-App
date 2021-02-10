@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -30,10 +31,12 @@ public class CustomPreloaderMain extends Preloader {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.preloaderStage = primaryStage;
         preloaderStage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         preloaderStage.initStyle(StageStyle.UNDECORATED);
+        preloaderStage.initStyle(StageStyle.TRANSPARENT);
         HelperMethods.SetAppDecoration(primaryStage);
         preloaderStage.show();
         preloaderStage.setOnCloseRequest((event) -> {

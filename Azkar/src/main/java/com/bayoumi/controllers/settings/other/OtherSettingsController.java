@@ -46,6 +46,8 @@ public class OtherSettingsController implements Initializable {
 
         format24.setSelected(otherSettings.isEnable24Format());
 
+        minimizeAtStart.setSelected(otherSettings.isMinimized());
+
         darkTheme.setSelected(otherSettings.isEnableDarkMode());
         darkTheme.setDisable(true);
 
@@ -63,6 +65,7 @@ public class OtherSettingsController implements Initializable {
         otherSettings.setEnable24Format(format24.isSelected());
         otherSettings.setEnableDarkMode(darkTheme.isSelected());
         otherSettings.setHijriOffset(hijriDateOffset.getValue());
+        otherSettings.setMinimized(minimizeAtStart.isSelected());
         otherSettings.save();
         close();
     }
@@ -70,7 +73,7 @@ public class OtherSettingsController implements Initializable {
     @FXML
     private void openWebsite() {
         try {
-            Desktop.getDesktop().browse(new URI("https://abdelrahmanbayoumi.github.io/"));
+            Desktop.getDesktop().browse(new URI("https://www.abdelrahmanbayoumi.ml/Azkar-App/"));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openWebsite()");
         }

@@ -35,7 +35,9 @@ public class DatabaseAssetsManager {
                     "high_period INTEGER NOT NULL DEFAULT 5, " +
                     "mid_period INTEGER NOT NULL DEFAULT 10, " +
                     "low_period INTEGER NOT NULL DEFAULT 20, " +
-                    "rear_period INTEGER NOT NULL DEFAULT 30 );") ||
+                    "rear_period INTEGER NOT NULL DEFAULT 30," +
+                    "stop_azkar INTEGER NOT NULL DEFAULT 0," +
+                    "selected_period TEXT DEFAULT 'high');") ||
                     !insertDefault("azkar_settings")) {
                 throw new Exception("ERROR in CREATE azkar_settings TABLE");
             }
@@ -43,7 +45,8 @@ public class DatabaseAssetsManager {
                     "language TEXT NOT NULL DEFAULT 'عربي - Arabic', " +
                     "enable_darkmode INTEGER NOT NULL DEFAULT 0" +
                     ", enable24 INTEGER NOT NULL DEFAULT 0" +
-                    ", hijri_offset INTEGER NOT NULL DEFAULT 0 ); ") ||
+                    ", hijri_offset INTEGER NOT NULL DEFAULT 0" +
+                    ", minimized INTEGER NOT NULL DEFAULT 0 ); ") ||
                     !insertDefault("other_settings")) {
                 throw new Exception("ERROR in CREATE other_settings TABLE");
             }
