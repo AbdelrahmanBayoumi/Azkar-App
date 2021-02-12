@@ -139,32 +139,14 @@
              </GridPane>
          </VBox>
      </HBox>
-    <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
-        <HBox HBox.hgrow="ALWAYS">
-            <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" prefWidth="200.0" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
-                <font>
-                    <Font name="System Bold" size="16.0" />
-                </font>
-                <graphic>
-                    <FontAwesomeIconView glyphName="BOOK" size="30" />
-                </graphic>
-            </JFXButton>
-        </HBox>
-        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#save" prefHeight="43.0" prefWidth="150.0" styleClass="confirm-button" text="حفظ">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-            <graphic>
-                <FontAwesomeIconView glyphName="SAVE" size="25" />
-            </graphic>
-        </JFXButton>
-        <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#close" prefHeight="43.0" prefWidth="150.0" styleClass="back-button" text="إغلاق">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-            <graphic>
-                <FontAwesomeIconView glyphName="CLOSE" size="25" />
-            </graphic>
-        </JFXButton>
-    </HBox>
+     <HBox alignment="CENTER_RIGHT" nodeOrientation="RIGHT_TO_LEFT">
+         <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" prefWidth="200.0" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
+             <font>
+                 <Font name="System Bold" size="16.0" />
+             </font>
+             <graphic>
+                 <FontAwesomeIconView glyphName="BOOK" size="30" />
+             </graphic>
+         </JFXButton>
+     </HBox>
 </VBox>

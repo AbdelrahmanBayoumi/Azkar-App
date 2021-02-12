@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
@@ -46,7 +44,7 @@
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></JFXCheckBox>
-                        <JFXCheckBox fx:id="darkTheme" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" text="التصميم الغامق">
+                        <JFXCheckBox fx:id="darkTheme" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" text="الوصع الليلي">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></JFXCheckBox>
@@ -124,25 +122,5 @@
             </VBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="50.0">
-         <children>
-            <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#save" prefWidth="200.0" styleClass="confirm-button" text="حفظ">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-               <graphic>
-                  <FontAwesomeIconView glyphName="SAVE" size="25" />
-               </graphic>
-            </JFXButton>
-            <JFXButton contentDisplay="RIGHT" graphicTextGap="20.0" onAction="#close" prefWidth="200.0" styleClass="back-button" text="إغلاق">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-               <graphic>
-                  <FontAwesomeIconView glyphName="CLOSE" size="25" />
-               </graphic>
-            </JFXButton>
-         </children>
-      </HBox>
    </children>
 </VBox>

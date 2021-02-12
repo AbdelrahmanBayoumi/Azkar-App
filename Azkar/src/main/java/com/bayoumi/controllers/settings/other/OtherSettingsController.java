@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.settings.other;
 
+import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseAssetsManager;
@@ -11,14 +12,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.stage.Stage;
 
 import java.awt.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class OtherSettingsController implements Initializable {
+public class OtherSettingsController implements Initializable, SettingsInterface {
     private OtherSettings otherSettings;
     @FXML
     private ComboBox<String> languageComboBox;
@@ -55,22 +55,6 @@ public class OtherSettingsController implements Initializable {
     }
 
     @FXML
-    private void close() {
-        ((Stage) languageComboBox.getScene().getWindow()).close();
-    }
-
-    @FXML
-    private void save() {
-        otherSettings.setLanguage(languageComboBox.getValue());
-        otherSettings.setEnable24Format(format24.isSelected());
-        otherSettings.setEnableDarkMode(darkTheme.isSelected());
-        otherSettings.setHijriOffset(hijriDateOffset.getValue());
-        otherSettings.setMinimized(minimizeAtStart.isSelected());
-        otherSettings.save();
-        close();
-    }
-
-    @FXML
     private void openWebsite() {
         try {
             Desktop.getDesktop().browse(new URI("https://www.abdelrahmanbayoumi.ml/Azkar-App/"));
@@ -79,4 +63,13 @@ public class OtherSettingsController implements Initializable {
         }
     }
 
+    @Override
+    public void saveToDB() {
+        otherSettings.setLanguage(languageComboBox.getValue());
+        otherSettings.setEnable24Format(format24.isSelected());
+        otherSettings.setEnableDarkMode(darkTheme.isSelected());
+        otherSettings.setHijriOffset(hijriDateOffset.getValue());
+        otherSettings.setMinimized(minimizeAtStart.isSelected());
+        otherSettings.save();
+    }
 }

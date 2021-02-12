@@ -96,8 +96,8 @@ public class Launcher extends Application {
             new PrayerTimesValidation().start();
 
 
-            Thread.sleep(500);
-            incrementPreloader();
+//            Thread.sleep(500);
+//            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             ex.printStackTrace();

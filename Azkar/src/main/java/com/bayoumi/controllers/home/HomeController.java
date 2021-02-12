@@ -317,8 +317,7 @@ HomeController implements Initializable {
     private void goToSettings() {
         try {
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/Settings.fxml"));
-            stage.setScene(new Scene(loader.load()));
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/settings/Settings.fxml"))));
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);

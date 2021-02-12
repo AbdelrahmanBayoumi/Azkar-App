@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.settings.azkar;
 
+import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AzkarSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
@@ -24,7 +25,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AzkarSettingsController implements Initializable {
+public class AzkarSettingsController implements Initializable, SettingsInterface {
 
     private AzkarSettings azkarSettings;
     private JFXButton currentFrequency;
@@ -142,26 +143,6 @@ public class AzkarSettingsController implements Initializable {
     }
 
     @FXML
-    private void save() {
-        try {
-            highFrequency.fire();
-            azkarSettings.setMorningAzkarReminder(morningAzkarTimeComboBox.getValue());
-            azkarSettings.setNightAzkarReminder(nightAzkarTimeComboBox.getValue());
-            azkarSettings.setAudioName(azkarAlarmComboBox.getValue());
-            azkarSettings.setStopped(stopAzkar.isSelected());
-            azkarSettings.save();
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + ".save()");
-        }
-        close();
-    }
-
-    @FXML
-    private void close() {
-        ((Stage) azkarPeriod.getScene().getWindow()).close();
-    }
-
-    @FXML
     private void goToAzkar() {
         try {
             Stage stage = new Stage();
@@ -172,6 +153,20 @@ public class AzkarSettingsController implements Initializable {
             stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".goToAzkar()");
+        }
+    }
+
+    @Override
+    public void saveToDB() {
+        try {
+            highFrequency.fire();
+            azkarSettings.setMorningAzkarReminder(morningAzkarTimeComboBox.getValue());
+            azkarSettings.setNightAzkarReminder(nightAzkarTimeComboBox.getValue());
+            azkarSettings.setAudioName(azkarAlarmComboBox.getValue());
+            azkarSettings.setStopped(stopAzkar.isSelected());
+            azkarSettings.save();
+        } catch (Exception ex) {
+            Logger.error(null, ex, getClass().getName() + ".saveToDB()");
         }
     }
 }

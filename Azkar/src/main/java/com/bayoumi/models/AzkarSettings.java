@@ -77,8 +77,30 @@ public class AzkarSettings {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AzkarSettings) {
+            AzkarSettings azkarSettings = (AzkarSettings) obj;
+            return azkarSettings.getMorningAzkarReminder().equals(this.getMorningAzkarReminder()) &&
+                    azkarSettings.getNightAzkarReminder().equals(this.getNightAzkarReminder()) &&
+                    azkarSettings.getAudioName().equals(this.getAudioName()) &&
+                    azkarSettings.getHighPeriod() == this.getHighPeriod() &&
+                    azkarSettings.getMidPeriod() == this.getMidPeriod() &&
+                    azkarSettings.getLowPeriod() == this.getLowPeriod() &&
+                    azkarSettings.getRearPeriod() == this.getRearPeriod() &&
+                    azkarSettings.isStopped() == this.isStopped() &&
+                    azkarSettings.getSelectedPeriod().equals(this.getSelectedPeriod());
+        }
+        return false;
+    }
+
     public void save() {
         try {
+            AzkarSettings oldSettings = new AzkarSettings();
+            if(this.equals(oldSettings)){
+                return;
+            }
+
             DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
             databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, high_period = ? , mid_period = ?, low_period = ?, rear_period = ?, stop_azkar = ?, selected_period = ?");
             databaseAssetsManager.stat.setString(1, this.getMorningAzkarReminder());

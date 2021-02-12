@@ -11,6 +11,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
+
+    private SettingsInterface settingsI;
+
+    // ====== GUI Objects ======
     private JFXButton selectedButton;
     @FXML
     private JFXButton cityButton;
@@ -21,9 +25,19 @@ public class SettingsController implements Initializable {
     @FXML
     private BorderPane borderPane;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         openCitySettings();
+        borderPane.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener((observable, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        newWindow.setOnCloseRequest(event -> this.settingsI.saveToDB());
+                    }
+                });
+            }
+        });
     }
 
     @FXML
@@ -33,6 +47,7 @@ public class SettingsController implements Initializable {
                 toggle(azkarButton);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/azkar/AzkarSettings.fxml"));
                 borderPane.setCenter(loader.load());
+                settingsI = loader.getController();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -47,6 +62,7 @@ public class SettingsController implements Initializable {
                 toggle(cityButton);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/prayertimes/PrayerTimeSettings.fxml"));
                 borderPane.setCenter(loader.load());
+                settingsI = loader.getController();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -61,6 +77,7 @@ public class SettingsController implements Initializable {
                 toggle(otherButton);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/other/OtherSettings.fxml"));
                 borderPane.setCenter(loader.load());
+                settingsI = loader.getController();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -78,6 +95,10 @@ public class SettingsController implements Initializable {
         selectedButton = b;
         selectedButton.getStyleClass().remove("secondary-button");
         selectedButton.getStyleClass().add("primary-button");
+
+        if (settingsI != null) {
+            settingsI.saveToDB();
+        }
     }
 
 
