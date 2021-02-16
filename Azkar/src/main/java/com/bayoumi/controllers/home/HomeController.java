@@ -2,6 +2,7 @@ package com.bayoumi.controllers.home;
 
 import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
+import com.bayoumi.controllers.prayertimes.PrayerTimesController;
 import com.bayoumi.models.*;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
@@ -27,6 +28,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.time.LocalTime;
@@ -51,6 +53,8 @@ HomeController implements Initializable {
     private OtherSettings otherSettings;
     private AzkarSettings azkarSettings;
     @FXML
+    public JFXButton settingsBTN;
+    @FXML
     private Label frequencyLabel;
     @FXML
     private JFXButton highFrequency;
@@ -62,22 +66,23 @@ HomeController implements Initializable {
     private JFXButton rearFrequency;
     private JFXButton currentFrequency;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-   /*
         //Build PopOver look and feel
-        VBox vBox = new VBox();
+        Label label = new Label("يمكن تعديل معدل ظهور الأذكار من الإعدادت");
+        label.setStyle("-fx-padding: 10;-fx-background-color: #E9C46A;-fx-text-fill: #000000;-fx-font-weight: bold;");
         //Create PopOver and add look and feel
-        PopOver popOver = new PopOver(vBox);
+        PopOver popOver = new PopOver(label);
         frequencyLabel.setOnMouseEntered(mouseEvent -> {
             //Show PopOver when mouse enters label
             popOver.show(frequencyLabel);
         });
-
+        popOver.setCloseButtonEnabled(true);
         frequencyLabel.setOnMouseExited(mouseEvent -> {
             //Hide PopOver when mouse exits label
             popOver.hide();
-        });*/
+        });
 
         otherSettings = new OtherSettings();
         azkarSettings = new AzkarSettings();
@@ -112,6 +117,9 @@ HomeController implements Initializable {
             Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
             Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
             PrayerTimes prayerTimesForToday = PrayerTimesDBManager.getPrayerTimesForToday();
+            if (prayerTimesForToday.getPrayerTimeSettings().isSummerTiming()) {
+                prayerTimesForToday.enableSummerTime();
+            }
             if (azkarSettings.getMorningAzkarOffset() != 0) {
                 AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getFajr()).plusMinutes(azkarSettings.getMorningAzkarOffset()).toString(), "أذكار الصباح", morningImage);
             }
@@ -303,11 +311,12 @@ HomeController implements Initializable {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/prayertimes/PrayerTimes.fxml"));
             stage.setScene(new Scene(loader.load()));
+            ((PrayerTimesController) loader.getController()).homeController = this;
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.showAndWait();
+            stage.show();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".goToPrayerTimes()");
         }

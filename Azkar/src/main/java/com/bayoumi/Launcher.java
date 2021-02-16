@@ -122,8 +122,7 @@ public class Launcher extends Application {
         primaryStage.setResizable(false);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
-        OtherSettings otherSettings = new OtherSettings();
-        if (!otherSettings.isMinimized()) {
+        if (!OtherSettings.getIsMinimizedDB()) {
             primaryStage.show();
         }
         // assign current primaryStage to SingleInstance Class

@@ -71,6 +71,7 @@ public class AzkarSettings {
                 this.isStopped = res.getInt(8) == 1;
                 this.selectedPeriod = res.getString(9);
             }
+            System.out.println(this);
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
@@ -202,5 +203,20 @@ public class AzkarSettings {
 
     public void setSelectedPeriod(String selectedPeriod) {
         this.selectedPeriod = selectedPeriod;
+    }
+
+    @Override
+    public String toString() {
+        return "AzkarSettings{" +
+                "morningAzkarReminder='" + morningAzkarReminder + '\'' +
+                ", nightAzkarReminder='" + nightAzkarReminder + '\'' +
+                ", audioName='" + audioName + '\'' +
+                ", selectedPeriod='" + selectedPeriod + '\'' +
+                ", highPeriod=" + highPeriod +
+                ", midPeriod=" + midPeriod +
+                ", lowPeriod=" + lowPeriod +
+                ", rearPeriod=" + rearPeriod +
+                ", isStopped=" + isStopped +
+                '}';
     }
 }

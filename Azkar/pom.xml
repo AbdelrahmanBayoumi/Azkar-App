@@ -29,11 +29,11 @@
             <version>8.9</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.controlsfx</groupId>-->
-<!--            <artifactId>controlsfx</artifactId>-->
-<!--            <version>8.40.15</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.15</version>
+        </dependency>
 
         <dependency>
             <groupId>org.xerial</groupId>
@@ -51,6 +51,12 @@
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
             <version>3.11.04</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.stepio.jgforms</groupId>
+            <artifactId>jgforms</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
         <!--        <dependency>-->

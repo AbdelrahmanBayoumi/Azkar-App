@@ -32,12 +32,12 @@ public class DatabaseAssetsManager {
                     "morning_reminder TEXT NOT NULL DEFAULT 'لا تذكير', " +
                     "night_reminder TEXT NOT NULL DEFAULT 'لا تذكير'," +
                     "audio_name TEXT NOT NULL DEFAULT 'بدون صوت'," +
-                    "high_period INTEGER NOT NULL DEFAULT 5, " +
-                    "mid_period INTEGER NOT NULL DEFAULT 10, " +
-                    "low_period INTEGER NOT NULL DEFAULT 20, " +
-                    "rear_period INTEGER NOT NULL DEFAULT 30," +
+                    "high_period INTEGER NOT NULL DEFAULT 10, " +
+                    "mid_period INTEGER NOT NULL DEFAULT 15, " +
+                    "low_period INTEGER NOT NULL DEFAULT 30, " +
+                    "rear_period INTEGER NOT NULL DEFAULT 45," +
                     "stop_azkar INTEGER NOT NULL DEFAULT 0," +
-                    "selected_period TEXT DEFAULT 'high');") ||
+                    "selected_period TEXT DEFAULT 'عالي');") ||
                     !insertDefault("azkar_settings")) {
                 throw new Exception("ERROR in CREATE azkar_settings TABLE");
             }
@@ -135,17 +135,6 @@ public class DatabaseAssetsManager {
         return false;
     }
 
-    public void setVersion(String version) {
-        try {
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE program_characteristics set version = ?");
-            databaseAssetsManager.stat.setString(1, version);
-            databaseAssetsManager.stat.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.error(null, ex, getClass().getName() + ".setVersion(version: " + version + ")");
-        }
-    }
-
     public String getVersion() {
         try {
             ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM program_characteristics").executeQuery();
@@ -157,5 +146,16 @@ public class DatabaseAssetsManager {
             Logger.error(null, ex, getClass().getName() + ".getVersion()");
         }
         return "0.0.0";
+    }
+
+    public void setVersion(String version) {
+        try {
+            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
+            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE program_characteristics set version = ?");
+            databaseAssetsManager.stat.setString(1, version);
+            databaseAssetsManager.stat.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.error(null, ex, getClass().getName() + ".setVersion(version: " + version + ")");
+        }
     }
 }

@@ -194,6 +194,7 @@ public class PrayerTimes {
                     this.asrJuristic = res.getInt(4);
                     this.summerTiming = res.getInt(5) == 1;
                 }
+                System.out.println(this);
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".loadSettings()");
             }
@@ -237,6 +238,17 @@ public class PrayerTimes {
 
         public void setAsrJuristic(int asrJuristic) {
             this.asrJuristic = asrJuristic;
+        }
+
+        @Override
+        public String toString() {
+            return "PrayerTimeSettings{" +
+                    "country='" + country + '\'' +
+                    ", city='" + city + '\'' +
+                    ", method=" + method +
+                    ", asrJuristic=" + asrJuristic +
+                    ", summerTiming=" + summerTiming +
+                    '}';
         }
 
         public static class Method {

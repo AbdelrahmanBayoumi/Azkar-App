@@ -131,7 +131,7 @@
                               <Font name="System Bold" size="15.0" />
                           </font>
                       </JFXButton>
-                      <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="15.0" onAction="#goToSettings" prefWidth="130.0" styleClass="box-noraml" text="الإعدادات">
+                      <JFXButton fx:id="settingsBTN" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="15.0" onAction="#goToSettings" prefWidth="130.0" styleClass="box-noraml" text="الإعدادات">
                           <font>
                               <Font name="System Bold" size="15.0" />
                           </font>

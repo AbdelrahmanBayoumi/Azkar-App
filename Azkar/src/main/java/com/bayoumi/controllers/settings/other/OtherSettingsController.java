@@ -72,4 +72,5 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         otherSettings.setMinimized(minimizeAtStart.isSelected());
         otherSettings.save();
     }
+
 }

@@ -2,7 +2,6 @@ package com.bayoumi.util.prayertimes;
 
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.util.Utilities;
-import com.bayoumi.util.WebService;
 import com.bayoumi.util.time.HijriDate;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -41,7 +40,7 @@ public class PrayerTimesValidation extends Thread {
         PRAYERTIMES_STATUS.setValue(0);
         System.out.println("Get Prayer Times: Thread Starts ...");
 
-        // if PrayerTimes data for today exist ?
+       /* // if PrayerTimes data for today exist ?
         if (PrayerTimesDBManager.checkIfTodayExist()) {
             System.out.println("Get Prayer Times: Day Found");
         } else {
@@ -57,6 +56,8 @@ public class PrayerTimesValidation extends Thread {
         if (!checkForSpareData()) {
             PRAYERTIMES_STATUS.setValue(-1);
         }
+        */
+        PRAYERTIMES_STATUS.setValue(-1); // TODO DELETE this line and above comments
         System.out.println("Get Prayer Times: Thread Ends ...");
     }
 

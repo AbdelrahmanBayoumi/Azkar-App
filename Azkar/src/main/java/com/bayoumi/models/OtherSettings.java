@@ -17,6 +17,17 @@ public class OtherSettings {
         loadSettings();
     }
 
+    public static boolean getIsMinimizedDB(){
+        try {
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT minimized FROM other_settings").executeQuery();
+            if (res.next()) {
+                return res.getInt(1) == 1;
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, OtherSettings.class.getName() + ".GetIsMinimizedDB()");
+        }
+        return false;
+    }
     private void loadSettings() {
         try {
             ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
@@ -27,6 +38,7 @@ public class OtherSettings {
                 hijriOffset = res.getInt(4);
                 minimized = res.getInt(5) == 1;
             }
+            System.out.println(this);
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }
@@ -103,4 +115,6 @@ public class OtherSettings {
     public void setHijriOffset(int hijriOffset) {
         this.hijriOffset = hijriOffset;
     }
+
+
 }

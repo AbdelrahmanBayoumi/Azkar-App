@@ -1,10 +1,12 @@
 package com.bayoumi.controllers.prayertimes;
 
 import com.bayoumi.Launcher;
+import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.controllers.prayertimes.info.InfoController;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.jfoenix.controls.JFXDialog;
@@ -16,12 +18,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PrayerTimesController implements Initializable {
 
+    public HomeController homeController;
     private PrayerTimes prayerTimes;
     @FXML
     private StackPane stackPane;
@@ -61,7 +65,6 @@ public class PrayerTimesController implements Initializable {
     private Label ishaTime;
     @FXML
     private VBox loadingBox;
-
     private boolean isFetched = false;
     private ChangeListener<Number> changeListener;
 
@@ -75,7 +78,15 @@ public class PrayerTimesController implements Initializable {
             initUI();
             isFetched = true;
         } else if (!isFetched && PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == -1) {
-            Logger.error("ERROR in fetching prayertimes", null, getClass().getName() + ".initialize()");
+            Logger.error(null, new Exception("ERROR in fetching prayertimes"), getClass().getName() + ".initialize()");
+            Platform.runLater(() -> {
+                if (BuilderUI.showConfirmAlert(false, "حدث خطأ في مواقيت الصلاة..." + "\n" + "هل تريد الذهاب لإعدادات المدينة؟")) {
+                    ((Stage) loadingBox.getScene().getWindow()).close();
+                    homeController.settingsBTN.fire();
+                } else {
+                    ((Stage) loadingBox.getScene().getWindow()).close();
+                }
+            });
         }
     }
 
