@@ -26,7 +26,9 @@ Desktop Application 💻 for:
 ## Screenshots
 
 <div align="center">
-<img src="/screenshots/001.gif">
+<img src="/screenshots/001.gif" alt="overview image">
+<br>
+<img src="/screenshots/002.gif" alt="notification">
 </div>
 
 
