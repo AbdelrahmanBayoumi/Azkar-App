@@ -50,8 +50,9 @@ Desktop Application 💻 for:
 -  [JFoenix 8.0.8](http://www.jfoenix.com/) library is an open source Java library, that implements Google Material Design using Java components .
 - [FontawesomeFX 8.9](https://bitbucket.org/Jerady/fontawesomefx/src/master/) for Icons
 -  [Ummalqura-Calendar 1.1.9](https://github.com/msarhan/ummalqura-calendar) for Hijri Calender.
+
+> Any Hijri conversion including Umm al-Qura is not used as reference for ibadah e.g. beginning of saum (fasting), Eid al-Fitr, and Eid al-Adha.
        
-       Any Hijri conversion including Umm al-Qura is not used as reference for ibadah e.g. beginning of saum (fasting), Eid al-Fitr, and Eid al-Adha.
 -  [aladhan.com API](https://aladhan.com/prayer-times-api) for prayer times
 
 ## Inspired From
