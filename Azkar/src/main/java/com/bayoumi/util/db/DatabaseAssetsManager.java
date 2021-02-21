@@ -37,7 +37,8 @@ public class DatabaseAssetsManager {
                     "low_period INTEGER NOT NULL DEFAULT 30, " +
                     "rear_period INTEGER NOT NULL DEFAULT 45," +
                     "stop_azkar INTEGER NOT NULL DEFAULT 0," +
-                    "selected_period TEXT DEFAULT 'عالي');") ||
+                    "selected_period TEXT DEFAULT 'عالي'," +
+                    "volume INTEGER NOT NULL DEFAULT 50);") ||
                     !insertDefault("azkar_settings")) {
                 throw new Exception("ERROR in CREATE azkar_settings TABLE");
             }

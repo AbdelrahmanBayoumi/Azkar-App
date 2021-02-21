@@ -18,6 +18,7 @@ public class Notification {
         } else {
             notification = new NotificationBox(msg, image);
         }
+        // for arabic text
         notification.getTextFlow().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         Scene scene = new Scene(notification);
         scene.setFill(Color.TRANSPARENT);

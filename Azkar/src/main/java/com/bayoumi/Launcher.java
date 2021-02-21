@@ -68,7 +68,7 @@ public class Launcher extends Application {
             Logger.info("App Launched");
             incrementPreloader();
 
-            Constants.copyAssetsDBToAppData(); // TODO in Production remove comment for this line.
+            Constants.copyAssetsDBToAppData(); //   TODO in Production remove comment for this line.
 
             DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
             if (!databaseAssetsManager.init()) {

@@ -15,10 +15,8 @@ public class HelperMethods {
 
     public static void ExitKeyCodeCombination(Scene scene, Stage stage) {
         HashMap<KeyCombination, Runnable> hashMap = new HashMap<>();
-        // CTRL + W
-        KeyCombination kc1 = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
-        Runnable rn1 = stage::close;
-        hashMap.put(kc1, rn1);
+        // [CTRL + W] => close stage
+        hashMap.put(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN), stage::close);
         scene.getAccelerators().putAll(hashMap);
     }
 

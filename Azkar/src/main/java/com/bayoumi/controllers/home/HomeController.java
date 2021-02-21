@@ -36,8 +36,8 @@ import java.util.Date;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class
-HomeController implements Initializable {
+public class HomeController implements Initializable {
+
 
     @FXML
     public Label hijriDate;
@@ -48,12 +48,12 @@ HomeController implements Initializable {
     @FXML
     public Label timeLabel;
     @FXML
-    private VBox periodBox;
+    public JFXButton settingsBTN;
     private EditablePeriodTimerTask absoluteAzkarTask;
     private OtherSettings otherSettings;
     private AzkarSettings azkarSettings;
     @FXML
-    public JFXButton settingsBTN;
+    private VBox periodBox;
     @FXML
     private Label frequencyLabel;
     @FXML
@@ -225,15 +225,15 @@ HomeController implements Initializable {
 
     private Long getPeriod() {
         if (currentFrequency.equals(highFrequency)) {
-            return azkarSettings.getHighPeriod() * 60000L; // 5 min
+            return azkarSettings.getHighPeriod() * 60000L;
         } else if (currentFrequency.equals(midFrequency)) {
-            return azkarSettings.getMidPeriod() * 60000L; // 10 min
+            return azkarSettings.getMidPeriod() * 60000L;
         } else if (currentFrequency.equals(lowFrequency)) {
-            return azkarSettings.getLowPeriod() * 60000L; // 20 min
+            return azkarSettings.getLowPeriod() * 60000L;
         } else if (currentFrequency.equals(rearFrequency)) {
-            return azkarSettings.getRearPeriod() * 60000L; // 30 min
+            return azkarSettings.getRearPeriod() * 60000L;
         }
-        return 300000L; // 5 min
+        return 300000L;
 
 //        if (currentFrequency.equals(highFrequency)) {
 //            return 15000L;

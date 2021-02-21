@@ -94,42 +94,6 @@
         <finalName>Azkar</finalName>
 
         <plugins>
-            <!-- Set a compiler level -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-            <!--                <version>3.6.1</version>-->
-            <!--                <configuration>-->
-            <!--                    <source>${jdk.version}</source>-->
-            <!--                    <target>${jdk.version}</target>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
-            <!-- Maven Shade Plugin -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-shade-plugin</artifactId>-->
-            <!--                <version>3.0.0</version>-->
-            <!--                <executions>-->
-            <!--                    &lt;!&ndash; Run shade goal on package phase &ndash;&gt;-->
-            <!--                    <execution>-->
-            <!--                        <phase>package</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>shade</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <transformers>-->
-            <!--                                &lt;!&ndash; add Main-Class to manifest file &ndash;&gt;-->
-            <!--                                <transformer-->
-            <!--                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-            <!--                                    <mainClass>com.bayoumi.Launcher</mainClass>-->
-            <!--                                </transformer>-->
-            <!--                            </transformers>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-
             <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>

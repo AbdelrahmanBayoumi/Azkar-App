@@ -2,6 +2,7 @@ package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.file.FileUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -19,24 +20,44 @@ public class AzkarSettings {
     private int lowPeriod;
     private int rearPeriod;
     private boolean isStopped;
+    private int volume;
+
 
     public AzkarSettings() {
         loadSettings();
     }
 
     public static ObservableList<String> getAudioList() {
-        ObservableList<String> audioFiles = FXCollections.observableArrayList();
-        audioFiles.add("بدون صوت");
-        File folder = new File("jarFiles/audio");
-        File[] listOfFiles = folder.listFiles();
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                if (file.isFile()) {
-                    audioFiles.add(file.getName());
+        ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
+        FileUtils.addFilesNameToList(new File("jarFiles/audio"), audioFiles);
+        return audioFiles;
+    }
+
+    public static int getVolumeDB() {
+        try {
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT volume FROM azkar_settings").executeQuery();
+            if (res.next()) {
+                return res.getInt(1);
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, AzkarSettings.class.getName() + ".getVolumeDB()");
+        }
+        return 50;
+    }
+
+    public static String getAudioNameDB() {
+        try {
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT audio_name FROM azkar_settings").executeQuery();
+            if (res.next()) {
+                String audioFileName = res.getString(1);
+                if (getAudioList().contains(audioFileName)) {
+                    return audioFileName;
                 }
             }
+        } catch (Exception ex) {
+            Logger.error(null, ex, AzkarSettings.class.getName() + ".getAudioNameDB()");
         }
-        return audioFiles;
+        return "بدون صوت";
     }
 
     public int getMorningAzkarOffset() {
@@ -48,6 +69,7 @@ public class AzkarSettings {
     }
 
     private int getOffset(String reminder) {
+        // TODO : about timed azkar reminder
         int offset = 0;
         if (reminder.equals("بـ نصف ساعة")) {
             offset = 30;
@@ -70,6 +92,7 @@ public class AzkarSettings {
                 this.rearPeriod = res.getInt(7);
                 this.isStopped = res.getInt(8) == 1;
                 this.selectedPeriod = res.getString(9);
+                this.volume = res.getInt(10);
             }
             System.out.println(this);
         } catch (Exception ex) {
@@ -90,7 +113,8 @@ public class AzkarSettings {
                     azkarSettings.getLowPeriod() == this.getLowPeriod() &&
                     azkarSettings.getRearPeriod() == this.getRearPeriod() &&
                     azkarSettings.isStopped() == this.isStopped() &&
-                    azkarSettings.getSelectedPeriod().equals(this.getSelectedPeriod());
+                    azkarSettings.getSelectedPeriod().equals(this.getSelectedPeriod()) &&
+                    azkarSettings.getVolume() == this.getVolume();
         }
         return false;
     }
@@ -98,12 +122,12 @@ public class AzkarSettings {
     public void save() {
         try {
             AzkarSettings oldSettings = new AzkarSettings();
-            if(this.equals(oldSettings)){
+            if (this.equals(oldSettings)) {
                 return;
             }
 
             DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, high_period = ? , mid_period = ?, low_period = ?, rear_period = ?, stop_azkar = ?, selected_period = ?");
+            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, high_period = ? , mid_period = ?, low_period = ?, rear_period = ?, stop_azkar = ?, selected_period = ?, volume = ?");
             databaseAssetsManager.stat.setString(1, this.getMorningAzkarReminder());
             databaseAssetsManager.stat.setString(2, this.getNightAzkarReminder());
             databaseAssetsManager.stat.setString(3, this.getAudioName());
@@ -113,6 +137,7 @@ public class AzkarSettings {
             databaseAssetsManager.stat.setInt(7, this.getRearPeriod());
             databaseAssetsManager.stat.setInt(8, this.isStopped() ? 1 : 0);
             databaseAssetsManager.stat.setString(9, this.getSelectedPeriod());
+            databaseAssetsManager.stat.setInt(10, this.getVolume());
             databaseAssetsManager.stat.executeUpdate();
             isUpdated = true;
         } catch (Exception ex) {
@@ -120,6 +145,19 @@ public class AzkarSettings {
         }
     }
 
+    public void saveAlarmSound() {
+        try {
+            DatabaseAssetsManager.getInstance().con
+                    .prepareStatement("UPDATE azkar_settings set audio_name = '" + this.getAudioName() + "'").
+                    executeUpdate();
+        } catch (Exception ex) {
+            Logger.error(null, ex, getClass().getName() + ".saveAlarmSound()");
+        }
+    }
+
+    /**
+     * saveSelectedPeriod to DB without using save() to save all fields
+     */
     public void saveSelectedPeriod() {
         try {
             DatabaseAssetsManager.getInstance().con
@@ -205,6 +243,14 @@ public class AzkarSettings {
         this.selectedPeriod = selectedPeriod;
     }
 
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+
     @Override
     public String toString() {
         return "AzkarSettings{" +
@@ -217,6 +263,7 @@ public class AzkarSettings {
                 ", lowPeriod=" + lowPeriod +
                 ", rearPeriod=" + rearPeriod +
                 ", isStopped=" + isStopped +
+                ", volume=" + volume +
                 '}';
     }
 }

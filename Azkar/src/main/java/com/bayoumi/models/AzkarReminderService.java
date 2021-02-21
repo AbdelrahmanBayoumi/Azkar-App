@@ -30,13 +30,4 @@ public class AzkarReminderService {
         ALARM = new Timer();
     }
 
- /*
-    public void clearTask() {
-        if (azkarReminderTask != null) {
-            azkarReminderTask.cancel();
-        }
-        ALARM.purge();
-    }
- * */
-
 }

@@ -530,3 +530,41 @@
     -fx-border-color: -fx-third;
     -fx-border-width: 3;
 }
+
+/*==== SLIDER ====*/
+.progress-slider .track {
+    -fx-background-color:null;  /* Hide the track */
+}
+
+.slider .track {
+    -fx-background-color:null;  /* Hide the track */
+    -fx-background-insets: 1 0 -1 0, 0, 1;
+    -fx-background-radius: 2.5, 2.5, 1.5;
+    -fx-padding: 0.208333em; /* 2.5 */
+}
+
+.progress-bar .bar {
+    -fx-padding: 4px;
+    -fx-background-insets: 0;
+}
+
+
+.jfx-slider > .track {
+    -fx-background-color: -fx-primary;
+}
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: -fx-secondary;
+}
+
