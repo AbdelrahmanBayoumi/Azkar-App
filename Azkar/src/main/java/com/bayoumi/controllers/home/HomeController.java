@@ -235,16 +235,18 @@ public class HomeController implements Initializable {
         }
         return 300000L;
 
-//        if (currentFrequency.equals(highFrequency)) {
-//            return 15000L;
-//        } else if (currentFrequency.equals(midFrequency)) {
-//            return 30000L;
-//        } else if (currentFrequency.equals(lowFrequency)) {
-//            return 40000L;
-//        } else if (currentFrequency.equals(rearFrequency)) {
-//            return 50000L;
-//        }
-//        return 50000L;
+        /*
+        if (currentFrequency.equals(highFrequency)) {
+            return 15000L;
+        } else if (currentFrequency.equals(midFrequency)) {
+            return 30000L;
+        } else if (currentFrequency.equals(lowFrequency)) {
+            return 40000L;
+        } else if (currentFrequency.equals(rearFrequency)) {
+            return 50000L;
+        }
+        return 50000L;
+        */
     }
 
     @FXML
