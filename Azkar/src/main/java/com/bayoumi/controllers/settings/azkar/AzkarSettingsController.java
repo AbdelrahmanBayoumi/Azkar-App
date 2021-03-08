@@ -28,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -265,14 +266,14 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         azkarSettings.saveAlarmSound();
 
         Platform.runLater(()
-                -> Notification.create(
+                -> Notification.createControlsFX(
                 AbsoluteZekr.absoluteZekrObservableList.get(
                         new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                null));
-        showZekrButton.setDisable(true);
-        PauseTransition pause = new PauseTransition(Duration.seconds(10));
-        pause.setOnFinished(event -> showZekrButton.setDisable(false));
-        pause.play();
+                new Image("/com/bayoumi/images/Kaaba.png")));
+//        showZekrButton.setDisable(true);
+//        PauseTransition pause = new PauseTransition(Duration.seconds(10));
+//        pause.setOnFinished(event -> showZekrButton.setDisable(false));
+//        pause.play();
     }
 
     @FXML

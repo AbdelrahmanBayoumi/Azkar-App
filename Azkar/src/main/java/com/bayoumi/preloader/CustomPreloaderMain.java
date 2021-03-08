@@ -39,9 +39,7 @@ public class CustomPreloaderMain extends Preloader {
         preloaderStage.initStyle(StageStyle.TRANSPARENT);
         HelperMethods.SetAppDecoration(primaryStage);
         preloaderStage.show();
-        preloaderStage.setOnCloseRequest((event) -> {
-            System.exit(0);
-        });
+        preloaderStage.setOnCloseRequest((event) -> System.exit(0));
         SingleInstance.getInstance().setCurrentStage(primaryStage);
     }
 

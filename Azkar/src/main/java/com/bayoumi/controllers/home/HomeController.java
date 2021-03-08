@@ -143,11 +143,17 @@ public class HomeController implements Initializable {
             if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
                 return;
             }
-            Platform.runLater(()
+            /*Platform.runLater(()
                     -> Notification.create(
                     AbsoluteZekr.absoluteZekrObservableList.get(
                             new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                    null));*/
+            Platform.runLater(()
+                    -> Notification.createControlsFX(
+                    AbsoluteZekr.absoluteZekrObservableList.get(
+                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
                     null));
+
         },
                 this::getPeriod);
         absoluteAzkarTask.updateTimer();
@@ -235,8 +241,8 @@ public class HomeController implements Initializable {
         }
         return 300000L;
 
-        /*
-        if (currentFrequency.equals(highFrequency)) {
+
+      /*  if (currentFrequency.equals(highFrequency)) {
             return 15000L;
         } else if (currentFrequency.equals(midFrequency)) {
             return 30000L;
@@ -246,7 +252,7 @@ public class HomeController implements Initializable {
             return 50000L;
         }
         return 50000L;
-        */
+*/
     }
 
     @FXML
