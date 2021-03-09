@@ -1,5 +1,6 @@
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.Notifications;
 import com.bayoumi.models.AzkarSettings;
 import com.bayoumi.util.gui.Draggable;
 import com.bayoumi.util.gui.HelperMethods;
@@ -22,7 +23,6 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 
 import java.io.File;
 
@@ -76,7 +76,7 @@ public class Notification {
     public static void createControlsFX(String msg, Image image) {
         Notifications.create()
                 .graphic(createGraphic(msg, image))
-                .hideAfter(Duration.seconds(10))
+                .hideAfter(Duration.seconds(12))
                 .position(Pos.BOTTOM_RIGHT).show();
 
         playAlarmSound(AzkarSettings.getVolumeDB());

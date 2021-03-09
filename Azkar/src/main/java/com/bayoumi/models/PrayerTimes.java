@@ -194,7 +194,6 @@ public class PrayerTimes {
                     this.asrJuristic = res.getInt(4);
                     this.summerTiming = res.getInt(5) == 1;
                 }
-                System.out.println(this);
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".loadSettings()");
             }

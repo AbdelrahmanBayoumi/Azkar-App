@@ -240,9 +240,8 @@ public class HomeController implements Initializable {
             return azkarSettings.getRearPeriod() * 60000L;
         }
         return 300000L;
-
-
-      /*  if (currentFrequency.equals(highFrequency)) {
+/*
+        if (currentFrequency.equals(highFrequency)) {
             return 15000L;
         } else if (currentFrequency.equals(midFrequency)) {
             return 30000L;
@@ -252,7 +251,7 @@ public class HomeController implements Initializable {
             return 50000L;
         }
         return 50000L;
-*/
+        */
     }
 
     @FXML

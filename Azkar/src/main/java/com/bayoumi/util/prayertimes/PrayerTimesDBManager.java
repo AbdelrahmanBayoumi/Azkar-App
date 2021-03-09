@@ -83,14 +83,28 @@ public class PrayerTimesDBManager {
             ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes ORDER BY date DESC LIMIT 1").executeQuery();
             if (res.next()) {
                 // value like: "1442-07-06"
-                String[] dateArr = res.getString(1).split("-");
-                return new HijriDate(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]) - 1, Integer.parseInt(dateArr[2]));
+                return getDateFromString(res.getString(1));
             }
         } catch (Exception ex) {
             Logger.error(null, ex, PrayerTimesDBManager.class.getName() + ".getPrayerTimesForToday()");
             ex.printStackTrace();
         }
         return null;
+    }
+
+    private static HijriDate getDateFromString(String s) {
+        String[] dateArr = s.split("-");
+        return new HijriDate(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]) - 1, Integer.parseInt(dateArr[2]));
+    }
+
+    public static void deleteLastSpecificMonth(HijriDate hijriDate) {
+        try {
+            DatabaseAssetsManager.getInstance().con
+                    .prepareStatement("DELETE FROM prayertimes WHERE prayertimes.date like '" + hijriDate.getYear() + "-" + Utilities.formatIntToTwoDigit(hijriDate.getMonth() + 1) + "-__" + "'")
+                    .executeUpdate();
+        } catch (SQLException ex) {
+            Logger.error(null, ex, PrayerTimesDBManager.class.getName() + ".deleteLastSpecificMonth()");
+        }
     }
 
     public static void deleteAll() {
@@ -102,4 +116,26 @@ public class PrayerTimesDBManager {
             Logger.error(null, ex, PrayerTimesDBManager.class.getName() + ".deleteAll()");
         }
     }
+
+    public static ArrayList<PrayerTimes> getAll() {
+        ArrayList<PrayerTimes> prayerTimesArrayList = new ArrayList<>();
+        try {
+            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes").executeQuery();
+            while (res.next()) {
+                prayerTimesArrayList.add(new PrayerTimesBuilder().
+                        hijriDate(getDateFromString(res.getString(1)))
+                        .fajr(res.getString(2))
+                        .sunrise(res.getString(3))
+                        .dhuhr(res.getString(4))
+                        .asr(res.getString(5))
+                        .maghrib(res.getString(6))
+                        .isha(res.getString(7)).build());
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, PrayerTimesDBManager.class.getName() + ".getAll()");
+            ex.printStackTrace();
+        }
+        return prayerTimesArrayList;
+    }
+
 }

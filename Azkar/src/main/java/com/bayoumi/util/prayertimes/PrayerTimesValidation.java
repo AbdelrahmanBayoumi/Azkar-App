@@ -26,6 +26,10 @@ public class PrayerTimesValidation extends Thread {
         // if there is less than or equal to 5 days to end of days stored
         if (daysBetween <= 5) {
             ArrayList<PrayerTimes> prayerTimesMonth = WebService.getPrayerTimesMonth(HijriDate.plusDay(lastDateStored, 1));
+            // check if there is any days of fetched month in DB => delete it to insert the new data of the same month
+            if(prayerTimesMonth.get(0).getHijriDate().getMonth() == lastDateStored.getMonth()){
+                PrayerTimesDBManager.deleteLastSpecificMonth(lastDateStored);
+            }
             // insert prayerTimes to DB
             if (!PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
                 return false;
