@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.bayoumi;
+package com.bayoumi.util.gui.notfication;
 
 import impl.org.controlsfx.skin.NotificationBar;
 import javafx.animation.*;
@@ -288,6 +288,7 @@ public class Notifications {
         NotificationPopupHandler.getInstance().show(this);
     }
 
+
     /***************************************************************************
      * * Private support classes * *
      **************************************************************************/
@@ -484,7 +485,11 @@ public class Notifications {
                         case BOTTOM_LEFT:
                         case BOTTOM_CENTER:
                         case BOTTOM_RIGHT:
-                            popup.setAnchorY(y - PADDING);
+                            try {
+                                popup.setAnchorY(y - PADDING);
+                            }catch (Exception ex){
+                                System.out.println("ex:" +ex);
+                            }
                             break;
                         default:
                             // no-op
@@ -504,7 +509,6 @@ public class Notifications {
                     createHideTimeline(popup, notificationBar, p, Duration.ZERO).play();
                 }
             });
-
             popup.getContent().add(notificationBar);
             popup.show(owner, 0, 0);
 

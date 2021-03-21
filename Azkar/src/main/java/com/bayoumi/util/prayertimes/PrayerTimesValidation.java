@@ -27,11 +27,11 @@ public class PrayerTimesValidation extends Thread {
         if (daysBetween <= 5) {
             ArrayList<PrayerTimes> prayerTimesMonth = WebService.getPrayerTimesMonth(HijriDate.plusDay(lastDateStored, 1));
             // check if there is any days of fetched month in DB => delete it to insert the new data of the same month
-            if(prayerTimesMonth.get(0).getHijriDate().getMonth() == lastDateStored.getMonth()){
+            if (prayerTimesMonth.get(0).getHijriDate().getMonth() == lastDateStored.getMonth()) {
                 PrayerTimesDBManager.deleteLastSpecificMonth(lastDateStored);
             }
             // insert prayerTimes to DB
-            if (!PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
+            if (prayerTimesMonth.size() < 1 && !PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
                 return false;
             }
         }
@@ -44,7 +44,7 @@ public class PrayerTimesValidation extends Thread {
         PRAYERTIMES_STATUS.setValue(0);
         System.out.println("Get Prayer Times: Thread Starts ...");
 
-       // if PrayerTimes data for today exist ?
+        // if PrayerTimes data for today exist ?
         if (PrayerTimesDBManager.checkIfTodayExist()) {
             System.out.println("Get Prayer Times: Day Found");
         } else {
@@ -53,7 +53,7 @@ public class PrayerTimesValidation extends Thread {
             // Fetch current month data from API
             ArrayList<PrayerTimes> prayerTimesMonth = WebService.getPrayerTimesMonth(new HijriDate());
 
-            if (!PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
+            if (prayerTimesMonth.size() < 1 || !PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
                 PRAYERTIMES_STATUS.setValue(-1);
             }
         }

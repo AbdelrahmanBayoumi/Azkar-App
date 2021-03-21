@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<HBox fx:id="notificationBox" alignment="CENTER" maxWidth="500.0" minWidth="330.0" spacing="20.0" styleClass="message-box" stylesheets="@../../css/controlsfx-notification.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.notification.NotificationsControlsFXController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="text" alignment="CENTER_RIGHT" contentDisplay="TEXT_ONLY" maxWidth="330.0" styleClass="message" text="الحمدلله" textAlignment="RIGHT" wrapText="true" />
+         </children>
+      </VBox>
+   </children>
+</HBox>

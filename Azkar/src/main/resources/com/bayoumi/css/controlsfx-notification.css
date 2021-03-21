@@ -18,36 +18,48 @@
     -fx-background-radius: 20;
 }
 
-.message {
-    -fx-fill: black;
-    -fx-font-size: 17;
-    -fx-font-weight: bold;
-    -fx-text-alignment: justify;
-}
 
 .notification-bar > .pane .title {
     -fx-font-size: 1.166667em; /*15px;*/
     -fx-text-fill: #292929;
     -fx-font-weight: bold;
 }
-
 .notification-bar > .pane .label {
-    /*-fx-font-size: 1.166667em; !*15px;*!*/
+    -fx-text-fill: black;
     -fx-font-size: 17;
-    -fx-fill: black;
-    -fx-text-alignment: justify;
-    -fx-alignment: center-right;
     -fx-font-weight: bold;
+    -fx-text-alignment: right;
+    -fx-max-width: 400;
+    -fx-wrap-text: true;
 }
+
+/*.message-box {*/
+/*    -fx-background-color: white;*/
+/*    -fx-background-radius: 20;*/
+/*    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);*/
+/*}
+.message {
+    -fx-text-fill: black;
+    -fx-font-size: 17;
+    -fx-font-weight: bold;
+    -fx-text-alignment: right;
+    -fx-max-width: 400;
+    -fx-wrap-text: true;
+}
+*/
+
 
 /******************************************************************************
  *
  * Dark theme
  *
  *****************************************************************************/
-
+.notification-bar.dark{
+    -fx-background-color: transparent;
+    -fx-padding: 7 7 7 7;
+}
 .notification-bar.dark > .pane {
-    -fx-background-color: -fx-outer-border, -fx-inner-border, linear-gradient(#595959, #474747 37%, #343434);
+    -fx-background-color: #2A2E37;
 }
 
 .notification-bar.dark > .pane .title,

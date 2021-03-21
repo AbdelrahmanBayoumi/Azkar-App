@@ -121,11 +121,14 @@ public class HomeController implements Initializable {
                 prayerTimesForToday.enableSummerTime();
             }
             if (azkarSettings.getMorningAzkarOffset() != 0) {
-                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getFajr()).plusMinutes(azkarSettings.getMorningAzkarOffset()).toString(), "أذكار الصباح", morningImage);
+                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getFajr()).plusMinutes(azkarSettings.getMorningAzkarOffset()).toString(), "أذكار الصباح", morningImage, this::goToMorningAzkar);
             }
             if (azkarSettings.getNightAzkarOffset() != 0) {
-                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getAsr()).plusMinutes(azkarSettings.getNightAzkarOffset()).toString(), "أذكار المساء", nightImage);
+                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getAsr()).plusMinutes(azkarSettings.getNightAzkarOffset()).toString(), "أذكار المساء", nightImage,this::goToNightAzkar);
             }
+
+            // for testing
+//            AzkarReminderService.create(LocalTime.of(16,53).toString(), "أذكار المساء", nightImage,this::goToNightAzkar);
         } else {
             PrayerTimesValidation.PRAYERTIMES_STATUS.addListener((observable, oldValue, newValue) -> {
                 if (newValue.intValue() == 1) {
@@ -152,7 +155,7 @@ public class HomeController implements Initializable {
                     -> Notification.createControlsFX(
                     AbsoluteZekr.absoluteZekrObservableList.get(
                             new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                    null));
+                    null, null));
 
         },
                 this::getPeriod);
@@ -240,9 +243,10 @@ public class HomeController implements Initializable {
             return azkarSettings.getRearPeriod() * 60000L;
         }
         return 300000L;
-/*
+
+        /*
         if (currentFrequency.equals(highFrequency)) {
-            return 15000L;
+            return 1000L;
         } else if (currentFrequency.equals(midFrequency)) {
             return 30000L;
         } else if (currentFrequency.equals(lowFrequency)) {
@@ -275,7 +279,7 @@ public class HomeController implements Initializable {
             TimedAzkarController controller = loader.getController();
             controller.setData(type);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.showAndWait();
+            stage.show();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".showTimedAzkar()");
         }

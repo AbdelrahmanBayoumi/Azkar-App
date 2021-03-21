@@ -62,8 +62,11 @@ public class WebService {
     public static ArrayList<PrayerTimes> getPrayerTimesMonth(HijriDate hijriDate) {
         ArrayList<PrayerTimes> prayerTimes = new ArrayList<>();
         try {
-//            DatabaseAssetsManager.getInstance().init();
             PrayerTimes.PrayerTimeSettings prayerTimeSettings = new PrayerTimes.PrayerTimeSettings();
+            System.out.println("prayerTimeSettings: "+ prayerTimeSettings);
+            if(!prayerTimeSettings.hasLocation()){
+                return prayerTimes;
+            }
             JSONObject jsonRoot = getJsonResponse(PRAYER_TIMES_END_POINT
                     , new Query("country", prayerTimeSettings.getCountry())
                     , new Query("city", prayerTimeSettings.getCity())

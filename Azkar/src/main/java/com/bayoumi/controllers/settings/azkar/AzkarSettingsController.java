@@ -17,7 +17,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -35,7 +34,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
@@ -266,10 +264,17 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         azkarSettings.saveAlarmSound();
 
         Platform.runLater(()
-                -> Notification.createControlsFX(
-                AbsoluteZekr.absoluteZekrObservableList.get(
-                        new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                new Image("/com/bayoumi/images/Kaaba.png")));
+                -> {
+            try {
+                Notification.createControlsFX(
+                        AbsoluteZekr.absoluteZekrObservableList.get(
+                                new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                        new Image("/com/bayoumi/images/Kaaba.png"), null);
+            } catch (Exception ex) {
+                Logger.error("createControlsFX", ex, getClass().getName() + ".runLater => createControlsFX()");
+                ex.printStackTrace();
+            }
+        });
 //        showZekrButton.setDisable(true);
 //        PauseTransition pause = new PauseTransition(Duration.seconds(10));
 //        pause.setOnFinished(event -> showZekrButton.setDisable(false));

@@ -144,6 +144,10 @@ public class PrayerTimes {
             loadSettings();
         }
 
+        public boolean hasLocation(){
+            return !this.getCountry().trim().equals("") && !this.getCity().trim().equals("");
+        }
+
         public void save() {
             try {
                 PrayerTimeSettings oldSettings = new PrayerTimeSettings();
