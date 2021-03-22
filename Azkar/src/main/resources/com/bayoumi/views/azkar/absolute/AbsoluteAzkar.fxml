@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TreeTableColumn?>
@@ -19,6 +20,14 @@
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
          </padding>
+         <JFXButton fx:id="returnToDefaultBTN" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="10.0" onAction="#returnToDefault" styleClass="back-button" text="إسترجاع الأذكار الإفتراضية">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+            <graphic>
+               <FontAwesomeIconView glyphName="REPEAT" size="25" />
+            </graphic>
+         </JFXButton>
          <JFXButton focusTraversable="false" onAction="#newZekrAddAction" prefWidth="140.0" text="إضافة">
             <font>
                <Font name="System Bold" size="18.0" />

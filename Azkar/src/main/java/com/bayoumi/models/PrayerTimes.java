@@ -2,7 +2,7 @@ package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
-import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.bayoumi.util.time.HijriDate;
@@ -165,21 +165,21 @@ public class PrayerTimes {
                         oldSettings.getMethod().equals(this.getMethod()) &&
                         oldSettings.getAsrJuristic() == this.getAsrJuristic() &&
                         oldSettings.isSummerTiming() != this.isSummerTiming()) {
-                    DatabaseAssetsManager.getInstance().
+                    DatabaseManager.getInstance().
                             con.
                             prepareStatement("UPDATE prayertimes_settings set summer_timing = " + (summerTiming ? 1 : 0)).
                             executeUpdate();
                     return;
                 }
 
-                DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-                databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?");
-                databaseAssetsManager.stat.setString(1, country);
-                databaseAssetsManager.stat.setString(2, city);
-                databaseAssetsManager.stat.setInt(3, method.getId());
-                databaseAssetsManager.stat.setInt(4, asrJuristic);
-                databaseAssetsManager.stat.setInt(5, summerTiming ? 1 : 0);
-                databaseAssetsManager.stat.executeUpdate();
+                DatabaseManager databaseManager = DatabaseManager.getInstance();
+                databaseManager.stat = databaseManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?");
+                databaseManager.stat.setString(1, country);
+                databaseManager.stat.setString(2, city);
+                databaseManager.stat.setInt(3, method.getId());
+                databaseManager.stat.setInt(4, asrJuristic);
+                databaseManager.stat.setInt(5, summerTiming ? 1 : 0);
+                databaseManager.stat.executeUpdate();
 
                 PrayerTimesDBManager.deleteAll();
                 new PrayerTimesValidation().start();
@@ -190,7 +190,7 @@ public class PrayerTimes {
 
         private void loadSettings() {
             try {
-                ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_settings").executeQuery();
+                ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_settings").executeQuery();
                 if (res.next()) {
                     this.country = res.getString(1);
                     this.city = res.getString(2);
@@ -281,7 +281,7 @@ public class PrayerTimes {
 
             public static Method getMethodByID(int id) {
                 try {
-                    ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_methods WHERE id = " + id).executeQuery();
+                    ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_methods WHERE id = " + id).executeQuery();
                     if (res.next()) {
                         return new Method(res.getInt(1), res.getString(2), res.getString(3));
                     }
@@ -294,7 +294,7 @@ public class PrayerTimes {
             public static ArrayList<Method> getListOfMethods() {
                 ArrayList<Method> methods = new ArrayList<>();
                 try {
-                    ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_methods").executeQuery();
+                    ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_methods").executeQuery();
                     while (res.next()) {
                         methods.add(new Method(res.getInt(1), res.getString(2), res.getString(3)));
                     }

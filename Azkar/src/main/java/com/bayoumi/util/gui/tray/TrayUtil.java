@@ -4,6 +4,7 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -25,8 +26,13 @@ public class TrayUtil {
         // sets up the tray icon (using awt code run on the swing thread).
         javax.swing.SwingUtilities.invokeLater(this::addAppToTray);
         stage.setOnCloseRequest(event -> {
-            this.stage.hide();
-            event.consume();
+            System.out.println(event);
+            if(event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)){
+                this.stage.hide();
+                event.consume();
+            }else{
+                Logger.info("TERMINATED !!"); // TODO does not work, remove if stmt
+            }
         });
     }
 
@@ -45,7 +51,7 @@ public class TrayUtil {
             BufferedImage trayIconImage = ImageIO.read(TrayUtil.class.getResource("/com/bayoumi/images/icon.png"));
             int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
             trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
-
+            trayIcon.setToolTip("Azkar App");
             // if the user clicks on the tray icon, show the main app stage.
             trayIcon.addMouseListener(new MouseAdapter() {
                 @Override

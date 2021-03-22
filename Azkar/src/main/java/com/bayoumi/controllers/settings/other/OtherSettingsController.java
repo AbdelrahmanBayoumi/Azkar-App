@@ -3,7 +3,7 @@ package com.bayoumi.controllers.settings.other;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.db.DatabaseManager;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -51,7 +51,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         darkTheme.setSelected(otherSettings.isEnableDarkMode());
         darkTheme.setDisable(true);
 
-        version.setText(DatabaseAssetsManager.getInstance().getVersion());
+        version.setText(DatabaseManager.getInstance().getVersion());
     }
 
     @FXML

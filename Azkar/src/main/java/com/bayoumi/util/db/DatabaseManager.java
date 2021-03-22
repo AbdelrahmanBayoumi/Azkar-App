@@ -6,20 +6,20 @@ import com.bayoumi.util.Logger;
 
 import java.sql.*;
 
-public class DatabaseAssetsManager {
+public class DatabaseManager {
 
-    private static DatabaseAssetsManager databaseAssetsManager = null;  // static
+    private static DatabaseManager databaseManager = null;  // static
     public PreparedStatement stat = null;
     public Connection con = null;
 
-    private DatabaseAssetsManager() {
+    private DatabaseManager() {
     }
 
-    public static DatabaseAssetsManager getInstance() {
-        if (databaseAssetsManager == null) {
-            databaseAssetsManager = new DatabaseAssetsManager();
+    public static DatabaseManager getInstance() {
+        if (databaseManager == null) {
+            databaseManager = new DatabaseManager();
         }
-        return databaseAssetsManager;
+        return databaseManager;
     }
 
     public boolean init() {
@@ -125,7 +125,7 @@ public class DatabaseAssetsManager {
             if (con == null) {
                 // .... Connect to SQlLite ....
                 Class.forName("org.sqlite.JDBC");
-                con = DriverManager.getConnection("jdbc:sqlite:" + Constants.assetsPath + "/db/assets.db");
+                con = DriverManager.getConnection("jdbc:sqlite:" + Constants.assetsPath + "/db/data.db");
                 con.prepareStatement("PRAGMA foreign_keys=ON").execute();
                 return true;
             }
@@ -138,7 +138,7 @@ public class DatabaseAssetsManager {
 
     public String getVersion() {
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM program_characteristics").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM program_characteristics").executeQuery();
             if (res.next()) {
                 return res.getString("version");
             }
@@ -151,10 +151,10 @@ public class DatabaseAssetsManager {
 
     public void setVersion(String version) {
         try {
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE program_characteristics set version = ?");
-            databaseAssetsManager.stat.setString(1, version);
-            databaseAssetsManager.stat.executeUpdate();
+            DatabaseManager databaseManager = DatabaseManager.getInstance();
+            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE program_characteristics set version = ?");
+            databaseManager.stat.setString(1, version);
+            databaseManager.stat.executeUpdate();
         } catch (SQLException ex) {
             Logger.error(null, ex, getClass().getName() + ".setVersion(version: " + version + ")");
         }

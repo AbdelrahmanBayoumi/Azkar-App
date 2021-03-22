@@ -6,8 +6,7 @@ import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utilities;
-import com.bayoumi.util.db.DatabaseAssetsManager;
-import com.bayoumi.util.db.DatabaseHandler;
+import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;
@@ -28,8 +27,6 @@ public class Launcher extends Application {
     public static Long startTime;
     // GUI Object
     public static HomeController homeController;
-    // Program characteristics
-    private final String VERSION = "1.0.4_3";
     // GUI Object
     private Scene scene = null;
 
@@ -68,21 +65,15 @@ public class Launcher extends Application {
             Logger.info("App Launched");
             incrementPreloader();
 
-            Constants.copyAssetsDBToAppData(); //   TODO in Production remove comment for this line.
+            Constants.copyDatabaseToAppData();
+            incrementPreloader();
 
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            if (!databaseAssetsManager.init()) {
+            DatabaseManager databaseManager = DatabaseManager.getInstance();
+            if (!databaseManager.init()) {
                 workFine.setValue(false);
             }
             // validate version
-            databaseAssetsManager.setVersion(VERSION);
-            incrementPreloader();
-
-            // connect to db (READ ONLY DB)
-            DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-            if (!databaseHandler.connectToDatabase()) {
-                workFine.setValue(false);
-            }
+            databaseManager.setVersion(Constants.VERSION);
             incrementPreloader();
 
             // load  Homepage FXML

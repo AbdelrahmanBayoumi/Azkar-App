@@ -1,8 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseAssetsManager;
-import com.bayoumi.util.db.DatabaseHandler;
+import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -31,10 +30,25 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
         delete.setOnAction(this::delete);
     }
 
+    public static void returnDefault() {
+        try {
+            if (BuilderUI.showConfirmAlert(true, "سيتم حذف أي تعديلات على الأذكار" + "،\n" + "إسترجاع الأذكار الإفتراضية؟")) {
+                DatabaseManager databaseManager = DatabaseManager.getInstance();
+                // delete all current values
+                databaseManager.con.prepareStatement("DELETE FROM absolute_zekr;").executeUpdate();
+                // reset default values
+                databaseManager.con.prepareStatement("INSERT INTO absolute_zekr SELECT * FROM absolute_zekr_default;").execute();
+                fetchData();
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, AbsoluteZekr.class.getName() + ".returnDefault()");
+        }
+    }
+
     public static boolean fetchData() {
         absoluteZekrObservableList.clear();
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM absolute_zekr").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM absolute_zekr").executeQuery();
             while (res.next()) {
                 absoluteZekrObservableList.add(new AbsoluteZekr(res.getInt(1), res.getString(2)));
             }
@@ -49,10 +63,10 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
         try {
             String newValue = BuilderUI.showEditTextField("الذكر", this.text);
             if (!newValue.equals("")) {
-                DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-                databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE absolute_zekr set text = ? WHERE id =" + this.id);
-                databaseAssetsManager.stat.setString(1, newValue);
-                databaseAssetsManager.stat.executeUpdate();
+                DatabaseManager databaseManager = DatabaseManager.getInstance();
+                databaseManager.stat = databaseManager.con.prepareStatement("UPDATE absolute_zekr set text = ? WHERE id =" + this.id);
+                databaseManager.stat.setString(1, newValue);
+                databaseManager.stat.executeUpdate();
                 AbsoluteZekr.fetchData();
             }
         } catch (SQLException ex) {
@@ -63,7 +77,7 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
     private void delete(Event event) {
         try {
             if (BuilderUI.showConfirmAlert(true, "حذف الذكر ؟")) {
-                DatabaseAssetsManager.getInstance().con
+                DatabaseManager.getInstance().con
                         .prepareStatement("DELETE FROM absolute_zekr WHERE id =" + this.id)
                         .executeUpdate();
                 AbsoluteZekr.fetchData();
@@ -75,10 +89,10 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
 
     public void insert() {
         try {
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("INSERT INTO absolute_zekr (TEXT) VALUES(?)");
-            databaseAssetsManager.stat.setString(1, this.text);
-            databaseAssetsManager.stat.execute();
+            DatabaseManager databaseManager = DatabaseManager.getInstance();
+            databaseManager.stat = databaseManager.con.prepareStatement("INSERT INTO absolute_zekr (TEXT) VALUES(?)");
+            databaseManager.stat.setString(1, this.text);
+            databaseManager.stat.execute();
         } catch (SQLException ex) {
             Logger.error(null, ex, getClass().getName() + ".insert(text: " + this.text + ")");
         }

@@ -13,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -22,7 +20,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -42,7 +39,6 @@ public class TimedAzkarController implements Initializable {
 
     private Image morningImage;
     private Image nightImage;
-    private boolean isSettingsOpened = false;
 
     public void setData(String type) {
         if (type.toLowerCase().contains("morning")) {
@@ -94,7 +90,7 @@ public class TimedAzkarController implements Initializable {
     private void openSettings() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/azkar/timed/Settings.fxml"));
-            HBox pane = loader.load();
+            VBox pane = loader.load();
 
             JFXDialog dialog = new JFXDialog(sp, pane, JFXDialog.DialogTransition.TOP);
 

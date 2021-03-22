@@ -1,7 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseHandler;
+import com.bayoumi.util.db.DatabaseManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -23,7 +23,7 @@ public class TimedZekr {
     public static void fetchNightAzkar() {
         NIGHT_LIST.clear();
         try {
-            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM night_zekr").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM night_zekr").executeQuery();
             while (res.next()) {
                 NIGHT_LIST.add(new TimedZekr(res.getInt(1), res.getString(2), res.getInt(3)));
             }
@@ -31,10 +31,11 @@ public class TimedZekr {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + "fetchNightAzkar()");
         }
     }
+
     public static void fetchMorningAzkar() {
         MORNING_LIST.clear();
         try {
-            ResultSet res = DatabaseHandler.getInstance().con.prepareStatement("SELECT * FROM morning_zekr").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM morning_zekr").executeQuery();
             while (res.next()) {
                 MORNING_LIST.add(new TimedZekr(res.getInt(1), res.getString(2), res.getInt(3)));
             }

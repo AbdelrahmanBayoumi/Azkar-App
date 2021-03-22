@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class Constants {
+    // Program characteristics
+    public static final String VERSION = "1.0.4_3";
     public static String assetsPath;
 
     static {
@@ -32,11 +34,11 @@ public class Constants {
 //        copyAssetsDBToAppData();
 //    }
 
-    public static void copyAssetsDBToAppData() throws IOException {
+    public static void copyDatabaseToAppData() throws IOException {
         Utilities.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
-        Path from = Paths.get(new File("jarFiles/db/assets.db").getAbsolutePath());
+        Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
         System.out.println(from.toString());
-        Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db/assets.db");
+        Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db/data.db");
         copyIfNotExist(from, to);
     }
 

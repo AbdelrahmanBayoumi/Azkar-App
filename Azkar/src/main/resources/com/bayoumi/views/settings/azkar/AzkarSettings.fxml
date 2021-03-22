@@ -12,13 +12,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <ScrollPane fitToHeight="true" fitToWidth="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="480.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.azkar.AzkarSettingsController">
    <content>
@@ -137,48 +133,9 @@
                </HBox>
             </children>
             <padding>
-               <Insets bottom="10.0" left="20.0" right="20.0" top="15.0" />
+               <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
             </padding>
          </VBox>
-            <VBox alignment="CENTER" minHeight="130.0" spacing="35.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);">
-                <GridPane alignment="CENTER" hgap="20.0" nodeOrientation="RIGHT_TO_LEFT" vgap="30.0" VBox.vgrow="ALWAYS">
-                    <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="292.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <Label text="التذكير بأذكار الصباح (بعد صلاة الفجر)" textAlignment="CENTER" wrapText="true">
-                        <font>
-                            <Font name="System Bold" size="18.0" />
-                        </font>
-                    </Label>
-                    <VBox alignment="CENTER" GridPane.columnIndex="1">
-                        <JFXComboBox fx:id="morningAzkarTimeComboBox" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXComboBox>
-                    </VBox>
-                    <Label text="التذكير بأذكار المساء (بعد صلاة العصر)" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
-                        <font>
-                            <Font name="System Bold" size="18.0" />
-                        </font>
-                    </Label>
-                    <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <JFXComboBox fx:id="nightAzkarTimeComboBox" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" style="-fx-font-size: 17;" styleClass="combo-box-normal">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXComboBox>
-                    </VBox>
-                </GridPane>
-            <padding>
-               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-            </VBox>
            <HBox alignment="BOTTOM_RIGHT" nodeOrientation="RIGHT_TO_LEFT" VBox.vgrow="ALWAYS">
             <HBox alignment="BOTTOM_LEFT" HBox.hgrow="ALWAYS">
                <children>

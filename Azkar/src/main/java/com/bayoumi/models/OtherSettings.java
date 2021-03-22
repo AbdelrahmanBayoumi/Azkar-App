@@ -1,7 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.db.DatabaseManager;
 
 import java.sql.ResultSet;
 
@@ -19,7 +19,7 @@ public class OtherSettings {
 
     public static boolean getIsMinimizedDB(){
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT minimized FROM other_settings").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT minimized FROM other_settings").executeQuery();
             if (res.next()) {
                 return res.getInt(1) == 1;
             }
@@ -30,7 +30,7 @@ public class OtherSettings {
     }
     private void loadSettings() {
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
             if (res.next()) {
                 language = res.getString(1);
                 enableDarkMode = res.getInt(2) == 1;
@@ -46,14 +46,14 @@ public class OtherSettings {
 
     public void save() {
         try {
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?, hijri_offset = ?, minimized = ?");
-            databaseAssetsManager.stat.setString(1, this.language);
-            databaseAssetsManager.stat.setInt(2, this.enableDarkMode ? 1 : 0);
-            databaseAssetsManager.stat.setInt(3, this.enable24Format ? 1 : 0);
-            databaseAssetsManager.stat.setInt(4, this.hijriOffset);
-            databaseAssetsManager.stat.setInt(5, this.minimized ? 1 : 0);
-            databaseAssetsManager.stat.executeUpdate();
+            DatabaseManager databaseManager = DatabaseManager.getInstance();
+            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?, hijri_offset = ?, minimized = ?");
+            databaseManager.stat.setString(1, this.language);
+            databaseManager.stat.setInt(2, this.enableDarkMode ? 1 : 0);
+            databaseManager.stat.setInt(3, this.enable24Format ? 1 : 0);
+            databaseManager.stat.setInt(4, this.hijriOffset);
+            databaseManager.stat.setInt(5, this.minimized ? 1 : 0);
+            databaseManager.stat.executeUpdate();
             isUpdated = true;
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");

@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class SingleInstance {
 
     private static SingleInstance singleInstance = null;
-    private final int PORT = 12347;
+    private final int PORT = 12348;
     private ServerSocket server;
     private Stage currentStage;
 

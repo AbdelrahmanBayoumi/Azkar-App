@@ -18,7 +18,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -68,10 +67,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private JFXCheckBox stopAzkar;
     @FXML
     private JFXComboBox<String> azkarAlarmComboBox;
-    @FXML
-    private JFXComboBox<String> nightAzkarTimeComboBox;
-    @FXML
-    private JFXComboBox<String> morningAzkarTimeComboBox;
+
     @FXML
     private JFXButton playButton;
     @FXML
@@ -106,14 +102,8 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(Utilities.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
         azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(Utilities.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
 
-        // init morning and night azkar reminder
-        nightAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
-        morningAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
-
         // init Saved data form DB
         azkarSettings = new AzkarSettings();
-        morningAzkarTimeComboBox.setValue(azkarSettings.getMorningAzkarReminder());
-        nightAzkarTimeComboBox.setValue(azkarSettings.getNightAzkarReminder());
         azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
         azkarAlarmComboBox.setItems(AzkarSettings.getAudioList());
         playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
@@ -242,8 +232,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     public void saveToDB() {
         try {
             highFrequency.fire();
-            azkarSettings.setMorningAzkarReminder(morningAzkarTimeComboBox.getValue());
-            azkarSettings.setNightAzkarReminder(nightAzkarTimeComboBox.getValue());
             azkarSettings.setAudioName(azkarAlarmComboBox.getValue());
             azkarSettings.setStopped(stopAzkar.isSelected());
             azkarSettings.setVolume((int) volumeSlider.getValue());

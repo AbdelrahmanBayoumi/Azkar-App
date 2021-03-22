@@ -1,7 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseAssetsManager;
+import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.file.FileUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +35,7 @@ public class AzkarSettings {
 
     public static int getVolumeDB() {
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT volume FROM azkar_settings").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT volume FROM azkar_settings").executeQuery();
             if (res.next()) {
                 return res.getInt(1);
             }
@@ -47,7 +47,7 @@ public class AzkarSettings {
 
     public static String getAudioNameDB() {
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT audio_name FROM azkar_settings").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT audio_name FROM azkar_settings").executeQuery();
             if (res.next()) {
                 String audioFileName = res.getString(1);
                 if (getAudioList().contains(audioFileName)) {
@@ -81,7 +81,7 @@ public class AzkarSettings {
 
     private void loadSettings() {
         try {
-            ResultSet res = DatabaseAssetsManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
             if (res.next()) {
                 this.morningAzkarReminder = res.getString(1);
                 this.nightAzkarReminder = res.getString(2);
@@ -126,19 +126,19 @@ public class AzkarSettings {
                 return;
             }
 
-            DatabaseAssetsManager databaseAssetsManager = DatabaseAssetsManager.getInstance();
-            databaseAssetsManager.stat = databaseAssetsManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, high_period = ? , mid_period = ?, low_period = ?, rear_period = ?, stop_azkar = ?, selected_period = ?, volume = ?");
-            databaseAssetsManager.stat.setString(1, this.getMorningAzkarReminder());
-            databaseAssetsManager.stat.setString(2, this.getNightAzkarReminder());
-            databaseAssetsManager.stat.setString(3, this.getAudioName());
-            databaseAssetsManager.stat.setInt(4, this.getHighPeriod());
-            databaseAssetsManager.stat.setInt(5, this.getMidPeriod());
-            databaseAssetsManager.stat.setInt(6, this.getLowPeriod());
-            databaseAssetsManager.stat.setInt(7, this.getRearPeriod());
-            databaseAssetsManager.stat.setInt(8, this.isStopped() ? 1 : 0);
-            databaseAssetsManager.stat.setString(9, this.getSelectedPeriod());
-            databaseAssetsManager.stat.setInt(10, this.getVolume());
-            databaseAssetsManager.stat.executeUpdate();
+            DatabaseManager databaseManager = DatabaseManager.getInstance();
+            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE azkar_settings set morning_reminder = ?, night_reminder = ?, audio_name = ?, high_period = ? , mid_period = ?, low_period = ?, rear_period = ?, stop_azkar = ?, selected_period = ?, volume = ?");
+            databaseManager.stat.setString(1, this.getMorningAzkarReminder());
+            databaseManager.stat.setString(2, this.getNightAzkarReminder());
+            databaseManager.stat.setString(3, this.getAudioName());
+            databaseManager.stat.setInt(4, this.getHighPeriod());
+            databaseManager.stat.setInt(5, this.getMidPeriod());
+            databaseManager.stat.setInt(6, this.getLowPeriod());
+            databaseManager.stat.setInt(7, this.getRearPeriod());
+            databaseManager.stat.setInt(8, this.isStopped() ? 1 : 0);
+            databaseManager.stat.setString(9, this.getSelectedPeriod());
+            databaseManager.stat.setInt(10, this.getVolume());
+            databaseManager.stat.executeUpdate();
             isUpdated = true;
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
@@ -147,7 +147,7 @@ public class AzkarSettings {
 
     public void saveAlarmSound() {
         try {
-            DatabaseAssetsManager.getInstance().con
+            DatabaseManager.getInstance().con
                     .prepareStatement("UPDATE azkar_settings set audio_name = '" + this.getAudioName() + "'").
                     executeUpdate();
         } catch (Exception ex) {
@@ -160,7 +160,7 @@ public class AzkarSettings {
      */
     public void saveSelectedPeriod() {
         try {
-            DatabaseAssetsManager.getInstance().con
+            DatabaseManager.getInstance().con
                     .prepareStatement("UPDATE azkar_settings set selected_period = '" + this.getSelectedPeriod() + "'").
                     executeUpdate();
         } catch (Exception ex) {
