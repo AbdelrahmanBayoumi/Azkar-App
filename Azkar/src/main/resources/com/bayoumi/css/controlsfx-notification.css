@@ -13,9 +13,14 @@
 .notification-bar > .pane {
     -fx-background-color: white;
     -fx-padding: 7 7 7 7;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0, 5, 5);
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 20;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 5, 0, 2, 2);*/
+
+    /*=== Yellow Border ===*/
+    -fx-border-color: #E9C46A;
+    -fx-border-radius: 15;
+    -fx-border-width: 5;
 }
 
 

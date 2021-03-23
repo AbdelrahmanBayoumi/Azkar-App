@@ -1,9 +1,0 @@
-[22-03-2021] [04:01:24 AM] => App Launched
-[22-03-2021] [04:03:04 AM] => App Launched
-[22-03-2021] [04:03:26 AM] => App Launched
-[22-03-2021] [04:30:30 AM] => App Launched
-[22-03-2021] [04:31:05 AM] => App Launched
-[22-03-2021] [04:33:27 AM] => App Launched
-[22-03-2021] [04:34:45 AM] => App Launched
-[22-03-2021] [04:35:17 AM] => App Launched
-[22-03-2021] [04:39:02 AM] => App Launched
