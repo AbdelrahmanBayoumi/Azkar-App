@@ -7,18 +7,17 @@
 
 
 Desktop Application 💻 for: 
-- Calculating Muslim prayer times 🕌  (Alexandria, Egypt only for now)
-- Morning and Nights Azkar 🤲
+- Calculating Muslim prayer times 🕌
+- Morning and Nights Azkar with reminder 🤲
 - With notification for random Azkar that pops-up in specific time 💬.
 
 <div align="right" dir="rtl">
 
 برنامج لسطح المكتب 💻 يساعدك على:
 
-- معرفة مواقيت الصلاة (في الاسكندرية,مصر) حتى الآن 🕌
-- قراءة أذكار الصباح و المساء 🤲
+- معرفة مواقيت الصلاة 🕌
+- قراءة أذكار الصباح و المساء مع التذكير بها 🤲
 - ظهور إشعارات بذكر او دعاء عشوائي كل فترة محددة 💬
-
 </div>
 
 
