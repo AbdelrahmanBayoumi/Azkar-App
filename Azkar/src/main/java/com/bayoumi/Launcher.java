@@ -1,6 +1,7 @@
 package com.bayoumi;
 
 import com.bayoumi.controllers.home.HomeController;
+import com.bayoumi.models.Onboarding;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
@@ -17,6 +18,7 @@ import javafx.application.Preloader;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -73,7 +75,6 @@ public class Launcher extends Application {
                 workFine.setValue(false);
             }
             // validate version
-            databaseManager.setVersion(Constants.VERSION);
             incrementPreloader();
 
             // load  Homepage FXML
@@ -113,11 +114,27 @@ public class Launcher extends Application {
         primaryStage.setResizable(false);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
-        if (!OtherSettings.getIsMinimizedDB()) {
+        if (Onboarding.isFirstTimeOpened() || !OtherSettings.getIsMinimizedDB()) {
             primaryStage.show();
         }
         // assign current primaryStage to SingleInstance Class
         SingleInstance.getInstance().setCurrentStage(primaryStage);
+
+        // show Onboarding stage
+        System.out.println("Onboarding.isFirstTimeOpened: " + Onboarding.isFirstTimeOpened());
+        if (Onboarding.isFirstTimeOpened()) {
+            try {
+                Stage onboardingStage = new Stage();
+                onboardingStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/onboarding/Onboarding.fxml"))));
+                onboardingStage.initModality(Modality.APPLICATION_MODAL);
+                HelperMethods.SetIcon(onboardingStage);
+                onboardingStage.setTitle("Onboarding - Azkar");
+                onboardingStage.show();
+            } catch (Exception ex) {
+                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show Onboarding stage");
+                ex.printStackTrace();
+            }
+        }
     }
 
 

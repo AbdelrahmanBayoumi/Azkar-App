@@ -66,6 +66,8 @@ public class OtherSettings {
                 "language='" + language + '\'' +
                 ", enableDarkMode=" + enableDarkMode +
                 ", enable24Format=" + enable24Format +
+                ", minimized=" + minimized +
+                ", hijriOffset=" + hijriOffset +
                 '}';
     }
 

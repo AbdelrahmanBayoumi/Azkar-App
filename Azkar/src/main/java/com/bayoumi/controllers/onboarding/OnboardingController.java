@@ -1,6 +1,7 @@
-package com.bayoumi.controllers.settings.prayertimes;
+package com.bayoumi.controllers.onboarding;
 
-import com.bayoumi.controllers.settings.SettingsInterface;
+import com.bayoumi.models.Onboarding;
+import com.bayoumi.models.OtherSettings;
 import com.bayoumi.models.PrayerTimes;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXRadioButton;
@@ -11,13 +12,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class PrayerTimeSettingsController implements Initializable, SettingsInterface {
-    private PrayerTimes.PrayerTimeSettings prayerTimeSettings;
+public class OnboardingController implements Initializable {
+
     @FXML
     private JFXTextField country;
     @FXML
@@ -25,13 +27,16 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
     @FXML
     private ComboBox<PrayerTimes.PrayerTimeSettings.Method> methodComboBox;
     @FXML
+    private JFXRadioButton standardJuristic;
+    @FXML
     private ToggleGroup asrJuristic;
     @FXML
     private JFXRadioButton hanafiRadioButton;
     @FXML
-    private JFXRadioButton standardJuristic;
+    private JFXCheckBox format24;
     @FXML
-    private JFXCheckBox summerTiming;
+    private JFXCheckBox minimizeAtStart;
+    private PrayerTimes.PrayerTimeSettings prayerTimeSettings;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,8 +55,26 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         } else {
             standardJuristic.setSelected(true);
         }
+    }
 
-        summerTiming.setSelected(prayerTimeSettings.isSummerTiming());
+    @FXML
+    private void finish() {
+        // save prayerTimes settings
+        prayerTimeSettings.setCountry(country.getText());
+        prayerTimeSettings.setCity(city.getText());
+        prayerTimeSettings.setMethod(methodComboBox.getValue());
+        prayerTimeSettings.setAsrJuristic(hanafiRadioButton.isSelected() ? 1 : 0);
+        prayerTimeSettings.setSummerTiming(false);
+        prayerTimeSettings.save();
+        // save other settings
+        OtherSettings otherSettings = new OtherSettings();
+        otherSettings.setEnable24Format(format24.isSelected());
+        otherSettings.setMinimized(minimizeAtStart.isSelected());
+        otherSettings.save();
+
+        Onboarding.setFirstTimeOpened(0);
+
+        ((Stage) country.getScene().getWindow()).close();
     }
 
     private void initPopOver(){
@@ -71,13 +94,4 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         });
     }
 
-    @Override
-    public void saveToDB() {
-        prayerTimeSettings.setCountry(country.getText());
-        prayerTimeSettings.setCity(city.getText());
-        prayerTimeSettings.setMethod(methodComboBox.getValue());
-        prayerTimeSettings.setAsrJuristic(hanafiRadioButton.isSelected() ? 1 : 0);
-        prayerTimeSettings.setSummerTiming(summerTiming.isSelected());
-        prayerTimeSettings.save();
-    }
 }

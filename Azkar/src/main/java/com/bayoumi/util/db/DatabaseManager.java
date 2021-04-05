@@ -3,6 +3,7 @@ package com.bayoumi.util.db;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import org.flywaydb.core.Flyway;
 
 import java.sql.*;
 
@@ -24,9 +25,17 @@ public class DatabaseManager {
 
     public boolean init() {
         try {
+            Flyway.configure()
+                    .dataSource("jdbc:sqlite:" + Constants.assetsPath + "/db/data.db", "", "")
+                    .baselineOnMigrate(true)
+                    .load()
+                    .migrate();
+
             if (!connectToDatabase()) {
                 throw new Exception("Cannot init DatabaseManager");
             }
+
+            /*
             // create tables azkar_settings
             if (!createTable("CREATE TABLE IF NOT EXISTS azkar_settings ( " +
                     "morning_reminder TEXT NOT NULL DEFAULT 'لا تذكير', " +
@@ -76,6 +85,7 @@ public class DatabaseManager {
                     !insertDefault("program_characteristics")) {
                 throw new Exception("ERROR in CREATE program_characteristics TABLE");
             }
+             */
             return true;
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
