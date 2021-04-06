@@ -60,7 +60,7 @@ body {
   text-align: center;
 
   color: #fff;
-  background: url("/img/madinah.jpg");
+  background: url("../img/madinah.jpg");
   background-size: cover;
   background-position: center center;
   background-attachment: local;
