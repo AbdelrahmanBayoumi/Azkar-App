@@ -21,9 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const message = document.getElementById("message").value;
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("message").value = "";
     submit(name, email, message);
   });
 });
@@ -44,6 +41,7 @@ function submit(name, email, message) {
     showFormError("Please enter all Fields");
     return;
   }
+
   name = encodeURIComponent(name);
   email = encodeURIComponent(email);
   message = encodeURIComponent(message);
@@ -64,6 +62,9 @@ function submit(name, email, message) {
 
   fetch(url, opts).then(() => {
     showFormSuccess("Sent Successfully")
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("message").value = "";
   }).catch(() => {
     showFormError("Can't Send Your Response");
   });
