@@ -3,45 +3,174 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Azkar App">
+  <meta name="description" content="Desktop Application 💻 for:
+  Calculating Muslim prayer times 🕌
+  Morning and Nights Azkar with reminder 🤲
+  With notification for random Azkar that pops-up in specific time 💬.">
   <meta name="author" content="Abdelrahman Bayoumi">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Azkar App</title>
+  <title>Azkar - أذكار</title>
 
-  <!-- Custom fonts for this template -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i"
-    rel="stylesheet">
+  <!-- font-awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+    crossorigin="anonymous"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link href="css/style.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="img/logo.png" />
 </head>
 
 <body>
-  <div class="container">
-    <div class="content">
-      <div><img src="img/logo.png" alt="logo" width="100%"></div>
-      <br>
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light" dir="rtl">
+    <a class="navbar-brand" href="#">
+      <img src="/img/logo.png" width="50" height="50" alt="">
+      <span class="navbar-brand-text">أذكار - Azkar</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <h1>Azkar App</h1>
-      <p class="mb-5">Desktop Application 💻 for Calculating Muslim prayer times 🕌 , Morning and Nights Azkar 🤲
-        with notification for random Azkar that pops-up in specific time.
-        <br> <br>
-        <strong><a style="color:white"
-            href="https://drive.google.com/file/d/1HVd_MFwOqGraHZPtBeMXtbGEPtnWHjY7/view?usp=sharing"
-            target="_blank">Click Here To
-            Download EXE (Google Drive)</a>
-        </strong>
-        <strong>
-          <br>
-          <a style="color:white" href="https://github.com/AbdelrahmanBayoumi/Azkar-App" target="_blank">
-            Github Repo
-          </a>
-        </strong>
-      </p>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <!-- <li class="nav-item active">
+          <a class="nav-link" href="#">الرئيسية <span class="sr-only">(current)</span></a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="#features">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact-us">Contact Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/AbdelrahmanBayoumi/Azkar-App" target="_blank">Github</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+            href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe">Download</a>
+        </li>
+      </ul>
+      <!-- <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"><button
+          class="btn btn-outline-success my-2 my-sm-0" type="submit">تحميل - Download</button></a> -->
     </div>
-  </div>
+  </nav>
+
+  <main class="">
+
+    <section class="jumbotron">
+      <div class="hero-box">
+        <h1 class="hero-title">Azkar - أذكار</h1>
+        <p class="hero-subtitle">
+          برنامج سطح مكتب يساعدك على: (معرفة مواقيت الصلاة - قراءة أذكار الصباح و المساء مع التذكير بها - ظهور إشعارات
+          بذكر او دعاء عشوائي كل فترة محددة)
+        </p>
+        <p><a class="btn btn-primary btn-lg hero-button" role="button"
+            href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"
+            dir="auto">تحميل - Download</a></p>
+    </section>
+    </section>
+    <!-- Features -->
+    <section id="features" class="features clean-block clean-info dark" style="background: white;">
+      <div class="container">
+        <div class="block-heading">
+          <h2 class="text-info" dir="auto">المميزات - Features</h2>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-md-6"><img id="feature-img" class="img-thumbnail" src="img/home.jpg"></div>
+          <div class="col-md-6">
+            <div class="getting-started-info" dir="rtl" style="text-align: right;">
+              <ul class="features-ul">
+                <li onclick='changeFeatureImage(this,"home.jpg")' class="features-li active">
+                  <span class="features-ul-icon">
+                    <i class="fas fa-home fa-lg"></i>
+                  </span>
+                  الصفحة الرئيسية
+                </li>
+                <li onclick='changeFeatureImage(this,"prayer-times.png")' class="features-li">
+                  <span span class="features-ul-icon">
+                    <i class="fas fa-kaaba fa-lg"></i>
+                  </span>
+                  معرفة مواقيت الصلاة
+                </li>
+                <li onclick='changeFeatureImage(this,"night-azkar.png")' class="features-li">
+                  <span class="features-ul-icon">
+                    <i class="fas fa-quran fa-lg"></i>
+                  </span>
+                  قراءة أذكار الصباح و المساء مع التذكير بها
+                </li>
+                <li onclick='changeFeatureImage(this,"zekr-notification.jpg")' class="features-li">
+                  <span class="features-ul-icon">
+                    <i class="far fa-comment-dots fa-lg"></i>
+                  </span>
+                  ظهور إشعارات بذكر او دعاء عشوائي كل فترة محددة
+                </li>
+              </ul>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <!-- Contact Us -->
+    <section class="clean-block clean-form dark" id="contact-us">
+      <div class="container">
+        <div class="block-heading">
+          <h2 class="text-info" dir="rtl">تواصل معنا - Contact Us </h2>
+          <p>We would love to hear any comments, suggestions, or feedback. </p>
+        </div>
+        <form>
+          <div class="form-group"><label for="name">Name</label><input class="form-control" type="text" id="name"
+              name="name"></div>
+          <!-- <div class="form-group"><label for="subject">Subject</label><input class="form-control" type="text"
+              id="subject" name="subject"></div> -->
+          <div class="form-group"><label for="email">Email</label><input class="form-control" type="email" id="email"
+              name="email"></div>
+          <div class="form-group"><label for="message">Message</label><textarea class="form-control" id="message"
+              name="message"></textarea></div>
+          <div class="form-group"><button class="btn btn-primary btn-block submit-button error" type="button">Send</button></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+
+  <footer>
+    <span>© 2021 Azkar</span>
+  </footer>
+
+  <script src="js/notification.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+  <!-- Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
