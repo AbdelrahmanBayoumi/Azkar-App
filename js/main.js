@@ -26,9 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-function checkEmail(elm) {
+function isMail(mailString) {
   var reg1 = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-  if (reg1.test(elm.value) == false) {
+  return reg1.test(mailString);
+}
+function checkEmail(elm) {
+  if (isMail(elm.value) == false) {
     elm.style.border = "1px solid red";
   } else {
     elm.style.border = "1px solid green";
@@ -42,6 +45,10 @@ function submit(name, email, message) {
     return;
   }
 
+  if(!isMail(email)){
+    showFormError("Email is not correct");
+    return;
+  }
   name = encodeURIComponent(name);
   email = encodeURIComponent(email);
   message = encodeURIComponent(message);
