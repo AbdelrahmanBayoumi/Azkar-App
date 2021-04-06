@@ -5,6 +5,10 @@
   /* transition: all ease 0.5s; */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --bg-color: #f5f7fe;
   --light-blue: #418bca;
@@ -71,16 +75,22 @@ body {
   padding-top: 20px;
 }
 
-.hero-button{
+.hero-button {
   background-color: var(--light-blue);
 }
 
-
 .clean-block .block-heading {
-  padding-top: 50px;
+  padding-top: 76px;
   margin-bottom: 40px;
   text-align: center;
 }
+
+@media screen and (min-width: 600px) {
+  .clean-block .block-heading {
+    padding-top: 100px;
+  }
+}
+
 .block-heading {
   text-align: center;
   margin-bottom: 40px;
