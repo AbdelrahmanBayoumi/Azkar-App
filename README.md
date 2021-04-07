@@ -1,7 +1,7 @@
 <a href="https://www.abdelrahmanbayoumi.ml/Azkar-App/"><h1 align="center"> Azkar App 🕌 برنامج الأذكار </h1></a>
 
-- [How to Install](#how-to-install)
-- [Website](https://www.abdelrahmanbayoumi.ml/Azkar-App/)
+- [How to Install ⬇️](#how-to-install)
+- [Website 🌍](https://www.abdelrahmanbayoumi.ml/Azkar-App/)
 
 <br>
 
@@ -33,7 +33,7 @@ Desktop Application 💻 for:
 
 ## How to Install
 
-- [64-bit EXE installer v1.0.4_2](https://azkar-server.herokuapp.com/release/Azkar_windows-x64_1_0_4_2.exe)
+- [64-bit EXE installer 0.9.2 - Beta version](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe)
 
 | *Note* | Thanks <a href="https://www.ej-technologies.com/products/install4j/overview.html"> <img alt="install4j" src="https://www.ej-technologies.com/images/product_banners/install4j_large.png" width="80px" /></a> for providing us open source license for the installers used in Azkar distribution. |
 | --- | --- |
@@ -55,6 +55,7 @@ Desktop Application 💻 for:
 > Any Hijri conversion including Umm al-Qura is not used as reference for ibadah e.g. beginning of saum (fasting), Eid al-Fitr, and Eid al-Adha.
        
 -  [aladhan.com API](https://aladhan.com/prayer-times-api) for prayer times
+-  [Flyway](https://github.com/flyway/flyway) for database migrations
 
 ## Inspired From
 -  [Quran Tab (Google Chrome Extension)](https://chrome.google.com/webstore/detail/quran-tab/afaihcdgkjebgabomemccdneglknjkdd) Quran Tab is an Islamic new tab page that will keep you inspired by a verse from the Quran every time you open a new tab.
