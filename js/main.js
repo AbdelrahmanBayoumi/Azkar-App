@@ -10,14 +10,10 @@ function changeImage(src) {
 let successAlert, dangerAlert;
 document.addEventListener('DOMContentLoaded', () => {
   successAlert = document.getElementById("successAlert");
-  successAlert.remove();
   dangerAlert = document.getElementById("dangerAlert");
-  dangerAlert.remove();
 
   document.querySelector('form').addEventListener('submit', event => {
     event.preventDefault();
-    successAlert.remove();
-    dangerAlert.remove();
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const message = document.getElementById("message").value;
@@ -78,10 +74,16 @@ function submit(name, email, message) {
 }
 
 function showFormSuccess(msg) {
+  console.log("showFormSuccess");
+  dangerAlert.style.display = "none";
+  successAlert.style.display = "block";
   successAlert.innerText = msg;
   document.querySelector('form').prepend(successAlert);;
 }
 function showFormError(msg) {
+  console.log("showFormError");
+  successAlert.style.display = "none";
+  dangerAlert.style.display = "block";
   dangerAlert.innerText = msg;
   document.querySelector('form').prepend(dangerAlert);;
 }
