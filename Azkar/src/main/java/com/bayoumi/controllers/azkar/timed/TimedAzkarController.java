@@ -105,7 +105,7 @@ public class TimedAzkarController implements Initializable {
 
     @FXML
     private void incrementScrollSpeed(ScrollEvent event) {
-        double deltaY = event.getDeltaY() * 4;
+        double deltaY = event.getDeltaY() * 1;
         double width = scrollPane.getContent().getBoundsInLocal().getWidth();
         double vvalue = scrollPane.getVvalue();
         scrollPane.setVvalue(vvalue + -deltaY / width);
