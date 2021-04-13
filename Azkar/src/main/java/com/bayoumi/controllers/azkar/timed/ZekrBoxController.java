@@ -1,6 +1,6 @@
 package com.bayoumi.controllers.azkar.timed;
 
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.Utility;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -26,7 +26,7 @@ public class ZekrBoxController {
 
     @FXML
     private void copy() {
-        Utilities.copyToClipboard(text.getText());
+        Utility.copyToClipboard(text.getText());
     }
 
     @FXML

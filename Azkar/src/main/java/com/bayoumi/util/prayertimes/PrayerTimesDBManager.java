@@ -3,7 +3,7 @@ package com.bayoumi.util.prayertimes;
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.models.PrayerTimesBuilder;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.time.HijriDate;
 
@@ -30,7 +30,7 @@ public class PrayerTimesDBManager {
     public static PrayerTimes getPrayerTimesForToday() {
         HijriDate hijriDateToday = new HijriDate();
         try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes WHERE date='" + hijriDateToday.getYear() + "-" + Utilities.formatIntToTwoDigit(hijriDateToday.getMonth() + 1) + "-" + Utilities.formatIntToTwoDigit(hijriDateToday.getDay()) + "'").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes WHERE date='" + hijriDateToday.getYear() + "-" + Utility.formatIntToTwoDigit(hijriDateToday.getMonth() + 1) + "-" + Utility.formatIntToTwoDigit(hijriDateToday.getDay()) + "'").executeQuery();
             if (res.next()) {
                 return new PrayerTimesBuilder().
                         hijriDate(hijriDateToday)
@@ -100,7 +100,7 @@ public class PrayerTimesDBManager {
     public static void deleteLastSpecificMonth(HijriDate hijriDate) {
         try {
             DatabaseManager.getInstance().con
-                    .prepareStatement("DELETE FROM prayertimes WHERE prayertimes.date like '" + hijriDate.getYear() + "-" + Utilities.formatIntToTwoDigit(hijriDate.getMonth() + 1) + "-__" + "'")
+                    .prepareStatement("DELETE FROM prayertimes WHERE prayertimes.date like '" + hijriDate.getYear() + "-" + Utility.formatIntToTwoDigit(hijriDate.getMonth() + 1) + "-__" + "'")
                     .executeUpdate();
         } catch (SQLException ex) {
             Logger.error(null, ex, PrayerTimesDBManager.class.getName() + ".deleteLastSpecificMonth()");

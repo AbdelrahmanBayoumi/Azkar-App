@@ -2,8 +2,8 @@ package com.bayoumi.util.prayertimes;
 
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.util.Query;
-import com.bayoumi.util.Utilities;
 import com.bayoumi.util.time.HijriDate;
+import com.bayoumi.util.time.Utilities;
 import kong.unirest.GetRequest;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;

@@ -34,7 +34,7 @@ public class Constants {
 //    }
 
     public static void copyDatabaseToAppData() throws IOException {
-        Utilities.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
+        Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
         Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
         System.out.println(from.toString());
         Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db/data.db");

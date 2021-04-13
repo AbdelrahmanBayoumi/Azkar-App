@@ -1,7 +1,7 @@
 package com.bayoumi.util.gui.tray;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.Utility;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -96,7 +96,7 @@ public class TrayUtil {
         exitItem.addActionListener(event -> {
             System.out.println(event);
             tray.remove(trayIcon);
-            Utilities.exitProgramAction();
+            Utility.exitProgramAction();
         });
 
         // setup the popup menu for the application.

@@ -7,7 +7,7 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
 import com.bayoumi.util.gui.notfication.Notification;
-import com.bayoumi.util.time.Utilities;
+import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -97,10 +97,10 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         IntegerSpinner.init(azkarPeriod_hour);
         azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 1));
         azkarPeriod_hour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
-        azkarPeriod.valueProperty().addListener((observable, oldValue, newValue) -> minPlurality.setText(Utilities.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
-        azkarPeriod_hour.valueProperty().addListener((observable, oldValue, newValue) -> hourPlurality.setText(Utilities.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
-        azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(Utilities.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
-        azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(Utilities.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
+        azkarPeriod.valueProperty().addListener((observable, oldValue, newValue) -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
+        azkarPeriod_hour.valueProperty().addListener((observable, oldValue, newValue) -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
+        azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
+        azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
 
         // init Saved data form DB
         azkarSettings = new AzkarSettings();

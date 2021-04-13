@@ -1,7 +1,7 @@
 package com.bayoumi.util.prayertimes;
 
 import com.bayoumi.models.PrayerTimes;
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.time.HijriDate;
 import javafx.beans.property.SimpleIntegerProperty;
 

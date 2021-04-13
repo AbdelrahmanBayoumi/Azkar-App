@@ -6,7 +6,7 @@ import com.bayoumi.models.OtherSettings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
@@ -52,16 +52,16 @@ public class Launcher extends Application {
         // if anything in loading goes wrong => terminate the program
         workFine.addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                Utilities.exitProgramAction();
+                Utility.exitProgramAction();
             }
         });
         incrementPreloader();
 
         try {
             // Create Needed Folder if not exist.
-            Utilities.createDirectory(Constants.assetsPath + "/logs");
-            Utilities.createDirectory(Constants.assetsPath + "/db");
-            Utilities.createDirectory(Constants.assetsPath + "/audio");
+            Utility.createDirectory(Constants.assetsPath + "/logs");
+            Utility.createDirectory(Constants.assetsPath + "/db");
+            Utility.createDirectory(Constants.assetsPath + "/audio");
 
             Logger.init();
             Logger.info("App Launched");

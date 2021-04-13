@@ -1,7 +1,7 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;

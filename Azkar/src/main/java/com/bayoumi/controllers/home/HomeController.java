@@ -6,11 +6,12 @@ import com.bayoumi.controllers.prayertimes.PrayerTimesController;
 import com.bayoumi.models.*;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;
+import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
@@ -221,13 +222,13 @@ public class HomeController implements Initializable {
         System.out.println("S: " + s);
         String msg = "ظهور كل" + " ";
         if (currentFrequency.equals(highFrequency)) {
-            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getHighPeriod());
+            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(azkarSettings.getHighPeriod());
         } else if (currentFrequency.equals(midFrequency)) {
-            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getMidPeriod());
+            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(azkarSettings.getMidPeriod());
         } else if (currentFrequency.equals(lowFrequency)) {
-            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getLowPeriod());
+            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(azkarSettings.getLowPeriod());
         } else if (currentFrequency.equals(rearFrequency)) {
-            msg += com.bayoumi.util.time.Utilities.getTimeArabicPlurality(azkarSettings.getRearPeriod());
+            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(azkarSettings.getRearPeriod());
         }
         frequencyLabel.setText(msg);
     }

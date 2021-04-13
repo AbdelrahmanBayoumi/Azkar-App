@@ -1,6 +1,6 @@
 package com.bayoumi.util.time;
 
-import com.bayoumi.util.Utilities;
+import com.bayoumi.util.Utility;
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
 
 import java.text.SimpleDateFormat;
@@ -47,7 +47,7 @@ public class HijriDate {
     }
 
     public String getHijriDateFormatted() {
-        return this.getYear() + "-" + Utilities.formatIntToTwoDigit(this.getMonth() + 1) + "-" + Utilities.formatIntToTwoDigit(this.getDay());
+        return this.getYear() + "-" + Utility.formatIntToTwoDigit(this.getMonth() + 1) + "-" + Utility.formatIntToTwoDigit(this.getDay());
     }
 
 /*
