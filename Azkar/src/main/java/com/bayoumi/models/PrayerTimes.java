@@ -1,19 +1,19 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
 import com.bayoumi.util.prayertimes.PrayerTimesValidation;
-import com.bayoumi.util.time.HijriDate;
+import com.bayoumi.util.time.Utilities;
 import javafx.util.StringConverter;
 
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class PrayerTimes {
-    private HijriDate hijriDate;
+    private LocalDate localDate;
     private String fajr;
     private String sunrise;
     private String dhuhr;
@@ -23,8 +23,8 @@ public class PrayerTimes {
     private PrayerTimes.PrayerTimeSettings prayerTimeSettings;
 
 
-    public PrayerTimes(HijriDate hijriDate, String fajr, String sunrise, String dhuhr, String asr, String maghrib, String isha) {
-        this.hijriDate = hijriDate;
+    public PrayerTimes(LocalDate localDate, String fajr, String sunrise, String dhuhr, String asr, String maghrib, String isha) {
+        this.localDate = localDate;
         this.fajr = fajr;
         this.sunrise = sunrise;
         this.dhuhr = dhuhr;
@@ -56,12 +56,12 @@ public class PrayerTimes {
         this.isha = LocalTime.parse(this.isha).plusHours(1).toString();
     }
 
-    public HijriDate getHijriDate() {
-        return hijriDate;
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
-    public void setHijriDate(HijriDate hijriDate) {
-        this.hijriDate = hijriDate;
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
     }
 
     public String getFajr() {
@@ -123,7 +123,7 @@ public class PrayerTimes {
     @Override
     public String toString() {
         return "PrayerTimes{" +
-                "hijriDate=" + hijriDate +
+                "localDate=" + localDate +
                 ", fajr='" + fajr + '\'' +
                 ", sunrise='" + sunrise + '\'' +
                 ", dhuhr='" + dhuhr + '\'' +
@@ -144,7 +144,7 @@ public class PrayerTimes {
             loadSettings();
         }
 
-        public boolean hasLocation(){
+        public boolean hasLocation() {
             return !this.getCountry().trim().equals("") && !this.getCity().trim().equals("");
         }
 

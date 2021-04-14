@@ -104,6 +104,18 @@ public class PrayerTimesController implements Initializable {
         new Thread(() -> {
             prayerTimes = PrayerTimesDBManager.getPrayerTimesForToday();
             System.out.println("fetched from DB: " + prayerTimes);
+            if(prayerTimes.getLocalDate() == null || prayerTimes.getFajr().equals("--:--")){
+                PrayerTimesValidation.PRAYERTIMES_STATUS.set(0);
+                Platform.runLater(() -> {
+                    if (BuilderUI.showConfirmAlert(false, "حدث خطأ في مواقيت الصلاة..." + "\n" + "هل تريد الذهاب لإعدادات المدينة؟")) {
+                        ((Stage) loadingBox.getScene().getWindow()).close();
+                        homeController.settingsBTN.fire();
+                    } else {
+                        ((Stage) loadingBox.getScene().getWindow()).close();
+                    }
+                });
+                return;
+            }
             Platform.runLater(() -> {
                 if (prayerTimes.getPrayerTimeSettings().isSummerTiming()) {
                     prayerTimes.enableSummerTime();

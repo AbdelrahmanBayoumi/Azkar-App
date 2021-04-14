@@ -2,7 +2,6 @@ package com.bayoumi.util.prayertimes;
 
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.util.Query;
-import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.time.Utilities;
 import kong.unirest.GetRequest;
 import kong.unirest.Unirest;
@@ -10,13 +9,14 @@ import kong.unirest.UnirestException;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class WebService {
 
     // http://api.aladhan.com/v1/hijriCalendarByCity?city=Ad%20Daqahliyah&country=Egypt&method=5&month=04&year=1442
     // http://api.aladhan.com/v1/timings/19-09-2020?latitude=31.2000924&longitude=29.9187387&method=5
-    private static final String PRAYER_TIMES_END_POINT = "http://api.aladhan.com/v1/hijriCalendarByCity";
+    private static final String PRAYER_TIMES_END_POINT = "http://api.aladhan.com/v1/calendarByCity";
 
     /**
      * @return PrayerTimes for Today in (Gregorian Calendar)
@@ -59,7 +59,11 @@ public class WebService {
     }
 
 
-    public static ArrayList<PrayerTimes> getPrayerTimesMonth(HijriDate hijriDate) {
+    /**
+     * @param localDate required to get the prayer times is that date (month & year)
+     * @return Returns all prayer times for a specific calendar month.
+     */
+    public static ArrayList<PrayerTimes> getPrayerTimesMonth(LocalDate localDate) {
         ArrayList<PrayerTimes> prayerTimes = new ArrayList<>();
         try {
             PrayerTimes.PrayerTimeSettings prayerTimeSettings = new PrayerTimes.PrayerTimeSettings();
@@ -72,8 +76,8 @@ public class WebService {
                     , new Query("city", prayerTimeSettings.getCity())
                     , new Query("method", String.valueOf(prayerTimeSettings.getMethod().getId()))
                     , new Query("school", String.valueOf(prayerTimeSettings.getAsrJuristic()))
-                    , new Query("month", String.valueOf(hijriDate.getMonth() + 1))
-                    , new Query("year", String.valueOf(hijriDate.getYear())));
+                    , new Query("month", String.valueOf(localDate.getMonth().getValue()))
+                    , new Query("year", String.valueOf(localDate.getYear())));
 
             if (jsonRoot.has("code")) {
                 if (jsonRoot.getString("code").equals("200")) {
@@ -82,7 +86,7 @@ public class WebService {
                         for (int i = 0; i < monthData.length(); i++) {
                             JSONObject timings = ((JSONObject) monthData.get(i)).getJSONObject("timings");
                             prayerTimes.add(PrayerTimes.builder()
-                                    .hijriDate(new HijriDate(hijriDate.getYear(), hijriDate.getMonth(), i + 1))
+                                    .localDate(LocalDate.of(localDate.getYear(), localDate.getMonth(), i + 1))
                                     .fajr(Utilities.formatTimeOnly(timings.getString("Fajr")))
                                     .sunrise(Utilities.formatTimeOnly(timings.getString("Sunrise")))
                                     .dhuhr(Utilities.formatTimeOnly(timings.getString("Dhuhr")))

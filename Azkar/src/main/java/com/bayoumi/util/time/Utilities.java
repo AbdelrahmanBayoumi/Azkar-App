@@ -2,6 +2,7 @@ package com.bayoumi.util.time;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -95,6 +96,24 @@ public class Utilities {
 
             return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
+    }
+
+    /**
+     * @param s date as string ex: '2021-04-15'
+     * @return LocalDate obj of that date
+     */
+    public static LocalDate getDateFromString(String s) {
+        String[] dateArr = s.split("-");
+        return LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+    }
+
+    /**
+     * @param s date as string ex: '2021-04-15'
+     * @return LocalDate obj of that date
+     */
+    private static HijriDate getHijriDateFromString(String s) {
+        String[] dateArr = s.split("-");
+        return new HijriDate(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]) - 1, Integer.parseInt(dateArr[2]));
     }
 
 

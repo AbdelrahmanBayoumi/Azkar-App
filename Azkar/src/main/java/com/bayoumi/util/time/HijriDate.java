@@ -27,7 +27,7 @@ public class HijriDate {
         this.day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    public static HijriDate plusDay(HijriDate hijriDate, int days) {
+    public static HijriDate plusDays(HijriDate hijriDate, int days) {
         return new HijriDate(hijriDate.getYear(), hijriDate.getMonth(), hijriDate.getDay() + days);
     }
 
