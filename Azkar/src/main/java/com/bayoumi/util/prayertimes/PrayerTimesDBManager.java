@@ -70,7 +70,6 @@ public class PrayerTimesDBManager {
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             for (PrayerTimes prayerTime : prayerTimes) {
-                System.out.println("prayerTime: "+ prayerTime);
                 databaseManager.stat = databaseManager.con.prepareStatement("INSERT INTO prayertimes (date,fajr,sunrise,dhuhr,asr,maghrib,isha) VALUES(?,?,?,?,?,?,?)");
                 databaseManager.stat.setString(1, prayerTime.getLocalDate().toString());
                 databaseManager.stat.setString(2, prayerTime.getFajr());

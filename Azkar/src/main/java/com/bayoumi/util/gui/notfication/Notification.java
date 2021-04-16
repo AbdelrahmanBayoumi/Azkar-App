@@ -2,6 +2,7 @@ package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.controllers.notification.NotificationsControlsFXController;
 import com.bayoumi.models.AzkarSettings;
+import com.bayoumi.models.NotificationSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.Draggable;
 import com.bayoumi.util.gui.HelperMethods;
@@ -102,7 +103,7 @@ public class Notification {
                             callback.run();
                         }
                     })
-                    .position(Pos.BOTTOM_RIGHT).show());
+                    .position(new NotificationSettings().getPosition()).show());
 
             playAlarmSound(AzkarSettings.getVolumeDB());
         } catch (Exception ex) {

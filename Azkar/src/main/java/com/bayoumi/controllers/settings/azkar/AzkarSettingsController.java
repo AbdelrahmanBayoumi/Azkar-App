@@ -3,6 +3,7 @@ package com.bayoumi.controllers.settings.azkar;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AbsoluteZekr;
 import com.bayoumi.models.AzkarSettings;
+import com.bayoumi.models.NotificationSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
@@ -18,10 +19,12 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -44,9 +47,12 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
     private AzkarSettings azkarSettings;
+    private NotificationSettings notificationSettings;
     private JFXButton currentFrequency;
     @FXML
     private VBox periodBox;
+    @FXML
+    private JFXComboBox<Pos> posComboBox;
     @FXML
     private JFXButton highFrequency;
     @FXML
@@ -135,6 +141,12 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
                 MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);
             }
         });
+
+        notificationSettings = new NotificationSettings();
+        posComboBox.setItems(FXCollections.observableArrayList(Pos.TOP_RIGHT, Pos.BOTTOM_RIGHT, Pos.TOP_LEFT, Pos.BOTTOM_LEFT, Pos.CENTER));
+        posComboBox.setValue(notificationSettings.getPosition());
+        // TODO Check for ENG Language
+        posComboBox.setConverter(NotificationSettings.posArabicConverter());
 
         azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod() % 60);
         azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getHighPeriod() / 60);
@@ -236,7 +248,10 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             azkarSettings.setStopped(stopAzkar.isSelected());
             azkarSettings.setVolume((int) volumeSlider.getValue());
             azkarSettings.save();
+            notificationSettings.setPosition(posComboBox.getValue());
+            notificationSettings.save();
         } catch (Exception ex) {
+            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".saveToDB()");
         }
     }
@@ -247,10 +262,11 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
             return;
         }
-        // save alarm sound in case of selecting new sound
+        // save alarm sound & pos in case of selecting new sound
         azkarSettings.setAudioName(azkarAlarmComboBox.getValue());
         azkarSettings.saveAlarmSound();
-
+        notificationSettings.setPosition(posComboBox.getValue());
+        notificationSettings.save();
         Platform.runLater(()
                 -> {
             try {

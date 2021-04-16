@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="480.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.azkar.AzkarSettingsController">
+<ScrollPane fitToHeight="true" fitToWidth="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="510.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.azkar.AzkarSettingsController">
    <content>
       <VBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefWidth="660.0" spacing="20.0" styleClass="root">
           <padding>
@@ -92,7 +92,7 @@
           </VBox>
          <VBox alignment="CENTER" spacing="25.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);">
             <children>
-               <Label minWidth="150.0" text="صوت التنبيه للأذكار" textAlignment="CENTER" wrapText="true">
+               <Label minWidth="150.0" text="صوت ومكان التنبيه للأذكار" textAlignment="CENTER" wrapText="true">
                   <font>
                      <Font name="System Bold" size="18.0" />
                   </font>
@@ -131,21 +131,30 @@
                      </HBox>
                   </children>
                </HBox>
+               <HBox>
+                  <children>
+                     <JFXComboBox fx:id="posComboBox" labelFloat="true" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefWidth="300.0" promptText="أختر مكان التنبيه" style="-fx-font-size: 17;" styleClass="combo-box-normal" HBox.hgrow="ALWAYS">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                     </JFXComboBox>
+                     <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                        <children>
+                              <JFXButton fx:id="showZekrButton" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#showZekr" prefHeight="43.0" prefWidth="140.0" styleClass="primary-button" text="إظهار ذكر للتجربة">
+                                  <font>
+                                      <Font name="System Bold" size="16.0" />
+                                  </font>
+                              </JFXButton>
+                        </children>
+                     </HBox>
+                  </children>
+               </HBox>
             </children>
             <padding>
                <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
             </padding>
          </VBox>
            <HBox alignment="BOTTOM_RIGHT" nodeOrientation="RIGHT_TO_LEFT" VBox.vgrow="ALWAYS">
-            <HBox alignment="BOTTOM_LEFT" HBox.hgrow="ALWAYS">
-               <children>
-                     <JFXButton fx:id="showZekrButton" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#showZekr" prefHeight="43.0" prefWidth="110.0" styleClass="primary-button" text="إظهار ذكر">
-                         <font>
-                             <Font name="System Bold" size="16.0" />
-                         </font>
-                     </JFXButton>
-               </children>
-            </HBox>
             <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" prefWidth="200.0" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
                <font>
                   <Font name="System Bold" size="16.0" />
