@@ -67,7 +67,6 @@ public class Launcher extends Application {
             Logger.info("App Launched");
             incrementPreloader();
 
-//            Constants.copyDatabaseToAppData();
             incrementPreloader();
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();

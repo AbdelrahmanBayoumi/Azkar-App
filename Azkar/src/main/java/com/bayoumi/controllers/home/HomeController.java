@@ -107,7 +107,7 @@ public class HomeController implements Initializable {
         Date date = new Date();
         day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
         gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
-        hijriDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
+        hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
     }
 
     private void initReminders() {
@@ -170,6 +170,7 @@ public class HomeController implements Initializable {
             if (OtherSettings.isUpdated) {
                 otherSettings = new OtherSettings();
                 OtherSettings.isUpdated = false;
+                hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
             }
             if (otherSettings.isEnable24Format()) {
                 timeNow = Utilities.getTime24(otherSettings.getLanguageLocal(), date);
@@ -182,8 +183,8 @@ public class HomeController implements Initializable {
             if (timeNow.equals("12:00:00 AM") || timeNow.equals("12:00:00 ص") || timeNow.equals("00:00:00")) {
                 System.out.println("NEW DAY ...");
                 day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
-                hijriDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
-                gregorianDate.setText(HijriDate.getHijriDateNowString(otherSettings.getLanguageLocal()));
+                gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
+                hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
             }
 
             if (AzkarSettings.isUpdated) {

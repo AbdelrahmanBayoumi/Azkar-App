@@ -4,6 +4,7 @@ import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.time.HijriDate;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -19,6 +20,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OtherSettingsController implements Initializable, SettingsInterface {
+
+    @FXML
+    public Label hijriDateLabel;
     private OtherSettings otherSettings;
     @FXML
     private ComboBox<String> languageComboBox;
@@ -36,9 +40,15 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         otherSettings = new OtherSettings();
+        hijriDateLabel.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
 
-        hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 0));
+        hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
         hijriDateOffset.getValueFactory().setValue(otherSettings.getHijriOffset());
+
+        hijriDateOffset.valueProperty().addListener((observable, oldValue, newValue) -> {
+            hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(otherSettings.getLanguageLocal()));
+        });
+
 
         languageComboBox.setItems(FXCollections.observableArrayList("عربي - Arabic", "إنجليزي - English"));
         languageComboBox.setValue(otherSettings.getLanguage());
