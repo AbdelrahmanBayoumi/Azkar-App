@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.control.Notifications;
 
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.util.ResourceBundle;
 
 public class FeedbackController implements Initializable {
@@ -44,7 +45,7 @@ public class FeedbackController implements Initializable {
     private ProgressIndicator progress;
     private JFXButton focusedButton;
 
-    private void reset(){
+    private void reset() {
         subject.setText("");
         email.setText("");
         details.setText("");
@@ -124,7 +125,7 @@ public class FeedbackController implements Initializable {
                         email.getText(),
                         details.getText(),
                         System.getProperty("os.name"),
-                        Constants.assetsPath + "/logs/debug.txt");
+                        getAbsolutePath(Constants.assetsPath + "/logs/debug.txt"));
                 feedback.submitFeedback();
                 Platform.runLater(() -> {
                     VBox vBox = new VBox(10);
@@ -144,6 +145,10 @@ public class FeedbackController implements Initializable {
             progress.setVisible(false);
             reset();
         }).start();
+    }
+
+    private String getAbsolutePath(String relativePath) {
+        return FileSystems.getDefault().getPath(relativePath).normalize().toAbsolutePath().toString();
     }
 
     @FXML

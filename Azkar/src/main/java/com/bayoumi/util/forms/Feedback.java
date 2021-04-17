@@ -95,7 +95,6 @@ public class Feedback {
 
     public void submitFeedback() throws MalformedURLException {
         URL url = buildFeedbackURL();
-        System.out.println(url);
         Submitter submitter = new Submitter(
                 new Configuration()
         );
