@@ -9,31 +9,86 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Feedback {
-    private String name;
-    private String mail;
-    private int rate;
-    private String content;
 
-    public Feedback(String name, String mail, int rate, String content) {
-        this.name = name;
-        this.mail = mail; // TODO Validate mail + required
-        this.rate = rate; // TODO validate rate
-        this.content = content;
+    private enum FeedbackForm implements MetaData {
+        TYPE(814257748),
+        SUBJECT(1244495847),
+        EMAIL(1620011711),
+        OS(1968101612),
+        DETAILS(1071993344),
+        LOG_PATH(788346873);
+
+        private final long id;
+
+        FeedbackForm(long l) {
+            this.id = l;
+        }
+
+        @Override
+        public long getId() {
+            return this.id;
+        }
+    }
+
+    private final String type;
+    private final String subject;
+    private final String email;
+    private final String details;
+    private final String os;
+    private final String logPath;
+
+    public Feedback(String type, String subject, String email, String details, String os, String logPath) {
+        this.type = type;
+        this.subject = subject;
+        this.email = email;
+        this.details = details;
+        this.os = os;
+        this.logPath = logPath;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public String getOS() {
+        return os;
+    }
+
+    public String getLogPath() {
+        return logPath;
     }
 
     private URL buildFeedbackURL() throws MalformedURLException {
-        Builder builder = Builder.formKey("1FAIpQLSdsHSZDURzLRCf1bxrMQ_onBRJ7BZvryU1_xxrXvr0Igh0SGg");
-        if (this.getName() != null && !this.getName().equals("")) {
-            builder.put(FeedbackForm.NAME, this.getName());
+        Builder builder = Builder.formKey("1FAIpQLSdgpuszSwl_sGLbGHgFGZo1zB0tJ05QSYlmxCZQMaMIuElrRw");
+        if (this.getType() != null && !this.getType().equals("")) {
+            builder.put(FeedbackForm.TYPE, this.getType());
         }
-        if (this.getMail() != null && !this.getMail().equals("")) {
-            builder.put(FeedbackForm.EMAIL_ADDRESS, this.getMail());
+        if (this.getSubject() != null && !this.getSubject().equals("")) {
+            builder.put(FeedbackForm.SUBJECT, this.getSubject());
         }
-        if (this.getRate() != 0) {
-            builder.put(FeedbackForm.RATE, this.getRate());
+        if (this.getEmail() != null && !this.getEmail().equals("")) {
+            builder.put(FeedbackForm.EMAIL, this.getEmail());
         }
-        if (this.getContent() != null && !this.getContent().equals("")) {
-            builder.put(FeedbackForm.CONTENT, this.getContent());
+        if (this.getOS() != null && !this.getOS().equals("")) {
+            builder.put(FeedbackForm.OS, this.getOS());
+        }
+        if (this.getDetails() != null && !this.getDetails().equals("")) {
+            builder.put(FeedbackForm.DETAILS, this.getDetails());
+        }
+        if (this.getLogPath() != null && !this.getLogPath().equals("")) {
+            builder.put(FeedbackForm.LOG_PATH, this.getLogPath());
         }
         return builder.toUrl();
     }
@@ -47,54 +102,5 @@ public class Feedback {
         submitter.submitForm(url);
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public int getRate() {
-        return rate;
-    }
-
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    private enum FeedbackForm implements MetaData {
-
-        NAME(2005620554),
-        EMAIL_ADDRESS(1045781291),
-        RATE(1166974658),
-        CONTENT(839337160);
-
-        private final long id;
-
-        FeedbackForm(long l) {
-            this.id = l;
-        }
-
-        @Override
-        public long getId() {
-            return this.id;
-        }
-    }
 }

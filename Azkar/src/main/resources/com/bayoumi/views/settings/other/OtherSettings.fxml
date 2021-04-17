@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
@@ -63,7 +65,7 @@
       </VBox>
       <VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
          <children>
-            <Label fx:id="hijriDateLabel" text="٤ رمضان ١٤٤٢ هـ">
+            <Label fx:id="hijriDateLabel" text="1 رمضان ١٤٤٢ هـ">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
@@ -88,6 +90,18 @@
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </padding>
       </VBox>
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <JFXButton contentDisplay="RIGHT" graphicTextGap="17.0" onAction="#openFeedback" text="للمشاكل والإقتراحات">
+               <graphic>
+                  <FontAwesomeIconView glyphName="COMMENTS" size="24" />
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </HBox>
       <VBox alignment="CENTER" spacing="2.0">
          <children>
             <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">

@@ -129,6 +129,10 @@
     -fx-text-fill: -fx-primary-text;
 }
 
+.transparent-button .glyph-icon {
+    -fx-fill: -fx-primary-text;
+}
+
 .transparent-button:hover {
     -fx-background-color: transparent;
 }
@@ -173,6 +177,7 @@
 
 .secondary-button {
     -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
+    -fx-text-fill: -fx-secondary-text;
 }
 
 .secondary-button .glyph-icon {
@@ -569,3 +574,6 @@
     -fx-background-color: -fx-secondary;
 }
 
+.error-label {
+    -fx-text-fill: red;
+}

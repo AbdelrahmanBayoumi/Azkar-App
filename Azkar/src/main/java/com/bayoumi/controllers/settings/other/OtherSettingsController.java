@@ -4,15 +4,21 @@ import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.OtherSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.time.HijriDate;
+import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.net.URI;
@@ -83,4 +89,17 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         otherSettings.save();
     }
 
+    @FXML
+    private void openFeedback() {
+        try {
+            Stage stage = new Stage();
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/feedback/Feedback.fxml"))));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            HelperMethods.SetIcon(stage);
+            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
+            stage.showAndWait();
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".openFeedback()");
+        }
+    }
 }
