@@ -35,14 +35,17 @@ public class PrayerTimesValidation extends Thread {
         if (daysBetween <= 5) {
             // fetch new Month data from API
             ArrayList<PrayerTimes> prayerTimesMonth = WebService.getPrayerTimesMonth(lastDateStored.plusDays(1));
+            if (prayerTimesMonth.size() < 1) {
+                return false;
+            }
             // check if there is any days of fetched month in DB => delete it to insert the new data of the same month
+            System.out.println("prayerTimesMonth.size:" + prayerTimesMonth.size());
             if (prayerTimesMonth.get(0).getLocalDate().getMonth().getValue() == lastDateStored.getMonth().getValue()) {
                 System.out.println("deletePrayerTimesInSpecificMonth");
                 PrayerTimesDBManager.deletePrayerTimesInSpecificMonth(lastDateStored);
             }
             // insert prayerTimes to DB
-            System.out.println("prayerTimesMonth.size:" + prayerTimesMonth.size());
-            if (prayerTimesMonth.size() < 1 || !PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
+            if (!PrayerTimesDBManager.insertPrayerTimesData(prayerTimesMonth)) {
                 return false;
             }
         }
