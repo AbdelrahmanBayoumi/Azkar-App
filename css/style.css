@@ -1,3 +1,30 @@
+/* cairo-600 - latin_arabic */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/cairo-v10-latin_arabic-600.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/cairo-v10-latin_arabic-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/cairo-v10-latin_arabic-600.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/cairo-v10-latin_arabic-600.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/cairo-v10-latin_arabic-600.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/cairo-v10-latin_arabic-600.svg#Cairo') format('svg'); /* Legacy iOS */
+}
+/* cairo-700 - latin_arabic */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/cairo-v10-latin_arabic-700.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/cairo-v10-latin_arabic-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/cairo-v10-latin_arabic-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/cairo-v10-latin_arabic-700.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/cairo-v10-latin_arabic-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/cairo-v10-latin_arabic-700.svg#Cairo') format('svg'); /* Legacy iOS */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -33,7 +60,7 @@ body {
   vertical-align: bottom;
   padding-right: 10px;
   padding-left: 10px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -144,6 +171,6 @@ footer {
   text-transform: uppercase;
 }
 
-.required-star{
+.required-star {
   color: red;
 }
