@@ -50,7 +50,6 @@ public class NotificationSettings {
             if (res.next()) {
                 this.position = Pos.valueOf(res.getString("position"));
             }
-            System.out.println(this);
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
