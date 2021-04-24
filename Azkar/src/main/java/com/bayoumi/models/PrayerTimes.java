@@ -1,16 +1,9 @@
 package com.bayoumi.models;
 
-import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
-import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
-import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.bayoumi.util.time.Utilities;
-import javafx.util.StringConverter;
 
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 public class PrayerTimes {
     private LocalDate localDate;
@@ -20,7 +13,7 @@ public class PrayerTimes {
     private String asr;
     private String maghrib;
     private String isha;
-    private PrayerTimes.PrayerTimeSettings prayerTimeSettings;
+    private PrayerTimeSettings prayerTimeSettings;
 
 
     public PrayerTimes(LocalDate localDate, String fajr, String sunrise, String dhuhr, String asr, String maghrib, String isha) {
@@ -116,8 +109,8 @@ public class PrayerTimes {
         return prayerTimeSettings;
     }
 
-    public void setPrayerTimeSettings(PrayerTimeSettings prayerTimeSettings) {
-        this.prayerTimeSettings = prayerTimeSettings;
+    public void setPrayerTimeSettings(PrayerTimeSettings prayerTimeSettings1) {
+        prayerTimeSettings = prayerTimeSettings1;
     }
 
     @Override
@@ -133,217 +126,4 @@ public class PrayerTimes {
                 '}';
     }
 
-    public static class PrayerTimeSettings {
-        private String country;
-        private String city;
-        private Method method;
-        private int asrJuristic; // 0 for standard, 1 for Hanafi
-        private boolean summerTiming;
-
-        public PrayerTimeSettings() {
-            loadSettings();
-        }
-
-        public boolean hasLocation() {
-            return !this.getCountry().trim().equals("") && !this.getCity().trim().equals("");
-        }
-
-        public void save() {
-            try {
-                PrayerTimeSettings oldSettings = new PrayerTimeSettings();
-                // if nothing changed
-                if (oldSettings.getCountry().equals(this.getCountry()) &&
-                        oldSettings.getCity().equals(this.getCity()) &&
-                        oldSettings.getMethod().equals(this.getMethod()) &&
-                        oldSettings.getAsrJuristic() == this.getAsrJuristic() &&
-                        oldSettings.isSummerTiming() == this.isSummerTiming()) {
-                    return;
-                }
-                // if summer timing only changed
-                else if (oldSettings.getCountry().equals(this.getCountry()) &&
-                        oldSettings.getCity().equals(this.getCity()) &&
-                        oldSettings.getMethod().equals(this.getMethod()) &&
-                        oldSettings.getAsrJuristic() == this.getAsrJuristic() &&
-                        oldSettings.isSummerTiming() != this.isSummerTiming()) {
-                    DatabaseManager.getInstance().
-                            con.
-                            prepareStatement("UPDATE prayertimes_settings set summer_timing = " + (summerTiming ? 1 : 0)).
-                            executeUpdate();
-                    return;
-                }
-
-                DatabaseManager databaseManager = DatabaseManager.getInstance();
-                databaseManager.stat = databaseManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?");
-                databaseManager.stat.setString(1, country);
-                databaseManager.stat.setString(2, city);
-                databaseManager.stat.setInt(3, method.getId());
-                databaseManager.stat.setInt(4, asrJuristic);
-                databaseManager.stat.setInt(5, summerTiming ? 1 : 0);
-                databaseManager.stat.executeUpdate();
-
-                PrayerTimesDBManager.deleteAll();
-                new PrayerTimesValidation().start();
-            } catch (Exception ex) {
-                Logger.error(null, ex, getClass().getName() + ".save()");
-            }
-        }
-
-        private void loadSettings() {
-            try {
-                ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_settings").executeQuery();
-                if (res.next()) {
-                    this.country = res.getString(1);
-                    this.city = res.getString(2);
-                    this.method = Method.getMethodByID(res.getInt(3));
-                    this.asrJuristic = res.getInt(4);
-                    this.summerTiming = res.getInt(5) == 1;
-                }
-            } catch (Exception ex) {
-                Logger.error(null, ex, getClass().getName() + ".loadSettings()");
-            }
-        }
-
-        public String getCountry() {
-            return country;
-        }
-
-        public void setCountry(String country) {
-            this.country = country;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public boolean isSummerTiming() {
-            return summerTiming;
-        }
-
-        public void setSummerTiming(boolean summerTiming) {
-            this.summerTiming = summerTiming;
-        }
-
-        public Method getMethod() {
-            return method;
-        }
-
-        public void setMethod(Method method) {
-            this.method = method;
-        }
-
-        public int getAsrJuristic() {
-            return asrJuristic;
-        }
-
-        public void setAsrJuristic(int asrJuristic) {
-            this.asrJuristic = asrJuristic;
-        }
-
-        @Override
-        public String toString() {
-            return "PrayerTimeSettings{" +
-                    "country='" + country + '\'' +
-                    ", city='" + city + '\'' +
-                    ", method=" + method +
-                    ", asrJuristic=" + asrJuristic +
-                    ", summerTiming=" + summerTiming +
-                    '}';
-        }
-
-        public static class Method {
-            private int id;
-            private String arabicName;
-            private String englishName;
-
-            public Method(int id, String arabicName, String englishName) {
-                this.id = id;
-                this.arabicName = arabicName;
-                this.englishName = englishName;
-            }
-
-            public static StringConverter<Method> getStringConverter() {
-                return new StringConverter<Method>() {
-                    @Override
-                    public String toString(Method object) {
-                        return object.getArabicName();
-                    }
-
-                    @Override
-                    public Method fromString(String string) {
-                        return null;
-                    }
-                };
-            }
-
-            public static Method getMethodByID(int id) {
-                try {
-                    ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_methods WHERE id = " + id).executeQuery();
-                    if (res.next()) {
-                        return new Method(res.getInt(1), res.getString(2), res.getString(3));
-                    }
-                } catch (Exception ex) {
-                    Logger.error(null, ex, Method.class.getName() + ".getMethodByID()");
-                }
-                return null;
-            }
-
-            public static ArrayList<Method> getListOfMethods() {
-                ArrayList<Method> methods = new ArrayList<>();
-                try {
-                    ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_methods").executeQuery();
-                    while (res.next()) {
-                        methods.add(new Method(res.getInt(1), res.getString(2), res.getString(3)));
-                    }
-                } catch (Exception ex) {
-                    Logger.error(null, ex, Method.class.getName() + ".getListOfMethods()");
-                }
-                return methods;
-            }
-
-            @Override
-            public boolean equals(Object obj) {
-                if (obj instanceof Method) {
-                    return this.getId() == ((Method) obj).getId();
-                }
-                return false;
-            }
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public String getArabicName() {
-                return arabicName;
-            }
-
-            public void setArabicName(String arabicName) {
-                this.arabicName = arabicName;
-            }
-
-            public String getEnglishName() {
-                return englishName;
-            }
-
-            public void setEnglishName(String englishName) {
-                this.englishName = englishName;
-            }
-
-            @Override
-            public String toString() {
-                return "Method{" +
-                        "id=" + id +
-                        ", arabicName='" + arabicName + '\'' +
-                        ", englishName='" + englishName + '\'' +
-                        '}';
-            }
-        }
-    }
 }

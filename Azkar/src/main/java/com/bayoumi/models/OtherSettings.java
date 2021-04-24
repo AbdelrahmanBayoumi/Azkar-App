@@ -38,7 +38,6 @@ public class OtherSettings {
                 hijriOffset = res.getInt(4);
                 minimized = res.getInt(5) == 1;
             }
-            System.out.println(this);
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }

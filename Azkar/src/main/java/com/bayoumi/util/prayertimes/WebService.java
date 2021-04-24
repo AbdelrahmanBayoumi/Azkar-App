@@ -1,5 +1,6 @@
 package com.bayoumi.util.prayertimes;
 
+import com.bayoumi.models.PrayerTimeSettings;
 import com.bayoumi.models.PrayerTimes;
 import com.bayoumi.util.Query;
 import com.bayoumi.util.time.Utilities;
@@ -22,7 +23,7 @@ public class WebService {
      * @return PrayerTimes for Today in (Gregorian Calendar)
      */
     public static PrayerTimes getPrayerTimesToday() {
-        PrayerTimes.PrayerTimeSettings prayerTimeSettings = new PrayerTimes.PrayerTimeSettings();
+        PrayerTimeSettings prayerTimeSettings = new PrayerTimeSettings();
         try {
             JSONObject jsonRoot = getJsonResponse("http://api.aladhan.com/v1/timingsByCity"
                     , new Query("country", prayerTimeSettings.getCountry())
@@ -66,7 +67,7 @@ public class WebService {
     public static ArrayList<PrayerTimes> getPrayerTimesMonth(LocalDate localDate) {
         ArrayList<PrayerTimes> prayerTimes = new ArrayList<>();
         try {
-            PrayerTimes.PrayerTimeSettings prayerTimeSettings = new PrayerTimes.PrayerTimeSettings();
+            PrayerTimeSettings prayerTimeSettings = new PrayerTimeSettings();
             System.out.println("prayerTimeSettings: "+ prayerTimeSettings);
             if(!prayerTimeSettings.hasLocation()){
                 return prayerTimes;
@@ -96,7 +97,11 @@ public class WebService {
                                     .build());
                         }
                     }
+                }else{
+                    System.out.println("Code Not equal 200");
                 }
+            }else{
+                System.out.println("has no code obj");
             }
         } catch (UnirestException e) {
             e.printStackTrace();

@@ -108,21 +108,23 @@ public class SingleInstance {
         System.exit(0);
     }
 
-    private void openCurrentStage() {
-        if (currentStage == null) {
-            System.out.println("null");
-            System.exit(0);
-        } else if (currentStage.isIconified()) {
-            System.out.println("isIconified");
-            currentStage.setIconified(false);
-        } else if (!currentStage.isShowing()) {
-            System.out.println("not isShowing");
-            currentStage.show();
-            currentStage.toFront();
-        } else {
-            System.out.println("setAlwaysOnTop");
-            currentStage.setAlwaysOnTop(true);
-            currentStage.setAlwaysOnTop(false);
-        }
+    public void openCurrentStage() {
+        Platform.runLater(() -> {
+            if (currentStage == null) {
+                System.out.println("null");
+                System.exit(0);
+            } else if (currentStage.isIconified()) {
+                System.out.println("isIconified");
+                currentStage.setIconified(false);
+            } else if (!currentStage.isShowing()) {
+                System.out.println("not isShowing");
+                currentStage.show();
+                currentStage.toFront();
+            } else {
+                System.out.println("setAlwaysOnTop");
+                currentStage.setAlwaysOnTop(true);
+                currentStage.setAlwaysOnTop(false);
+            }
+        });
     }
 }

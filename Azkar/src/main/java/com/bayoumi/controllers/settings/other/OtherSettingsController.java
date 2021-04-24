@@ -6,7 +6,6 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.time.HijriDate;
-import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -97,7 +96,8 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.showAndWait();
+            stage.show();
+            ((Stage) version.getScene().getWindow()).close();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openFeedback()");
         }

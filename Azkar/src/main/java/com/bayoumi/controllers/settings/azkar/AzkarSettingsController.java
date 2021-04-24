@@ -273,7 +273,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
                 Notification.createControlsFX(
                         AbsoluteZekr.absoluteZekrObservableList.get(
                                 new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                        new Image("/com/bayoumi/images/Kaaba.png"), null);
+                        new Image("/com/bayoumi/images/Kaaba.png"), null,10);
             } catch (Exception ex) {
                 Logger.error("createControlsFX", ex, getClass().getName() + ".runLater => createControlsFX()");
                 ex.printStackTrace();

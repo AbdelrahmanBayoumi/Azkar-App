@@ -1,18 +1,17 @@
 package com.bayoumi.controllers.home;
 
+import com.batoulapps.adhan.PrayerTimes;
 import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
-import com.bayoumi.controllers.prayertimes.PrayerTimesController;
 import com.bayoumi.models.*;
 import com.bayoumi.util.EditablePeriodTimerTask;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.notfication.Notification;
-import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
-import com.bayoumi.util.prayertimes.PrayerTimesValidation;
+import com.bayoumi.util.prayertimes.local.PrayerTimesUtil;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.time.HijriDate;
+import com.bayoumi.util.time.Utilities;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.Animation;
@@ -32,6 +31,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.Random;
@@ -112,31 +112,21 @@ public class HomeController implements Initializable {
 
     private void initReminders() {
         System.out.println("initReminders() ... ");
-
         AzkarReminderService.clearAllTasks();
-        if (PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == 1) {
-            Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
-            Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
-            PrayerTimes prayerTimesForToday = PrayerTimesDBManager.getPrayerTimesForToday();
-            if (prayerTimesForToday.getPrayerTimeSettings().isSummerTiming()) {
-                prayerTimesForToday.enableSummerTime();
-            }
-            if (azkarSettings.getMorningAzkarOffset() != 0) {
-                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getFajr()).plusMinutes(azkarSettings.getMorningAzkarOffset()).toString(), "أذكار الصباح", morningImage, this::goToMorningAzkar);
-            }
-            if (azkarSettings.getNightAzkarOffset() != 0) {
-                AzkarReminderService.create(LocalTime.parse(prayerTimesForToday.getAsr()).plusMinutes(azkarSettings.getNightAzkarOffset()).toString(), "أذكار المساء", nightImage,this::goToNightAzkar);
-            }
-
-            // for testing
-//            AzkarReminderService.create(LocalTime.of(16,53).toString(), "أذكار المساء", nightImage,this::goToNightAzkar);
-        } else {
-            PrayerTimesValidation.PRAYERTIMES_STATUS.addListener((observable, oldValue, newValue) -> {
-                if (newValue.intValue() == 1) {
-                    initReminders();
-                }
-            });
+        Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
+        Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
+        PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(new PrayerTimeSettings());
+        if (azkarSettings.getMorningAzkarOffset() != 0) { // 60000
+            prayerTimesForToday.fajr.setTime(prayerTimesForToday.fajr.getTime() + (azkarSettings.getMorningAzkarOffset() * 60000));
+            AzkarReminderService.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "أذكار الصباح", morningImage, this::goToMorningAzkar);
         }
+        if (azkarSettings.getNightAzkarOffset() != 0) {
+            prayerTimesForToday.asr.setTime(prayerTimesForToday.asr.getTime() + (azkarSettings.getNightAzkarOffset() * 60000));
+            AzkarReminderService.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.asr), "أذكار المساء", nightImage, this::goToNightAzkar);
+        }
+
+        // for testing
+        AzkarReminderService.create(LocalTime.of(0,22).toString(), "أذكار المساء", nightImage,this::goToNightAzkar);
     }
 
     private void initAzkarThread() {
@@ -147,16 +137,11 @@ public class HomeController implements Initializable {
             if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
                 return;
             }
-            /*Platform.runLater(()
-                    -> Notification.create(
-                    AbsoluteZekr.absoluteZekrObservableList.get(
-                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                    null));*/
             Platform.runLater(()
                     -> Notification.createControlsFX(
                     AbsoluteZekr.absoluteZekrObservableList.get(
                             new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                    null, null));
+                    null, null,10));
 
         },
                 this::getPeriod);
@@ -245,7 +230,6 @@ public class HomeController implements Initializable {
             return azkarSettings.getRearPeriod() * 60000L;
         }
         return 300000L;
-
         /*
         if (currentFrequency.equals(highFrequency)) {
             return 1000L;
@@ -322,9 +306,7 @@ public class HomeController implements Initializable {
     private void goToPrayerTimes() {
         try {
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/prayertimes/PrayerTimes.fxml"));
-            stage.setScene(new Scene(loader.load()));
-            ((PrayerTimesController) loader.getController()).homeController = this;
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/prayertimes/PrayerTimes.fxml"))));
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);

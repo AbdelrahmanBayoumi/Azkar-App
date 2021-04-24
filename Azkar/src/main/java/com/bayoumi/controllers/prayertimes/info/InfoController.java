@@ -1,6 +1,6 @@
 package com.bayoumi.controllers.prayertimes.info;
 
-import com.bayoumi.models.PrayerTimes;
+import com.bayoumi.models.PrayerTimeSettings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -14,7 +14,7 @@ public class InfoController {
     @FXML
     private Label asrJuristic;
 
-    public void setData(PrayerTimes.PrayerTimeSettings prayerTimeSettings) {
+    public void setData(PrayerTimeSettings prayerTimeSettings) {
         country.setText(prayerTimeSettings.getCountry());
         city.setText(prayerTimeSettings.getCity());
         calcMethod.setText(prayerTimeSettings.getMethod().getArabicName());

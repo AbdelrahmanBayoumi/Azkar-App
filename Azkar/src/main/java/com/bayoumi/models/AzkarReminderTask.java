@@ -20,6 +20,6 @@ public class AzkarReminderTask extends TimerTask {
 
     @Override
     public void run() {
-        Platform.runLater(() -> Notification.createControlsFX(text, image,callback));
+        Platform.runLater(() -> Notification.createControlsFX(text, image,callback,30));
     }
 }

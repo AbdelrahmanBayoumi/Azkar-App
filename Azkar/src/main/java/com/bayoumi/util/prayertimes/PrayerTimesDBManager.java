@@ -66,7 +66,7 @@ public class PrayerTimesDBManager {
      * @param prayerTimes list to be inserted in Database
      * @return true if insertion success, false if any Exception happens
      */
-    public static boolean insertPrayerTimesData(ArrayList<PrayerTimes> prayerTimes) {
+    public static synchronized boolean insertPrayerTimesData(ArrayList<PrayerTimes> prayerTimes) {
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             for (PrayerTimes prayerTime : prayerTimes) {

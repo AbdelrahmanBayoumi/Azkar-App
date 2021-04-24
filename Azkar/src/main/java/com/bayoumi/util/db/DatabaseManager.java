@@ -3,6 +3,7 @@ package com.bayoumi.util.db;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.install4j.api.launcher.ApplicationLauncher;
 import org.flywaydb.core.Flyway;
 
 import java.sql.*;
@@ -30,62 +31,9 @@ public class DatabaseManager {
                     .baselineOnMigrate(true)
                     .load()
                     .migrate();
-
             if (!connectToDatabase()) {
                 throw new Exception("Cannot init DatabaseManager");
             }
-
-            /*
-            // create tables azkar_settings
-            if (!createTable("CREATE TABLE IF NOT EXISTS azkar_settings ( " +
-                    "morning_reminder TEXT NOT NULL DEFAULT 'لا تذكير', " +
-                    "night_reminder TEXT NOT NULL DEFAULT 'لا تذكير'," +
-                    "audio_name TEXT NOT NULL DEFAULT 'بدون صوت'," +
-                    "high_period INTEGER NOT NULL DEFAULT 10, " +
-                    "mid_period INTEGER NOT NULL DEFAULT 15, " +
-                    "low_period INTEGER NOT NULL DEFAULT 30, " +
-                    "rear_period INTEGER NOT NULL DEFAULT 45," +
-                    "stop_azkar INTEGER NOT NULL DEFAULT 0," +
-                    "selected_period TEXT DEFAULT 'عالي'," +
-                    "volume INTEGER NOT NULL DEFAULT 50);") ||
-                    !insertDefault("azkar_settings")) {
-                throw new Exception("ERROR in CREATE azkar_settings TABLE");
-            }
-            if (!createTable("CREATE TABLE IF NOT EXISTS other_settings (" +
-                    "language TEXT NOT NULL DEFAULT 'عربي - Arabic', " +
-                    "enable_darkmode INTEGER NOT NULL DEFAULT 0" +
-                    ", enable24 INTEGER NOT NULL DEFAULT 0" +
-                    ", hijri_offset INTEGER NOT NULL DEFAULT 0" +
-                    ", minimized INTEGER NOT NULL DEFAULT 0 ); ") ||
-                    !insertDefault("other_settings")) {
-                throw new Exception("ERROR in CREATE other_settings TABLE");
-            }
-            if (!createTable("CREATE TABLE IF NOT EXISTS prayertimes_settings (" +
-                    "country TEXT NOT NULL DEFAULT 'Egypt', " +
-                    "city TEXT NOT NULL DEFAULT 'Alexandria', " +
-                    "method INTEGER NOT NULL DEFAULT 5, " +
-                    "asr_juristic INTEGER NOT NULL DEFAULT 0, " +
-                    "summer_timing INTEGER NOT NULL DEFAULT 0 ); " +
-                    "INSERT INTO prayertimes_settings DEFAULT VALUES;") ||
-                    !insertDefault("prayertimes_settings")) {
-                throw new Exception("ERROR in CREATE prayertimes_settings TABLE");
-            }
-            if (!createTable("CREATE TABLE IF NOT EXISTS prayertimes ( " +
-                    "date TEXT NOT NULL UNIQUE," +
-                    "fajr TEXT NOT NULL ," +
-                    "sunrise TEXT NOT NULL ," +
-                    "dhuhr TEXT NOT NULL ," +
-                    "asr TEXT NOT NULL ," +
-                    "maghrib TEXT NOT NULL ," +
-                    "isha TEXT NOT NULL );")) {
-                throw new Exception("ERROR in CREATE prayertimes TABLE");
-            }
-            if (!createTable("CREATE TABLE IF NOT EXISTS program_characteristics ( " +
-                    "version TEXT NOT NULL DEFAULT 0 );") ||
-                    !insertDefault("program_characteristics")) {
-                throw new Exception("ERROR in CREATE program_characteristics TABLE");
-            }
-             */
             return true;
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");

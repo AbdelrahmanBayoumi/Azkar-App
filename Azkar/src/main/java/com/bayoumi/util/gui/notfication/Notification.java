@@ -85,7 +85,7 @@ public class Notification {
         }
     }
 
-    public static void createControlsFX(String msg, Image image, Runnable callback) {
+    public static void createControlsFX(String msg, Image image, Runnable callback, double duration) {
         try {
             FXMLLoader loader = new FXMLLoader(Notification.class.getResource("/com/bayoumi/views/notification/NotificationsControlsFX.fxml"));
             Parent notificationView = loader.load();
@@ -93,7 +93,7 @@ public class Notification {
             Platform.runLater(() -> Notifications.create()
                     .graphic(notificationView)
                     .hideCloseButton()
-                    .hideAfter(Duration.seconds(10))
+                    .hideAfter(Duration.seconds(duration))
                     .onAction(event -> {
                         System.out.println("Closing Notification ..."); // TODO : Delete println
                         if (MEDIA_PLAYER != null) {

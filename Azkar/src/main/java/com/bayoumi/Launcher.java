@@ -8,9 +8,9 @@ import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.db.LocationsDBManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
-import com.bayoumi.util.prayertimes.PrayerTimesValidation;
 import com.bayoumi.util.validation.SingleInstance;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
@@ -73,7 +73,9 @@ public class Launcher extends Application {
             if (!databaseManager.init()) {
                 workFine.setValue(false);
             }
-            // validate version
+            incrementPreloader();
+
+            LocationsDBManager.getInstance();
             incrementPreloader();
 
             // load  Homepage FXML
@@ -82,13 +84,6 @@ public class Launcher extends Application {
             scene.getStylesheets().add("/com/bayoumi/css/style.css");
             homeController = loader.getController();
             incrementPreloader();
-
-            // Get Prayer Times
-            new PrayerTimesValidation().start();
-
-
-//            Thread.sleep(500);
-//            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             ex.printStackTrace();
@@ -134,6 +129,8 @@ public class Launcher extends Application {
                 ex.printStackTrace();
             }
         }
+        com.install4j.api.launcher.StartupNotification.registerStartupListener(s ->
+                SingleInstance.getInstance().openCurrentStage());
     }
 
 

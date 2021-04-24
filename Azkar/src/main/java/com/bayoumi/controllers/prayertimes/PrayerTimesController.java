@@ -1,17 +1,15 @@
 package com.bayoumi.controllers.prayertimes;
 
+import com.batoulapps.adhan.PrayerTimes;
 import com.bayoumi.Launcher;
-import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.controllers.prayertimes.info.InfoController;
 import com.bayoumi.models.OtherSettings;
-import com.bayoumi.models.PrayerTimes;
+import com.bayoumi.models.PrayerTimeSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.BuilderUI;
-import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
-import com.bayoumi.util.prayertimes.PrayerTimesValidation;
+import com.bayoumi.util.prayertimes.local.PrayerTimesUtil;
 import com.jfoenix.controls.JFXDialog;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,12 +19,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class PrayerTimesController implements Initializable {
 
-    public HomeController homeController;
-    private PrayerTimes prayerTimes;
     @FXML
     private StackPane stackPane;
     @FXML
@@ -65,79 +64,50 @@ public class PrayerTimesController implements Initializable {
     private Label ishaTime;
     @FXML
     private VBox loadingBox;
-    private boolean isFetched = false;
-    private ChangeListener<Number> changeListener;
+    private PrayerTimeSettings prayerTimeSettings;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initChangeListener();
-        loadingBox.visibleProperty().bind(PrayerTimesValidation.PRAYERTIMES_STATUS.isNotEqualTo(1));
-        PrayerTimesValidation.PRAYERTIMES_STATUS.addListener(changeListener);
-
-        if (!isFetched && PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == 1) {
-            initUI();
-            isFetched = true;
-        } else if (!isFetched && PrayerTimesValidation.PRAYERTIMES_STATUS.getValue() == -1) {
-            Logger.error(null, new Exception("ERROR in fetching prayertimes"), getClass().getName() + ".initialize()");
-            Platform.runLater(() -> {
-                if (BuilderUI.showConfirmAlert(false, "حدث خطأ في مواقيت الصلاة..." + "\n" + "هل تريد الذهاب لإعدادات المدينة؟")) {
-                    ((Stage) loadingBox.getScene().getWindow()).close();
-                    homeController.settingsBTN.fire();
-                } else {
-                    ((Stage) loadingBox.getScene().getWindow()).close();
-                }
-            });
-        }
-    }
-
-    private void initChangeListener() {
-        changeListener = (observable, oldValue, newValue) -> {
-            System.out.println(observable);
-            if (!isFetched && newValue.intValue() == 1) {
-                initUI();
-                isFetched = true;
-            }
-        };
-    }
-
-    private void initUI() {
         new Thread(() -> {
-            prayerTimes = PrayerTimesDBManager.getPrayerTimesForToday();
-            System.out.println("fetched from DB: " + prayerTimes);
-            if(prayerTimes.getLocalDate() == null || prayerTimes.getFajr().equals("--:--")){
-                PrayerTimesValidation.PRAYERTIMES_STATUS.set(0);
+            try {
+                prayerTimeSettings = new PrayerTimeSettings();
+                PrayerTimes prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(prayerTimeSettings);
+                Platform.runLater(() -> {
+                    OtherSettings otherSettings = new OtherSettings();
+                    SimpleDateFormat formatter;
+                    if (otherSettings.isEnable24Format()) {
+                        formatter = new SimpleDateFormat("HH:mm", new Locale(otherSettings.getLanguageLocal()));
+                    } else {
+                        formatter = new SimpleDateFormat("hh:mm a", new Locale(otherSettings.getLanguageLocal()));
+                    }
+                    formatter.setTimeZone(TimeZone.getDefault());
+
+                    fajrTime.setText(formatter.format(prayerTimesToday.fajr));
+                    sunriseTime.setText(formatter.format(prayerTimesToday.sunrise));
+                    dhuhrTime.setText(formatter.format(prayerTimesToday.dhuhr));
+                    asrTime.setText(formatter.format(prayerTimesToday.asr));
+                    maghribTime.setText(formatter.format(prayerTimesToday.maghrib));
+                    ishaTime.setText(formatter.format(prayerTimesToday.isha));
+
+                    day.textProperty().bind(Launcher.homeController.day.textProperty());
+                    hijriDate.textProperty().bind(Launcher.homeController.hijriDate.textProperty());
+                    gregorianDate.textProperty().bind(Launcher.homeController.gregorianDate.textProperty());
+                    time.textProperty().bind(Launcher.homeController.timeLabel.textProperty());
+
+                    loadingBox.setVisible(false);
+                });
+            } catch (Exception ex) {
+                Logger.error("ERROR in fetching prayertimes", ex, getClass().getName() + ".initialize()");
                 Platform.runLater(() -> {
                     if (BuilderUI.showConfirmAlert(false, "حدث خطأ في مواقيت الصلاة..." + "\n" + "هل تريد الذهاب لإعدادات المدينة؟")) {
                         ((Stage) loadingBox.getScene().getWindow()).close();
-                        homeController.settingsBTN.fire();
+                        Launcher.homeController.settingsBTN.fire();
                     } else {
                         ((Stage) loadingBox.getScene().getWindow()).close();
                     }
                 });
-                return;
             }
-            Platform.runLater(() -> {
-                if (prayerTimes.getPrayerTimeSettings().isSummerTiming()) {
-                    prayerTimes.enableSummerTime();
-                }
-
-                OtherSettings otherSettings = new OtherSettings();
-                if (!otherSettings.isEnable24Format()) {
-                    prayerTimes.formatTime24To12(otherSettings.getLanguageLocal());
-                }
-                fajrTime.setText(prayerTimes.getFajr());
-                sunriseTime.setText(prayerTimes.getSunrise());
-                dhuhrTime.setText(prayerTimes.getDhuhr());
-                asrTime.setText(prayerTimes.getAsr());
-                maghribTime.setText(prayerTimes.getMaghrib());
-                ishaTime.setText(prayerTimes.getIsha());
-
-                day.textProperty().bind(Launcher.homeController.day.textProperty());
-                hijriDate.textProperty().bind(Launcher.homeController.hijriDate.textProperty());
-                gregorianDate.textProperty().bind(Launcher.homeController.gregorianDate.textProperty());
-                time.textProperty().bind(Launcher.homeController.timeLabel.textProperty());
-                PrayerTimesValidation.PRAYERTIMES_STATUS.removeListener(changeListener);
-            });
         }).start();
     }
 
@@ -147,7 +117,7 @@ public class PrayerTimesController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/prayertimes/info/Info.fxml"));
             JFXDialog dialog = new JFXDialog(stackPane, loader.load(), JFXDialog.DialogTransition.TOP);
             InfoController infoController = loader.getController();
-            infoController.setData(prayerTimes.getPrayerTimeSettings());
+            infoController.setData(prayerTimeSettings);
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();

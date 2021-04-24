@@ -1,35 +1,38 @@
 package com.bayoumi.controllers.settings.prayertimes;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
-import com.bayoumi.models.PrayerTimes;
-import com.bayoumi.util.Logger;
-import com.bayoumi.util.prayertimes.PrayerTimesDBManager;
-import com.bayoumi.util.prayertimes.PrayerTimesValidation;
-import com.jfoenix.controls.JFXButton;
+import com.bayoumi.models.City;
+import com.bayoumi.models.Country;
+import com.bayoumi.models.PrayerTimeSettings;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleGroup;
+import javafx.util.StringConverter;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class PrayerTimeSettingsController implements Initializable, SettingsInterface {
-    private PrayerTimes.PrayerTimeSettings prayerTimeSettings;
+    private PrayerTimeSettings prayerTimeSettings;
+
     @FXML
-    private JFXTextField country;
+    private JFXComboBox<Country> countries;
     @FXML
-    private JFXTextField city;
+    private JFXComboBox<City> cities;
     @FXML
-    private ComboBox<PrayerTimes.PrayerTimeSettings.Method> methodComboBox;
+    private ComboBox<PrayerTimeSettings.Method> methodComboBox;
     @FXML
     private ToggleGroup asrJuristic;
     @FXML
@@ -39,62 +42,131 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
     @FXML
     private JFXCheckBox summerTiming;
     @FXML
-    private Label statusLabel;
+    private JFXTextField longitude;
     @FXML
-    private JFXButton reloadButton;
-    private ChangeListener<Number> changeListener;
-
-    private void initChangeListener() {
-        changeListener = (observable, oldValue, newValue) -> {
-            System.out.println(observable);
-            Platform.runLater(() -> changeStatusLabel(newValue.intValue()));
-        };
-    }
-
-    private void changeStatusLabel(int i) {
-        if (i == 1) {
-            statusLabel.setText("تم تحميل مواقيت الصلاة بنجاح");
-            statusLabel.setStyle("-fx-text-fill: green;");
-        } else if (i == 0) {
-            statusLabel.setText("جاري تحميل مواقيت الصلاة..");
-            statusLabel.setStyle("-fx-text-fill: red;");
-        } else {
-            statusLabel.setText("خطأ في تحميل مواقيت الصلاة!");
-            statusLabel.setStyle("-fx-text-fill: red;");
-        }
-    }
+    private JFXTextField latitude;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initChangeListener();
-        PrayerTimesValidation.PRAYERTIMES_STATUS.addListener(changeListener);
-        changeStatusLabel(PrayerTimesValidation.PRAYERTIMES_STATUS.intValue());
+        initDoubleValidation();
+        prayerTimeSettings = new PrayerTimeSettings();
+        initCountries();
+        initCities();
         initPopOver();
-        prayerTimeSettings = new PrayerTimes.PrayerTimeSettings();
-        country.setText(prayerTimeSettings.getCountry());
-        city.setText(prayerTimeSettings.getCity());
-        methodComboBox.setItems(FXCollections.observableArrayList(
-                PrayerTimes.PrayerTimeSettings.Method.getListOfMethods()
-        ));
-        methodComboBox.setConverter(PrayerTimes.PrayerTimeSettings.Method.getStringConverter());
+        // init Methods
+        methodComboBox.setItems(FXCollections.observableArrayList(PrayerTimeSettings.Method.getListOfMethods()));
+        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter());
         methodComboBox.setValue(prayerTimeSettings.getMethod());
-
+        // init Asr Juristic
         if (prayerTimeSettings.getAsrJuristic() == 1) {
             hanafiRadioButton.setSelected(true);
         } else {
             standardJuristic.setSelected(true);
         }
-
         summerTiming.setSelected(prayerTimeSettings.isSummerTiming());
+    }
 
-        reloadButton.disableProperty().bind(PrayerTimesValidation.PRAYERTIMES_STATUS.isEqualTo(0));
-//        reloadButton.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
-//            if (oldScene == null && newScene != null) {
-//                newScene.getWindow().setOnCloseRequest(event -> {
-//
-//                });
-//            }
-//        });
+    private void initCountries() {
+        // getAllData
+        Country.getAllData().forEach(country -> countries.getItems().add(country));
+        // StringConverter
+        countries.setConverter(new StringConverter<Country>() {
+            @Override
+            public String toString(Country object) {
+                return object != null ? object.getArabicName() : "";
+            }
+
+            @Override
+            public Country fromString(String string) {
+                return countries.getItems().stream().filter(object ->
+                        object.getArabicName().equals(string)).findFirst().orElse(null);
+            }
+        });
+        countries.setOnAction(this::changeCountry);
+        if (!countries.getItems().isEmpty()) {
+            countries.setValue(countries.getItems().get(0));
+        }
+        Country countryFormCode = Country.getCountryFormCode(prayerTimeSettings.getCountry());
+        if (countryFormCode != null) {
+            countries.setValue(countryFormCode);
+        }
+    }
+
+    private void changeCountry(ActionEvent event) {
+        cities.getItems().clear();
+        cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+        if (!cities.getItems().isEmpty()) {
+            cities.setValue(cities.getItems().get(0));
+        }
+    }
+
+    private void initCities() {
+        cities.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            if (newValue != null) {
+                latitude.setText(String.valueOf(cities.getValue().getLatitude()));
+                longitude.setText(String.valueOf(cities.getValue().getLongitude()));
+            }
+        });
+        if (!countries.getItems().isEmpty()) {
+            cities.getItems().clear();
+            if (countries.getValue() != null) {
+                cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+            }
+            if (!cities.getItems().isEmpty()) {
+                cities.setValue(cities.getItems().get(0));
+
+            }
+        }
+        cities.setConverter(new StringConverter<City>() {
+            @Override
+            public String toString(City object) {
+                if (object.getArabicName() == null || object.getArabicName().trim().equals("")) {
+                    return object.getEnglishName();
+                }
+                return object.getArabicName();
+            }
+
+            @Override
+            public City fromString(String string) {
+                return null;
+            }
+        });
+        City cityFromEngName = City.getCityFromEngName(prayerTimeSettings.getCity(), prayerTimeSettings.getCountry());
+        if (cityFromEngName != null) {
+            cities.setValue(cityFromEngName);
+            cities.getSelectionModel().select(cityFromEngName);
+        }
+    }
+
+    private void initDoubleValidation() {
+        Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            String text = c.getControlNewText();
+            if (validEditingState.matcher(text).matches()) {
+                return c;
+            } else {
+                return null;
+            }
+        };
+
+        StringConverter<Double> converter = new StringConverter<Double>() {
+
+            @Override
+            public Double fromString(String s) {
+                if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
+                    return 0.0;
+                } else {
+                    return Double.valueOf(s);
+                }
+            }
+
+            @Override
+            public String toString(Double d) {
+                return d.toString();
+            }
+        };
+        latitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
+        longitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
     }
 
     private void initPopOver() {
@@ -115,27 +187,15 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
 
     @Override
     public void saveToDB() {
-        PrayerTimesValidation.PRAYERTIMES_STATUS.removeListener(changeListener);
-
-        prayerTimeSettings.setCountry(country.getText());
-        prayerTimeSettings.setCity(city.getText());
+        prayerTimeSettings.setCountry(countries.getValue().getCode());
+        prayerTimeSettings.setCity(cities.getValue().getEnglishName());
         prayerTimeSettings.setMethod(methodComboBox.getValue());
         prayerTimeSettings.setAsrJuristic(hanafiRadioButton.isSelected() ? 1 : 0);
         prayerTimeSettings.setSummerTiming(summerTiming.isSelected());
+        prayerTimeSettings.setLatitude(Double.parseDouble(latitude.getText()));
+        prayerTimeSettings.setLongitude(Double.parseDouble(longitude.getText()));
         prayerTimeSettings.save();
     }
 
-
-    @FXML
-    private void reload() {
-        new Thread(() -> {
-            try {
-                PrayerTimesDBManager.deleteAll();
-                new PrayerTimesValidation().start();
-            } catch (Exception ex) {
-                Logger.error(null, ex, getClass().getName() + ".reload()");
-            }
-        }).start();
-    }
 
 }

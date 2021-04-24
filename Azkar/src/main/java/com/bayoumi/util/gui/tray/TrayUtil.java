@@ -27,10 +27,10 @@ public class TrayUtil {
         javax.swing.SwingUtilities.invokeLater(this::addAppToTray);
         stage.setOnCloseRequest(event -> {
             System.out.println(event);
-            if(event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)){
+            if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
                 this.stage.hide();
                 event.consume();
-            }else{
+            } else {
                 Logger.info("TERMINATED !!"); // TODO does not work, remove if stmt
             }
         });
