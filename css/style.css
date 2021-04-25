@@ -187,3 +187,7 @@ footer {
 .required-star {
   color: red;
 }
+
+.feature-img{
+  max-width: 800px;
+}
