@@ -94,7 +94,6 @@ public class AzkarSettings {
                 this.selectedPeriod = res.getString(9);
                 this.volume = res.getInt(10);
             }
-            System.out.println(this);
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");

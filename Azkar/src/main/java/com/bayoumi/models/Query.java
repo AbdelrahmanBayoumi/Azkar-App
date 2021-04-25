@@ -1,8 +1,8 @@
-package com.bayoumi.util;
+package com.bayoumi.models;
 
 public class Query {
-    private String key;
-    private String value;
+    private final String key;
+    private final String value;
 
     public Query(String key, String value) {
         this.key = key;
@@ -13,15 +13,7 @@ public class Query {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public String getValue() {
         return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }

@@ -7,7 +7,7 @@ import com.bayoumi.models.OtherSettings;
 import com.bayoumi.models.PrayerTimeSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.BuilderUI;
-import com.bayoumi.util.prayertimes.local.PrayerTimesUtil;
+import com.bayoumi.util.prayertimes.PrayerTimesUtil;
 import com.jfoenix.controls.JFXDialog;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

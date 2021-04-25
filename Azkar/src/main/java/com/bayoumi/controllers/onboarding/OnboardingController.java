@@ -1,9 +1,15 @@
 package com.bayoumi.controllers.onboarding;
 
 import com.bayoumi.models.*;
+import com.bayoumi.util.Logger;
+import com.bayoumi.util.gui.ComboBoxAutoComplete;
+import com.bayoumi.util.web.IpChecker;
+import com.bayoumi.util.web.LocationService;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,10 +42,18 @@ public class OnboardingController implements Initializable {
     private JFXCheckBox format24;
     @FXML
     private JFXCheckBox minimizeAtStart;
+    @FXML
+    private JFXButton autoLocationButton;
+    @FXML
+    private Label statusLabel;
     private PrayerTimeSettings prayerTimeSettings;
+    private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
+    private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
+        cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initPopOver();
         prayerTimeSettings = new PrayerTimeSettings();
         initCountries();
@@ -55,6 +69,7 @@ public class OnboardingController implements Initializable {
         } else {
             standardJuristic.setSelected(true);
         }
+        autoLocationButton.fire();
     }
 
     @FXML
@@ -81,7 +96,8 @@ public class OnboardingController implements Initializable {
 
     private void initCountries() {
         // getAllData
-        Country.getAllData().forEach(country -> countries.getItems().add(country));
+        countries.getItems().addAll(Country.getAllData());
+        countryComboBoxAutoComplete.setItems(countries.getItems());
         // StringConverter
         countries.setConverter(new StringConverter<Country>() {
             @Override
@@ -108,16 +124,24 @@ public class OnboardingController implements Initializable {
     private void changeCountry(ActionEvent event) {
         cities.getItems().clear();
         cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+        cityComboBoxAutoComplete.setItems(cities.getItems());
         if (!cities.getItems().isEmpty()) {
             cities.setValue(cities.getItems().get(0));
         }
+        statusLabel.setVisible(false);
     }
 
     private void initCities() {
+        cities.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            if (newValue != null) {
+                statusLabel.setVisible(false);
+            }
+        });
         if (!countries.getItems().isEmpty()) {
             cities.getItems().clear();
             if (countries.getValue() != null) {
                 cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+                cityComboBoxAutoComplete.setItems(cities.getItems());
             }
             if (!cities.getItems().isEmpty()) {
                 cities.setValue(cities.getItems().get(0));
@@ -162,4 +186,50 @@ public class OnboardingController implements Initializable {
         });
     }
 
+    @FXML
+    private void getAutoLocation() {
+        countries.setDisable(true);
+        cities.setDisable(true);
+        autoLocationButton.setDisable(true);
+        statusLabel.setVisible(true);
+        statusLabel.setText("جاري التحميل...");
+        statusLabel.setStyle("-fx-text-fill: green");
+        new Thread(() -> {
+            try {
+                City city = LocationService.getCity(IpChecker.getIp());
+                if (city != null) {
+                    Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
+                    if (countryFormCode != null) {
+                        Platform.runLater(() -> {
+                            countries.setValue(countryFormCode);
+                        });
+                    } else {
+                        throw new Exception("Error in fetching city!");
+                    }
+                    City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
+                    if (cityFromEngName != null) {
+                        Platform.runLater(() -> {
+                            cities.setValue(cityFromEngName);
+                            cities.getSelectionModel().select(cityFromEngName);
+                        });
+                    } else {
+                        throw new Exception("Error in fetching city!");
+                    }
+                } else {
+                    throw new Exception("Error in fetching city!");
+                }
+                statusLabel.setVisible(false);
+            } catch (Exception ex) {
+                Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
+                Platform.runLater(() -> {
+                    statusLabel.setVisible(true);
+                    statusLabel.setText("خطأ في تحديد الموقع.. برجاء المحاولة مرة أخرى!");
+                    statusLabel.setStyle("-fx-text-fill: red");
+                });
+            }
+            countries.setDisable(false);
+            cities.setDisable(false);
+            autoLocationButton.setDisable(false);
+        }).start();
+    }
 }

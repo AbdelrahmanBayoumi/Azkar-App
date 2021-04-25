@@ -4,10 +4,12 @@ import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.City;
 import com.bayoumi.models.Country;
 import com.bayoumi.models.PrayerTimeSettings;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextField;
+import com.bayoumi.util.Logger;
+import com.bayoumi.util.gui.ComboBoxAutoComplete;
+import com.bayoumi.util.web.IpChecker;
+import com.bayoumi.util.web.LocationService;
+import com.jfoenix.controls.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,9 +47,18 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
     private JFXTextField longitude;
     @FXML
     private JFXTextField latitude;
+    @FXML
+    private JFXButton autoLocationButton;
+    @FXML
+    private Label statusLabel;
+    private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
+    private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        statusLabel.setVisible(false);
+        countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
+        cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initDoubleValidation();
         prayerTimeSettings = new PrayerTimeSettings();
         initCountries();
@@ -68,7 +79,8 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
 
     private void initCountries() {
         // getAllData
-        Country.getAllData().forEach(country -> countries.getItems().add(country));
+        countries.getItems().addAll(Country.getAllData());
+        countryComboBoxAutoComplete.setItems(countries.getItems());
         // StringConverter
         countries.setConverter(new StringConverter<Country>() {
             @Override
@@ -94,10 +106,14 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
 
     private void changeCountry(ActionEvent event) {
         cities.getItems().clear();
-        cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+        if (countries.getValue() != null) {
+            cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+            cityComboBoxAutoComplete.setItems(cities.getItems());
+        }
         if (!cities.getItems().isEmpty()) {
             cities.setValue(cities.getItems().get(0));
         }
+        statusLabel.setVisible(false);
     }
 
     private void initCities() {
@@ -105,16 +121,17 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
             if (newValue != null) {
                 latitude.setText(String.valueOf(cities.getValue().getLatitude()));
                 longitude.setText(String.valueOf(cities.getValue().getLongitude()));
+                statusLabel.setVisible(false);
             }
         });
         if (!countries.getItems().isEmpty()) {
             cities.getItems().clear();
             if (countries.getValue() != null) {
                 cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+                cityComboBoxAutoComplete.setItems(cities.getItems());
             }
             if (!cities.getItems().isEmpty()) {
                 cities.setValue(cities.getItems().get(0));
-
             }
         }
         cities.setConverter(new StringConverter<City>() {
@@ -197,5 +214,56 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         prayerTimeSettings.save();
     }
 
-
+    @FXML
+    private void getAutoLocation() {
+        countries.setDisable(true);
+        cities.setDisable(true);
+        latitude.setDisable(true);
+        longitude.setDisable(true);
+        autoLocationButton.setDisable(true);
+        statusLabel.setVisible(true);
+        statusLabel.setText("جاري التحميل...");
+        statusLabel.setStyle("-fx-text-fill: green");
+        new Thread(() -> {
+            try {
+                City city = LocationService.getCity(IpChecker.getIp());
+                if (city != null) {
+                    Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
+                    if (countryFormCode != null) {
+                        Platform.runLater(() -> {
+                            countries.setValue(countryFormCode);
+                        });
+                    } else {
+                        throw new Exception("Error in fetching city!");
+                    }
+                    City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
+                    if (cityFromEngName != null) {
+                        Platform.runLater(() -> {
+                            cities.setValue(cityFromEngName);
+                            cities.getSelectionModel().select(cityFromEngName);
+                            latitude.setText(String.valueOf(cityFromEngName.getLatitude()));
+                            latitude.setText(String.valueOf(cityFromEngName.getLongitude()));
+                        });
+                    } else {
+                        throw new Exception("Error in fetching city!");
+                    }
+                } else {
+                    throw new Exception("Error in fetching city!");
+                }
+                statusLabel.setVisible(false);
+            } catch (Exception ex) {
+                Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
+                Platform.runLater(() -> {
+                    statusLabel.setVisible(true);
+                    statusLabel.setText("خطأ في تحديد الموقع.. برجاء المحاولة مرة أخرى!");
+                    statusLabel.setStyle("-fx-text-fill: red");
+                });
+            }
+            countries.setDisable(false);
+            cities.setDisable(false);
+            latitude.setDisable(false);
+            longitude.setDisable(false);
+            autoLocationButton.setDisable(false);
+        }).start();
+    }
 }

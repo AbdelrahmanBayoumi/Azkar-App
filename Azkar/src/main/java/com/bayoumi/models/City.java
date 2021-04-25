@@ -52,7 +52,6 @@ public class City {
         } catch (Exception ex) {
             Logger.error(null, ex, City.class.getName() + ".getCitiesInCountry()");
         }
-        System.out.println("cities.size():" + cities.size());
         return cities;
     }
 
@@ -70,6 +69,10 @@ public class City {
             Logger.error(null, ex, City.class.getName() + ".getCityFromEngName()");
         }
         return null;
+    }
+
+    public String getName() {
+        return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
     }
 
     @Override

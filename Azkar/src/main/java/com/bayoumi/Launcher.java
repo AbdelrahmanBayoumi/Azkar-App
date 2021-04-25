@@ -115,7 +115,6 @@ public class Launcher extends Application {
         SingleInstance.getInstance().setCurrentStage(primaryStage);
 
         // show Onboarding stage
-        System.out.println("Onboarding.isFirstTimeOpened: " + Onboarding.isFirstTimeOpened());
         if (Onboarding.isFirstTimeOpened()) {
             try {
                 Stage onboardingStage = new Stage();

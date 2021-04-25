@@ -1,14 +1,15 @@
 package com.bayoumi.controllers.home;
 
-import com.batoulapps.adhan.PrayerTimes;
 import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
-import com.bayoumi.models.*;
-import com.bayoumi.util.EditablePeriodTimerTask;
+import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.AzkarSettings;
+import com.bayoumi.models.OtherSettings;
+import com.bayoumi.models.PrayerTimeSettings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
-import com.bayoumi.util.gui.notfication.Notification;
-import com.bayoumi.util.prayertimes.local.PrayerTimesUtil;
+import com.bayoumi.util.services.azkar.AzkarService;
+import com.bayoumi.util.services.reminders.ReminderService;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.time.Utilities;
@@ -17,13 +18,11 @@ import com.jfoenix.controls.JFXButton;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,14 +30,10 @@ import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Date;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
-
 
     @FXML
     public Label hijriDate;
@@ -50,7 +45,6 @@ public class HomeController implements Initializable {
     public Label timeLabel;
     @FXML
     public JFXButton settingsBTN;
-    private EditablePeriodTimerTask absoluteAzkarTask;
     private OtherSettings otherSettings;
     private AzkarSettings azkarSettings;
     @FXML
@@ -70,20 +64,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Build PopOver look and feel
-        Label label = new Label("يمكن تعديل معدل ظهور الأذكار من الإعدادت");
-        label.setStyle("-fx-padding: 10;-fx-background-color: #E9C46A;-fx-text-fill: #000000;-fx-font-weight: bold;");
-        //Create PopOver and add look and feel
-        PopOver popOver = new PopOver(label);
-        frequencyLabel.setOnMouseEntered(mouseEvent -> {
-            //Show PopOver when mouse enters label
-            popOver.show(frequencyLabel);
-        });
-        popOver.setCloseButtonEnabled(true);
-        frequencyLabel.setOnMouseExited(mouseEvent -> {
-            //Hide PopOver when mouse exits label
-            popOver.hide();
-        });
+        buildPopOver();
 
         otherSettings = new OtherSettings();
         azkarSettings = new AzkarSettings();
@@ -97,98 +78,17 @@ public class HomeController implements Initializable {
         }
 
         if (!azkarSettings.isStopped()) {
-            initAzkarThread();
+            AzkarService.init(this);
         } else {
             periodBox.setDisable(true);
         }
 
         initClock();
-        initReminders();
+        ReminderService.init(azkarSettings);
         Date date = new Date();
         day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
         gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
         hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
-    }
-
-    private void initReminders() {
-        System.out.println("initReminders() ... ");
-        AzkarReminderService.clearAllTasks();
-        Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
-        Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
-        PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(new PrayerTimeSettings());
-        if (azkarSettings.getMorningAzkarOffset() != 0) { // 60000
-            prayerTimesForToday.fajr.setTime(prayerTimesForToday.fajr.getTime() + (azkarSettings.getMorningAzkarOffset() * 60000));
-            AzkarReminderService.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "أذكار الصباح", morningImage, this::goToMorningAzkar);
-        }
-        if (azkarSettings.getNightAzkarOffset() != 0) {
-            prayerTimesForToday.asr.setTime(prayerTimesForToday.asr.getTime() + (azkarSettings.getNightAzkarOffset() * 60000));
-            AzkarReminderService.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.asr), "أذكار المساء", nightImage, this::goToNightAzkar);
-        }
-
-        // for testing
-        AzkarReminderService.create(LocalTime.of(0,22).toString(), "أذكار المساء", nightImage,this::goToNightAzkar);
-    }
-
-    private void initAzkarThread() {
-        setFrequencyLabel("initAzkarThread");
-        absoluteAzkarTask = null;
-        absoluteAzkarTask = new EditablePeriodTimerTask(()
-                -> {
-            if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
-                return;
-            }
-            Platform.runLater(()
-                    -> Notification.createControlsFX(
-                    AbsoluteZekr.absoluteZekrObservableList.get(
-                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                    null, null,10));
-
-        },
-                this::getPeriod);
-        absoluteAzkarTask.updateTimer();
-    }
-
-    private void initClock() {
-        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            Date date = new Date();
-            String timeNow;
-            if (OtherSettings.isUpdated) {
-                otherSettings = new OtherSettings();
-                OtherSettings.isUpdated = false;
-                hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
-            }
-            if (otherSettings.isEnable24Format()) {
-                timeNow = Utilities.getTime24(otherSettings.getLanguageLocal(), date);
-            } else {
-                timeNow = Utilities.getTime(otherSettings.getLanguageLocal(), date);
-            }
-            timeLabel.setText(timeNow);
-
-            // Is it new day? => change Dates and the prayer times
-            if (timeNow.equals("12:00:00 AM") || timeNow.equals("12:00:00 ص") || timeNow.equals("00:00:00")) {
-                System.out.println("NEW DAY ...");
-                day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
-                gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
-                hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
-            }
-
-            if (AzkarSettings.isUpdated) {
-                azkarSettings = new AzkarSettings();
-                AzkarSettings.isUpdated = false;
-                if (absoluteAzkarTask != null) {
-                    absoluteAzkarTask.stopTask();
-                }
-                if (azkarSettings.isStopped()) {
-                    periodBox.setDisable(true);
-                } else {
-                    initAzkarThread();
-                    periodBox.setDisable(false);
-                }
-                initReminders();
-            }
-        }), new KeyFrame(Duration.seconds(1)));
-        clock.setCycleCount(Animation.INDEFINITE);
-        clock.play();
     }
 
     private JFXButton getSelectedButton() {
@@ -204,8 +104,7 @@ public class HomeController implements Initializable {
         return highFrequency;
     }
 
-    private void setFrequencyLabel(String s) {
-        System.out.println("S: " + s);
+    public void setFrequencyLabel() {
         String msg = "ظهور كل" + " ";
         if (currentFrequency.equals(highFrequency)) {
             msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(azkarSettings.getHighPeriod());
@@ -219,7 +118,7 @@ public class HomeController implements Initializable {
         frequencyLabel.setText(msg);
     }
 
-    private Long getPeriod() {
+    public Long getPeriod() {
         if (currentFrequency.equals(highFrequency)) {
             return azkarSettings.getHighPeriod() * 60000L;
         } else if (currentFrequency.equals(midFrequency)) {
@@ -244,13 +143,78 @@ public class HomeController implements Initializable {
         */
     }
 
+    private void buildPopOver() {
+        //Build PopOver look and feel
+        Label label = new Label("يمكن تعديل معدل ظهور الأذكار من الإعدادت");
+        label.setStyle("-fx-padding: 10;-fx-background-color: #E9C46A;-fx-text-fill: #000000;-fx-font-weight: bold;");
+        //Create PopOver and add look and feel
+        PopOver popOver = new PopOver(label);
+        frequencyLabel.setOnMouseEntered(mouseEvent -> {
+            //Show PopOver when mouse enters label
+            popOver.show(frequencyLabel);
+        });
+        popOver.setCloseButtonEnabled(true);
+        frequencyLabel.setOnMouseExited(mouseEvent -> {
+            //Hide PopOver when mouse exits label
+            popOver.hide();
+        });
+    }
+
+    private void initClock() {
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            Date date = new Date();
+            String timeNow;
+            // check if there is a change in Hijri date offset
+            if (OtherSettings.isUpdated) {
+                otherSettings = new OtherSettings();
+                OtherSettings.isUpdated = false;
+                hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
+            }
+            if (otherSettings.isEnable24Format()) {
+                timeNow = Utilities.getTime24(otherSettings.getLanguageLocal(), date);
+            } else {
+                timeNow = Utilities.getTime(otherSettings.getLanguageLocal(), date);
+            }
+            timeLabel.setText(timeNow);
+
+            // Is it new day? => change Dates and the prayer times
+            if (timeNow.equals("12:00:00 AM") || timeNow.equals("12:00:00 ص") || timeNow.equals("00:00:00")) {
+                day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
+                gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
+                hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
+            }
+
+            // check if time periods of Azkar and settings has changed
+            if (AzkarSettings.isUpdated) {
+                azkarSettings = new AzkarSettings();
+                AzkarSettings.isUpdated = false;
+                if (AzkarService.absoluteAzkarTask != null) {
+                    AzkarService.absoluteAzkarTask.stopTask();
+                }
+                if (azkarSettings.isStopped()) {
+                    periodBox.setDisable(true);
+                } else {
+                    AzkarService.init(this);
+                    periodBox.setDisable(false);
+                }
+                ReminderService.init(azkarSettings);
+            }
+            if (PrayerTimeSettings.isUpdated) {
+                ReminderService.init(azkarSettings);
+                PrayerTimeSettings.isUpdated = false;
+            }
+        }), new KeyFrame(Duration.seconds(1)));
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
+    }
+
     @FXML
-    private void goToMorningAzkar() {
+    public void goToMorningAzkar() {
         showTimedAzkar("morning");
     }
 
     @FXML
-    private void goToNightAzkar() {
+    public void goToNightAzkar() {
         showTimedAzkar("night");
     }
 
@@ -296,8 +260,8 @@ public class HomeController implements Initializable {
         currentFrequency = b;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
-        absoluteAzkarTask.updateTimer();
-        setFrequencyLabel("toggleFrequencyBTN");
+        AzkarService.absoluteAzkarTask.updateTimer();
+        setFrequencyLabel();
         azkarSettings.setSelectedPeriod(currentFrequency.getText());
         azkarSettings.saveSelectedPeriod();
     }

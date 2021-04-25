@@ -6,8 +6,10 @@ import javafx.util.StringConverter;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PrayerTimeSettings {
+    public static boolean isUpdated = false;
     private String country;
     private String city;
     private Method method;
@@ -36,6 +38,7 @@ public class PrayerTimeSettings {
             databaseManager.stat.setDouble(6, latitude);
             databaseManager.stat.setDouble(7, longitude);
             databaseManager.stat.executeUpdate();
+            isUpdated = true;
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
         }

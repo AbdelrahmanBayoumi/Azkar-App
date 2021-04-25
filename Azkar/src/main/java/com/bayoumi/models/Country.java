@@ -49,6 +49,20 @@ public class Country {
         return null;
     }
 
+    public static String getCountryNameFormCode(String code) {
+        try {
+            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement("SELECT En_Name,Ar_Name FROM Countries WHERE Code='" + code + "'").executeQuery();
+            if (res.next()) {
+                if(res.getString("Ar_Name") == null || res.getString("Ar_Name").equals("")){
+                    return res.getString("En_Name");
+                }
+                return res.getString("Ar_Name");
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, Country.class.getName() + ".getCountryNameFormCode()");
+        }
+        return null;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
@@ -46,6 +48,36 @@
                         <JFXTextField fx:id="longitude" editable="false" labelFloat="true" promptText="خط الطول" styleClass="text-field-normal" text="0" HBox.hgrow="ALWAYS" />
                         <JFXTextField fx:id="latitude" editable="false" labelFloat="true" promptText="خط العرض" styleClass="text-field-normal" text="0" HBox.hgrow="ALWAYS" />
                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="statusLabel" style="-fx-text-fill: green;" text="جاري التحميل...">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <JFXButton fx:id="autoLocationButton" contentDisplay="RIGHT" graphicTextGap="10.0" onAction="#getAutoLocation" styleClass="secondary-button" text="تحديد تلقائي للمكان">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="MAP_MARKER" size="20" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="-10.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
                <padding>
