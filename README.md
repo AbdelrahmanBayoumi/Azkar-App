@@ -33,7 +33,10 @@ Desktop Application 💻 for:
 
 ## How to Install
 
-- [64-bit EXE installer 0.9.3](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe)
+- [64-bit EXE windows installer](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe)
+- 32-bit EXE windows installer _(will be available soon)_
+- linux version _(will be available soon)_
+- mac version _(will be available soon)_
 
 | *Note* | Thanks <a href="https://www.ej-technologies.com/products/install4j/overview.html"> <img alt="install4j" src="https://www.ej-technologies.com/images/product_banners/install4j_large.png" width="80px" /></a> for providing us open source license for the installers used in Azkar distribution. |
 | --- | --- |
@@ -48,22 +51,24 @@ Desktop Application 💻 for:
 
 ## Tools & Technologies
 -  [sqlite](https://www.sqlite.org/) SQL database engine.
--  [JFoenix 8.0.8](http://www.jfoenix.com/) library is an open source Java library, that implements Google Material Design using Java components .
-- [FontawesomeFX 8.9](https://bitbucket.org/Jerady/fontawesomefx/src/master/) for Icons
+-  [JFoenix 8.0.8](http://www.jfoenix.com/) library is an open source Java library, that implements Google Material Design using Java components.
+-  [ControlsFX](https://github.com/controlsfx/controlsfx) High quality UI controls to complement the core JavaFX distribution.
+-  [FontawesomeFX 8.9](https://bitbucket.org/Jerady/fontawesomefx/src/master/) for font Icons.
 -  [Ummalqura-Calendar 1.1.9](https://github.com/msarhan/ummalqura-calendar) for Hijri Calender.
 
 > Any Hijri conversion including Umm al-Qura is not used as reference for ibadah e.g. beginning of saum (fasting), Eid al-Fitr, and Eid al-Adha.
        
--  [aladhan.com API](https://aladhan.com/prayer-times-api) for prayer times
+-  [Adhan](https://github.com/batoulapps/Adhan) High precision prayer time library (No internet needed)
 -  [Flyway](https://github.com/flyway/flyway) for database migrations
+-  [Install4J Runtime](https://www.ej-technologies.com/resources/install4j/help/api/) for scripting installers and uninstallers, developing extensions and for accessing runtime services.
+-  [jgforms](https://github.com/stepio/jgforms) Support submitting Google Forms through Java API. For submitting feedback and bugs.
 
 ## Inspired From
 -  [Quran Tab (Google Chrome Extension)](https://chrome.google.com/webstore/detail/quran-tab/afaihcdgkjebgabomemccdneglknjkdd) Quran Tab is an Islamic new tab page that will keep you inspired by a verse from the Quran every time you open a new tab.
 -  [Prayer Times Desktop application](https://github.com/HouariZegai/PrayerTimes) for calculating Muslim prayer times in **Algeria** and setting an alarm (Adhan) for the prayer times.
 
 ## Requirements
-* Java 8
-* Internet connection (for prayer times)
+* Java 8 (**for development**, to use the app nomaly see: [How to Install ⬇️](#how-to-install))
 
 
 ## Contributing 💡
