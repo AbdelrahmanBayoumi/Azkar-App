@@ -188,6 +188,56 @@ footer {
   color: red;
 }
 
-.feature-img{
+.feature-img {
   max-width: 800px;
+}
+
+.download-section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  justify-content: center;
+  text-align: center;
+
+  padding-bottom: 100px;
+}
+
+.platform-box {
+  background-color: var(--bg-color);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+
+  width: 300px;
+
+  margin: 30px 30px;
+}
+
+.platform-name {
+  /* margin: 0px; */
+  margin-top: 20px;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.platform-box > button,
+.platform-box > a {
+  margin-top: 35px;
+  border-radius: 15;
+  width: 223px;
+  /* background-color: #04AA6D; */
+}
+
+.number-of-downloads {
+  margin-top: 10px;
+}
+#version {
+  font-weight: 700;
 }

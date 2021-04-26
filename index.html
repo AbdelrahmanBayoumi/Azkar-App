@@ -47,9 +47,7 @@
           <a class="nav-link" href="https://github.com/AbdelrahmanBayoumi/Azkar-App" target="_blank">Github</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link"
-            href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe">Download
-            (64-bit)</a>
+          <a class="nav-link" href="#download">Download</a>
         </li>
       </ul>
       <!-- <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"><button
@@ -66,16 +64,13 @@
           برنامج سطح مكتب يساعدك على: (معرفة مواقيت الصلاة - قراءة أذكار الصباح و المساء مع التذكير بها - ظهور إشعارات
           بذكر او دعاء عشوائي كل فترة محددة)
         </p>
-        <p><a class="btn btn-primary btn-lg hero-button" role="button"
-            href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"
-            dir="auto">
-            تحميل - Download (64 bit)
-            <i style="padding-right: 10px;font-size: 30px;" class="fab fa-windows fa-lg"></i>
+        <p><a class="btn btn-primary btn-lg hero-button" role="button" href="#download" dir="auto">
+            تحميل - Download
           </a></p>
     </section>
     </section>
     <!-- Features -->
-    <section id="features" class="features clean-block clean-info dark" style="background: white;">
+    <section id="features" class="features clean-block clean-info dark">
       <div class="container">
         <div class="block-heading">
           <h2 class="text-info" dir="auto">المميزات - Features</h2>
@@ -116,8 +111,59 @@
       </div>
     </section>
 
+    <!-- Download -->
+    <section id="download" class="clean-block clean-info dark" style="background: white;">
+      <div class="container">
+        <div class="block-heading">
+          <h2 class="text-info" dir="auto">تحميل - Download</h2>
+          <p>
+            Version <span id="version">0.0.0</span>
+          </p>
+        </div>
+        <div class="download-section">
+          <div class="platform-box">
+            <i style="font-size: 85px;color: #0063C6;" class="fab fa-windows fa-lg"></i>
+            <p class="platform-name">64-bit Windows</p>
+            <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"
+              target="_blank">
+              <button class="btn btn-success btn-lg" onclick="win_exe64()">
+                <i style="padding-right: 10px;font-size: 30px;" class="fas fa-download fa-lg"></i>
+                Download (64-bit)
+              </button>
+            </a>
+            <p class="number-of-downloads">عدد التحميلات: <span id="win_exe64_counter">0</span></p>
+          </div>
 
+          <div class="platform-box">
+            <i style="font-size: 85px;color: #0063C6;" class="fab fa-windows fa-lg"></i>
+            <p class="platform-name">32-bit Windows</p>
+            <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x32.exe"
+              target="_blank">
+              <button class="btn btn-success btn-lg" onclick="win_exe32()">
+                <i style="padding-right: 10px;font-size: 30px;" class="fas fa-download fa-lg"></i>
+                Download (32-bit)
+              </button>
+            </a>
+            <p class="number-of-downloads">عدد التحميلات: <span id="win_exe32_counter">0</span></p>
+          </div>
 
+          <div class="platform-box">
+            <!-- <i style="font-size: 60px;color: #0063C6;" class="fab fa-java fa-lg"></i> -->
+            <img src="img/jar.png" alt="jar" width="85" height="85">
+            <p class="platform-name">Portable Jar (No JRE)</p>
+            <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/PortableJar_No-JRE.zip"
+              target="_blank">
+              <button class="btn btn-success btn-lg" onclick="jar_portable()">
+                <i style="padding-right: 10px;font-size: 30px;" class="fas fa-download fa-lg"></i>
+                Download (.zip)
+              </button>
+            </a>
+            <p class="number-of-downloads">عدد التحميلات: <span id="jar_counter">0</span></p>
+          </div>
+          <!-- <i class="fab fa-java"></i> -->
+        </div>
+      </div>
+    </section>
 
 
     <!-- Contact Us -->

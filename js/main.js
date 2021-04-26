@@ -1,17 +1,49 @@
+// require('dotenv').config()
+
+const versionNumber = "0.9.4";
+document.getElementById("version").innerText = versionNumber;
+
+function jar_portable() {
+  console.log("jar_portable");
+  incrementCounter(`"version": ${versionNumber}, "platform":"jar"`)
+}
+
+function win_exe64() {
+  console.log("win_exe64");
+  incrementCounter(`"version": ${versionNumber}, "platform":"win_exe64"`)
+}
+
+function win_exe32() {
+  console.log("win_exe32");
+  incrementCounter(`{"version": "${versionNumber}", "platform":"win_exe32"}`)
+}
+
+function incrementCounter(bodyData) {
+  console.log("incrementCounter:", bodyData);
+
+  // code for post request here
+}
+
+
 function changeFeatureImage(item, src) {
   document.getElementsByClassName("active")[0].classList.remove("active");
   item.classList.add("active");
-  changeImage(src);
-}
-
-function changeImage(src) {
   document.getElementById("feature-img").src = "img/" + src;
 }
+
 let successAlert, dangerAlert;
 document.addEventListener('DOMContentLoaded', () => {
+  // fetch number of downloads for each platform
+  let win_exe64_counter = document.getElementById("win_exe64_counter");
+  let win_exe32_counter = document.getElementById("win_exe32_counter");
+  let jar_counter = document.getElementById("jar_counter");
+  win_exe64_counter.innerText = 0;
+  win_exe32_counter.innerText = 0;
+  jar_counter.innerText = 0;
+
+  // add action when form is submitted 
   successAlert = document.getElementById("successAlert");
   dangerAlert = document.getElementById("dangerAlert");
-
   document.querySelector('form').addEventListener('submit', event => {
     event.preventDefault();
     const name = document.getElementById("name").value;
@@ -22,18 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// check if mail is correct
 function isMail(mailString) {
   var reg1 = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
   return reg1.test(mailString);
 }
-function checkEmail(elm) {
-  if (isMail(elm.value) == false) {
-    elm.style.border = "1px solid red";
-  } else {
-    elm.style.border = "1px solid green";
-  }
-}
 
+// submit contact-us form
 function submit(name, email, message) {
   // TODO validate data
   if (name == "" || email == "" || message == "") {
@@ -41,7 +68,7 @@ function submit(name, email, message) {
     return;
   }
 
-  if(!isMail(email)){
+  if (!isMail(email)) {
     showFormError("Email is not correct");
     return;
   }
