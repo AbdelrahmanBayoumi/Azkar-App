@@ -189,7 +189,7 @@ footer {
 }
 
 .feature-img {
-  max-width: 800px;
+  aspect-ratio: attr(width) / attr(height);
 }
 
 .download-section {
@@ -208,6 +208,7 @@ footer {
   background-color: var(--bg-color);
   border-radius: 15px;
   padding: 20px;
+  padding-bottom: 10px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 
   display: flex;
@@ -216,8 +217,8 @@ footer {
   align-items: center;
 
   width: 300px;
-
   margin: 30px 30px;
+  justify-content: space-between;
 }
 
 .platform-name {
@@ -227,6 +228,9 @@ footer {
   font-weight: 600;
 }
 
+.platform-name > span{
+  font-size: 0.8em;
+}
 .platform-box > button,
 .platform-box > a {
   margin-top: 35px;
@@ -236,7 +240,13 @@ footer {
 }
 
 .number-of-downloads {
-  margin-top: 10px;
+  margin-top: 20px;
+  font-size: 0.80em;
+}
+
+.number-of-downloads > span{
+  margin-left: 5px;
+  font-size: 1.2em;
 }
 #version {
   font-weight: 700;
