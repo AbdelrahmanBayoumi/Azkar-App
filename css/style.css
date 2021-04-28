@@ -251,3 +251,7 @@ footer {
 #version {
   font-weight: 700;
 }
+
+.number-of-downloads{
+  display: none;
+}
