@@ -100,7 +100,7 @@ body {
   text-align: center;
 
   color: #fff;
-  background: url("../img/madinah.jpg");
+  background: url("../img/madinah.webp");
   background-size: cover;
   background-position: center center;
   background-attachment: local;
@@ -228,7 +228,7 @@ footer {
   font-weight: 600;
 }
 
-.platform-name > span{
+.platform-name > span {
   font-size: 0.8em;
 }
 .platform-box > button,
@@ -241,17 +241,13 @@ footer {
 
 .number-of-downloads {
   margin-top: 20px;
-  font-size: 0.80em;
+  font-size: 0.8em;
 }
 
-.number-of-downloads > span{
+.number-of-downloads > span {
   margin-left: 5px;
   font-size: 1.2em;
 }
 #version {
   font-weight: 700;
-}
-
-.number-of-downloads{
-  display: none;
 }
