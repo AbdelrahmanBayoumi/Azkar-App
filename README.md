@@ -34,7 +34,8 @@ Desktop Application 💻 for:
 ## How to Install
 
 - [64-bit EXE windows installer](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe)
-- 32-bit EXE windows installer _(will be available soon)_
+- [32-bit EXE windows installer](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x32.exe)
+- [Portable Jar (No JRE) _JRE 8 required_](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/PortableJar_No-JRE.zip)
 - linux version _(will be available soon)_
 - mac version _(will be available soon)_
 
