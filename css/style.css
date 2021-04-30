@@ -242,7 +242,7 @@ footer {
 .number-of-downloads {
   margin-top: 20px;
   font-size: 0.8em;
-  /* display:none; */
+  display: none;
 }
 
 .number-of-downloads > span {
@@ -252,4 +252,3 @@ footer {
 #version {
   font-weight: 700;
 }
-
