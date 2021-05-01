@@ -23,7 +23,9 @@ function incrementCounter(bodyData) {
       "api_key": "AbdelRahmanBayomi",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(bodyData)
+    body: JSON.stringify(bodyData),
+    withCredentials: true,
+    credentials: "include",
   };
   fetch("https://azkar-download-tracker.herokuapp.com/downloads", requestOptions)
     .catch(error => console.log('error', error));
