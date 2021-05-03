@@ -197,29 +197,37 @@ public class OnboardingController implements Initializable {
         new Thread(() -> {
             try {
                 City city = LocationService.getCity(IpChecker.getIp());
-                if (city != null) {
-                    Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
-                    if (countryFormCode != null) {
-                        Platform.runLater(() -> {
-                            countries.setValue(countryFormCode);
-                        });
-                    } else {
-                        throw new Exception("Error in fetching city!");
-                    }
-                    City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
-                    if (cityFromEngName != null) {
-                        Platform.runLater(() -> {
-                            cities.setValue(cityFromEngName);
-                            cities.getSelectionModel().select(cityFromEngName);
-                        });
-                    } else {
-                        throw new Exception("Error in fetching city!");
-                    }
+                Logger.info("LocationService.getCity(IP): " + city);
+                Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
+                System.out.println("countryFormCode: " + countryFormCode);
+                if (countryFormCode != null) {
+                    Platform.runLater(() -> {
+                        countries.setValue(countryFormCode);
+                    });
                 } else {
-                    throw new Exception("Error in fetching city!");
+                    throw new Exception("Error in fetching city => cannot getCountryFormCode()!");
+                }
+                City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
+                System.out.println("cityFromEngName: " + cityFromEngName);
+                if (cityFromEngName != null) {
+                    Platform.runLater(() -> {
+                        cities.setValue(cityFromEngName);
+                        cities.getSelectionModel().select(cityFromEngName);
+                    });
+                } else {
+                    City cityFromCoordinates = City.getCityFromCoordinates(city.getLongitude(), city.getLatitude(), city.getCountryCode());
+                    if (cityFromCoordinates != null) {
+                        Platform.runLater(() -> {
+                            cities.setValue(cityFromCoordinates);
+                            cities.getSelectionModel().select(cityFromCoordinates);
+                        });
+                    } else {
+                        throw new Exception("Error in getCityFromCoordinates() && getCityFromEngName()");
+                    }
                 }
                 statusLabel.setVisible(false);
             } catch (Exception ex) {
+                ex.printStackTrace();
                 Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
                 Platform.runLater(() -> {
                     statusLabel.setVisible(true);

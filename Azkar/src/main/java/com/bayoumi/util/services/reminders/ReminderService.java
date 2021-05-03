@@ -12,29 +12,43 @@ import java.text.SimpleDateFormat;
 public class ReminderService {
 
     public static void init(AzkarSettings azkarSettings) {
-        AzkarReminderService.clearAllTasks();
-        initTimedAzkar(azkarSettings);
+        ReminderTask.clearAllTasks();
+        PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(new PrayerTimeSettings());
+        initPrayerTimes(prayerTimesForToday);
+        initTimedAzkar(azkarSettings, prayerTimesForToday);
         // for testing
-//        AzkarReminderService.create(LocalTime.of(1, 37).toString(), "أذكار المساء", null, () -> Launcher.homeController.goToNightAzkar());
+//        ReminderTask.create(LocalTime.of(1, 37).toString(), "أذكار المساء", null, () -> Launcher.homeController.goToNightAzkar());
     }
 
     /**
      * init timed azkar (MorningAzkar, NightAzkar)
      *
      * @param azkarSettings to get the offset when the alarm will be displayed
+     * @param prayerTimesForToday to get prayer times to get time of fajr and asr
      */
-    private static void initTimedAzkar(AzkarSettings azkarSettings) {
-        Image morningImage = new Image("/com/bayoumi/images/sun_50px.png");
-        Image nightImage = new Image("/com/bayoumi/images/night_50px.png");
-
-        PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(new PrayerTimeSettings());
+    private static void initTimedAzkar(AzkarSettings azkarSettings, PrayerTimes prayerTimesForToday) {
+        System.out.println("Timed Azkar Reminder ...");
         if (azkarSettings.getMorningAzkarOffset() != 0) {
             prayerTimesForToday.fajr.setTime(prayerTimesForToday.fajr.getTime() + (azkarSettings.getMorningAzkarOffset() * 60000));
-            AzkarReminderService.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "أذكار الصباح", morningImage, () -> Launcher.homeController.goToMorningAzkar());
+            ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "أذكار الصباح", new Image("/com/bayoumi/images/sun_50px.png"), () -> Launcher.homeController.goToMorningAzkar());
         }
         if (azkarSettings.getNightAzkarOffset() != 0) {
             prayerTimesForToday.asr.setTime(prayerTimesForToday.asr.getTime() + (azkarSettings.getNightAzkarOffset() * 60000));
-            AzkarReminderService.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.asr), "أذكار المساء", nightImage, () -> Launcher.homeController.goToNightAzkar());
+            ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.asr), "أذكار المساء", new Image("/com/bayoumi/images/night_50px.png"), () -> Launcher.homeController.goToNightAzkar());
         }
+    }
+
+    /**
+     * initializes reminders for prayer times
+     * @param prayerTimesForToday to get all prayer times
+     */
+    private static void initPrayerTimes(PrayerTimes prayerTimesForToday) {
+        System.out.println("PrayerTimes Reminder ...");
+        Image image = new Image("/com/bayoumi/images/Kaaba.png");
+        ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "صلاة الفجر", image, null);
+        ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.dhuhr), "صلاة الظهر", image, null);
+        ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.asr), "صلاة العصر", image, null);
+        ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.maghrib), "صلاة المغرب", image, null);
+        ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.isha), "صلاة العشاء", image, null);
     }
 }

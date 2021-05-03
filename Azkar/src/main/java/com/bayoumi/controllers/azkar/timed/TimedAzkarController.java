@@ -2,6 +2,7 @@ package com.bayoumi.controllers.azkar.timed;
 
 import com.bayoumi.models.TimedZekr;
 import com.bayoumi.util.Logger;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -36,6 +38,8 @@ public class TimedAzkarController implements Initializable {
     private ImageView image;
     @FXML
     private Label title;
+    @FXML
+    private JFXButton settingsButton;
 
     private Image morningImage;
     private Image nightImage;
@@ -58,6 +62,8 @@ public class TimedAzkarController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         morningImage = new Image("/com/bayoumi/images/sun_50px.png");
         nightImage = new Image("/com/bayoumi/images/night_50px.png");
+        settingsButton.setOnMouseEntered(event -> settingsButton.setContentDisplay(ContentDisplay.LEFT));
+        settingsButton.setOnMouseExited(event -> settingsButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY));
     }
 
     private void initAzkarContainer(ObservableList<TimedZekr> list) {

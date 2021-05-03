@@ -227,28 +227,35 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         new Thread(() -> {
             try {
                 City city = LocationService.getCity(IpChecker.getIp());
-                if (city != null) {
-                    Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
-                    if (countryFormCode != null) {
-                        Platform.runLater(() -> {
-                            countries.setValue(countryFormCode);
-                        });
-                    } else {
-                        throw new Exception("Error in fetching city!");
-                    }
-                    City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
-                    if (cityFromEngName != null) {
-                        Platform.runLater(() -> {
-                            cities.setValue(cityFromEngName);
-                            cities.getSelectionModel().select(cityFromEngName);
-                            latitude.setText(String.valueOf(cityFromEngName.getLatitude()));
-                            latitude.setText(String.valueOf(cityFromEngName.getLongitude()));
-                        });
-                    } else {
-                        throw new Exception("Error in fetching city!");
-                    }
+                Logger.info("LocationService.getCity(IP): " + city);
+                Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
+                if (countryFormCode != null) {
+                    Platform.runLater(() -> {
+                        countries.setValue(countryFormCode);
+                    });
                 } else {
-                    throw new Exception("Error in fetching city!");
+                    throw new Exception("Error in fetching city => cannot getCountryFormCode()!");
+                }
+                City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
+                if (cityFromEngName != null) {
+                    Platform.runLater(() -> {
+                        cities.setValue(cityFromEngName);
+                        cities.getSelectionModel().select(cityFromEngName);
+                        latitude.setText(String.valueOf(cityFromEngName.getLatitude()));
+                        latitude.setText(String.valueOf(cityFromEngName.getLongitude()));
+                    });
+                } else {
+                    City cityFromCoordinates = City.getCityFromCoordinates(city.getLongitude(), city.getLatitude(), city.getCountryCode());
+                    if (cityFromCoordinates != null) {
+                        Platform.runLater(() -> {
+                            cities.setValue(cityFromCoordinates);
+                            cities.getSelectionModel().select(cityFromCoordinates);
+                            latitude.setText(String.valueOf(cityFromCoordinates.getLatitude()));
+                            latitude.setText(String.valueOf(cityFromCoordinates.getLongitude()));
+                        });
+                    } else {
+                        throw new Exception("Error in getCityFromCoordinates() && getCityFromEngName()");
+                    }
                 }
                 statusLabel.setVisible(false);
             } catch (Exception ex) {

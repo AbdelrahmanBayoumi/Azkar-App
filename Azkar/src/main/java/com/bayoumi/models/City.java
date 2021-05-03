@@ -71,6 +71,26 @@ public class City {
         return null;
     }
 
+    public static City getCityFromCoordinates(double longitude, double latitude, String countryCode) {
+        try {
+            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement(
+                    "SELECT * from cityd WHERE " +
+                            "(latitude BETWEEN " + latitude + "-0.008 AND " + latitude + "+0.008) AND " +
+                            "(longitude BETWEEN " + longitude + "-0.008 AND " + longitude + "+0.008)  AND " +
+                            "(country='" + countryCode + "');").executeQuery();
+            if (res.next()) {
+                return new City(
+                        res.getString("country"), res.getString("city"),
+                        res.getString("Ar_Name"), res.getDouble("latitude"),
+                        res.getDouble("longitude"), res.getDouble("time_zone")
+                );
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, City.class.getName() + ".getCityFromCoordinates()");
+        }
+        return null;
+    }
+
     public String getName() {
         return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
     }

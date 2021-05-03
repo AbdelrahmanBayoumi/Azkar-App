@@ -31,6 +31,9 @@ public class ZekrBoxController {
 
     @FXML
     private void repeat() {
+        if(this.repeatBTN.isDisable()){
+            return;
+        }
         if (this.repeatValue > 1) {
             this.repeatBTN.setText("التكرار" + "     " + "(" + (--this.repeatValue) + ")");
         } else {

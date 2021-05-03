@@ -2,7 +2,7 @@ package com.bayoumi.util.services.azkar;
 
 import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.util.EditablePeriodTimerTask;
+import com.bayoumi.util.services.EditablePeriodTimerTask;
 import com.bayoumi.util.gui.notfication.Notification;
 import javafx.application.Platform;
 

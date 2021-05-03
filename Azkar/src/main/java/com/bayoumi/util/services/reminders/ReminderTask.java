@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AzkarReminderService {
+public class ReminderTask {
     private static Timer ALARM = new Timer();
 
     public static void create(String time, String text, Image image, Runnable callback) {
