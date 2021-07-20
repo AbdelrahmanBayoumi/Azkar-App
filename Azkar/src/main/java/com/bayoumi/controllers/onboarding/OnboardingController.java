@@ -231,7 +231,7 @@ public class OnboardingController implements Initializable {
                 Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
                 Platform.runLater(() -> {
                     statusLabel.setVisible(true);
-                    statusLabel.setText("خطأ في تحديد الموقع.. برجاء المحاولة مرة أخرى!");
+                    statusLabel.setText("خطأ في التحديد التلقائي للموقع.. برجاء المحاولة مرة أخرى!");
                     statusLabel.setStyle("-fx-text-fill: red");
                 });
             }

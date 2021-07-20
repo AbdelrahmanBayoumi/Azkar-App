@@ -1,13 +1,31 @@
 package com.bayoumi.util.time;
 
+import com.bayoumi.util.Utility;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 public class Utilities {
+
+    public static String findDifference(Date d1, Date d2) {
+        try {
+            // Calculate time difference
+            // in milliseconds
+            long difference_In_Time = d2.getTime() - d1.getTime();
+
+            int difference_In_Seconds = (int) Math.abs(Math.round((difference_In_Time / 1000.0)) % 60);
+            int difference_In_Minutes = Math.abs((int) (difference_In_Time / (1000.0 * 60)) % 60);
+            int difference_In_Hours = Math.abs((int) (difference_In_Time / (1000.0 * 60 * 60)) % 24);
+
+            return Utility.formatIntToTwoDigit(difference_In_Hours) + ":" + Utility.formatIntToTwoDigit(difference_In_Minutes) + ":" + Utility.formatIntToTwoDigit(difference_In_Seconds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * @param language is the language in which time is shown
@@ -116,6 +134,20 @@ public class Utilities {
         return new HijriDate(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]) - 1, Integer.parseInt(dateArr[2]));
     }
 
+    /**
+     * @param date initial date
+     * @return next date (initial date + 1)
+     * with: Hours=0, Minutes=0, Seconds=0
+     */
+    public static Date getTomorrowDate(Date date) {
+        Calendar calendar = GregorianCalendar.getInstance(TimeZone.getDefault());
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, 1);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        return calendar.getTime();
+    }
 
 //    public static void main(String[] args) {
 //        Date date = new Date();

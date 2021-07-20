@@ -105,7 +105,6 @@ public class Launcher extends Application {
         new TrayUtil(primaryStage);
         // add loaded scene to primaryStage
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
         if (Onboarding.isFirstTimeOpened() || !OtherSettings.getIsMinimizedDB()) {

@@ -273,16 +273,12 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
                 Notification.createControlsFX(
                         AbsoluteZekr.absoluteZekrObservableList.get(
                                 new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                        new Image("/com/bayoumi/images/Kaaba.png"), null,10);
+                        new Image("/com/bayoumi/images/Kaaba.png"), null, 10, notificationSettings);
             } catch (Exception ex) {
-                Logger.error("createControlsFX", ex, getClass().getName() + ".runLater => createControlsFX()");
+                Logger.error("createControlsFX", ex, getClass().getName() + "showZekr().runLater => createControlsFX()");
                 ex.printStackTrace();
             }
         });
-//        showZekrButton.setDisable(true);
-//        PauseTransition pause = new PauseTransition(Duration.seconds(10));
-//        pause.setOnFinished(event -> showZekrButton.setDisable(false));
-//        pause.play();
     }
 
     @FXML

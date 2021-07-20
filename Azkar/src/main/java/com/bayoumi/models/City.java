@@ -73,11 +73,13 @@ public class City {
 
     public static City getCityFromCoordinates(double longitude, double latitude, String countryCode) {
         try {
-            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement(
-                    "SELECT * from cityd WHERE " +
-                            "(latitude BETWEEN " + latitude + "-0.008 AND " + latitude + "+0.008) AND " +
-                            "(longitude BETWEEN " + longitude + "-0.008 AND " + longitude + "+0.008)  AND " +
-                            "(country='" + countryCode + "');").executeQuery();
+            String sql = "SELECT * from cityd WHERE " +
+                    "(latitude BETWEEN " + latitude + "-0.008 AND " + latitude + "+0.008) AND " +
+                    "(longitude BETWEEN " + longitude + "-0.008 AND " + longitude + "+0.008)  AND " +
+                    "(country='" + countryCode + "');";
+            System.out.println("sql: "+sql);
+            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement(sql).executeQuery();
+
             if (res.next()) {
                 return new City(
                         res.getString("country"), res.getString("city"),

@@ -2,9 +2,16 @@ package com.bayoumi.util.gui;
 
 import com.bayoumi.controllers.alert.confirm.ConfirmAlertController;
 import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
+import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
+import com.bayoumi.controllers.dialog.UpdateConfirmController;
+import com.bayoumi.models.UpdateInfo;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.validation.SingleInstance;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -12,6 +19,38 @@ import javafx.stage.Stage;
  * @author Bayoumi
  */
 public class BuilderUI {
+
+    public static boolean showUpdateDetails(UpdateInfo updateInfo , String currentVersion) {
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/dialog/UpdateConfirm.fxml"));
+            stage.setScene(new Scene(loader.load()));
+            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            HelperMethods.SetIcon(stage);
+            UpdateConfirmController controller = loader.getController();
+            controller.setData(updateInfo, currentVersion);
+            stage.showAndWait();
+            return controller.isConfirmed;
+        }catch (Exception ex){
+            Logger.error(null, ex, BuilderUI.class.getName() + ".showUpdateDetails()");
+            return false;
+        }
+    }
+
+    public static void showOkAlert(Alert.AlertType alertType, String text, boolean isRTL) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle("");
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(BuilderUI.class.getResource("/com/bayoumi/css/style.css").toExternalForm());
+        if (isRTL) {
+            (dialogPane.getChildren().get(1)).setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        }
+        HelperMethods.SetIcon((Stage) alert.getDialogPane().getScene().getWindow());
+        alert.showAndWait();
+    }
 
     public static boolean showConfirmAlert(boolean isDanger, String text) {
         try {
@@ -47,105 +86,5 @@ public class BuilderUI {
             return "";
         }
     }
-/*
-    private static final String DEFAULT_TITLE = "PS System - Code Clinic";
 
-    public static Image infoImage = new Image("/img/infoPNG.png");
-    public static Image appImage = new Image(ControlPanel.getInstance().PATH_OF_LAUNCHER_IMAGE);
-    private static final MediaPlayer sound = new MediaPlayer(new Media(new File("audio/timeFinished.mp3").toURI().toString()));
-
-    public static Alert buildErrorAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert a = new Alert(alertType);
-        a.setTitle(title);
-        a.setHeaderText(header);
-        a.setContentText(content);
-        return a;
-    }
-
-    public static void showNotification(Node icon, String msg) {
-        icon.setStyle("-fx-font-size:80;");
-        Label emailLabel = new Label(msg);
-        emailLabel.setAlignment(Pos.CENTER);
-        VBox vb = new VBox(icon, emailLabel);
-        vb.setAlignment(Pos.CENTER);
-        vb.setSpacing(5);
-        Notifications notification = Notifications.create()
-                .graphic(vb)
-                .hideAfter(Duration.seconds(10))
-                .position(Pos.BOTTOM_RIGHT);
-        notification.show();
-    }
-
-    public static Stage initStageDecorated(Scene scene, String title, String Icon) {
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle(title == null ? DEFAULT_TITLE : title);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        setIcon(stage, Icon);
-        return stage;
-    }
-
-    public static Stage initStageTransparent(Scene scene, String title, String Icon) {
-        scene.setFill(Color.TRANSPARENT);
-        Stage stage = new Stage(StageStyle.UNDECORATED);
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle(title == null ? DEFAULT_TITLE : title);
-        setIcon(stage, Icon);
-        return stage;
-    }
-
-    public static Stage initStageUnDecorated(Scene scene, String title, String Icon) {
-        Stage stage = new Stage(StageStyle.UNDECORATED);
-        stage.setScene(scene);
-        stage.setTitle(title == null ? DEFAULT_TITLE : title);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        setIcon(stage, Icon);
-        return stage;
-    }
-
-    public static void setAppDecoration(Stage s) {
-        s.setTitle(DEFAULT_TITLE);
-        setIcon(s, "");
-    }
-
-    public static void setIcon(Stage s, String iconName) {
-        s.getIcons().clear();
-        Image icon;
-        if (iconName.equalsIgnoreCase("info")) {
-            icon = infoImage;
-        } else {
-            icon = appImage;
-        }
-        s.getIcons().add(icon);
-    }
-
-    public static void HandlerCTRL_W(Scene scene, Stage stage, Runnable rn) {
-        HashMap<KeyCombination, Runnable> hashMap = new HashMap<>();
-        // CTRL + W
-        KeyCombination kc1 = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
-        hashMap.put(kc1, rn);
-        scene.getAccelerators().putAll(hashMap);
-    }
-
-    public static void showTimerNotification(String roomName) {
-        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.TIMER);
-        icon.setStyle("-fx-font-size:80;");
-        Label msg = new Label("انتهى وقت  : " + roomName);
-        msg.setAlignment(Pos.CENTER);
-        VBox vb = new VBox(msg, icon);
-        vb.setAlignment(Pos.CENTER);
-        vb.setSpacing(5);
-        Notifications notification = Notifications.create()
-                .graphic(vb)
-                .hideAfter(Duration.seconds(10))
-                .position(Pos.BOTTOM_RIGHT)
-                .onAction((ActionEvent event) -> {
-                    sound.stop();
-                });
-        notification.show();
-        sound.play();
-    }
-    */
 }

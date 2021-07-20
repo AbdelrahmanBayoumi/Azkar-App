@@ -85,7 +85,7 @@ public class Notification {
         }
     }
 
-    public static void createControlsFX(String msg, Image image, Runnable callback, double duration) {
+    public static void createControlsFX(String msg, Image image, Runnable callback, double duration, NotificationSettings notificationSettings) {
         try {
             FXMLLoader loader = new FXMLLoader(Notification.class.getResource("/com/bayoumi/views/notification/NotificationsControlsFX.fxml"));
             Parent notificationView = loader.load();
@@ -103,7 +103,7 @@ public class Notification {
                             callback.run();
                         }
                     })
-                    .position(new NotificationSettings().getPosition()).show());
+                    .position(notificationSettings.getPosition()).show());
 
             playAlarmSound(AzkarSettings.getVolumeDB());
         } catch (Exception ex) {

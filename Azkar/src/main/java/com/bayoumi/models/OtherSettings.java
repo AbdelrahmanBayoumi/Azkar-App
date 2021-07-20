@@ -28,7 +28,7 @@ public class OtherSettings {
         }
         return false;
     }
-    private void loadSettings() {
+    public void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
             if (res.next()) {

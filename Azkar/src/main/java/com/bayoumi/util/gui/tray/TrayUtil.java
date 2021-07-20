@@ -1,5 +1,6 @@
 package com.bayoumi.util.gui.tray;
 
+import com.bayoumi.Launcher;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import javafx.application.Platform;
@@ -85,9 +86,18 @@ public class TrayUtil {
 
         // the convention for tray icons seems to be to set the default icon for opening
         // the application stage in a bold font.
-        java.awt.Font defaultFont = java.awt.Font.decode(null);
-        java.awt.Font boldFont = defaultFont.deriveFont(java.awt.Font.BOLD);
-        openItem.setFont(boldFont);
+        openItem.setFont(java.awt.Font.decode(null).deriveFont(java.awt.Font.BOLD));
+
+        /*
+        java.awt.MenuItem openPrayerTimes = new java.awt.MenuItem("Prayer Times");
+        openPrayerTimes.addActionListener(event -> Platform.runLater(() -> Launcher.homeController.goToPrayerTimes()));
+
+        java.awt.MenuItem morningAzkar = new java.awt.MenuItem("Morning Azkar");
+        morningAzkar.addActionListener(event -> Platform.runLater(() -> Launcher.homeController.goToMorningAzkar()));
+
+        java.awt.MenuItem nightAzkar = new java.awt.MenuItem("Night Azkar");
+        nightAzkar.addActionListener(event -> Platform.runLater(() -> Launcher.homeController.goToNightAzkar()));
+        */
 
         // to really exit the application, the user must go to the system tray icon
         // and select the exit option, this will shutdown JavaFX and remove the
@@ -103,6 +113,13 @@ public class TrayUtil {
         final java.awt.PopupMenu popup = new java.awt.PopupMenu();
         popup.add(openItem);
         popup.addSeparator();
+        /*
+        popup.add(openPrayerTimes);
+        popup.addSeparator();
+        popup.add(morningAzkar);
+        popup.add(nightAzkar);
+        popup.addSeparator();
+        */
         popup.add(exitItem);
         trayIcon.setPopupMenu(popup);
     }

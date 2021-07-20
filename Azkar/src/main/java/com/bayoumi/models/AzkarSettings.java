@@ -79,7 +79,7 @@ public class AzkarSettings {
         return offset;
     }
 
-    private void loadSettings() {
+    public void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM azkar_settings").executeQuery();
             if (res.next()) {

@@ -1,6 +1,7 @@
 package com.bayoumi.util.gui;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -8,6 +9,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.util.HashMap;
 
@@ -35,4 +37,17 @@ public class HelperMethods {
         stage.getIcons().clear();
         stage.getIcons().add(new Image("/com/bayoumi/images/icon.png"));
     }
+
+    public static void setStageListener(Node node, Callback<Stage, Void> callback) {
+        node.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener((observable, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        callback.call((Stage) newWindow);
+                    }
+                });
+            }
+        });
+    }
+
 }

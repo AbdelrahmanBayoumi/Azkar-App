@@ -22,12 +22,31 @@ public class PrayerTimeSettings {
         loadSettings();
     }
 
-    public boolean hasLocation() {
-        return !this.getCountry().trim().equals("") && !this.getCity().trim().equals("");
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PrayerTimeSettings that = (PrayerTimeSettings) o;
+        return asrJuristic == that.asrJuristic &&
+                summerTiming == that.summerTiming &&
+                Double.compare(that.latitude, latitude) == 0 &&
+                Double.compare(that.longitude, longitude) == 0 &&
+                Objects.equals(country, that.country) &&
+                Objects.equals(city, that.city) &&
+                Objects.equals(method, that.method);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(country, city, method, asrJuristic, summerTiming, latitude, longitude);
     }
 
     public void save() {
         try {
+            if (this.equals(new PrayerTimeSettings())) {
+                // if current obj is equal the one stored in DB then => do nothing (don't save)
+                return;
+            }
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             databaseManager.stat = databaseManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?,latitude = ?,longitude = ?;");
             databaseManager.stat.setString(1, country);
@@ -44,7 +63,7 @@ public class PrayerTimeSettings {
         }
     }
 
-    private void loadSettings() {
+    public void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_settings").executeQuery();
             if (res.next()) {

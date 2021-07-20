@@ -21,7 +21,7 @@ public class Logger {
     /**
      * initialize printWriter object to log data in a file
      */
-    public Logger() {
+    private Logger() {
     }
 
     public static void init() {

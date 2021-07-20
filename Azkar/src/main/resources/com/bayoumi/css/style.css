@@ -1,14 +1,18 @@
-/*@font-face {
-    font-family: 'calibri';
-    src: url('../fonts/calibri.ttf');
-}*/
+@font-face {
+    font-family: 'Droid Arabic Kufi';
+    src: url('../fonts/DroidKufi-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Droid Arabic Kufi';
+    src: url('../fonts/DroidKufi-Regular.ttf');
+}
 
 * {
     /* ====== Colors ====== */
     -fx-primary: #2A9D8F;
     -fx-primary-dark: derive(#2A9D8F, -40%);
     -fx-primary-light: derive(#2A9D8F, 40%);
-
     -fx-secondary: #33485d;
     -fx-secondary-hover: derive(#264653, -40%);
     -fx-secondary-light: derive(#264653, -40%);
@@ -37,7 +41,6 @@
 .spp {
     -fx-scale-x: 1.5;
     -fx-scale-y: 1.5;
-
 }
 
 .root {
@@ -515,16 +518,16 @@
 }
 
 .box-prayer .label {
-    -fx-font-size: 30;
+    -fx-font-size: 25;
 }
 
-.box-prayer:hover {
-    -fx-background-color: -fx-secondary;
-}
+/*.box-prayer:hover {*/
+/*    -fx-background-color: -fx-secondary;*/
+/*}*/
 
-.box-prayer:hover .label {
-    -fx-text-fill: -fx-secondary-text;
-}
+/*.box-prayer:hover .label {*/
+/*    -fx-text-fill: -fx-secondary-text;*/
+/*}*/
 
 .box-prayer-selected {
     -fx-background-color: -fx-secondary;
@@ -533,8 +536,8 @@
 
 .box-prayer-selected .label {
     -fx-text-fill: -fx-secondary-text;
-    -fx-font-weight: bold;
-    -fx-font-size: 26;
+    /*-fx-font-weight: bold;*/
+    -fx-font-size: 30;
 }
 
 /*==== SLIDER ====*/
@@ -576,4 +579,27 @@
 
 .error-label {
     -fx-text-fill: red;
+}
+
+.white-box {
+    -fx-background-color: -fx-secondary-text;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 20, 0, 0, 0);
+    -fx-background-radius: 30;
+}
+
+.white-box > .label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+/* == Alert == */
+.dialog-pane > .content.label {
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+    -fx-font-family: "Droid Arabic Kufi";
+    -fx-font-size: 16px;
+}
+
+.dialog-pane .button {
+    -fx-font-size: 15;
 }

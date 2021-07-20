@@ -1,7 +1,3 @@
-/*
- * Code Clinic Solutions
- * PS-Restaurant System  * 
- */
 package com.bayoumi.util.gui.button;
 
 import com.jfoenix.controls.JFXButton;
