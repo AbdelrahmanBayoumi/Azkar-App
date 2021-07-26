@@ -11,7 +11,9 @@ import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
 import com.bayoumi.util.services.azkar.AzkarService;
+import com.bayoumi.util.services.reminders.Reminder;
 import com.bayoumi.util.services.reminders.ReminderService;
+import com.bayoumi.util.services.reminders.ReminderUtil;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.time.Utilities;
@@ -143,6 +145,16 @@ public class HomeController implements Initializable {
         day.setText(Utilities.getDay(otherSettings.getLanguageLocal(), date));
         gregorianDate.setText(Utilities.getGregorianDate(otherSettings.getLanguageLocal(), date));
         hijriDate.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
+
+        initReminders();
+    }
+
+    private void initReminders(){
+        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.fajr, () -> playAdhan("صلاة الفجر")));
+        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.dhuhr, () -> playAdhan("صلاة الظهر")));
+        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.asr, () -> playAdhan("صلاة العصر")));
+        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.maghrib, () -> playAdhan("صلاة المغرب")));
+        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
     }
 
     private void buildPopOver() {
@@ -170,8 +182,34 @@ public class HomeController implements Initializable {
         currentPrayerValue = value;
     }
 
+    private boolean isEqualIgnoreMillis(Date a, Date b) {
+        return ((a.getTime() / 1000) * 1000) == ((b.getTime() / 1000) * 1000);
+    }
+
+    private void checkForReminders(Date date) {
+        ReminderUtil.getInstance().validate(date);
+//        if (isEqualIgnoreMillis(date, prayerTimesToday.fajr)) {
+//              playAdhan("صلاة الفجر");
+//        } else if (isEqualIgnoreMillis(date, prayerTimesToday.dhuhr)) {
+//            playAdhan("صلاة الظهر");
+//        } else if (isEqualIgnoreMillis(date, prayerTimesToday.asr)) {
+//            playAdhan("صلاة العصر");
+//        } else if (isEqualIgnoreMillis(date, prayerTimesToday.maghrib)) {
+//            playAdhan("صلاة المغرب");
+//        } else if (isEqualIgnoreMillis(date, prayerTimesToday.isha)) {
+//            playAdhan("صلاة العشاء");
+//        }
+    }
+
+    private void playAdhan(String prayerName) {
+        System.out.println("playAdhan() => " + prayerName);
+        Platform.runLater(() -> Notification.createControlsFX(prayerName, new Image("/com/bayoumi/images/Kaaba.png")
+                , null, 300, notificationSettings));
+    }
+
     private void timelineAction(PrayerTimes prayerTimesToday, Date date) {
-        // get [ current prayer ] and [ next Prayer ]
+        // get 'next Prayer' and if 'next Prayer'=NONE get 'currentPrayer'
+        // to update the new current prayerBox
         switch (prayerTimesToday.nextPrayer().equals(Prayer.NONE) ? prayerTimesToday.currentPrayer() : prayerTimesToday.nextPrayer()) {
             case FAJR:
                 changeCurrentPrayerBox(fajrBox, "صلاة الفجر");
@@ -196,18 +234,18 @@ public class HomeController implements Initializable {
 
         Date nextPrayerTime;
         if (prayerTimesToday.nextPrayer().equals(Prayer.SUNRISE)) {
-            // currentPrayerText.setText("متبقي على " + currentPrayerValue);
-            currentPrayerText.setText(currentPrayerValue);
+             currentPrayerText.setText("متبقي على " + currentPrayerValue);
+//            currentPrayerText.setText(currentPrayerValue);
             nextPrayerTime = prayerTimesToday.dhuhr;
         }
         // take current Prayer ( when isha is finished and it's before 12pm )
         else if (prayerTimesToday.nextPrayer().equals(Prayer.NONE)) {
-            // currentPrayerText.setText("مر على " + currentPrayerValue);
-            currentPrayerText.setText(currentPrayerValue);
+             currentPrayerText.setText("مر على " + currentPrayerValue);
+//            currentPrayerText.setText(currentPrayerValue);
             nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.currentPrayer());
         } else {
-            // currentPrayerText.setText("متبقي على " + currentPrayerValue);
-            currentPrayerText.setText(currentPrayerValue);
+             currentPrayerText.setText("متبقي على " + currentPrayerValue);
+//            currentPrayerText.setText(currentPrayerValue);
             nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.nextPrayer());
         }
 
@@ -222,6 +260,7 @@ public class HomeController implements Initializable {
 //        System.out.println("remainingTime: " + remainingTime);
 //        System.out.println("date: " + date);
         remainingTimeLabel.setText(remainingTime);
+        checkForReminders(date);
     }
 
     private void initClock() {
@@ -284,6 +323,8 @@ public class HomeController implements Initializable {
                 prayerTimeSettings.loadSettings();
                 prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(prayerTimeSettings);
                 setPrayerTimesValuesToGUI(prayerTimesToday, otherSettings);
+                ReminderUtil.getInstance().clear();
+                initReminders();
                 ReminderService.init(azkarSettings, prayerTimeSettings, notificationSettings);
                 PrayerTimeSettings.isUpdated = false;
             }
@@ -293,6 +334,7 @@ public class HomeController implements Initializable {
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
     }
+
 
     @FXML
     public void goToMorningAzkar() {

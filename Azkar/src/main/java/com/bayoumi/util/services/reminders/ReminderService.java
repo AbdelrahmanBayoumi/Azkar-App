@@ -15,7 +15,7 @@ public class ReminderService {
     public static void init(AzkarSettings azkarSettings, PrayerTimeSettings prayerTimeSettings, NotificationSettings notificationSettings) {
         ReminderTask.clearAllTasks();
         final PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(prayerTimeSettings);
-        initPrayerTimes(prayerTimesForToday, notificationSettings);
+//        initPrayerTimes(prayerTimesForToday, notificationSettings);
         initTimedAzkar(azkarSettings, prayerTimesForToday, notificationSettings);
         // for testing
 //        ReminderTask.create(LocalTime.of(1, 37).toString(), "أذكار المساء", null, () -> Launcher.homeController.goToNightAzkar());
@@ -28,7 +28,7 @@ public class ReminderService {
      * @param prayerTimesForToday to get prayer times to get time of fajr and asr
      */
     private static void initTimedAzkar(AzkarSettings azkarSettings, PrayerTimes prayerTimesForToday, NotificationSettings notificationSettings) {
-        System.out.println("Timed Azkar Reminder ...");
+        System.out.println("Timed Azkar ReminderUtil ...");
         if (azkarSettings.getMorningAzkarOffset() != 0) {
             prayerTimesForToday.fajr.setTime(prayerTimesForToday.fajr.getTime() + (azkarSettings.getMorningAzkarOffset() * 60000));
             ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "أذكار الصباح", new Image("/com/bayoumi/images/sun_50px.png"), () -> Launcher.homeController.goToMorningAzkar(), notificationSettings);
@@ -45,7 +45,7 @@ public class ReminderService {
      * @param prayerTimesForToday to get all prayer times
      */
     private static void initPrayerTimes(PrayerTimes prayerTimesForToday, NotificationSettings notificationSettings) {
-        System.out.println("PrayerTimes Reminder ...");
+        System.out.println("PrayerTimes ReminderUtil ...");
         final Image image = new Image("/com/bayoumi/images/Kaaba.png");
         ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.fajr), "صلاة الفجر", image, null, 300, notificationSettings);
         ReminderTask.create(new SimpleDateFormat("HH:mm").format(prayerTimesForToday.sunrise), "شروق الشمس", new Image("/com/bayoumi/images/sun_50px.png"), null, 300, notificationSettings);
