@@ -77,7 +77,8 @@ If you want to contribute to this project and make it better with new ideas, you
 If you find any issue just put it in the repository issue section, thank you.
 
 
-## Thank You!
+<h2 align="center">🌟Star this repository🌟</h2>
+
 Please ⭐️ this repo and share it with others
 
 
