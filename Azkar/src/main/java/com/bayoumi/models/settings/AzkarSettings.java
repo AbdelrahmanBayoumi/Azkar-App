@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
@@ -8,9 +8,10 @@ import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.sql.ResultSet;
+import java.util.Observable;
 
-public class AzkarSettings {
-    public static boolean isUpdated = false;
+public class AzkarSettings extends Observable {
+
     private String morningAzkarReminder;
     private String nightAzkarReminder;
     private String audioName;
@@ -23,7 +24,7 @@ public class AzkarSettings {
     private int volume;
 
 
-    public AzkarSettings() {
+    protected AzkarSettings() {
         loadSettings();
     }
 
@@ -31,33 +32,6 @@ public class AzkarSettings {
         ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
         FileUtils.addFilesNameToList(new File("jarFiles/audio"), audioFiles);
         return audioFiles;
-    }
-
-    public static int getVolumeDB() {
-        try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT volume FROM azkar_settings").executeQuery();
-            if (res.next()) {
-                return res.getInt(1);
-            }
-        } catch (Exception ex) {
-            Logger.error(null, ex, AzkarSettings.class.getName() + ".getVolumeDB()");
-        }
-        return 50;
-    }
-
-    public static String getAudioNameDB() {
-        try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT audio_name FROM azkar_settings").executeQuery();
-            if (res.next()) {
-                String audioFileName = res.getString(1);
-                if (getAudioList().contains(audioFileName)) {
-                    return audioFileName;
-                }
-            }
-        } catch (Exception ex) {
-            Logger.error(null, ex, AzkarSettings.class.getName() + ".getAudioNameDB()");
-        }
-        return "بدون صوت";
     }
 
     public int getMorningAzkarOffset() {
@@ -120,8 +94,8 @@ public class AzkarSettings {
 
     public void save() {
         try {
-            AzkarSettings oldSettings = new AzkarSettings();
-            if (this.equals(oldSettings)) {
+            if (this.equals(new AzkarSettings())) {
+                // if current obj is equal the one stored in DB then => do nothing (don't save)
                 return;
             }
 
@@ -138,19 +112,13 @@ public class AzkarSettings {
             databaseManager.stat.setString(9, this.getSelectedPeriod());
             databaseManager.stat.setInt(10, this.getVolume());
             databaseManager.stat.executeUpdate();
-            isUpdated = true;
+            // fetch new updated data from database
+            loadSettings();
+            // fire change event to all listeners to update their values
+            setChanged();
+            notifyObservers();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
-        }
-    }
-
-    public void saveAlarmSound() {
-        try {
-            DatabaseManager.getInstance().con
-                    .prepareStatement("UPDATE azkar_settings set audio_name = '" + this.getAudioName() + "'").
-                    executeUpdate();
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + ".saveAlarmSound()");
         }
     }
 

@@ -1,8 +1,9 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.controllers.notification.NotificationsControlsFXController;
-import com.bayoumi.models.AzkarSettings;
-import com.bayoumi.models.NotificationSettings;
+import com.bayoumi.models.settings.AzkarSettings;
+import com.bayoumi.models.settings.NotificationSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.Draggable;
 import com.bayoumi.util.gui.HelperMethods;
@@ -78,7 +79,7 @@ public class Notification {
 
             System.out.println("Opening Notification ...");  // TODO : Delete println
             HelperMethods.setStageToBottom(stage, notification.getWidth(), notification.getHeight());
-            playAlarmSound(AzkarSettings.getVolumeDB());
+            playAlarmSound(Settings.getInstance().getAzkarSettings().getVolume());
         } catch (Exception ex) {
             Logger.error(null, ex, Notification.class.getName() + ".create()");
             ex.printStackTrace();
@@ -105,7 +106,7 @@ public class Notification {
                     })
                     .position(notificationSettings.getPosition()).show());
 
-            playAlarmSound(AzkarSettings.getVolumeDB());
+            playAlarmSound(Settings.getInstance().getAzkarSettings().getVolume());
         } catch (Exception ex) {
             Logger.error(null, ex, Notification.class.getName() + ".createControlsFX()");
             ex.printStackTrace();
@@ -157,13 +158,10 @@ public class Notification {
 
         hBox.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
-//                System.out.println("88888888");
                 if (hBox.getScene().getStylesheets().contains("/com/bayoumi/css/style.css")) {
-//                    System.out.println("55555555555555");
                     hBox.getScene().getStylesheets().remove("/com/bayoumi/css/style.css");
                 }
                 if (hBox.getScene().getStylesheets().isEmpty()) {
-//                    System.out.println("7777777");
                     hBox.getScene().getStylesheets().add(0, "/com/bayoumi/css/controlsfx-notification.css");
                 }
             }
@@ -221,7 +219,7 @@ public class Notification {
     }
 
     private static void playAlarmSound(int volume) {
-        String fileName = AzkarSettings.getAudioNameDB();
+        String fileName = Settings.getInstance().getAzkarSettings().getAudioName();
         if (!fileName.equals("بدون صوت")) {
             MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
             MEDIA_PLAYER.setVolume(volume / 100.0);

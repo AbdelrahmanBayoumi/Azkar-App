@@ -3,11 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -15,421 +12,133 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="535.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css"
-           xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.bayoumi.controllers.home.HomeController">
+<StackPane prefHeight="535.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
    <VBox prefHeight="200.0" prefWidth="100.0">
-      <VBox prefHeight="85.0" style="-fx-background-color: -fx-secondary;" VBox.vgrow="ALWAYS"/>
-      <VBox prefHeight="160.0" style="-fx-background-color: -fx-bg;" VBox.vgrow="ALWAYS"/>
+      <VBox prefHeight="85.0" style="-fx-background-color: -fx-secondary;" VBox.vgrow="ALWAYS" />
+      <VBox prefHeight="160.0" style="-fx-background-color: -fx-bg;" VBox.vgrow="ALWAYS" />
    </VBox>
    <VBox alignment="CENTER" prefHeight="630.0" prefWidth="460.0" StackPane.alignment="CENTER">
       <VBox alignment="CENTER" spacing="10.0">
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
          </padding>
          <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT">
             <children>
                <Label fx:id="hijriDate" style="-fx-text-fill: -fx-secondary-text;" text="DD MMMM YYYY">
                   <font>
-                     <Font name="System Bold" size="20.0"/>
+                     <Font name="System Bold" size="20.0" />
                   </font>
                </Label>
                <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                   <Label fx:id="day" style="-fx-text-fill: -fx-secondary-text;" text="السبت">
                      <font>
-                        <Font name="Calisto MT Bold" size="20.0"/>
+                        <Font name="Calisto MT Bold" size="20.0" />
                      </font>
                   </Label>
                </HBox>
                <Label fx:id="gregorianDate" style="-fx-text-fill: -fx-secondary-text;" text="DD MMMM YYYY">
                   <font>
-                     <Font name="System Bold" size="20.0"/>
+                     <Font name="System Bold" size="20.0" />
                   </font>
                </Label>
             </children>
          </HBox>
       </VBox>
-      <HBox alignment="TOP_RIGHT" spacing="70.0" VBox.vgrow="ALWAYS">
+      <HBox fx:id="mainContainer" alignment="TOP_RIGHT" spacing="70.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
-            <Insets/>
+            <Insets />
          </VBox.margin>
          <children>
-            <VBox alignment="TOP_CENTER" spacing="20.0" HBox.hgrow="ALWAYS">
+            <VBox fx:id="container" alignment="TOP_CENTER" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
                   <VBox alignment="CENTER" spacing="10.0" style="-fx-background-radius: 20;" styleClass="white-box">
                      <children>
                         <HBox alignment="CENTER" spacing="20.0">
                            <children>
-                              <MaterialDesignIconView glyphName="CLOCK" size="28"/>
+                              <MaterialDesignIconView glyphName="CLOCK" size="28" />
                               <Label text="الساعة الان ">
                                  <font>
-                                    <Font name="System Bold" size="18.0"/>
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </HBox>
                         <Label fx:id="timeLabel" lineSpacing="1.0" text="00:00">
                            <font>
-                              <Font name="System Bold" size="24.0"/>
+                              <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
                      </children>
                      <padding>
-                        <Insets bottom="10.0" top="10.0"/>
+                        <Insets bottom="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT"
-                        style="-fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);"
-                        styleClass="white-box">
+                  <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);" styleClass="white-box">
                      <children>
                         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                            <children>
                               <Label fx:id="currentPrayerText" text="باقي على المغرب">
                                  <font>
-                                    <Font size="23.0"/>
+                                    <Font size="23.0" />
                                  </font>
                               </Label>
                            </children>
                         </HBox>
                         <Label fx:id="remainingTimeLabel" text="00:00:00">
                            <font>
-                              <Font size="25.0"/>
+                              <Font size="25.0" />
                            </font>
                         </Label>
                      </children>
                      <VBox.margin>
-                        <Insets/>
+                        <Insets />
                      </VBox.margin>
                      <padding>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <VBox fx:id="periodBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0"
-                        style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                     </padding>
-                     <children>
-                        <Label text="معدل ظهور الأذكار">
-                           <font>
-                              <Font name="System Bold" size="20.0"/>
-                           </font>
-                        </Label>
-                        <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 5 دقائق">
-                           <font>
-                              <Font name="System Bold" size="15.0"/>
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER"
-                              style="-fx-background-radius: 20; -fx-background-color: derive( -fx-secondary-text,-5%);">
-                           <children>
-                              <JFXButton fx:id="highFrequency" focusTraversable="false" minWidth="76.0"
-                                         onAction="#highFrequencyAction" styleClass="frequency-btn" text="عالي">
-                                 <font>
-                                    <Font name="System Bold" size="16.0"/>
-                                 </font>
-                              </JFXButton>
-                              <JFXButton fx:id="midFrequency" focusTraversable="false" minWidth="76.0"
-                                         onAction="#midFrequencyAction" styleClass="frequency-btn" text="متوسط">
-                                 <font>
-                                    <Font name="System Bold" size="16.0"/>
-                                 </font>
-                              </JFXButton>
-                              <JFXButton fx:id="lowFrequency" focusTraversable="false" minWidth="76.0"
-                                         onAction="#lowFrequencyAction" styleClass="frequency-btn" text="منخفض">
-                                 <font>
-                                    <Font name="System Bold" size="16.0"/>
-                                 </font>
-                              </JFXButton>
-                              <JFXButton fx:id="rearFrequency" focusTraversable="false" minWidth="76.0"
-                                         onAction="#rearFrequencyAction" styleClass="frequency-btn" text="نادر">
-                                 <font>
-                                    <Font name="System Bold" size="16.0"/>
-                                 </font>
-                              </JFXButton>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
                   <HBox alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0"
-                                   minHeight="95.0" minWidth="130.0" onAction="#goToMorningAzkar" prefHeight="100.0"
-                                   prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml"
-                                   text="أذكار الصباح">
+                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToMorningAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار الصباح">
                            <graphic>
                               <ImageView fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../images/sun_50px.png"/>
+                                    <Image url="@../../images/sun_50px.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                            <font>
-                              <Font name="System Bold" size="15.0"/>
+                              <Font name="System Bold" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0"
-                                   minHeight="95.0" minWidth="130.0" onAction="#goToNightAzkar" prefHeight="100.0"
-                                   prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml"
-                                   text="أذكار المساء">
+                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToNightAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار المساء">
                            <graphic>
                               <ImageView fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../images/night_50px.png"/>
+                                    <Image url="@../../images/night_50px.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                            <font>
-                              <Font name="System Bold" size="15.0"/>
+                              <Font name="System Bold" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton contentDisplay="TOP" focusTraversable="false"
-                                   graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToSettings"
-                                   prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;"
-                                   styleClass="box-noraml" text="الإعدادات">
+                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToSettings" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="الإعدادات">
                            <font>
-                              <Font name="System Bold" size="15.0"/>
+                              <Font name="System Bold" size="15.0" />
                            </font>
                            <graphic>
-                              <FontAwesomeIconView glyphName="GEAR" size="45"/>
+                              <FontAwesomeIconView glyphName="GEAR" size="45" />
                            </graphic>
                         </JFXButton>
                      </children>
                   </HBox>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" spacing="20.0">
-               <HBox.margin>
-                  <Insets/>
-               </HBox.margin>
-               <children>
-                  <VBox alignment="CENTER" minWidth="324.0" prefWidth="324.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <HBox fx:id="fajrBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT"
-                              styleClass="box-prayer">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="fajrText" text="الفجر">
-                                       <font>
-                                          <Font name="Arial Bold" size="27.0"/>
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="fajrTime" text="--:--">
-                                 <font>
-                                    <Font name="Arial Bold" size="25.0"/>
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" styleClass="box-prayer">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="sunriseText" text="الشروق">
-                                       <font>
-                                          <Font name="Arial Bold" size="27.0"/>
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="sunriseTime" text="--:--">
-                                 <font>
-                                    <Font name="Arial Bold" size="25.0"/>
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                        </HBox>
-                        <HBox fx:id="dhuhrBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT"
-                              styleClass="box-prayer">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="dhuhrText" text="الظهر">
-                                       <font>
-                                          <Font name="Almarai" size="27.0"/>
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="dhuhrTime" text="--:--">
-                                 <font>
-                                    <Font name="Arial Bold" size="25.0"/>
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                        </HBox>
-                        <HBox fx:id="asrBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT"
-                              styleClass="box-prayer">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="asrText" text="العصر">
-                                       <font>
-                                          <Font name="Arial Bold" size="27.0"/>
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="asrTime" text="--:--">
-                                 <font>
-                                    <Font name="Arial Bold" size="25.0"/>
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                        </HBox>
-                        <HBox fx:id="maghribBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT"
-                              styleClass="box-prayer">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="maghribText" text="المغرب">
-                                       <font>
-                                          <Font name="Arial Bold" size="27.0"/>
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="maghribTime" text="--:--">
-                                 <font>
-                                    <Font name="Arial Bold" size="25.0"/>
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                        </HBox>
-                        <HBox fx:id="ishaBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT"
-                              styleClass="box-prayer">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label fx:id="ishaText" text="العشاء">
-                                       <font>
-                                          <Font name="Arial Bold" size="27.0"/>
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="ishaTime" text="--:--">
-                                 <font>
-                                    <Font name="Arial Bold" size="25.0"/>
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                           </padding>
-                        </HBox>
-                        <HBox alignment="BOTTOM_LEFT">
-                           <children>
-                              <Label onMouseClicked="#openSunnahBox"
-                                     style="-fx-font-size: 16; -fx-font-weight: bold; -fx-font-family: system;"
-                                     text="مواقيت أخرى">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND"/>
-                                 </cursor>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets top="30.0"/>
-                           </padding>
-                        </HBox>
-                     </children>
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                     </padding>
-                     <styleClass>
-                        <String fx:value="white-box"/>
-                        <String fx:value="prayer-view"/>
-                     </styleClass>
-                  </VBox>
                </children>
             </VBox>
          </children>
          <padding>
-            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
          </padding>
       </HBox>
-   </VBox>
-   <VBox fx:id="loadingBox" alignment="CENTER" spacing="20.0" style="-fx-background-color: rgba(0, 0, 0, 0.7);"
-         visible="false" StackPane.alignment="CENTER">
-      <children>
-         <ProgressIndicator/>
-         <Label style="-fx-text-fill: -fx-secondary-text;" text="Loading ...">
-            <font>
-               <Font name="System Bold" size="25.0"/>
-            </font>
-         </Label>
-      </children>
-   </VBox>
-   <VBox fx:id="sunnahBox" alignment="CENTER" fillWidth="false" onMouseClicked="#removeSunnahBox"
-         style="-fx-background-color: rgba(0%,0%,0%,0.5);" visible="false" StackPane.alignment="CENTER">
-      <children>
-         <VBox alignment="CENTER" minWidth="450.0" styleClass="white-box">
-            <padding>
-               <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
-            </padding>
-            <children>
-               <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" styleClass="box-prayer">
-                  <children>
-                     <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                        <children>
-                           <Label style="-fx-font-size: 26;" text="منتصف الليل">
-                              <font>
-                                 <Font name="Arial Bold" size="27.0"/>
-                              </font>
-                           </Label>
-                        </children>
-                     </HBox>
-                     <Label fx:id="middleOfTheNightTime" style="-fx-font-size: 26;" text="--:--">
-                        <font>
-                           <Font name="Arial Bold" size="25.0"/>
-                        </font>
-                     </Label>
-                  </children>
-                  <padding>
-                     <Insets bottom="15.0" left="10.0" right="10.0" top="15.0"/>
-                  </padding>
-               </HBox>
-               <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" styleClass="box-prayer">
-                  <children>
-                     <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                        <children>
-                           <Label style="-fx-font-size: 26;" text="الثلث الأخير من الليل">
-                              <font>
-                                 <Font name="Arial Bold" size="27.0"/>
-                              </font>
-                           </Label>
-                        </children>
-                     </HBox>
-                     <Label fx:id="lastThirdOfTheNightTime" style="-fx-font-size: 26;" text="--:--">
-                        <font>
-                           <Font name="Arial Bold" size="25.0"/>
-                        </font>
-                     </Label>
-                  </children>
-                  <padding>
-                     <Insets bottom="15.0" left="10.0" right="10.0" top="15.0"/>
-                  </padding>
-               </HBox>
-            </children>
-         </VBox>
-      </children>
    </VBox>
 </StackPane>

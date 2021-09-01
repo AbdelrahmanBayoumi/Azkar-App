@@ -3,7 +3,8 @@ package com.bayoumi.controllers.settings.prayertimes;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.City;
 import com.bayoumi.models.Country;
-import com.bayoumi.models.PrayerTimeSettings;
+import com.bayoumi.models.settings.PrayerTimeSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ComboBoxAutoComplete;
 import com.bayoumi.util.web.IpChecker;
@@ -61,7 +62,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initDoubleValidation();
         // TODO use dependency injection for PrayerTimeSettings
-        prayerTimeSettings = new PrayerTimeSettings();
+        prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         initCountries();
         initCities();
         initPopOver();

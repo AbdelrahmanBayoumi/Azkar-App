@@ -1,7 +1,8 @@
 package com.bayoumi.controllers.settings.other;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
-import com.bayoumi.models.OtherSettings;
+import com.bayoumi.models.settings.OtherSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
@@ -51,7 +52,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        otherSettings = new OtherSettings();
+        otherSettings = Settings.getInstance().getOtherSettings();
         hijriDateLabel.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
 
         hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));

@@ -2,19 +2,19 @@ package com.bayoumi.util.prayertimes;
 
 import com.batoulapps.adhan.*;
 import com.batoulapps.adhan.data.DateComponents;
-import com.bayoumi.models.PrayerTimeSettings;
+import com.bayoumi.models.settings.PrayerTimeSettings;
 
 import java.util.Date;
 
 public class PrayerTimesUtil {
 
-    public static PrayerTimes getPrayerTimesToday(PrayerTimeSettings prayerTimeSettings) {
+    public static PrayerTimes getPrayerTimesToday(PrayerTimeSettings prayerTimeSettings, Date nowDate) {
         final Coordinates coordinates = new Coordinates(prayerTimeSettings.getLatitude(), prayerTimeSettings.getLongitude());
-        final DateComponents dateComponents = DateComponents.from(new Date());
+        final DateComponents dateComponents = DateComponents.from(nowDate);
         final CalculationParameters parameters = CalculationMethod.valueOf(prayerTimeSettings.getMethod().getValue()).getParameters();
         parameters.madhab = prayerTimeSettings.getAsrJuristic() == 0 ? Madhab.SHAFI : Madhab.HANAFI;
 
-        com.batoulapps.adhan.PrayerTimes prayerTimes = new com.batoulapps.adhan.PrayerTimes(coordinates, dateComponents, parameters);
+        PrayerTimes prayerTimes = new PrayerTimes(coordinates, dateComponents, parameters);
         if (prayerTimeSettings.isSummerTiming()) {
             prayerTimes.fajr.setTime(prayerTimes.fajr.getTime() + 60 * 60 * 1000);
             prayerTimes.sunrise.setTime(prayerTimes.sunrise.getTime() + 60 * 60 * 1000);

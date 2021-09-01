@@ -2,8 +2,9 @@ package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.models.AzkarSettings;
-import com.bayoumi.models.NotificationSettings;
+import com.bayoumi.models.settings.AzkarSettings;
+import com.bayoumi.models.settings.NotificationSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
@@ -109,7 +110,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
 
         // init Saved data form DB
-        azkarSettings = new AzkarSettings();
+        azkarSettings = Settings.getInstance().getAzkarSettings();
         azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
         azkarAlarmComboBox.setItems(AzkarSettings.getAudioList());
         playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
@@ -142,7 +143,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             }
         });
 
-        notificationSettings = new NotificationSettings();
+        notificationSettings = Settings.getInstance().getNotificationSettings();
         posComboBox.setItems(FXCollections.observableArrayList(Pos.TOP_RIGHT, Pos.BOTTOM_RIGHT, Pos.TOP_LEFT, Pos.BOTTOM_LEFT, Pos.CENTER));
         posComboBox.setValue(notificationSettings.getPosition());
         // TODO Check for ENG Language
@@ -264,9 +265,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         }
         // save alarm sound & pos in case of selecting new sound
         azkarSettings.setAudioName(azkarAlarmComboBox.getValue());
-        azkarSettings.saveAlarmSound();
         notificationSettings.setPosition(posComboBox.getValue());
-        notificationSettings.save();
         Platform.runLater(()
                 -> {
             try {

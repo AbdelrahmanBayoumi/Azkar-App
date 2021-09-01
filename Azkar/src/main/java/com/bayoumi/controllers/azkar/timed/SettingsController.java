@@ -1,7 +1,8 @@
 package com.bayoumi.controllers.azkar.timed;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
-import com.bayoumi.models.AzkarSettings;
+import com.bayoumi.models.settings.AzkarSettings;
+import com.bayoumi.models.settings.Settings;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
@@ -33,7 +34,7 @@ public class SettingsController implements SettingsInterface {
         morningAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
 
         // init Saved data form DB
-        azkarSettings = new AzkarSettings();
+        azkarSettings = Settings.getInstance().getAzkarSettings();
         morningAzkarTimeComboBox.setValue(azkarSettings.getMorningAzkarReminder());
         nightAzkarTimeComboBox.setValue(azkarSettings.getNightAzkarReminder());
         dialog.setOnDialogClosed(event -> saveToDB());

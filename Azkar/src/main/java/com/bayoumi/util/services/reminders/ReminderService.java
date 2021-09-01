@@ -2,21 +2,22 @@ package com.bayoumi.util.services.reminders;
 
 import com.batoulapps.adhan.PrayerTimes;
 import com.bayoumi.Launcher;
-import com.bayoumi.models.AzkarSettings;
-import com.bayoumi.models.NotificationSettings;
-import com.bayoumi.models.PrayerTimeSettings;
+import com.bayoumi.models.settings.AzkarSettings;
+import com.bayoumi.models.settings.NotificationSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
 import javafx.scene.image.Image;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReminderService {
 
-    public static void init(AzkarSettings azkarSettings, PrayerTimeSettings prayerTimeSettings, NotificationSettings notificationSettings) {
+    public static void init(Settings settings, Date date) {
         ReminderTask.clearAllTasks();
-        final PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(prayerTimeSettings);
+        final PrayerTimes prayerTimesForToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
 //        initPrayerTimes(prayerTimesForToday, notificationSettings);
-        initTimedAzkar(azkarSettings, prayerTimesForToday, notificationSettings);
+        initTimedAzkar(settings.getAzkarSettings(), prayerTimesForToday, settings.getNotificationSettings());
         // for testing
 //        ReminderTask.create(LocalTime.of(1, 37).toString(), "أذكار المساء", null, () -> Launcher.homeController.goToNightAzkar());
     }

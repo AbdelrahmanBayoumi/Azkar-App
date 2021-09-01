@@ -2,7 +2,7 @@ package com.bayoumi;
 
 import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.OtherSettings;
+import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;

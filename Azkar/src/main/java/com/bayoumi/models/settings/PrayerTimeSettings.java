@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
@@ -7,9 +7,10 @@ import javafx.util.StringConverter;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Observable;
 
-public class PrayerTimeSettings {
-    public static boolean isUpdated = false;
+public class PrayerTimeSettings extends Observable {
+
     private String country;
     private String city;
     private Method method;
@@ -18,7 +19,7 @@ public class PrayerTimeSettings {
     private double latitude;
     private double longitude;
 
-    public PrayerTimeSettings() {
+    protected PrayerTimeSettings() {
         loadSettings();
     }
 
@@ -57,13 +58,17 @@ public class PrayerTimeSettings {
             databaseManager.stat.setDouble(6, latitude);
             databaseManager.stat.setDouble(7, longitude);
             databaseManager.stat.executeUpdate();
-            isUpdated = true;
+            // fetch new updated data from database
+            loadSettings();
+            // fire change event to all listeners to update their values
+            setChanged();
+            notifyObservers();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
         }
     }
 
-    public void loadSettings() {
+    private void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_settings").executeQuery();
             if (res.next()) {

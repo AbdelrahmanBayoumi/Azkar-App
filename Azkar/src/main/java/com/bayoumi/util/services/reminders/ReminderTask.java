@@ -1,6 +1,6 @@
 package com.bayoumi.util.services.reminders;
 
-import com.bayoumi.models.NotificationSettings;
+import com.bayoumi.models.settings.NotificationSettings;
 import com.bayoumi.util.gui.notfication.Notification;
 import javafx.application.Platform;
 import javafx.scene.image.Image;

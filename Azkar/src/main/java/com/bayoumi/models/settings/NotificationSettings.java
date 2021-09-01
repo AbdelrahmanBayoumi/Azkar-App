@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
@@ -8,16 +8,15 @@ import javafx.util.StringConverter;
 import java.sql.ResultSet;
 
 public class NotificationSettings {
-    public static boolean isUpdated = false;
     private Pos position;
 
-    public NotificationSettings() {
+    protected NotificationSettings() {
         this.position = Pos.BOTTOM_RIGHT;
         loadSettings();
     }
 
     public static StringConverter<Pos> posArabicConverter() {
-       return new StringConverter<Pos>() {
+        return new StringConverter<Pos>() {
             @Override
             public String toString(Pos object) {
                 if (object.equals(Pos.TOP_RIGHT)) {
@@ -45,13 +44,15 @@ public class NotificationSettings {
         };
     }
 
-    public void loadSettings() {
+    private void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM notification").executeQuery();
             if (res.next()) {
                 this.position = Pos.valueOf(res.getString("position"));
             }
+            System.out.println("--- " + getClass().getName() + ".loadSettings()" + " ---");
             System.out.println(this);
+            System.out.println("-------------------------------------------------------");
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
@@ -64,7 +65,7 @@ public class NotificationSettings {
             databaseManager.stat = databaseManager.con.prepareStatement("UPDATE notification set position = ?");
             databaseManager.stat.setString(1, this.position.toString());
             databaseManager.stat.executeUpdate();
-            isUpdated = true;
+            loadSettings();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
         }

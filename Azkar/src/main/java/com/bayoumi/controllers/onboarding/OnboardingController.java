@@ -1,6 +1,9 @@
 package com.bayoumi.controllers.onboarding;
 
 import com.bayoumi.models.*;
+import com.bayoumi.models.settings.OtherSettings;
+import com.bayoumi.models.settings.PrayerTimeSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ComboBoxAutoComplete;
 import com.bayoumi.util.web.IpChecker;
@@ -55,7 +58,7 @@ public class OnboardingController implements Initializable {
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initPopOver();
-        prayerTimeSettings = new PrayerTimeSettings();
+        prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         initCountries();
         initCities();
         methodComboBox.setItems(FXCollections.observableArrayList(
@@ -84,7 +87,7 @@ public class OnboardingController implements Initializable {
         prayerTimeSettings.setLongitude(cities.getValue().getLongitude());
         prayerTimeSettings.save();
         // save other settings
-        OtherSettings otherSettings = new OtherSettings();
+        OtherSettings otherSettings = Settings.getInstance().getOtherSettings();
         otherSettings.setEnable24Format(format24.isSelected());
         otherSettings.setMinimized(minimizeAtStart.isSelected());
         otherSettings.save();

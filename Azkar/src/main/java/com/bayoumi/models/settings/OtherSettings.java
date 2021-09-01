@@ -1,23 +1,27 @@
-package com.bayoumi.models;
+package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Observable;
 
-public class OtherSettings {
-    public static boolean isUpdated = false;
+public class OtherSettings extends Observable {
+
     private String language;
     private boolean enableDarkMode;
     private boolean enable24Format;
     private boolean minimized;
     private int hijriOffset;
 
-    public OtherSettings() {
+    protected OtherSettings() {
         loadSettings();
     }
 
-    public static boolean getIsMinimizedDB(){
+    public static boolean getIsMinimizedDB() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT minimized FROM other_settings").executeQuery();
             if (res.next()) {
@@ -28,7 +32,8 @@ public class OtherSettings {
         }
         return false;
     }
-    public void loadSettings() {
+
+    private void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
             if (res.next()) {
@@ -43,8 +48,15 @@ public class OtherSettings {
         }
     }
 
+    /**
+     * update OtherSettings Object in Database
+     */
     public void save() {
         try {
+            if (this.equals(new OtherSettings())) {
+                // if current obj is equal the one stored in DB then => do nothing (don't save)
+                return;
+            }
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             databaseManager.stat = databaseManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?, hijri_offset = ?, minimized = ?");
             databaseManager.stat.setString(1, this.language);
@@ -53,12 +65,34 @@ public class OtherSettings {
             databaseManager.stat.setInt(4, this.hijriOffset);
             databaseManager.stat.setInt(5, this.minimized ? 1 : 0);
             databaseManager.stat.executeUpdate();
-            isUpdated = true;
+            // fetch new updated data from database
+            loadSettings();
+            // fire change event to all listeners to update their values
+            setChanged();
+            notifyObservers();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".save()");
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OtherSettings that = (OtherSettings) o;
+        return enableDarkMode == that.enableDarkMode &&
+                enable24Format == that.enable24Format &&
+                minimized == that.minimized &&
+                hijriOffset == that.hijriOffset &&
+                language.equals(that.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(language, enableDarkMode, enable24Format, minimized, hijriOffset);
+    }
+
+    // =========== SETTERS & GETTERS ===========
     @Override
     public String toString() {
         return "OtherSettings{" +
@@ -116,6 +150,5 @@ public class OtherSettings {
     public void setHijriOffset(int hijriOffset) {
         this.hijriOffset = hijriOffset;
     }
-
 
 }
