@@ -1,51 +1,23 @@
 const versionNumber = "0.9.4";
 document.getElementById("version").innerText = versionNumber;
 
-function win_exe64(btn) {
-  btn.disabled = true;
-  incrementCounter({ "version": versionNumber, "platform": "win_exe64" })
-}
-
-function win_exe32(btn) {
-  btn.disabled = true;
-  incrementCounter({ "version": versionNumber, "platform": "win_exe32" })
-}
-
-function jar_portable(btn) {
-  btn.disabled = true;
-  incrementCounter({ "version": versionNumber, "platform": "jar" })
-}
-
-function incrementCounter(bodyData) {
-  var requestOptions = {
-    method: 'POST',
-    headers: {
-      "api_key": "AbdelRahmanBayomi",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(bodyData),
-    withCredentials: true,
-    credentials: "include",
-  };
-  fetch("https://azkar-download-tracker.herokuapp.com/downloads", requestOptions)
-    .catch(error => console.log('error', error));
-}
 
 function getVersionCounter(version) {
-  return fetch("https://azkar-download-tracker.herokuapp.com/downloads/" + version,
-    {
-      method: 'GET',
-      headers: {
-        "api_key": "AbdelRahmanBayomi",
-        "Content-Type": "application/json"
-      }
-    }).then(result => result.json())
-    .then(data => {
+  return fetch("https://api.github.com/repos/AbdelrahmanBayoumi/Azkar-App/releases/tags/" + version)
+    .then(result => result.json())
+    .then(json => {
       // console.log("data:", data);
-      if (data.version) {
-        document.getElementById("win_exe64_counter").innerText = data.win_exe64;
-        document.getElementById("win_exe32_counter").innerText = data.win_exe32;
-        document.getElementById("jar_counter").innerText = data.jar;
+      json.assets.forEach(asset => {
+        if (asset.name.indexOf("32") !== -1) {
+          document.getElementById("win_exe32_counter").innerText = asset.download_count;
+        } else if (asset.name.indexOf("64") !== -1) {
+          document.getElementById("win_exe64_counter").innerText = asset.download_count;
+        } else if (asset.name.indexOf("Jar") !== -1) {
+          document.getElementById("jar_counter").innerText = asset.download_count;
+        }
+        // console.log("Name:", asset.name, ", Number of Downlads:", asset.download_count);
+      });
+      if (json.assets) {
         Array.from(document.getElementsByClassName("number-of-downloads")).forEach(
           (element, index, array) => {
             element.style.display = "inline";
