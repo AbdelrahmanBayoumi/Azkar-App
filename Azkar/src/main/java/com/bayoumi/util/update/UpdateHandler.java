@@ -41,7 +41,7 @@ public class UpdateHandler {
      * 1   : New update found
      * -1  :  error => only installers and single bundle archives on macOS are supported for background updates
      */
-    public int checkUpdate() {
+    public synchronized int checkUpdate() {
         CompletableFuture<UpdateDescriptorEntry> future = new CompletableFuture<>();
         try {
             getUpdateDescriptor(future);

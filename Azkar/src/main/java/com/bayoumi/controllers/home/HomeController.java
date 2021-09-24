@@ -14,7 +14,6 @@ import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
 import com.bayoumi.util.services.azkar.AzkarService;
 import com.bayoumi.util.services.reminders.Reminder;
-import com.bayoumi.util.services.reminders.ReminderService;
 import com.bayoumi.util.services.reminders.ReminderUtil;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.time.Utilities;
@@ -36,16 +35,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class HomeController implements Initializable {
 
     // ==== Helper Objects ====
     public Date date;
-    private Calendar calendar;
     private String remainingTime;
     private AzkarPeriodsController azkarPeriodsController;
     private PrayerTimesController prayerTimesController;
@@ -66,7 +62,6 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         FXMLLoader fxmlLoader;
         date = new Date();
-        calendar = Calendar.getInstance(TimeZone.getDefault());
         // initialize required dependencies
         settings = Settings.getInstance();
         prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
@@ -89,7 +84,6 @@ public class HomeController implements Initializable {
         }
 
         initClock();
-        ReminderService.init(settings, date);
         day.setText(Utilities.getDay(settings.getOtherSettings().getLanguageLocal(), date));
         gregorianDate.setText(Utilities.getGregorianDate(settings.getOtherSettings().getLanguageLocal(), date));
         hijriDate.setText(new HijriDate(settings.getOtherSettings().getHijriOffset()).getString(settings.getOtherSettings().getLanguageLocal()));
@@ -110,7 +104,6 @@ public class HomeController implements Initializable {
 
         // if there is a change in HijriDate offset
         settings.getOtherSettings().addObserver((o, arg) -> {
-            System.out.println("OtherSettings Change Listener");
             hijriDate.setText(new HijriDate(settings.getOtherSettings().getHijriOffset()).getString(settings.getOtherSettings().getLanguageLocal()));
             prayerTimesController.setPrayerTimesValuesToGUI();
         });
@@ -124,15 +117,14 @@ public class HomeController implements Initializable {
                 AzkarService.init(azkarPeriodsController, settings.getNotificationSettings());
                 periodBox.setDisable(false);
             }
-            ReminderService.init(settings, date);
+            // reinitialize Reminders
+            initReminders();
         });
 
         settings.getPrayerTimeSettings().addObserver((o, arg) -> {
             prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
             prayerTimesController.setPrayerTimes(prayerTimesToday);
-            ReminderUtil.getInstance().clear();
             initReminders();
-            ReminderService.init(settings, date);
         });
     }
 
@@ -140,8 +132,6 @@ public class HomeController implements Initializable {
     private void initClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             date = new Date();
-//            System.out.println("=============================================");
-//            System.out.println("date = " + date);
 
             // -- increment time --
             String timeNow;
@@ -164,8 +154,8 @@ public class HomeController implements Initializable {
                 // get prayer times for the new day
                 prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
                 prayerTimesController.setPrayerTimes(prayerTimesToday);
-                // reinitialize the ReminderService
-                ReminderService.init(settings, date);
+                // reinitialize Reminders
+                initReminders();
             }
 
             prayerTimesController.prayerTimelineAction();
@@ -249,11 +239,30 @@ public class HomeController implements Initializable {
     }
 
     private void initReminders() {
+        ReminderUtil.getInstance().clear();
         ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.fajr, () -> playAdhan("صلاة الفجر")));
         ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.dhuhr, () -> playAdhan("صلاة الظهر")));
         ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.asr, () -> playAdhan("صلاة العصر")));
         ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.maghrib, () -> playAdhan("صلاة المغرب")));
         ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
+        if (settings.getAzkarSettings().getMorningAzkarOffset() != 0) {
+            Date morningAzkarDate = ((Date) prayerTimesToday.fajr.clone());
+            morningAzkarDate.setTime(prayerTimesToday.fajr.getTime() + (settings.getAzkarSettings().getMorningAzkarOffset() * 60000));
+            ReminderUtil.getInstance().add(new Reminder(morningAzkarDate, () -> Platform.runLater(() ->
+                    Notification.createControlsFX("أذكار الصباح",
+                            new Image("/com/bayoumi/images/sun_50px.png"),
+                            () -> Launcher.homeController.goToMorningAzkar(),
+                            30, settings.getNotificationSettings()))));
+        }
+        if (settings.getAzkarSettings().getNightAzkarOffset() != 0) {
+            Date nightAzkarDate = ((Date) prayerTimesToday.asr.clone());
+            nightAzkarDate.setTime(prayerTimesToday.asr.getTime() + (settings.getAzkarSettings().getNightAzkarOffset() * 60000));
+            ReminderUtil.getInstance().add(new Reminder(nightAzkarDate, () -> Platform.runLater(() ->
+                    Notification.createControlsFX("أذكار المساء",
+                            new Image("/com/bayoumi/images/night_50px.png"),
+                            () -> Launcher.homeController.goToNightAzkar(),
+                            30, settings.getNotificationSettings()))));
+        }
     }
 
     private void checkForReminders(Date date) {

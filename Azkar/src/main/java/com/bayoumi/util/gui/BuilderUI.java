@@ -2,7 +2,6 @@ package com.bayoumi.util.gui;
 
 import com.bayoumi.controllers.alert.confirm.ConfirmAlertController;
 import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
-import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.controllers.dialog.UpdateConfirmController;
 import com.bayoumi.models.UpdateInfo;
 import com.bayoumi.util.Logger;
@@ -20,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class BuilderUI {
 
-    public static boolean showUpdateDetails(UpdateInfo updateInfo , String currentVersion) {
+    public static boolean showUpdateDetails(UpdateInfo updateInfo, String currentVersion) {
         try {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/dialog/UpdateConfirm.fxml"));
@@ -32,7 +31,7 @@ public class BuilderUI {
             controller.setData(updateInfo, currentVersion);
             stage.showAndWait();
             return controller.isConfirmed;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Logger.error(null, ex, BuilderUI.class.getName() + ".showUpdateDetails()");
             return false;
         }

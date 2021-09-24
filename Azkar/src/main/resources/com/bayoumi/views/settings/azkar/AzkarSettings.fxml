@@ -142,10 +142,13 @@
                            </JFXComboBox>
                            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                               <children>
-                                    <JFXButton fx:id="showZekrButton" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#showZekr" prefHeight="43.0" prefWidth="140.0" styleClass="primary-button" text="إظهار ذكر للتجربة">
+                                    <JFXButton fx:id="showZekrButton" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#showZekr" styleClass="primary-button" text="إظهار ذكر للتجربة">
                                         <font>
                                             <Font name="System Bold" size="16.0" />
                                         </font>
+                                    <padding>
+                                       <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
+                                    </padding>
                                     </JFXButton>
                               </children>
                            </HBox>
@@ -159,13 +162,16 @@
             </children>
          </VBox>
            <HBox alignment="BOTTOM_RIGHT" nodeOrientation="RIGHT_TO_LEFT">
-            <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" prefWidth="200.0" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
+            <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
                <graphic>
                   <FontAwesomeIconView glyphName="BOOK" size="30" />
                </graphic>
+               <padding>
+                  <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
+               </padding>
             </JFXButton>
            </HBox>
       </VBox>

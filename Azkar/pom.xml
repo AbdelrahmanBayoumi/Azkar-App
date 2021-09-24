@@ -62,6 +62,12 @@
         </dependency>
 
 <!--        <dependency>-->
+<!--            <groupId>io.sentry</groupId>-->
+<!--            <artifactId>sentry</artifactId>-->
+<!--            <version>5.1.2</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
 <!--            <groupId>joda-time</groupId>-->
 <!--            <artifactId>joda-time</artifactId>-->
 <!--            <version>2.10.10</version>-->

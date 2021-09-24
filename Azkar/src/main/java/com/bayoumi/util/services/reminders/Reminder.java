@@ -26,4 +26,9 @@ public class Reminder {
     public void setCallback(Runnable callback) {
         this.callback = callback;
     }
+
+    @Override
+    public String toString() {
+        return "Reminder " + hashCode() + " {" + "date=" + date + '}';
+    }
 }

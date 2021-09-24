@@ -44,7 +44,7 @@ public class SingleInstance {
     private void singleInstanceApplicationCheck() {
         try {
             InetAddress localAddress = InetAddress.getLocalHost();
-            System.out.println("InetAddress.getLocalHost(): " + localAddress);
+            System.out.println("InetAddress.getLocalHost(): " + localAddress + ":" + PORT);
             server = new ServerSocket(PORT, 1, localAddress);
             System.out.println("Server Online ...");
             // listen to other Instances

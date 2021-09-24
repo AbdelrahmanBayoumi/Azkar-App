@@ -27,6 +27,7 @@ public class ReminderUtil {
     public void validate(Date date) {
         reminderList.forEach(reminder -> {
             if (isEqualIgnoreMillis(date, reminder.getDate())) {
+                System.out.println("reminder: "+ reminder);
                 reminder.getCallback().run();
             }
         });

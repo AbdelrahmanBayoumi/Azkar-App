@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
 public class Launcher extends Application {
     // preloader flags
     public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
