@@ -12,7 +12,6 @@ import com.bayoumi.util.db.LocationsDBManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
-import com.bayoumi.util.web.AzkarServer;
 import com.sun.javafx.application.LauncherImpl;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
@@ -90,9 +89,23 @@ public class Launcher extends Application {
             scene.getStylesheets().add("/com/bayoumi/css/style.css");
             homeController = loader.getController();
             incrementPreloader();
+            // --- initialize Sentry for error tracking ---
+            try {
+                Sentry.init(options -> {
+                    options.setEnableExternalConfiguration(true);
+                    options.setTracesSampleRate(0.2);
+                    options.setDiagnosticLevel(SentryLevel.DEBUG);
+                    options.setDebug(true);
+                    options.setRelease("azkar.app@1.0.0+1");
+                });
+            } catch (Exception ex) {
+                System.out.println(ex.getLocalizedMessage());
+            }
             incrementPreloader();
-            incrementPreloader();
-            incrementPreloader();
+
+//            incrementPreloader();
+//            incrementPreloader();
+//            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             ex.printStackTrace();
