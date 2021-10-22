@@ -2,12 +2,7 @@ package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
-import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.update.UpdateHandler;
-import com.install4j.api.launcher.Variables;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.util.Callback;
 
 import java.sql.ResultSet;
 import java.util.Objects;
@@ -15,6 +10,8 @@ import java.util.Observable;
 import java.util.Timer;
 
 public class OtherSettings extends Observable {
+
+    private static boolean isFirstInstance = true;
 
     private String language;
     private boolean enableDarkMode;
@@ -39,49 +36,6 @@ public class OtherSettings extends Observable {
         return false;
     }
 
-    public static void checkForUpdate(Callback<Void, Void> callback, boolean showAlerts) {
-        new Thread(() -> {
-            try {
-                switch (UpdateHandler.getInstance().checkUpdate()) {
-                    case 0:
-                        Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "No Update Found");
-                        if (showAlerts) {
-                            Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, "لا يوجد تحديثات جديدة", true));
-                        }
-                        break;
-                    case 1:
-                        Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "New update found");
-                        Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "Current Version: " + DatabaseManager.getInstance().getVersion());
-                        Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "New Version: " + UpdateHandler.getInstance().getUpdateInfo());
-                        Platform.runLater(() -> {
-                            String version;
-                            try {
-                                version = Variables.getCompilerVariable("sys.version");
-                            } catch (Exception ex) {
-                                Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => cannot get sys.version");
-                                version = DatabaseManager.getInstance().getVersion();
-                            }
-                            if (BuilderUI.showUpdateDetails(UpdateHandler.getInstance().getUpdateInfo(), version)) {
-                                new Thread(() -> UpdateHandler.getInstance().install()).start();
-                            }
-                        });
-                        break;
-                    case -1:
-                        if (showAlerts) {
-                            Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, "توجد مشكلة في البحث عن تحديثات جديدة", true));
-                        }
-                        Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
-                        break;
-                }
-                if (callback != null) {
-                    callback.call(null);
-                }
-            } catch (Exception ex) {
-                Logger.error(null, ex, OtherSettings.class.getName() + ".checkForUpdate()");
-            }
-        }).start();
-    }
-
     private void loadSettings() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
@@ -93,7 +47,8 @@ public class OtherSettings extends Observable {
                 minimized = res.getInt(5) == 1;
                 automaticCheckForUpdates = res.getInt(6) == 1;
             }
-            if (automaticCheckForUpdates) {
+            if (isFirstInstance) {
+                isFirstInstance = false;
                 System.out.println("Start automaticCheckForUpdates");
                 Timer t = new java.util.Timer();
                 t.schedule(
@@ -101,7 +56,9 @@ public class OtherSettings extends Observable {
                             @Override
                             public void run() {
                                 System.out.println("automaticCheckForUpdates: run()");
-                                OtherSettings.checkForUpdate(null,false);
+                                if (UpdateHandler.getInstance().checkUpdate() == 1 && automaticCheckForUpdates) {
+                                    UpdateHandler.getInstance().showInstallPrompt();
+                                }
                                 // close the thread
                                 t.cancel();
                             }
@@ -150,14 +107,14 @@ public class OtherSettings extends Observable {
         return enableDarkMode == that.enableDarkMode &&
                 enable24Format == that.enable24Format &&
                 minimized == that.minimized &&
-                automaticCheckForUpdates == that.automaticCheckForUpdates &&
                 hijriOffset == that.hijriOffset &&
-                language.equals(that.language);
+                automaticCheckForUpdates == that.automaticCheckForUpdates &&
+                Objects.equals(language, that.language);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(language, enableDarkMode, enable24Format, minimized, hijriOffset);
+        return Objects.hash(language, enableDarkMode, enable24Format, minimized, hijriOffset, automaticCheckForUpdates);
     }
 
     // =========== SETTERS & GETTERS ===========

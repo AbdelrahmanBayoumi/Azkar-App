@@ -12,7 +12,10 @@ import com.bayoumi.util.db.LocationsDBManager;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
+import com.bayoumi.util.web.AzkarServer;
 import com.sun.javafx.application.LauncherImpl;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -59,31 +62,36 @@ public class Launcher extends Application {
         incrementPreloader();
 
         try {
-            // Create Needed Folder if not exist.
+            // --- Create Needed Folder if not exist ---
             Utility.createDirectory(Constants.assetsPath + "/logs");
             Utility.createDirectory(Constants.assetsPath + "/db");
             Utility.createDirectory(Constants.assetsPath + "/audio");
+            incrementPreloader();
 
+            // --- initialize Logger ---
             Logger.init();
             Logger.info("App Launched");
             incrementPreloader();
 
-            incrementPreloader();
-
+            // --- initialize database connection ---
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             if (!databaseManager.init()) {
                 workFine.setValue(false);
             }
             incrementPreloader();
 
+            // --- initialize database connection (locationsDB) ---
             LocationsDBManager.getInstance();
             incrementPreloader();
 
-            // load  Homepage FXML
+            // --- load Homepage FXML ---
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/home/home.fxml"));
             scene = new Scene(loader.load());
             scene.getStylesheets().add("/com/bayoumi/css/style.css");
             homeController = loader.getController();
+            incrementPreloader();
+            incrementPreloader();
+            incrementPreloader();
             incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");

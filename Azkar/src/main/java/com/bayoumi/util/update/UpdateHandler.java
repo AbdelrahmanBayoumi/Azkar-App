@@ -2,12 +2,15 @@ package com.bayoumi.util.update;
 
 import com.bayoumi.models.UpdateInfo;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.gui.BuilderUI;
 import com.install4j.api.launcher.ApplicationLauncher;
 import com.install4j.api.launcher.Variables;
 import com.install4j.api.update.ApplicationDisplayMode;
 import com.install4j.api.update.UpdateChecker;
 import com.install4j.api.update.UpdateDescriptor;
 import com.install4j.api.update.UpdateDescriptorEntry;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -86,20 +89,37 @@ public class UpdateHandler {
         return 1;
     }
 
+    public void showInstallPrompt() {
+        Platform.runLater(() -> {
+            String version;
+            try {
+                version = Variables.getCompilerVariable("sys.version");
+            } catch (Exception ex) {
+                Logger.info(getClass().getName() + ".showInstallPrompt(): " + "error => cannot get sys.version");
+                version = DatabaseManager.getInstance().getVersion();
+            }
+            if (BuilderUI.showUpdateDetails(UpdateHandler.getInstance().getUpdateInfo(), version)) {
+                new Thread(() -> UpdateHandler.getInstance().install()).start();
+            }
+        });
+    }
+
+
     /**
      * install the update launcher
      * NOTE: SHOULD NOT BE CALLED IN JAVAFX THREAD
-     *
-     * @return true : if there is update
-     * false : if there is nothing to install
      */
-    public boolean install() {
+    public void install() {
         if (validUpdateDescriptorEntry == null) {
             Logger.info("Nothing to install. No valid update available.");
-            return false;
+            return;
         }
         try {
-            Logger.info("Launching updater on local desktop.");
+            Logger.info(UpdateHandler.class.getName() + ".install(): " + "New update found");
+            Logger.info(UpdateHandler.class.getName() + ".install(): " + "Current Version: " + DatabaseManager.getInstance().getVersion());
+            Logger.info(UpdateHandler.class.getName() + ".install(): " + "New Version: " + UpdateHandler.getInstance().getUpdateInfo());
+            Logger.info(UpdateHandler.class.getName() + "Launching updater on local desktop.");
+
             ApplicationLauncher.launchApplication(UPDATE_APPLICATION_ID, null, false, new ApplicationLauncher.Callback() {
                         public void exited(int exitValue) {
                             Logger.info("Launcher exited.");
@@ -113,7 +133,6 @@ public class UpdateHandler {
         } catch (IOException ex) {
             Logger.info("Error while updating: " + ex.getMessage());
         }
-        return true;
     }
 
     private void getUpdateDescriptor(CompletableFuture<UpdateDescriptorEntry> future) {

@@ -5,18 +5,19 @@ import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.time.HijriDate;
+import com.bayoumi.util.update.UpdateHandler;
 import com.jfoenix.controls.JFXCheckBox;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -56,9 +57,8 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
         hijriDateOffset.getValueFactory().setValue(otherSettings.getHijriOffset());
 
-        hijriDateOffset.valueProperty().addListener((observable, oldValue, newValue) -> {
-            hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(otherSettings.getLanguageLocal()));
-        });
+        hijriDateOffset.valueProperty().addListener((observable, oldValue, newValue) ->
+                hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(otherSettings.getLanguageLocal())));
 
 
         languageComboBox.setItems(FXCollections.observableArrayList("عربي - Arabic", "إنجليزي - English"));
@@ -115,9 +115,19 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void checkForUpdate() {
         loadingBox.setVisible(true);
-        OtherSettings.checkForUpdate(param -> {
-            loadingBox.setVisible(false);
-            return null;
-        },true);
+        switch (UpdateHandler.getInstance().checkUpdate()) {
+            case 0:
+                Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "No Update Found");
+                Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, "لا يوجد تحديثات جديدة", true));
+                break;
+            case 1:
+                UpdateHandler.getInstance().showInstallPrompt();
+                break;
+            case -1:
+                Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
+                Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, "توجد مشكلة في البحث عن تحديثات جديدة", true));
+                break;
+        }
+        loadingBox.setVisible(false);
     }
 }

@@ -232,9 +232,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
                 Logger.info("LocationService.getCity(IP): " + city);
                 Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
                 if (countryFormCode != null) {
-                    Platform.runLater(() -> {
-                        countries.setValue(countryFormCode);
-                    });
+                    Platform.runLater(() -> countries.setValue(countryFormCode));
                 } else {
                     throw new Exception("Error in fetching city => cannot getCountryFormCode()!");
                 }

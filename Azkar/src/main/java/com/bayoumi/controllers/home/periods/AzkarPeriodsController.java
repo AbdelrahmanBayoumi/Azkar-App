@@ -1,7 +1,6 @@
 package com.bayoumi.controllers.home.periods;
 
-import com.batoulapps.adhan.PrayerTimes;
-import com.bayoumi.models.settings.*;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.services.azkar.AzkarService;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.jfoenix.controls.JFXButton;
@@ -14,7 +13,7 @@ import org.controlsfx.control.PopOver;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AzkarPeriodsController implements Initializable{
+public class AzkarPeriodsController implements Initializable {
     // ==== Objects ====
     private Settings settings;
     // =========
@@ -25,7 +24,7 @@ public class AzkarPeriodsController implements Initializable{
     @FXML
     private JFXButton highFrequency, midFrequency, lowFrequency, rearFrequency, currentFrequency;
 
-    public void setData(Settings settings){
+    public void setData(Settings settings) {
         currentFrequency = getSelectedButton();
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
@@ -35,11 +34,13 @@ public class AzkarPeriodsController implements Initializable{
             periodBox.setDisable(true);
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         settings = Settings.getInstance();
         buildPopOver();
     }
+
     private void buildPopOver() {
         //Build PopOver look and feel
         Label label = new Label("يمكن تعديل معدل ظهور الأذكار من الإعدادت");
@@ -56,18 +57,22 @@ public class AzkarPeriodsController implements Initializable{
             popOver.hide();
         });
     }
+
     @FXML
     private void highFrequencyAction() {
         toggleFrequencyBTN(highFrequency);
     }
+
     @FXML
     private void midFrequencyAction() {
         toggleFrequencyBTN(midFrequency);
     }
+
     @FXML
     private void lowFrequencyAction() {
         toggleFrequencyBTN(lowFrequency);
     }
+
     @FXML
     private void rearFrequencyAction() {
         toggleFrequencyBTN(rearFrequency);

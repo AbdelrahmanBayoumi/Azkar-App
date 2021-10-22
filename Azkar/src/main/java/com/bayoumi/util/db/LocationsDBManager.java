@@ -10,7 +10,6 @@ import java.sql.SQLException;
 public class LocationsDBManager {
 
     private static LocationsDBManager databaseManager = null;  // static
-    public PreparedStatement stat = null;
     public Connection con = null;
 
     private LocationsDBManager() throws Exception {
@@ -43,10 +42,3 @@ public class LocationsDBManager {
     }
 
 }
-/*
-TODO
-SELECT * from Countries;
--- User Chooses Egypt which code is EG
--- THEN
-SELECT * from cityd WHERE country='EG';
-* */

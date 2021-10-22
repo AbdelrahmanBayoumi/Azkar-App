@@ -3,7 +3,6 @@ package com.bayoumi.util.db;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.install4j.api.launcher.ApplicationLauncher;
 import org.flywaydb.core.Flyway;
 
 import java.sql.*;
@@ -115,6 +114,30 @@ public class DatabaseManager {
             databaseManager.stat.executeUpdate();
         } catch (SQLException ex) {
             Logger.error(null, ex, getClass().getName() + ".setVersion(version: " + version + ")");
+        }
+    }
+
+    public String getID() {
+        try {
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT ID FROM program_characteristics").executeQuery();
+            if (res.next()) {
+                return res.getString("ID");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Logger.error(null, ex, getClass().getName() + ".getID()");
+        }
+        return "";
+    }
+
+    public void setID(String ID) {
+        try {
+            DatabaseManager databaseManager = DatabaseManager.getInstance();
+            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE program_characteristics set ID = ?");
+            databaseManager.stat.setString(1, ID);
+            databaseManager.stat.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.error(null, ex, getClass().getName() + ".setID(ID: " + ID + ")");
         }
     }
 }
