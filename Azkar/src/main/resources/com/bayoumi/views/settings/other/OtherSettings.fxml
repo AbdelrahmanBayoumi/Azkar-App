@@ -104,7 +104,7 @@
                         <Insets right="10.0" />
                      </padding>
                   </JFXCheckBox>
-                  <JFXButton contentDisplay="RIGHT" graphicTextGap="17.0" onAction="#checkForUpdate" prefWidth="220.0" style="-fx-background-radius: 15;" styleClass="secondary-button" text="تحقق من وجود تحديثات">
+                  <JFXButton contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="220.0" onAction="#checkForUpdate" style="-fx-background-radius: 15;" styleClass="secondary-button" text="تحقق من وجود تحديثات">
                      <graphic>
                         <FontAwesomeIconView glyphName="REFRESH" size="24" />
                      </graphic>
@@ -116,7 +116,7 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                <children>
-                  <JFXButton contentDisplay="RIGHT" graphicTextGap="17.0" onAction="#openFeedback" prefWidth="220.0" style="-fx-background-radius: 15;" text="للمشاكل والإقتراحات">
+                  <JFXButton contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="220.0" onAction="#openFeedback" style="-fx-background-radius: 15;" text="للمشاكل والإقتراحات">
                      <graphic>
                         <FontAwesomeIconView glyphName="COMMENTS" size="24" />
                      </graphic>
