@@ -6,9 +6,12 @@ import com.bayoumi.models.settings.AzkarSettings;
 import com.bayoumi.models.settings.NotificationSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
 import com.bayoumi.util.gui.notfication.Notification;
+import com.bayoumi.util.gui.notfication.NotificationAudio;
+import com.bayoumi.util.gui.notfication.NotificationContent;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXButton;
@@ -112,7 +115,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         // init Saved data form DB
         azkarSettings = Settings.getInstance().getAzkarSettings();
         azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
-        azkarAlarmComboBox.setItems(AzkarSettings.getAudioList());
+        azkarAlarmComboBox.setItems(FileUtils.getAudioList());
         playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
         azkarAlarmComboBox.setOnAction(event -> {
             playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
@@ -269,10 +272,13 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         Platform.runLater(()
                 -> {
             try {
-                Notification.createControlsFX(
-                        AbsoluteZekr.absoluteZekrObservableList.get(
-                                new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                        new Image("/com/bayoumi/images/Kaaba.png"), null, 10, notificationSettings);
+                Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
+                        new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                                new Image("/com/bayoumi/images/Kaaba.png")),
+                        10,
+                        notificationSettings.getPosition(),
+                        null,
+                        new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume()));
             } catch (Exception ex) {
                 Logger.error("createControlsFX", ex, getClass().getName() + "showZekr().runLater => createControlsFX()");
                 ex.printStackTrace();

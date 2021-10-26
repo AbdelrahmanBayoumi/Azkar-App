@@ -3,10 +3,7 @@ package com.bayoumi.models.settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.file.FileUtils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-import java.io.File;
 import java.sql.ResultSet;
 import java.util.Observable;
 
@@ -26,12 +23,6 @@ public class AzkarSettings extends Observable {
 
     protected AzkarSettings() {
         loadSettings();
-    }
-
-    public static ObservableList<String> getAudioList() {
-        ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
-        FileUtils.addFilesNameToList(new File("jarFiles/audio"), audioFiles);
-        return audioFiles;
     }
 
     public int getMorningAzkarOffset() {
@@ -152,7 +143,7 @@ public class AzkarSettings extends Observable {
     }
 
     public String getAudioName() {
-        if (getAudioList().contains(audioName)) {
+        if (FileUtils.getAudioList().contains(audioName)) {
             return audioName;
         }
         return "بدون صوت";

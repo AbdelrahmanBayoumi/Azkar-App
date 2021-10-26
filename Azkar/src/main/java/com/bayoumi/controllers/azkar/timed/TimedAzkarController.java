@@ -2,6 +2,7 @@ package com.bayoumi.controllers.azkar.timed;
 
 import com.bayoumi.models.TimedZekr;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.gui.ScrollHandler;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
@@ -64,6 +65,7 @@ public class TimedAzkarController implements Initializable {
         nightImage = new Image("/com/bayoumi/images/night_50px.png");
         settingsButton.setOnMouseEntered(event -> settingsButton.setContentDisplay(ContentDisplay.LEFT));
         settingsButton.setOnMouseExited(event -> settingsButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY));
+        ScrollHandler.init(boxContainer, scrollPane, 1);
     }
 
     private void initAzkarContainer(ObservableList<TimedZekr> list) {
@@ -109,12 +111,12 @@ public class TimedAzkarController implements Initializable {
         }
     }
 
-    @FXML
-    private void incrementScrollSpeed(ScrollEvent event) {
-        double deltaY = event.getDeltaY() * 1;
-        double width = scrollPane.getContent().getBoundsInLocal().getWidth();
-        double vvalue = scrollPane.getVvalue();
-        scrollPane.setVvalue(vvalue + -deltaY / width);
-    }
+//    @FXML
+//    private void incrementScrollSpeed(ScrollEvent event) {
+//        double deltaY = event.getDeltaY() * 1;
+//        double width = scrollPane.getContent().getBoundsInLocal().getWidth();
+//        double vvalue = scrollPane.getVvalue();
+//        scrollPane.setVvalue(vvalue + -deltaY / width);
+//    }
 
 }

@@ -1,10 +1,13 @@
 package com.bayoumi.controllers.onboarding;
 
-import com.bayoumi.models.*;
+import com.bayoumi.models.City;
+import com.bayoumi.models.Country;
+import com.bayoumi.models.Onboarding;
 import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ComboBoxAutoComplete;
 import com.bayoumi.util.web.IpChecker;
 import com.bayoumi.util.web.LocationService;
@@ -14,6 +17,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -85,6 +89,8 @@ public class OnboardingController implements Initializable {
         prayerTimeSettings.setSummerTiming(false);
         prayerTimeSettings.setLatitude(cities.getValue().getLatitude());
         prayerTimeSettings.setLongitude(cities.getValue().getLongitude());
+        ObservableList<String> adhanList = FileUtils.getAdhanList();
+        prayerTimeSettings.setAdhanAudio(adhanList.size() > 1 ? adhanList.get(1) : "بدون صوت");
         prayerTimeSettings.save();
         // save other settings
         OtherSettings otherSettings = Settings.getInstance().getOtherSettings();

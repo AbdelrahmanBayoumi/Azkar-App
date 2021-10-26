@@ -6,30 +6,44 @@ import com.bayoumi.models.Country;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ComboBoxAutoComplete;
+import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.web.IpChecker;
 import com.bayoumi.util.web.LocationService;
 import com.jfoenix.controls.*;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.ToggleGroup;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PopOver;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class PrayerTimeSettingsController implements Initializable, SettingsInterface {
+    private static MediaPlayer MEDIA_PLAYER;
     private PrayerTimeSettings prayerTimeSettings;
+    private FontAwesomeIconView pauseIcon;
+    private FontAwesomeIconView playIcon;
 
+
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private VBox container;
     @FXML
     private JFXComboBox<Country> countries;
     @FXML
@@ -49,9 +63,11 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
     @FXML
     private JFXTextField latitude;
     @FXML
-    private JFXButton autoLocationButton;
+    private JFXButton autoLocationButton, playButton;
     @FXML
     private Label statusLabel;
+    @FXML
+    private JFXComboBox<String> adhanAudioBox;
     private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
     private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
 
@@ -61,7 +77,6 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initDoubleValidation();
-        // TODO use dependency injection for PrayerTimeSettings
         prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         initCountries();
         initCities();
@@ -77,6 +92,27 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
             standardJuristic.setSelected(true);
         }
         summerTiming.setSelected(prayerTimeSettings.isSummerTiming());
+        adhanAudioBox.setValue(prayerTimeSettings.getAdhanAudio());
+        adhanAudioBox.setItems(FileUtils.getAdhanList());
+
+        playIcon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
+        playIcon.setStyle("-fx-fill: -fx-secondary;");
+        playIcon.setGlyphSize(30);
+        pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
+        pauseIcon.setGlyphSize(30);
+        pauseIcon.setStyle("-fx-fill: -fx-secondary;");
+
+        playButton.setDisable(adhanAudioBox.getValue().equals("بدون صوت"));
+        adhanAudioBox.setOnAction(event -> {
+            playButton.setDisable(adhanAudioBox.getValue().equals("بدون صوت"));
+            if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+                MEDIA_PLAYER.stop();
+                playButton.setGraphic(playIcon);
+                playButton.setPadding(new Insets(5, 14, 5, 8));
+            }
+        });
+
+        ScrollHandler.init(container, scrollPane, 4);
     }
 
     private void initCountries() {
@@ -213,7 +249,11 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         prayerTimeSettings.setSummerTiming(summerTiming.isSelected());
         prayerTimeSettings.setLatitude(Double.parseDouble(latitude.getText()));
         prayerTimeSettings.setLongitude(Double.parseDouble(longitude.getText()));
+        prayerTimeSettings.setAdhanAudio(adhanAudioBox.getValue());
         prayerTimeSettings.save();
+        if (isMediaPlaying()) {
+            MEDIA_PLAYER.stop();
+        }
     }
 
     @FXML
@@ -273,4 +313,29 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
             autoLocationButton.setDisable(false);
         }).start();
     }
+
+    private boolean isMediaPlaying() {
+        return MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING);
+    }
+
+    @FXML
+    private void play() {
+        if (isMediaPlaying()) {
+            MEDIA_PLAYER.stop();
+            playButton.setGraphic(playIcon);
+        } else {
+            String fileName = adhanAudioBox.getValue();
+            System.out.println(fileName);
+            if (!fileName.equals("بدون صوت")) {
+                MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/adhan/" + fileName + ".mp3").toURI().toString()));
+                MEDIA_PLAYER.setVolume(100);
+                MEDIA_PLAYER.play();
+                // playing
+                playButton.setGraphic(pauseIcon);
+                playButton.setPadding(new Insets(5, 11, 5, 11));
+                MEDIA_PLAYER.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
+            }
+        }
+    }
+
 }

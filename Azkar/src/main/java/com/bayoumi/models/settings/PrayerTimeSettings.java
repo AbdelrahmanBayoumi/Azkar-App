@@ -2,6 +2,7 @@ package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.file.FileUtils;
 import javafx.util.StringConverter;
 
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ public class PrayerTimeSettings extends Observable {
     private boolean summerTiming;
     private double latitude;
     private double longitude;
+    private String adhanAudio;
 
     protected PrayerTimeSettings() {
         loadSettings();
@@ -34,12 +36,13 @@ public class PrayerTimeSettings extends Observable {
                 Double.compare(that.longitude, longitude) == 0 &&
                 Objects.equals(country, that.country) &&
                 Objects.equals(city, that.city) &&
-                Objects.equals(method, that.method);
+                Objects.equals(method, that.method) &&
+                Objects.equals(adhanAudio, that.adhanAudio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(country, city, method, asrJuristic, summerTiming, latitude, longitude);
+        return Objects.hash(country, city, method, asrJuristic, summerTiming, latitude, longitude, adhanAudio);
     }
 
     public void save() {
@@ -49,7 +52,7 @@ public class PrayerTimeSettings extends Observable {
                 return;
             }
             DatabaseManager databaseManager = DatabaseManager.getInstance();
-            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?,latitude = ?,longitude = ?;");
+            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?,latitude = ?,longitude = ?, adhanAudio = ?;");
             databaseManager.stat.setString(1, country);
             databaseManager.stat.setString(2, city);
             databaseManager.stat.setInt(3, method.getId());
@@ -57,6 +60,7 @@ public class PrayerTimeSettings extends Observable {
             databaseManager.stat.setInt(5, summerTiming ? 1 : 0);
             databaseManager.stat.setDouble(6, latitude);
             databaseManager.stat.setDouble(7, longitude);
+            databaseManager.stat.setString(8, adhanAudio);
             databaseManager.stat.executeUpdate();
             // fetch new updated data from database
             loadSettings();
@@ -79,6 +83,7 @@ public class PrayerTimeSettings extends Observable {
                 this.summerTiming = res.getInt(5) == 1;
                 this.latitude = res.getDouble("latitude");
                 this.longitude = res.getDouble("longitude");
+                this.adhanAudio = res.getString("adhanAudio");
             }
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
@@ -125,7 +130,6 @@ public class PrayerTimeSettings extends Observable {
         this.asrJuristic = asrJuristic;
     }
 
-
     public double getLatitude() {
         return latitude;
     }
@@ -142,6 +146,17 @@ public class PrayerTimeSettings extends Observable {
         this.longitude = longitude;
     }
 
+    public String getAdhanAudio() {
+        if (FileUtils.getAdhanList().contains(adhanAudio)) {
+            return adhanAudio;
+        }
+        return "بدون صوت";
+    }
+
+    public void setAdhanAudio(String adhanAudio) {
+        this.adhanAudio = adhanAudio;
+    }
+
     @Override
     public String toString() {
         return "PrayerTimeSettings{" +
@@ -152,6 +167,7 @@ public class PrayerTimeSettings extends Observable {
                 ", summerTiming=" + summerTiming +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", adhanAudio='" + adhanAudio + '\'' +
                 '}';
     }
 

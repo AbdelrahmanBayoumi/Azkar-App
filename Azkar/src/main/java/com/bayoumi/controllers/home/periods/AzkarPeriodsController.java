@@ -29,7 +29,7 @@ public class AzkarPeriodsController implements Initializable {
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
         if (!settings.getAzkarSettings().isStopped()) {
-            AzkarService.init(this, settings.getNotificationSettings());
+            AzkarService.init(this);
         } else {
             periodBox.setDisable(true);
         }

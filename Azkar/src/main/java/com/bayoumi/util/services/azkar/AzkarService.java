@@ -2,8 +2,10 @@ package com.bayoumi.util.services.azkar;
 
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.models.settings.NotificationSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.gui.notfication.Notification;
+import com.bayoumi.util.gui.notfication.NotificationAudio;
+import com.bayoumi.util.gui.notfication.NotificationContent;
 import com.bayoumi.util.services.EditablePeriodTimerTask;
 import javafx.application.Platform;
 
@@ -25,7 +27,7 @@ public class AzkarService {
         }
     }
 
-    public static void init(AzkarPeriodsController azkarPeriodsController, NotificationSettings notificationSettings) {
+    public static void init(AzkarPeriodsController azkarPeriodsController) {
         azkarPeriodsController.setFrequencyLabel();
         absoluteAzkarTask = null;
         absoluteAzkarTask = new EditablePeriodTimerTask(()
@@ -34,11 +36,13 @@ public class AzkarService {
                 return;
             }
             Platform.runLater(()
-                    -> Notification.createControlsFX(
-                    AbsoluteZekr.absoluteZekrObservableList.get(
-                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                    null, null, 10, notificationSettings));
-
+                    -> Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
+                    new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                            null),
+                    30,
+                    Settings.getInstance().getNotificationSettings().getPosition(),
+                    null,
+                    new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume())));
         },
                 azkarPeriodsController::getPeriod);
         absoluteAzkarTask.updateTimer();

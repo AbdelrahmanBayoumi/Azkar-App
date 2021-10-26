@@ -19,7 +19,7 @@
    <AnchorPane>
       <VBox layoutX="19.0" layoutY="9.0" prefHeight="530.0" prefWidth="800.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" focusTraversable="false" styleClass="root" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-            <FlowPane fx:id="boxContainer" alignment="CENTER" hgap="20.0" nodeOrientation="RIGHT_TO_LEFT" onScroll="#incrementScrollSpeed" vgap="20.0">
+            <FlowPane fx:id="boxContainer" alignment="CENTER" hgap="20.0" nodeOrientation="RIGHT_TO_LEFT" vgap="20.0">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
