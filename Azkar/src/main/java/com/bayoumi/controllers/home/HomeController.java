@@ -264,7 +264,7 @@ public class HomeController implements Initializable {
             nightAzkarDate.setTime(prayerTimesToday.asr.getTime() + (settings.getAzkarSettings().getNightAzkarOffset() * 60000));
             ReminderUtil.getInstance().add(new Reminder(nightAzkarDate, () -> Platform.runLater(() ->
                     Notification.create(new NotificationContent("أذكار المساء",
-                                    new Image("/com/bayoumi/images/sun_50px.png")),
+                                    new Image("/com/bayoumi/images/night_50px.png")),
                             30,
                             settings.getNotificationSettings().getPosition(),
                             () -> Launcher.homeController.goToNightAzkar(),
