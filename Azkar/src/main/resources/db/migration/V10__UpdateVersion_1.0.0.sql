@@ -1,4 +1,4 @@
-UPDATE "program_characteristics" SET "version"="0.9.9";
+UPDATE "program_characteristics" SET "version"="1.0.0";
 ALTER TABLE program_characteristics ADD COLUMN "ID" TEXT;
 UPDATE "onboarding" SET "isFirstTimeOpened"=1;
 
