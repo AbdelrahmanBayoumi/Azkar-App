@@ -77,7 +77,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private JFXCheckBox stopAzkar;
     @FXML
     private JFXComboBox<String> azkarAlarmComboBox;
-
     @FXML
     private JFXButton playButton;
     @FXML
@@ -149,7 +148,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         notificationSettings = Settings.getInstance().getNotificationSettings();
         posComboBox.setItems(FXCollections.observableArrayList(Pos.TOP_RIGHT, Pos.BOTTOM_RIGHT, Pos.TOP_LEFT, Pos.BOTTOM_LEFT, Pos.CENTER));
         posComboBox.setValue(notificationSettings.getPosition());
-        // TODO Check for ENG Language
         posComboBox.setConverter(NotificationSettings.posArabicConverter());
 
         azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod() % 60);

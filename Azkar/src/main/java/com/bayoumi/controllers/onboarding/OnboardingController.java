@@ -1,5 +1,7 @@
 package com.bayoumi.controllers.onboarding;
 
+import com.bayoumi.controllers.components.audio.ChooseAudioController;
+import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.models.City;
 import com.bayoumi.models.Country;
 import com.bayoumi.models.Onboarding;
@@ -7,8 +9,8 @@ import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ComboBoxAutoComplete;
+import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.web.IpChecker;
 import com.bayoumi.util.web.LocationService;
 import com.jfoenix.controls.JFXButton;
@@ -17,13 +19,14 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PopOver;
@@ -32,7 +35,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OnboardingController implements Initializable {
-
+    private ChooseAudioController chooseAudioController;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private VBox container, adhanContainer;
     @FXML
     private JFXComboBox<Country> countries;
     @FXML
@@ -77,6 +84,12 @@ public class OnboardingController implements Initializable {
             standardJuristic.setSelected(true);
         }
         autoLocationButton.fire();
+
+        chooseAudioController = ChooseAudioUtil.adhan(adhanContainer);
+        if (chooseAudioController != null) {
+            chooseAudioController.initFromFirstValue();
+        }
+        ScrollHandler.init(container, scrollPane, 4);
     }
 
     @FXML
@@ -89,8 +102,9 @@ public class OnboardingController implements Initializable {
         prayerTimeSettings.setSummerTiming(false);
         prayerTimeSettings.setLatitude(cities.getValue().getLatitude());
         prayerTimeSettings.setLongitude(cities.getValue().getLongitude());
-        ObservableList<String> adhanList = FileUtils.getAdhanList();
-        prayerTimeSettings.setAdhanAudio(adhanList.size() > 1 ? adhanList.get(1) : "بدون صوت");
+//        prayerTimeSettings.setAdhanAudio(adhanList.size() > 1 ? adhanList.get(1) : "بدون صوت");
+        prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue());
+        ChooseAudioController.stopIfPlaying();
         prayerTimeSettings.save();
         // save other settings
         OtherSettings otherSettings = Settings.getInstance().getOtherSettings();

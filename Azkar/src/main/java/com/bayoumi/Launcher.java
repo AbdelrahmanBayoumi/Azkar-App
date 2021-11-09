@@ -1,5 +1,6 @@
 package com.bayoumi;
 
+import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.models.Onboarding;
 import com.bayoumi.models.settings.OtherSettings;
@@ -144,6 +145,7 @@ public class Launcher extends Application {
                 HelperMethods.SetIcon(onboardingStage);
                 onboardingStage.setTitle("Onboarding - Azkar");
                 onboardingStage.show();
+                onboardingStage.setOnCloseRequest(event -> ChooseAudioController.stopIfPlaying());
             } catch (Exception ex) {
                 Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show Onboarding stage");
                 ex.printStackTrace();
