@@ -115,19 +115,22 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void checkForUpdate() {
         loadingBox.setVisible(true);
-        switch (UpdateHandler.getInstance().checkUpdate()) {
-            case 0:
-                Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "No Update Found");
-                Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, "لا يوجد تحديثات جديدة", true));
-                break;
-            case 1:
-                UpdateHandler.getInstance().showInstallPrompt();
-                break;
-            case -1:
-                Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
-                Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, "توجد مشكلة في البحث عن تحديثات جديدة", true));
-                break;
-        }
-        loadingBox.setVisible(false);
+        new Thread(() -> {
+            switch (UpdateHandler.getInstance().checkUpdate()) {
+                case 0:
+                    Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "No Update Found");
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, "لا يوجد تحديثات جديدة", true));
+                    break;
+                case 1:
+                    UpdateHandler.getInstance().showInstallPrompt();
+                    break;
+                case -1:
+                    Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, "توجد مشكلة في البحث عن تحديثات جديدة", true));
+                    break;
+            }
+            Platform.runLater(() -> loadingBox.setVisible(false));
+        }).start();
+
     }
 }
