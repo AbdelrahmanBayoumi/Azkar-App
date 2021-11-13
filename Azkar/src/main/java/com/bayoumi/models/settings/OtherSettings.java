@@ -63,7 +63,7 @@ public class OtherSettings extends Observable {
                                 t.cancel();
                             }
                         },
-                        300000 // 5min
+                        390000 // 6.5min => to ensure that update will open when no notification is shown
                 );
             }
         } catch (Exception ex) {
