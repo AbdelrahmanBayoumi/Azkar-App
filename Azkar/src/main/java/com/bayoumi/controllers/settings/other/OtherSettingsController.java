@@ -80,7 +80,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void openWebsite() {
         try {
-            Desktop.getDesktop().browse(new URI("https://www.abdelrahmanbayoumi.ml/Azkar-App/"));
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/"));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openWebsite()");
         }

@@ -135,7 +135,7 @@
                               <Font size="17.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: blue;" text="abdelrahmanbayoumi.ml/Azkar-App" textFill="#1d0968" underline="true">
+                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: blue;" text="azkar-site.web.app/" textFill="#1d0968" underline="true">
                            <font>
                               <Font size="17.0" />
                            </font>
