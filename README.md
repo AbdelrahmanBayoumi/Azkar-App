@@ -54,7 +54,7 @@ Desktop Application 💻 for:
 
 
 ## Requirements
-* Java 8 (**for development**), to use the app nomaly see: [How to Install ⬇️](#how-to-install)
+* Java 8 (**for development**), to use the app normally see: [How to Install ⬇️](#how-to-install)
 
 
 ## Installation for development
@@ -82,6 +82,7 @@ Desktop Application 💻 for:
 ## Inspired From
 -  [Quran Tab (Google Chrome Extension)](https://chrome.google.com/webstore/detail/quran-tab/afaihcdgkjebgabomemccdneglknjkdd) Quran Tab is an Islamic new tab page that will keep you inspired by a verse from the Quran every time you open a new tab.
 -  [Prayer Times Desktop application](https://github.com/HouariZegai/PrayerTimes) for calculating Muslim prayer times in **Algeria** and setting an alarm (Adhan) for the prayer times.
+-  [أذكار المسلم](https://play.google.com/store/apps/details?id=com.revanen.athkar) (Mobile App) shows Athkar (automatically) on your device screen while using other applications
 
 
 ## Contributing 💡
