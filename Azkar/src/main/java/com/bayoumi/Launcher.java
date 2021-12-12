@@ -37,6 +37,8 @@ public class Launcher extends Application {
     private Scene scene = null;
 
     public static void main(String[] args) {
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("prism.lcdtext", "false");
         LauncherImpl.launchApplication(Launcher.class, CustomPreloaderMain.class, args);
     }
 
