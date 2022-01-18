@@ -7,7 +7,7 @@
        
 [![Azkar version](https://img.shields.io/website?color=black&down_color=black&label=%20&logo=google-earth&logoColor=white&up_color=black&up_message=Website&url=https://www.abdelrahmanbayoumi.ml/Azkar-App/)](https://azkar-site.web.app/)
 [![Azkar version](https://img.shields.io/badge/Azkar-v1.0.0-green?style=flat)](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest)
-![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red?style=flat)
+![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red?style=flat) [![Java 8](https://img.shields.io/badge/Java-8-red.svg)](https://www.java.com)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/LICENSE)
 ![HITS](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAbdelrahmanBayoumi%2FAzkar-App&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=PAGE+VIEWS&edge_flat=false)
        
