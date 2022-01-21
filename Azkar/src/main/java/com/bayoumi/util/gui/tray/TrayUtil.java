@@ -1,6 +1,5 @@
 package com.bayoumi.util.gui.tray;
 
-import com.bayoumi.Launcher;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import javafx.application.Platform;

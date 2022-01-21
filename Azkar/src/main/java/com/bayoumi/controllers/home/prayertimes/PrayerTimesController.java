@@ -6,6 +6,7 @@ import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
+import com.bayoumi.util.time.Utilities;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -131,6 +132,13 @@ public class PrayerTimesController implements Initializable {
             SunnahTimes sunnahTimes = new SunnahTimes(prayerTimesToday);
             middleOfTheNightTime.setText(formatter.format(sunnahTimes.middleOfTheNight));
             lastThirdOfTheNightTime.setText(formatter.format(sunnahTimes.lastThirdOfTheNight));
+
+
+            if (Utilities.isFriday(prayerTimesToday.dhuhr)) {
+                dhuhrText.setText("الجمعة");
+            } else {
+                dhuhrText.setText("الظهر");
+            }
         });
     }
 

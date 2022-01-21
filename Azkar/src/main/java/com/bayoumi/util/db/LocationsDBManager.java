@@ -4,7 +4,6 @@ import com.bayoumi.util.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class LocationsDBManager {
