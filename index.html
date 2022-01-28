@@ -2,225 +2,18 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="
-  برنامج سطح مكتب يساعدك على: (معرفة مواقيت الصلاة - قراءة أذكار الصباح و المساء مع التذكير بها - ظهور إشعارات بذكر او دعاء عشوائي كل فترة محددة)
-  Desktop Application 💻 for:
-  Calculating Muslim prayer times 🕌
-  Morning and Nights Azkar with reminder 🤲
-  With notification for random Azkar that pops-up in specific time 💬.">
-  <meta name="author" content="Abdelrahman Bayoumi">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Azkar - أذكار</title>
-  <!-- font-awesome -->
-  <link href="css/all.min.css" rel="stylesheet">
-  <!-- Bootstrap -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- main CSS -->
-  <link href="css/style.css" rel="stylesheet">
-  <!-- favicon -->
-  <link rel="icon" type="image/png" href="img/logo.png" />
+    <meta charset="UTF-8">
+    <meta name="author" content="Abdelrahman Bayoumi">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Azkar - أذكار</title>
+    <meta http-equiv="refresh" content="0;URL='https://azkar-site.web.app/'" />
 </head>
 
 <body>
-  <nav class="navbar sticky-top navbar-expand-lg navbar-light" dir="rtl">
-    <a class="navbar-brand" href="#">
-      <img src="img/logo.png" width="50" height="50" alt="">
-      <span class="navbar-brand-text">أذكار - Azkar</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <!-- <li class="nav-item active">
-          <a class="nav-link" href="#">الرئيسية <span class="sr-only">(current)</span></a>
-        </li> -->
-        <li class="nav-item">
-          <a class="nav-link" href="#features">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact-us">Contact Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#download">Download</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/AbdelrahmanBayoumi/Azkar-App" target="_blank">Github</a>
-        </li>
-      </ul>
-      <!-- <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"><button
-          class="btn btn-outline-success my-2 my-sm-0" type="submit">تحميل - Download</button></a> -->
-    </div>
-  </nav>
-
-  <main class="">
-
-    <section class="jumbotron">
-      <div class="hero-box">
-        <h1 class="hero-title">Azkar - أذكار</h1>
-        <p class="hero-subtitle">
-          برنامج سطح مكتب يساعدك على: (معرفة مواقيت الصلاة - قراءة أذكار الصباح و المساء مع التذكير بها - ظهور إشعارات
-          بذكر او دعاء عشوائي كل فترة محددة)
-        </p>
-        <p><a class="btn btn-primary btn-lg hero-button" role="button" href="#download" dir="auto">
-            تحميل - Download
-          </a></p>
-    </section>
-    </section>
-    <!-- Features -->
-    <section id="features" class="features clean-block clean-info dark">
-      <div class="container">
-        <div class="block-heading">
-          <h2 class="text-info" dir="auto">المميزات - Features</h2>
-        </div>
-        <div class="row align-items-center">
-          <div class="col-md-6"><img id="feature-img" width="800" height="639" class="img-thumbnail"
-              src="img/home.webp">
-          </div>
-          <div class="col-md-6">
-            <div class="getting-started-info" dir="rtl" style="text-align: right;">
-              <ul class="features-ul">
-                <li onclick='changeFeatureImage(this,"home.webp")' class="features-li active">
-                  <span class="features-ul-icon">
-                    <i class="fas fa-home fa-lg"></i>
-                  </span>
-                  الصفحة الرئيسية
-                </li>
-                <li onclick='changeFeatureImage(this,"prayer-times.webp")' class="features-li">
-                  <span span class="features-ul-icon">
-                    <i class="fas fa-kaaba fa-lg"></i>
-                  </span>
-                  معرفة مواقيت الصلاة
-                </li>
-                <li onclick='changeFeatureImage(this,"night-azkar.webp")' class="features-li">
-                  <span class="features-ul-icon">
-                    <i class="fas fa-quran fa-lg"></i>
-                  </span>
-                  قراءة أذكار الصباح و المساء مع التذكير بها
-                </li>
-                <li onclick='changeFeatureImage(this,"zekr-notification.webp")' class="features-li">
-                  <span class="features-ul-icon">
-                    <i class="far fa-comment-dots fa-lg"></i>
-                  </span>
-                  ظهور إشعارات بذكر او دعاء عشوائي كل فترة محددة
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Download -->
-    <section id="download" class="clean-block clean-info dark" style="background: white;">
-      <div class="container">
-        <div class="block-heading">
-          <h2 class="text-info" dir="auto">تحميل - Download</h2>
-          <p>
-            Version <span id="version">0.0.0</span>
-          </p>
-        </div>
-        <div class="download-section">
-          <div class="platform-box">
-            <i style="font-size: 85px;color: #0063C6;" class="fab fa-windows fa-lg"></i>
-            <p class="platform-name">64-bit Windows<br><br></p>
-            <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x64.exe"
-              target="_blank">
-              <button class="btn btn-success btn-lg">
-                <i style="padding-right: 10px;font-size: 30px;" class="fas fa-download fa-lg"></i>
-                Download (64-bit)
-              </button>
-            </a>
-            <p class="number-of-downloads">عدد التحميلات: <span id="win_exe64_counter">0</span></p>
-          </div>
-
-          <div class="platform-box">
-            <i style="font-size: 85px;color: #0063C6;" class="fab fa-windows fa-lg"></i>
-            <p class="platform-name">32-bit Windows <br><br></p>
-            <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/Azkar_windows-x32.exe"
-              target="_blank">
-              <button class="btn btn-success btn-lg">
-                <i style="padding-right: 10px;font-size: 30px;" class="fas fa-download fa-lg"></i>
-                Download (32-bit)
-              </button>
-            </a>
-            <p class="number-of-downloads">عدد التحميلات: <span id="win_exe32_counter">0</span></p>
-          </div>
-
-          <div class="platform-box">
-            <!-- <i style="font-size: 60px;color: #0063C6;" class="fab fa-java fa-lg"></i> -->
-            <img src="img/jar.webp" alt="jar" width="85" height="85">
-            <p class="platform-name">Portable Jar (No JRE) <br><span>JRE 8 required</span></p>
-            <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest/download/PortableJar_No-JRE.zip"
-              target="_blank">
-              <button class="btn btn-success btn-lg">
-                <i style="padding-right: 10px;font-size: 30px;" class="fas fa-download fa-lg"></i>
-                Download (.zip)
-              </button>
-            </a>
-            <p class="number-of-downloads">عدد التحميلات: <span id="jar_counter">0</span></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- Contact Us -->
-    <section class="clean-block clean-form dark" id="contact-us">
-      <div class="container">
-        <div class="block-heading">
-          <h2 class="text-info" dir="rtl">تواصل معنا - Contact Us </h2>
-          <p>We would love to hear any comments, suggestions, or feedback. </p>
-        </div>
-        <form>
-          <div id="successAlert" style="display: none;" class="alert alert-success alert-dismissible fade show"
-            role="alert">
-            Sent successfully
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div id="dangerAlert" style="display: none;" class="alert alert-danger alert-dismissible fade show"
-            role="alert">
-            Can't Send Your Response
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="form-group"><label for="name">Name<span class="required-star"> *</span></label><input
-              class="form-control" type="text" id="name" name="name"></div>
-          <div class="form-group"><label for="email">Email<span class="required-star"> *</span></label>
-            <input class="form-control" type="email" id="email" name="email">
-          </div>
-          <div class="form-group"><label for="message">Message<span class="required-star"> *</span></label>
-            <textarea class="form-control" id="message" name="message" dir="auto" rows="6"></textarea>
-          </div>
-          <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Send</button></div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-
-  <footer>
-    <span>© 2021 Azkar</span>
-  </footer>
-
-  <!-- JavaScript -->
-  <script src="js/src.js"></script>
-  <!-- Bootstrap -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
+    <p>This page has moved to a <a href="https://azkar-site.web.app/">
+        azkar-site.web.app</a>.</p>
 </body>
 
 </html>
