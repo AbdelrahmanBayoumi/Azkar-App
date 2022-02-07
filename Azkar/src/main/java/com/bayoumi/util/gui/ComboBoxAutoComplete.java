@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class ComboBoxAutoComplete<T> {
 
     String filter = "";
-    private JFXComboBox<T> cmb;
+    private final JFXComboBox<T> cmb;
     private ObservableList<T> originalItems;
 
     public ComboBoxAutoComplete(JFXComboBox<T> cmb) {
@@ -65,7 +65,7 @@ public class ComboBoxAutoComplete<T> {
                 cmb.getTooltip().hide();
             } else {
                 Stream<T> items = cmb.getItems().stream();
-                String txtUsr = unaccent(filter.toString().toLowerCase());
+                String txtUsr = unaccent(filter.toLowerCase());
 
                 items.filter(city -> unaccent(((City) city).getName().replaceAll("[إأآ]", "ا"))
                         .toLowerCase().contains(txtUsr.replaceAll("[إأآ]", "ا"))).forEach(filteredList::add);
@@ -101,7 +101,7 @@ public class ComboBoxAutoComplete<T> {
                 cmb.getTooltip().hide();
             } else {
                 Stream<T> items = cmb.getItems().stream();
-                String txtUsr = unaccent(filter.toString().toLowerCase());
+                String txtUsr = unaccent(filter.toLowerCase());
 
                 items.filter(country -> unaccent(((Country) country).getArabicName().replaceAll("[إأآ]", "ا"))
                         .toLowerCase().contains(txtUsr.replaceAll("[إأآ]", "ا"))).forEach(filteredList::add);
@@ -137,7 +137,7 @@ public class ComboBoxAutoComplete<T> {
                 cmb.getTooltip().hide();
             } else {
                 Stream<T> itens = cmb.getItems().stream();
-                String txtUsr = unaccent(filter.toString().toLowerCase());
+                String txtUsr = unaccent(filter.toLowerCase());
                 itens.filter(el -> unaccent(el.toString().toLowerCase().replaceAll("[إأآ]", "ا")).contains(txtUsr.replaceAll("[إأآ]", "ا"))).forEach(filteredList::add);
                 cmb.getTooltip().setText(txtUsr);
                 Window stage = cmb.getScene().getWindow();

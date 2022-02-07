@@ -280,7 +280,7 @@ public class HomeController implements Initializable {
     private void playAdhan(String prayerName) {
         System.out.println("playAdhan() => " + prayerName);
         Platform.runLater(() -> Notification.create(new NotificationContent(prayerName,
-                    new Image("/com/bayoumi/images/Kaaba.png")),
+                        new Image("/com/bayoumi/images/Kaaba.png")),
                 240,
                 settings.getNotificationSettings().getPosition(),
                 null,

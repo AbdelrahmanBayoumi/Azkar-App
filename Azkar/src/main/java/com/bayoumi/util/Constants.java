@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 public class Constants {
     // Program characteristics
     public static String assetsPath;
+    public final static String VERSION = "1.0.1";
 
     static {
         try {
@@ -36,7 +37,7 @@ public class Constants {
     public static void copyDatabaseToAppData() throws IOException {
         Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
         Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
-        System.out.println(from.toString());
+        System.out.println(from);
         Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db/data.db");
         copyIfNotExist(from, to);
     }

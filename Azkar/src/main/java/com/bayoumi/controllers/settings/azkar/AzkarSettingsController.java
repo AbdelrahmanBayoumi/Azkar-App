@@ -271,7 +271,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
                 -> {
             try {
                 Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
-                        new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                                new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
                                 new Image("/com/bayoumi/images/Kaaba.png")),
                         10,
                         notificationSettings.getPosition(),

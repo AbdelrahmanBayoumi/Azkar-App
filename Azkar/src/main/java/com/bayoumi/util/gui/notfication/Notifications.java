@@ -109,7 +109,7 @@ public class Notifications {
     private Window owner;
     private Screen screen = null;
 
-    private List<String> styleClass = new ArrayList<>();
+    private final List<String> styleClass = new ArrayList<>();
     private int threshold;
     private Notifications thresholdNotification;
 
@@ -224,7 +224,7 @@ public class Notifications {
      * Specify the actions that should be shown in the notification as buttons.
      */
     public Notifications action(Action... actions) {
-        this.actions = actions == null ? FXCollections.<Action>observableArrayList() : FXCollections
+        this.actions = actions == null ? FXCollections.observableArrayList() : FXCollections
                 .observableArrayList(actions);
         return this;
     }
@@ -306,7 +306,7 @@ public class Notifications {
         private double screenWidth;
         private double screenHeight;
         // for animating in the notifications
-        private ParallelTransition parallelTransition = new ParallelTransition();
+        private final ParallelTransition parallelTransition = new ParallelTransition();
 
         private boolean isShowing = false;
 
@@ -487,8 +487,8 @@ public class Notifications {
                         case BOTTOM_RIGHT:
                             try {
                                 popup.setAnchorY(y - PADDING);
-                            }catch (Exception ex){
-                                System.out.println("ex:" +ex);
+                            } catch (Exception ex) {
+                                System.out.println("ex:" + ex);
                             }
                             break;
                         default:
@@ -632,7 +632,7 @@ public class Notifications {
             // is in the 'new' area.
             // firstly, we need to determine the target positions for all popups
             double sum = 0;
-            double targetAnchors[] = new double[popups.size()];
+            double[] targetAnchors = new double[popups.size()];
             for (int i = popups.size() - 1; i >= 0; i--) {
                 Popup _popup = popups.get(i);
 
@@ -700,9 +700,9 @@ public class Notifications {
 
         class CustomTransition extends Transition {
 
-            private WeakReference<Popup> popupWeakReference;
-            private double oldAnchorY;
-            private double distance;
+            private final WeakReference<Popup> popupWeakReference;
+            private final double oldAnchorY;
+            private final double distance;
 
             CustomTransition(Popup popup, double oldAnchorY, double distance) {
                 popupWeakReference = new WeakReference<>(popup);

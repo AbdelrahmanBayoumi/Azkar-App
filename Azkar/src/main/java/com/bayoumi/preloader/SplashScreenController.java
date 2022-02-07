@@ -36,7 +36,7 @@ public class SplashScreenController implements Initializable {
     @FXML
     public void RootMouseDragged(Event event) {
         MouseEvent e = (MouseEvent) event;
-        ((Stage) (((Node) (event.getSource())).getScene().getWindow())).setX(e.getScreenX() - xOffset);
-        ((Stage) (((Node) (event.getSource())).getScene().getWindow())).setY(e.getScreenY() - yOffset);
+        ((Node) (event.getSource())).getScene().getWindow().setX(e.getScreenX() - xOffset);
+        ((Node) (event.getSource())).getScene().getWindow().setY(e.getScreenY() - yOffset);
     }
 }

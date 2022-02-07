@@ -7,15 +7,16 @@ import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.SentryUtil;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.db.LocationsDBManager;
+import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
 import com.sun.javafx.application.LauncherImpl;
 import io.sentry.Sentry;
-import io.sentry.SentryLevel;
 import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -23,6 +24,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 
 public class Launcher extends Application {
@@ -37,8 +40,7 @@ public class Launcher extends Application {
     private Scene scene = null;
 
     public static void main(String[] args) {
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("prism.lcdtext", "false");
+        ArabicTextSupport.fix();
         LauncherImpl.launchApplication(Launcher.class, CustomPreloaderMain.class, args);
     }
 
@@ -94,21 +96,12 @@ public class Launcher extends Application {
             incrementPreloader();
             // --- initialize Sentry for error tracking ---
             try {
-                Sentry.init(options -> {
-                    options.setEnableExternalConfiguration(true);
-                    options.setTracesSampleRate(0.2);
-                    options.setDiagnosticLevel(SentryLevel.DEBUG);
-                    options.setDebug(true);
-                    options.setRelease("azkar.app@1.0.0+1");
-                });
+                SentryUtil.init();
+                Sentry.captureException(new Exception());
             } catch (Exception ex) {
                 System.out.println(ex.getLocalizedMessage());
             }
             incrementPreloader();
-
-//            incrementPreloader();
-//            incrementPreloader();
-//            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             ex.printStackTrace();
@@ -142,7 +135,7 @@ public class Launcher extends Application {
         if (Onboarding.isFirstTimeOpened()) {
             try {
                 Stage onboardingStage = new Stage();
-                onboardingStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/onboarding/Onboarding.fxml"))));
+                onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/bayoumi/views/onboarding/Onboarding.fxml")))));
                 onboardingStage.initModality(Modality.APPLICATION_MODAL);
                 HelperMethods.SetIcon(onboardingStage);
                 onboardingStage.setTitle("Onboarding - Azkar");

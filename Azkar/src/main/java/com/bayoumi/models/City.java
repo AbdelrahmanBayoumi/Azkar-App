@@ -77,7 +77,7 @@ public class City {
                     "(latitude BETWEEN " + latitude + "-0.008 AND " + latitude + "+0.008) AND " +
                     "(longitude BETWEEN " + longitude + "-0.008 AND " + longitude + "+0.008)  AND " +
                     "(country='" + countryCode + "');";
-            System.out.println("sql: "+sql);
+            System.out.println("sql: " + sql);
             ResultSet res = LocationsDBManager.getInstance().con.prepareStatement(sql).executeQuery();
 
             if (res.next()) {

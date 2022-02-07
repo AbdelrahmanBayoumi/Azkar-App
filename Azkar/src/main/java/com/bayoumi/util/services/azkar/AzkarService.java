@@ -37,7 +37,7 @@ public class AzkarService {
             }
             Platform.runLater(()
                     -> Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
-                    new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
+                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
                             null),
                     30,
                     Settings.getInstance().getNotificationSettings().getPosition(),

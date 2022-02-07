@@ -52,7 +52,7 @@ public class ChooseAudioController implements Initializable {
     }
 
     public void initFromFirstValue() {
-        if(audioBox == null || audioBox.getItems() == null){
+        if (audioBox == null || audioBox.getItems() == null) {
             return;
         }
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(1) : "بدون صوت");

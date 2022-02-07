@@ -17,7 +17,9 @@ public class FileUtils {
                 }
             }
         }
-    }public static void addFilesNameToListRemoveExtension(File folder, List<String> list, String extension) {
+    }
+
+    public static void addFilesNameToListRemoveExtension(File folder, List<String> list, String extension) {
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
