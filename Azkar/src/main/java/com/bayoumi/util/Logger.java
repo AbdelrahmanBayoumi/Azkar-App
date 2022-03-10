@@ -14,7 +14,7 @@ import java.util.Date;
 public class Logger {
 
     //========= Helper Objects =========
-    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("[dd-MM-yyyy] [hh:mm:ss a]");
+    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("[dd-MM-yyyy] [hh:mm:ss.SSS a]");
     private static final Object LOCK = new Object();
     private static PrintWriter PRINT_WRITER;
 

@@ -6,8 +6,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Utilities {
+    public static String convertMillisecondsToMin(long milliseconds) {
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds);
+        long seconds = (TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60);
+
+        return milliseconds + " Milliseconds = "
+                + minutes + " minutes, "
+                + seconds + " seconds, "
+                + (milliseconds - seconds * 1000) + " milliseconds";
+    }
 
     public static boolean isFriday(Date date) {
         Calendar cal = Calendar.getInstance();

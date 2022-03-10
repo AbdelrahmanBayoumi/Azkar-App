@@ -85,8 +85,8 @@ public class TimedAzkarController implements Initializable {
     }
 
     private ObservableList<Text> getTextList() {
-        ObservableList<Text> list = FXCollections.observableArrayList();
-        ObservableList<Node> ZekrBoxNodes = boxContainer.getChildren();
+        final ObservableList<Text> list = FXCollections.observableArrayList();
+        final ObservableList<Node> ZekrBoxNodes = boxContainer.getChildren();
         for (Node zekrBox : ZekrBoxNodes) {
             list.add((Text) ((TextFlow) ((HBox) ((VBox) zekrBox).getChildren().get(0)).getChildren().get(0)).getChildren().get(0));
         }
@@ -96,26 +96,12 @@ public class TimedAzkarController implements Initializable {
     @FXML
     private void openSettings() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/azkar/timed/Settings.fxml"));
-            VBox pane = loader.load();
-
-            JFXDialog dialog = new JFXDialog(sp, pane, JFXDialog.DialogTransition.TOP);
-
-            SettingsController controller = loader.getController();
-            controller.setData(getTextList(), dialog);
-
+            final FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/azkar/timed/Settings.fxml"));
+            final JFXDialog dialog = new JFXDialog(sp, loader.load(), JFXDialog.DialogTransition.TOP);
+            ((SettingsController) loader.getController()).setData(getTextList(), dialog);
             dialog.show();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".openSettings()");
         }
     }
-
-//    @FXML
-//    private void incrementScrollSpeed(ScrollEvent event) {
-//        double deltaY = event.getDeltaY() * 1;
-//        double width = scrollPane.getContent().getBoundsInLocal().getWidth();
-//        double vvalue = scrollPane.getVvalue();
-//        scrollPane.setVvalue(vvalue + -deltaY / width);
-//    }
-
 }

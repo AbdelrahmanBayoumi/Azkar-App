@@ -13,9 +13,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.batoulapps.adhan:adhan:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: com.install4j:install4j-runtime:9.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.8" level="project" />
+    <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.10" level="project" />
     <orderEntry type="library" name="Maven: de.jensd:fontawesomefx:8.9" level="project" />
-    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.40.15" level="project" />
+    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.40.18" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.36.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.sentry:sentry:5.6.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />

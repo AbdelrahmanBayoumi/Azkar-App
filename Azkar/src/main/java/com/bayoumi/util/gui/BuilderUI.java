@@ -4,6 +4,7 @@ import com.bayoumi.controllers.alert.confirm.ConfirmAlertController;
 import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
 import com.bayoumi.controllers.dialog.UpdateConfirmController;
 import com.bayoumi.models.UpdateInfo;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.validation.SingleInstance;
 import javafx.fxml.FXMLLoader;
@@ -86,4 +87,12 @@ public class BuilderUI {
         }
     }
 
+    public static Stage initStageDecorated(Scene scene, String title) {
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle(title == null ? "" : title);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        HelperMethods.SetIcon(stage);
+        return stage;
+    }
 }

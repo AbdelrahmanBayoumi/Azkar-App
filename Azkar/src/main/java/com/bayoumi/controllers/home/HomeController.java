@@ -10,6 +10,9 @@ import com.bayoumi.models.AbsoluteZekr;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.load.Loader;
+import com.bayoumi.util.gui.load.LoaderComponent;
+import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
@@ -185,16 +188,10 @@ public class HomeController implements Initializable {
 
     private void showTimedAzkar(String type) {
         try {
-            Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/azkar/timed/TimedAzkar.fxml"));
-            stage.setScene(new Scene(loader.load()));
-            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            HelperMethods.SetIcon(stage);
-            TimedAzkarController controller = loader.getController();
-            controller.setData(type);
-            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.show();
+            final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.TimedAzkar);
+            ((TimedAzkarController) popUp.getController()).setData(type);
+            HelperMethods.ExitKeyCodeCombination(popUp.getStage().getScene(), popUp.getStage());
+            popUp.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".showTimedAzkar()");
         }

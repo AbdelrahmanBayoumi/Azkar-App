@@ -18,10 +18,14 @@ public class ZekrBoxController {
     @FXML
     private FontAwesomeIconView copyIcon;
 
+    private void updateRepeatButton(int repeat) {
+        this.repeatBTN.setText("التكرار" + "\t" + repeat);
+    }
+
     public void setData(String text, int repeatValue) {
         this.text.setText(text);
         this.repeatValue = repeatValue;
-        this.repeatBTN.setText("التكرار" + "     " + "(" + this.repeatValue + ")");
+        updateRepeatButton(this.repeatValue);
     }
 
     @FXML
@@ -35,14 +39,13 @@ public class ZekrBoxController {
             return;
         }
         if (this.repeatValue > 1) {
-            this.repeatBTN.setText("التكرار" + "     " + "(" + (--this.repeatValue) + ")");
+            updateRepeatButton(--this.repeatValue);
         } else {
             (this.repeatBTN.getParent()).setStyle("-fx-background-color: linear-gradient(-fx-gray, lightgray); -fx-background-radius:  0 0 20 20;");
             this.repeatBTN.setStyle("-fx-text-fill: -fx-secondary;");
             this.copyBTN.setStyle("-fx-text-fill: -fx-secondary;");
             copyIcon.setStyle("-fx-fill: -fx-secondary;");
-
-            this.repeatBTN.setText("التكرار" + "     " + "(" + (--this.repeatValue) + ")");
+            updateRepeatButton(this.repeatValue);
             this.repeatBTN.setDisable(true);
             // remove box
 //            ((Pane) text.getParent().getParent().getParent().getParent()).getChildren().remove(text.getParent().getParent().getParent());

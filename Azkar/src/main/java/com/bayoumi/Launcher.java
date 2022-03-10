@@ -96,8 +96,7 @@ public class Launcher extends Application {
             incrementPreloader();
             // --- initialize Sentry for error tracking ---
             try {
-                SentryUtil.init();
-                Sentry.captureException(new Exception());
+//                SentryUtil.init();
             } catch (Exception ex) {
                 System.out.println(ex.getLocalizedMessage());
             }

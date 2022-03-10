@@ -19,20 +19,10 @@ public class Constants {
             } else {
                 assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
             }
-//            assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
         } catch (Exception ex) {
             System.out.println(ex.getLocalizedMessage());
         }
     }
-
-
-//    public static void main(String[] args) throws IOException {
-//        Path from = Paths.get("jarFiles/db/assets.db");
-//        Path to = Paths.get("D:/FFOutput/assets.db");
-//        copyIfNotExist(from, to);
-
-//        copyAssetsDBToAppData();
-//    }
 
     public static void copyDatabaseToAppData() throws IOException {
         Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
