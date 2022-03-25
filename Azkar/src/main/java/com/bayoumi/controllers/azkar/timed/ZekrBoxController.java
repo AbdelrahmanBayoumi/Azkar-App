@@ -19,7 +19,7 @@ public class ZekrBoxController {
     private FontAwesomeIconView copyIcon;
 
     private void updateRepeatButton(int repeat) {
-        this.repeatBTN.setText("التكرار" + "\t" + repeat);
+        this.repeatBTN.setText("التكرار" + "    " + "(" + repeat + ")");
     }
 
     public void setData(String text, int repeatValue) {
@@ -45,10 +45,8 @@ public class ZekrBoxController {
             this.repeatBTN.setStyle("-fx-text-fill: -fx-secondary;");
             this.copyBTN.setStyle("-fx-text-fill: -fx-secondary;");
             copyIcon.setStyle("-fx-fill: -fx-secondary;");
-            updateRepeatButton(this.repeatValue);
+            updateRepeatButton(--this.repeatValue);
             this.repeatBTN.setDisable(true);
-            // remove box
-//            ((Pane) text.getParent().getParent().getParent().getParent()).getChildren().remove(text.getParent().getParent().getParent());
         }
     }
 }

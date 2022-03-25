@@ -43,6 +43,11 @@
     -fx-scale-y: 1.5;
 }
 
+.font-primary {
+    -fx-font-family: "Droid Arabic Kufi";
+    -fx-padding: -13 0 0 0;
+}
+
 .root {
     -fx-background-color: -fx-bg;
 }
@@ -602,4 +607,24 @@
 
 .dialog-pane .button {
     -fx-font-size: 15;
+}
+
+/* ==== Zekr ==== */
+/*.zekr-listView .scroll-bar:horizontal .increment-arrow,*/
+/*.zekr-listView .scroll-bar:horizontal .decrement-arrow,*/
+/*.zekr-listView .scroll-bar:horizontal .increment-button,*/
+/*.zekr-listView .scroll-bar:horizontal .decrement-button {*/
+/*    -fx-padding: 0;*/
+/*}*/
+
+.zekr-text {
+    -fx-background-color: red;
+    -fx-font-family: 'Droid Arabic Kufi';
+    -fx-font-size: 20;
+    /*-fx-font-weight: BOLD;*/
+    -fx-max-height: infinity;
+    -fx-max-width: infinity;
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }

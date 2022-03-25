@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class TimedZekr {
     public final static ObservableList<TimedZekr> MORNING_LIST = FXCollections.observableArrayList();
@@ -42,6 +43,19 @@ public class TimedZekr {
         } catch (Exception ex) {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + "fetchMorningAzkar()");
         }
+    }
+
+    public static ArrayList<TimedZekr> getMorningAzkar() {
+        ArrayList<TimedZekr> list = new ArrayList<>();
+        try {
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM morning_zekr").executeQuery();
+            while (res.next()) {
+                list.add(new TimedZekr(res.getInt(1), res.getString(2), res.getInt(3)));
+            }
+        } catch (Exception ex) {
+            Logger.error(null, ex, AbsoluteZekr.class.getName() + "getMorningAzkar()");
+        }
+        return list;
     }
 
     @Override

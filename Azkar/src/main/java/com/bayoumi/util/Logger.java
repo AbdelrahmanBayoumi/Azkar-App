@@ -47,6 +47,7 @@ public class Logger {
     public static void error(String msg, Throwable throwable, String CLASS_NAME) {
         new Thread(() -> {
             synchronized (LOCK) {
+                throwable.printStackTrace();
                 String DataAndTime = DATE_TIME_FORMAT.format(new Date());
                 String m = DataAndTime + " => "
                         + "Exception[ " + throwable.getLocalizedMessage() + " ] in => "

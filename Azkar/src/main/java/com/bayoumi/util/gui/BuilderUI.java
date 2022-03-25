@@ -4,7 +4,6 @@ import com.bayoumi.controllers.alert.confirm.ConfirmAlertController;
 import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
 import com.bayoumi.controllers.dialog.UpdateConfirmController;
 import com.bayoumi.models.UpdateInfo;
-import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.validation.SingleInstance;
 import javafx.fxml.FXMLLoader;
