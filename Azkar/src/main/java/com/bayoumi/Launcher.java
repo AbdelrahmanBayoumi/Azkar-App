@@ -7,11 +7,13 @@ import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.SentryUtil;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.db.LocationsDBManager;
 import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
 import com.sun.javafx.application.LauncherImpl;
@@ -87,14 +89,14 @@ public class Launcher extends Application {
             incrementPreloader();
 
             // --- load Homepage FXML ---
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/home/home.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.Home.toString()));
             scene = new Scene(loader.load());
             scene.getStylesheets().add("/com/bayoumi/css/style.css");
             homeController = loader.getController();
             incrementPreloader();
             // --- initialize Sentry for error tracking ---
             try {
-//                SentryUtil.init();
+                SentryUtil.init();
             } catch (Exception ex) {
                 System.out.println(ex.getLocalizedMessage());
             }

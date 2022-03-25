@@ -1,6 +1,7 @@
 package com.bayoumi.controllers.settings;
 
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.gui.load.Locations;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,9 +46,13 @@ public class SettingsController implements Initializable {
         try {
             if (!azkarButton.equals(selectedButton)) {
                 toggle(azkarButton);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/azkar/AzkarSettings.fxml"));
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.AzkarSettings.toString()));
                 borderPane.setCenter(loader.load());
                 settingsI = loader.getController();
+
+//                borderPane.setCenter(Loader.getInstance().getView(Locations.AzkarSettings));
+//                settingsI = (SettingsInterface) Loader.getInstance().getController(Locations.AzkarSettings);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -60,7 +65,7 @@ public class SettingsController implements Initializable {
         try {
             if (!cityButton.equals(selectedButton)) {
                 toggle(cityButton);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/prayertimes/PrayerTimeSettings.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.PrayerTimeSettings.toString()));
                 borderPane.setCenter(loader.load());
                 settingsI = loader.getController();
             }
@@ -75,7 +80,7 @@ public class SettingsController implements Initializable {
         try {
             if (!otherButton.equals(selectedButton)) {
                 toggle(otherButton);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/settings/other/OtherSettings.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.OtherSettings.toString()));
                 borderPane.setCenter(loader.load());
                 settingsI = loader.getController();
             }
@@ -100,6 +105,5 @@ public class SettingsController implements Initializable {
             settingsI.saveToDB();
         }
     }
-
 
 }

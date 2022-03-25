@@ -59,4 +59,5 @@ public class LoaderComponent {
         stage.showAndWait();
     }
 
+
 }

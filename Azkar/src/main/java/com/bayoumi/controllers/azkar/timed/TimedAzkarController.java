@@ -3,6 +3,7 @@ package com.bayoumi.controllers.azkar.timed;
 import com.bayoumi.models.TimedZekr;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ScrollHandler;
+import com.bayoumi.util.gui.load.Locations;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
@@ -73,7 +74,7 @@ public class TimedAzkarController implements Initializable {
             ZekrBoxController controller;
             FXMLLoader fxmlLoader;
             for (TimedZekr zekr : list) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/azkar/timed/ZekrBox.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource(Locations.ZekrBox.toString()));
                 boxContainer.getChildren().add(fxmlLoader.load());
                 controller = fxmlLoader.getController();
                 controller.setData(zekr.getText(), zekr.getRepeat());
@@ -96,7 +97,7 @@ public class TimedAzkarController implements Initializable {
     @FXML
     private void openSettings() {
         try {
-            final FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/azkar/timed/Settings.fxml"));
+            final FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar_Settings.toString()));
             final JFXDialog dialog = new JFXDialog(sp, loader.load(), JFXDialog.DialogTransition.TOP);
             ((SettingsController) loader.getController()).setData(getTextList(), dialog);
             dialog.show();

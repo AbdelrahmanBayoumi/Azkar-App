@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="CENTER" maxWidth="740.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.ZekrBoxController">
+<VBox alignment="CENTER" maxWidth="740.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="740.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.ZekrBoxController">
     <HBox alignment="CENTER" fillHeight="false" maxWidth="740.0" onMouseClicked="#repeat" VBox.vgrow="ALWAYS">
         <TextFlow maxWidth="740.0" textAlignment="CENTER">
             <padding>

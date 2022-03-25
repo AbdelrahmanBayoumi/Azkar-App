@@ -8,9 +8,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class Constants {
+    public enum Mode {PRODUCTION, DEVELOPMENT}
+
     // Program characteristics
     public static String assetsPath;
     public final static String VERSION = "1.0.1";
+
+    public final static Mode RUNNING_MODE = Mode.PRODUCTION;
 
     static {
         try {

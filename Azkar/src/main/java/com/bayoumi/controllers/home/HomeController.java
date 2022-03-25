@@ -22,7 +22,6 @@ import com.bayoumi.util.services.reminders.Reminder;
 import com.bayoumi.util.services.reminders.ReminderUtil;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.time.Utilities;
-import com.bayoumi.util.validation.SingleInstance;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -30,13 +29,10 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -72,7 +68,7 @@ public class HomeController implements Initializable {
         prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
 
         try {
-            fxmlLoader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/home/prayertimes/PrayerTimes.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource(Locations.PrayerTimes.toString()));
             mainContainer.getChildren().add(1, fxmlLoader.load());
             prayerTimesController = fxmlLoader.getController();
             prayerTimesController.setData(settings, prayerTimesToday);
@@ -96,7 +92,7 @@ public class HomeController implements Initializable {
         initReminders();
 
         try {
-            fxmlLoader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/home/periods/AzkarPeriods.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource(Locations.AzkarPeriods.toString()));
             periodBox = fxmlLoader.load();
             azkarPeriodsController = fxmlLoader.getController();
             azkarPeriodsController.setData(settings);
@@ -200,13 +196,9 @@ public class HomeController implements Initializable {
     @FXML
     private void goToSettings() {
         try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/settings/Settings.fxml"))));
-            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            HelperMethods.SetIcon(stage);
-            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.showAndWait();
+            final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.Settings);
+            HelperMethods.ExitKeyCodeCombination(popUp.getStage().getScene(), popUp.getStage());
+            popUp.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".goToSettings()");
         }
@@ -218,7 +210,7 @@ public class HomeController implements Initializable {
     // ==============================================
     private void handlePrayerRemainingTime(Date dateNow) {
         Date nextPrayerTime;
-        // take current Prayer ( when isha is finished and it's before 12pm )
+        // take current Prayer ( when isha is finished, and it's before 12pm )
         if (prayerTimesToday.nextPrayer().equals(Prayer.NONE)) {
             currentPrayerText.setText("مر على " + prayerTimesController.getCurrentPrayerValue());
             nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.currentPrayer());
@@ -247,7 +239,7 @@ public class HomeController implements Initializable {
         ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
         if (settings.getAzkarSettings().getMorningAzkarOffset() != 0) {
             Date morningAzkarDate = ((Date) prayerTimesToday.fajr.clone());
-            morningAzkarDate.setTime(prayerTimesToday.fajr.getTime() + (settings.getAzkarSettings().getMorningAzkarOffset() * 60000));
+            morningAzkarDate.setTime(prayerTimesToday.fajr.getTime() + (settings.getAzkarSettings().getMorningAzkarOffset() * 60000L));
             ReminderUtil.getInstance().add(new Reminder(morningAzkarDate, () -> Platform.runLater(() ->
                     Notification.create(new NotificationContent("أذكار الصباح",
                                     new Image("/com/bayoumi/images/sun_50px.png")),
@@ -258,7 +250,7 @@ public class HomeController implements Initializable {
         }
         if (settings.getAzkarSettings().getNightAzkarOffset() != 0) {
             Date nightAzkarDate = ((Date) prayerTimesToday.asr.clone());
-            nightAzkarDate.setTime(prayerTimesToday.asr.getTime() + (settings.getAzkarSettings().getNightAzkarOffset() * 60000));
+            nightAzkarDate.setTime(prayerTimesToday.asr.getTime() + (settings.getAzkarSettings().getNightAzkarOffset() * 60000L));
             ReminderUtil.getInstance().add(new Reminder(nightAzkarDate, () -> Platform.runLater(() ->
                     Notification.create(new NotificationContent("أذكار المساء",
                                     new Image("/com/bayoumi/images/night_50px.png")),

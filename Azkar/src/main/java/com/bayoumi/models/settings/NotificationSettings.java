@@ -1,11 +1,12 @@
 package com.bayoumi.models.settings;
 
+import com.bayoumi.models.Preferences;
+import com.bayoumi.models.PreferencesType;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.gui.BuilderUI;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.util.StringConverter;
-
-import java.sql.ResultSet;
 
 public class NotificationSettings {
     private Pos position;
@@ -46,27 +47,18 @@ public class NotificationSettings {
 
     private void loadSettings() {
         try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM notification").executeQuery();
-            if (res.next()) {
-                this.position = Pos.valueOf(res.getString("position"));
-            }
-            System.out.println("--- " + getClass().getName() + ".loadSettings()" + " ---");
-            System.out.println(this);
-            System.out.println("-------------------------------------------------------");
+            this.position = Pos.valueOf(Preferences.getInstance().get(PreferencesType.NOTIFICATION_POS, "BOTTOM_LEFT"));
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }
     }
 
     public void save() {
         try {
-            DatabaseManager databaseManager = DatabaseManager.getInstance();
-            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE notification set position = ?");
-            databaseManager.stat.setString(1, this.position.toString());
-            databaseManager.stat.executeUpdate();
-            loadSettings();
+            Preferences.getInstance().set(PreferencesType.NOTIFICATION_POS, this.position.toString());
         } catch (Exception ex) {
+            // TODO: show ERROR ALERT with the chosen language
+            BuilderUI.showOkAlert(Alert.AlertType.ERROR, "ERROR in saving notification position", false);
             Logger.error(null, ex, getClass().getName() + ".save()");
         }
     }
