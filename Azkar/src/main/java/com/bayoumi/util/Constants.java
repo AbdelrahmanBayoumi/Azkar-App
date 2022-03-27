@@ -14,7 +14,7 @@ public class Constants {
     public static String assetsPath;
     public final static String VERSION = "1.0.1";
 
-    public final static Mode RUNNING_MODE = Mode.PRODUCTION;
+    public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
 
     static {
         try {

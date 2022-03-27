@@ -3,12 +3,15 @@ package com.bayoumi.controllers.settings.azkar;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AbsoluteZekr;
 import com.bayoumi.models.settings.AzkarSettings;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.NotificationSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
+import com.bayoumi.util.gui.PopOverUtil;
+import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
@@ -43,11 +46,13 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 public class AzkarSettingsController implements Initializable, SettingsInterface {
 
+    private ResourceBundle bundle;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
     private AzkarSettings azkarSettings;
@@ -80,7 +85,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private JFXButton playButton;
     @FXML
-    private JFXButton showZekrButton;
+    private JFXButton showZekrButton, goToAzkarDBButton;
     @FXML
     private OctIconView volume;
     @FXML
@@ -91,8 +96,15 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private double previousValue = 50;
     private boolean isMuted = false;
 
+    private void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
+
         playIcon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
         playIcon.setStyle("-fx-fill: -fx-secondary;");
         playIcon.setGlyphSize(30);
@@ -106,10 +118,10 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         IntegerSpinner.init(azkarPeriod_hour);
         azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 1));
         azkarPeriod_hour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
-        azkarPeriod.valueProperty().addListener((observable, oldValue, newValue) -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
-        azkarPeriod_hour.valueProperty().addListener((observable, oldValue, newValue) -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
-        azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(Integer.parseInt(azkarPeriod.getEditor().getText()))));
-        azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
+        azkarPeriod.valueProperty().addListener((observable, oldValue, newValue) -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, Integer.parseInt(azkarPeriod.getEditor().getText()))));
+        azkarPeriod_hour.valueProperty().addListener((observable, oldValue, newValue) -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(bundle, Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
+        azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, Integer.parseInt(azkarPeriod.getEditor().getText()))));
+        azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(bundle, Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
 
         // init Saved data form DB
         azkarSettings = Settings.getInstance().getAzkarSettings();
@@ -156,6 +168,8 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         stopAzkar.setSelected(azkarSettings.isStopped());
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
+
+        PopOverUtil.init(goToAzkarDBButton, "يمكنك (إضافة أو تعديل أو حذف) ذكر من الأذكار المطلقة" + "\n" + "الأذكار المطلقة: المستخدمة في الإشعارات");
     }
 
     @FXML
@@ -232,7 +246,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private void goToAzkar() {
         try {
             Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/azkar/absolute/AbsoluteAzkar.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString())))));
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             HelperMethods.SetIcon(stage);
             stage.initModality(Modality.APPLICATION_MODAL);

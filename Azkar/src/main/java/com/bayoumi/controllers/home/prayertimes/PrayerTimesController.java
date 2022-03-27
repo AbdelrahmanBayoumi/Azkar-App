@@ -4,7 +4,9 @@ import com.batoulapps.adhan.Prayer;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
 import com.bayoumi.util.time.Utilities;
 import javafx.application.Platform;
@@ -25,6 +27,7 @@ public class PrayerTimesController implements Initializable {
 
     // ==== Helper Objects ====
     private String currentPrayerValue;
+    private ResourceBundle bundle;
     // ==== Settings Objects ====
     private Settings settings;
     private PrayerTimes prayerTimesToday;
@@ -49,11 +52,23 @@ public class PrayerTimesController implements Initializable {
                 sunnahBox.setVisible(false);
             }
         });
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+    }
+
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        fajrText.setText(Utility.toUTF(bundle.getString("fajr")));
+        sunriseText.setText(Utility.toUTF(bundle.getString("sunrise")));
+        dhuhrText.setText(Utility.toUTF(bundle.getString("dhuhr")));
+        asrText.setText(Utility.toUTF(bundle.getString("asr")));
+        maghribText.setText(Utility.toUTF(bundle.getString("maghrib")));
+        ishaText.setText(Utility.toUTF(bundle.getString("isha")));
     }
 
     public void setData(Settings settings, PrayerTimes prayerTimesToday) {
         this.settings = settings;
         setPrayerTimes(prayerTimesToday);
+        LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
     }
 
     public void setPrayerTimes(PrayerTimes prayerTimesToday) {
@@ -66,22 +81,22 @@ public class PrayerTimesController implements Initializable {
         // to update the new current prayerBox
         switch (prayerTimesToday.nextPrayer().equals(Prayer.NONE) ? prayerTimesToday.currentPrayer() : prayerTimesToday.nextPrayer()) {
             case FAJR:
-                changeCurrentPrayerBox(fajrBox, "صلاة الفجر");
+                changeCurrentPrayerBox(fajrBox, Utility.toUTF(bundle.getString("fajrPrayer")));
                 break;
             case SUNRISE:
-                changeCurrentPrayerBox(sunriseBox, "وقت الشروق");
+                changeCurrentPrayerBox(sunriseBox, Utility.toUTF(bundle.getString("sunriseTime")));
                 break;
             case DHUHR:
-                changeCurrentPrayerBox(dhuhrBox, "صلاة الظهر");
+                changeCurrentPrayerBox(dhuhrBox, Utility.toUTF(bundle.getString("dhuhrPrayer")));
                 break;
             case ASR:
-                changeCurrentPrayerBox(asrBox, "صلاة العصر");
+                changeCurrentPrayerBox(asrBox, Utility.toUTF(bundle.getString("asrPrayer")));
                 break;
             case MAGHRIB:
-                changeCurrentPrayerBox(maghribBox, "صلاة المغرب");
+                changeCurrentPrayerBox(maghribBox, Utility.toUTF(bundle.getString("maghribPrayer")));
                 break;
             case ISHA:
-                changeCurrentPrayerBox(ishaBox, "صلاة العشاء");
+                changeCurrentPrayerBox(ishaBox, Utility.toUTF(bundle.getString("ishaPrayer")));
                 break;
         }
         if (currentPrayerBox != null && !currentPrayerBox.getStyleClass().contains("box-prayer-selected")) {
@@ -135,9 +150,9 @@ public class PrayerTimesController implements Initializable {
 
 
             if (Utilities.isFriday(prayerTimesToday.dhuhr)) {
-                dhuhrText.setText("الجمعة");
+                dhuhrText.setText(Utility.toUTF(bundle.getString("jummah")));
             } else {
-                dhuhrText.setText("الظهر");
+                dhuhrText.setText(Utility.toUTF(bundle.getString("dhuhr")));
             }
         });
     }

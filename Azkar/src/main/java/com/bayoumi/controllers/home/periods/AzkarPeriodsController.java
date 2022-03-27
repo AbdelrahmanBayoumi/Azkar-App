@@ -1,6 +1,10 @@
 package com.bayoumi.controllers.home.periods;
 
+import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Utility;
+import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.services.azkar.AzkarService;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.jfoenix.controls.JFXButton;
@@ -8,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,15 +19,18 @@ import java.util.ResourceBundle;
 public class AzkarPeriodsController implements Initializable {
     // ==== Objects ====
     private Settings settings;
+    private ResourceBundle bundle;
     // =========
     @FXML
     private VBox periodBox;
     @FXML
-    private Label frequencyLabel;
+    private Label frequencyLabel, title;
     @FXML
     private JFXButton highFrequency, midFrequency, lowFrequency, rearFrequency, currentFrequency;
 
     public void setData(Settings settings) {
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+
         currentFrequency = getSelectedButton();
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
@@ -33,29 +39,25 @@ public class AzkarPeriodsController implements Initializable {
         } else {
             periodBox.setDisable(true);
         }
+        LanguageBundle.getInstance().addObserver((o, arg) -> {
+            updateBundle(LanguageBundle.getInstance().getResourceBundle());
+            setFrequencyLabel();
+        });
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         settings = Settings.getInstance();
-        buildPopOver();
     }
 
-    private void buildPopOver() {
-        //Build PopOver look and feel
-        Label label = new Label("يمكن تعديل معدل ظهور الأذكار من الإعدادت");
-        label.setStyle("-fx-padding: 10;-fx-background-color: #E9C46A;-fx-text-fill: #000000;-fx-font-weight: bold;");
-        //Create PopOver and add look and feel
-        PopOver popOver = new PopOver(label);
-        frequencyLabel.setOnMouseEntered(mouseEvent -> {
-            //Show PopOver when mouse enters label
-            popOver.show(frequencyLabel);
-        });
-        popOver.setCloseButtonEnabled(true);
-        frequencyLabel.setOnMouseExited(mouseEvent -> {
-            //Hide PopOver when mouse exits label
-            popOver.hide();
-        });
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        PopOverUtil.init(frequencyLabel, Utility.toUTF(bundle.getString("azkar.period.tooltip")));
+        title.setText(Utility.toUTF(bundle.getString("azkar.period.title")));
+        highFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.high")));
+        midFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.mid")));
+        lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
+        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
     }
 
     @FXML
@@ -103,15 +105,31 @@ public class AzkarPeriodsController implements Initializable {
     }
 
     public void setFrequencyLabel() {
-        String msg = "ظهور كل" + " ";
+        String msg = Utility.toUTF(bundle.getString("azkar.period.showEvery")) + " ";
         if (currentFrequency.equals(highFrequency)) {
-            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(settings.getAzkarSettings().getHighPeriod());
+            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+                msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getHighPeriod());
+            } else {
+                msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getHighPeriod());
+            }
         } else if (currentFrequency.equals(midFrequency)) {
-            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(settings.getAzkarSettings().getMidPeriod());
+            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+                msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getMidPeriod());
+            } else {
+                msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getMidPeriod());
+            }
         } else if (currentFrequency.equals(lowFrequency)) {
-            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(settings.getAzkarSettings().getLowPeriod());
+            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+                msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getLowPeriod());
+            } else {
+                msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getLowPeriod());
+            }
         } else if (currentFrequency.equals(rearFrequency)) {
-            msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(settings.getAzkarSettings().getRearPeriod());
+            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+                msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getRearPeriod());
+            } else {
+                msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getRearPeriod());
+            }
         }
         frequencyLabel.setText(msg);
     }

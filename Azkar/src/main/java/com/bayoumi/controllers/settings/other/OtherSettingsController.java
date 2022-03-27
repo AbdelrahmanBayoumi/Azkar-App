@@ -1,12 +1,14 @@
 package com.bayoumi.controllers.settings.other;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.update.UpdateHandler;
 import com.jfoenix.controls.JFXCheckBox;
@@ -19,12 +21,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.net.URI;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class OtherSettingsController implements Initializable, SettingsInterface {
@@ -33,7 +35,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     public Label hijriDateLabel;
     private OtherSettings otherSettings;
     @FXML
-    private ComboBox<String> languageComboBox;
+    private ComboBox<Language> languageComboBox;
     @FXML
     private JFXCheckBox format24;
     @FXML
@@ -61,9 +63,10 @@ public class OtherSettingsController implements Initializable, SettingsInterface
                 hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(otherSettings.getLanguageLocal())));
 
 
-        languageComboBox.setItems(FXCollections.observableArrayList("عربي - Arabic", "إنجليزي - English"));
+        languageComboBox.setConverter(Language.stringConvertor(languageComboBox));
+        languageComboBox.setItems(FXCollections.observableArrayList(Language.values()));
         languageComboBox.setValue(otherSettings.getLanguage());
-        languageComboBox.setDisable(true);
+//        languageComboBox.setDisable(true);
 
         format24.setSelected(otherSettings.isEnable24Format());
 
@@ -100,10 +103,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void openFeedback() {
         try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/com/bayoumi/views/feedback/Feedback.fxml"))));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            HelperMethods.SetIcon(stage);
+            final Stage stage = BuilderUI.initStageDecorated(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Feedback.toString())))), "");
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.show();
             ((Stage) version.getScene().getWindow()).close();

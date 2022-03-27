@@ -13,7 +13,7 @@ public class OtherSettings extends Observable {
 
     private static boolean isFirstInstance = true;
 
-    private String language;
+    private Language language;
     private boolean enableDarkMode;
     private boolean enable24Format;
     private boolean minimized;
@@ -40,7 +40,7 @@ public class OtherSettings extends Observable {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM other_settings").executeQuery();
             if (res.next()) {
-                language = res.getString(1);
+                language = Language.get(res.getString(1));
                 enableDarkMode = res.getInt(2) == 1;
                 enable24Format = res.getInt(3) == 1;
                 hijriOffset = res.getInt(4);
@@ -82,7 +82,7 @@ public class OtherSettings extends Observable {
             }
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             databaseManager.stat = databaseManager.con.prepareStatement("UPDATE other_settings set language = ?, enable_darkmode = ?, enable24 = ?, hijri_offset = ?, minimized = ?, automatic_check_for_updates = ?");
-            databaseManager.stat.setString(1, this.language);
+            databaseManager.stat.setString(1, this.language.getLocale());
             databaseManager.stat.setInt(2, this.enableDarkMode ? 1 : 0);
             databaseManager.stat.setInt(3, this.enable24Format ? 1 : 0);
             databaseManager.stat.setInt(4, this.hijriOffset);
@@ -130,19 +130,16 @@ public class OtherSettings extends Observable {
                 '}';
     }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 
     public String getLanguageLocal() {
-        if (language.equals("عربي - Arabic")) {
-            return "ar";
-        }
-        return "en";
+        return language.getLocale();
     }
 
     public boolean isMinimized() {

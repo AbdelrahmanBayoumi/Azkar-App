@@ -162,7 +162,7 @@
             </children>
          </VBox>
            <HBox alignment="BOTTOM_RIGHT" nodeOrientation="RIGHT_TO_LEFT">
-            <JFXButton contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
+            <JFXButton fx:id="goToAzkarDBButton" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToAzkar" styleClass="secondary-button" text="قاعدة بيانات الأذكار">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

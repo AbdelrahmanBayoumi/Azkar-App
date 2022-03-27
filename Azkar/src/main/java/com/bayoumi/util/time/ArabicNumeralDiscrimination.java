@@ -1,5 +1,9 @@
 package com.bayoumi.util.time;
 
+import com.bayoumi.util.Utility;
+
+import java.util.ResourceBundle;
+
 /**
  * Helper Methods
  */
@@ -9,15 +13,15 @@ public class ArabicNumeralDiscrimination {
      * @return Arabic String for the numerical discrimination
      * for minutes
      */
-    public static String minutesArabicPlurality(int minute) {
+    public static String minutesArabicPlurality(ResourceBundle bundle, int minute) {
         if (minute == 1) {
-            return "دقيقة";
+            return Utility.toUTF(bundle.getString("oneMinute"));
         } else if (minute == 2) {
-            return "دقيقتين";
+            return Utility.toUTF(bundle.getString("twoMinutes"));
         } else if (minute < 11) {
-            return "دقائق";
+            return Utility.toUTF(bundle.getString("minutes"));
         } else {
-            return "دقيقة";
+            return Utility.toUTF(bundle.getString("oneMinute"));
         }
     }
 
@@ -26,28 +30,43 @@ public class ArabicNumeralDiscrimination {
      * @return Arabic String for the numerical discrimination
      * for hours
      */
-    public static String hoursArabicPlurality(int hour) {
+    public static String hoursArabicPlurality(ResourceBundle bundle, int hour) {
         if (hour == 1) {
-            return "ساعة";
+            return Utility.toUTF(bundle.getString("oneHour"));
         } else if (hour == 2) {
-            return "ساعتين";
+            return Utility.toUTF(bundle.getString("twoHours"));
         } else if (hour < 11) {
-            return "ساعات";
+            return Utility.toUTF(bundle.getString("hours"));
         } else {
-            return "ساعة";
+            return Utility.toUTF(bundle.getString("oneHour"));
         }
     }
 
-    public static String getTimeArabicPlurality(int time) {
+    public static String getTimeArabicPlurality(ResourceBundle bundle, int time) {
         String res = "";
         if (time % 60 != 0) {
-            res += (isOneOrTwo(time % 60) ? "" : time % 60 + " ") + ArabicNumeralDiscrimination.minutesArabicPlurality(time % 60);
+            res += (isOneOrTwo(time % 60) ? "" : time % 60 + " ") + ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, time % 60);
         }
         if (time / 60 != 0) {
             if (time % 60 != 0) {
-                res += " و";
+                res += " " + Utility.toUTF(bundle.getString("and"));
             }
-            res += (isOneOrTwo(time / 60) ? "" : time / 60 + " ") + ArabicNumeralDiscrimination.hoursArabicPlurality(time / 60);
+            res += (isOneOrTwo(time / 60) ? "" : time / 60 + " ") + ArabicNumeralDiscrimination.hoursArabicPlurality(bundle, time / 60);
+        }
+
+        return res;
+    }
+
+    public static String getTimeGeneralPlurality(ResourceBundle bundle, int time) {
+        String res = "";
+        if (time % 60 != 0) {
+            res += (isOneOrTwo(time % 60) ? "" : time % 60 + " ") + ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, time % 60);
+        }
+        if (time / 60 != 0) {
+            if (time % 60 != 0) {
+                res += " " + Utility.toUTF(bundle.getString("and")) + " ";
+            }
+            res += (isOneOrTwo(time / 60) ? "" : time / 60 + " ") + ArabicNumeralDiscrimination.hoursArabicPlurality(bundle, time / 60);
         }
 
         return res;
