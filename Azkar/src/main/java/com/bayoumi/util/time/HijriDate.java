@@ -7,6 +7,33 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class HijriDate {
+
+
+    private static UmmalquraCalendar getCalenderAfterOffset(UmmalquraCalendar tempCal, int offset) {
+        int daysCountThisYear = tempCal.get(UmmalquraCalendar.DAY_OF_MONTH);
+        for (int i = 0; i < tempCal.get(Calendar.MONTH); i++) {
+            daysCountThisYear += UmmalquraCalendar.lengthOfMonth(tempCal.get(Calendar.YEAR), i);
+        }
+        int res = offset + daysCountThisYear;
+        int YEAR = tempCal.get(Calendar.YEAR);
+        int MONTH;
+        for (MONTH = 0; MONTH <= 11; MONTH++) {
+            if (res - UmmalquraCalendar.lengthOfMonth(YEAR, MONTH) <= 0) {
+                // month found
+                break;
+            } else {
+                res -= UmmalquraCalendar.lengthOfMonth(YEAR, MONTH);
+            }
+        }
+        if (tempCal.lengthOfYear() < offset + daysCountThisYear) {
+            YEAR++;
+        }
+        MONTH = MONTH > 11 ? (MONTH % 12) : MONTH;
+        int DAY_OF_MONTH = res == 0 ? tempCal.get(Calendar.DAY_OF_MONTH) : res;
+        return new UmmalquraCalendar(YEAR, MONTH, DAY_OF_MONTH);
+    }
+
+
     private final int year;
     private final int month;
     private final int day;
@@ -17,12 +44,12 @@ public class HijriDate {
         this.year = calendar.get(Calendar.YEAR);
         this.month = calendar.get(Calendar.MONTH);
         this.day = calendar.get(Calendar.DAY_OF_MONTH);
+
     }
 
     public HijriDate(int dayOffset) {
         UmmalquraCalendar tempCal = new UmmalquraCalendar();
-        this.calendar = new UmmalquraCalendar(tempCal.get(Calendar.YEAR), tempCal.get(Calendar.MONTH),
-                tempCal.get(Calendar.DAY_OF_MONTH) + dayOffset);
+        this.calendar = getCalenderAfterOffset(tempCal, dayOffset);
         this.year = calendar.get(Calendar.YEAR);
         this.month = calendar.get(Calendar.MONTH);
         this.day = calendar.get(Calendar.DAY_OF_MONTH);
