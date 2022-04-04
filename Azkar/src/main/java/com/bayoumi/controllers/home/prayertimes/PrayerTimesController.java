@@ -12,8 +12,10 @@ import com.bayoumi.util.time.Utilities;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -41,7 +43,7 @@ public class PrayerTimesController implements Initializable {
     @FXML
     private HBox fajrBox, sunriseBox, dhuhrBox, asrBox, maghribBox, ishaBox, currentPrayerBox;
     @FXML
-    private Label fajrText, sunriseText, dhuhrText, asrText, maghribText, ishaText;
+    private Label fajrText, sunriseText, dhuhrText, asrText, maghribText, ishaText, lastThirdOfTheNightTimeText, middleOfTheNightTimeText, otherTimings;
     @FXML
     private Label fajrTime, sunriseTime, dhuhrTime, asrTime, maghribTime, ishaTime;
 
@@ -57,12 +59,22 @@ public class PrayerTimesController implements Initializable {
 
     public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
+        final String dir = Utility.toUTF(bundle.getString("dir"));
+        if (dir.equals("LEFT_TO_RIGHT")) {
+            prayerTimesBox.setMinWidth(379);
+        } else {
+            prayerTimesBox.setMinWidth(Region.USE_COMPUTED_SIZE);
+        }
+        prayerTimesBox.setNodeOrientation(NodeOrientation.valueOf(dir));
         fajrText.setText(Utility.toUTF(bundle.getString("fajr")));
         sunriseText.setText(Utility.toUTF(bundle.getString("sunrise")));
         dhuhrText.setText(Utility.toUTF(bundle.getString("dhuhr")));
         asrText.setText(Utility.toUTF(bundle.getString("asr")));
         maghribText.setText(Utility.toUTF(bundle.getString("maghrib")));
         ishaText.setText(Utility.toUTF(bundle.getString("isha")));
+        otherTimings.setText(Utility.toUTF(bundle.getString("otherTimings")));
+        lastThirdOfTheNightTimeText.setText(Utility.toUTF(bundle.getString("lastThirdOfTheNightTime")));
+        middleOfTheNightTimeText.setText(Utility.toUTF(bundle.getString("middleOfTheNightTime")));
     }
 
     public void setData(Settings settings, PrayerTimes prayerTimesToday) {

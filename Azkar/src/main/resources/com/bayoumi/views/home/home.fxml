@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="535.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
+<StackPane fx:id="stackPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="535.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
    <VBox prefHeight="200.0" prefWidth="100.0">
       <VBox prefHeight="85.0" style="-fx-background-color: -fx-secondary;" VBox.vgrow="ALWAYS" />
       <VBox prefHeight="160.0" style="-fx-background-color: -fx-bg;" VBox.vgrow="ALWAYS" />
@@ -51,16 +51,16 @@
          <children>
             <VBox fx:id="container" alignment="TOP_CENTER" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" spacing="10.0" style="-fx-background-radius: 20;" styleClass="white-box">
+                  <VBox fx:id="clockBox" alignment="CENTER" spacing="10.0" style="-fx-background-radius: 20;" styleClass="white-box">
                      <children>
                         <HBox alignment="CENTER" spacing="20.0">
                            <children>
-                              <MaterialDesignIconView glyphName="CLOCK" size="28" />
-                              <Label text="الساعة الان ">
+                              <Label fx:id="timeNow" text="الساعة الان ">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
+                              <MaterialDesignIconView glyphName="CLOCK" size="28" />
                            </children>
                         </HBox>
                         <Label fx:id="timeLabel" lineSpacing="1.0" text="00:00">
@@ -73,7 +73,7 @@
                         <Insets bottom="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);" styleClass="white-box">
+                  <HBox fx:id="remainingTimeBox" alignment="CENTER" style="-fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);" styleClass="white-box">
                      <children>
                         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                            <children>
@@ -97,9 +97,9 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
+                  <HBox alignment="BOTTOM_CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToMorningAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار الصباح">
+                        <JFXButton fx:id="morningAzkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToMorningAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار الصباح">
                            <graphic>
                               <ImageView fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -111,7 +111,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToNightAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار المساء">
+                        <JFXButton fx:id="nightAzkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToNightAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار المساء">
                            <graphic>
                               <ImageView fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -123,7 +123,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToSettings" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="الإعدادات">
+                        <JFXButton fx:id="settingsButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToSettings" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="الإعدادات">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>

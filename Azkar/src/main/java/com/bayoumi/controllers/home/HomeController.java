@@ -7,8 +7,10 @@ import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
@@ -29,9 +31,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -46,6 +51,7 @@ public class HomeController implements Initializable {
     private String remainingTime;
     private AzkarPeriodsController azkarPeriodsController;
     private PrayerTimesController prayerTimesController;
+    private ResourceBundle bundle;
     // ==== Settings Objects ====
     private Settings settings;
     private PrayerTimes prayerTimesToday;
@@ -53,14 +59,22 @@ public class HomeController implements Initializable {
     @FXML
     private Label timeLabel, day, hijriDate, gregorianDate;
     @FXML
-    private Label currentPrayerText, remainingTimeLabel;
+    private Label currentPrayerText, remainingTimeLabel, timeNow;
     @FXML
-    private VBox container, periodBox;
+    private VBox container, periodBox, clockBox;
     @FXML
-    private HBox mainContainer;
+    private StackPane stackPane;
+    @FXML
+    private Button morningAzkarButton, nightAzkarButton, settingsButton;
+    @FXML
+    private HBox mainContainer, remainingTimeBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        LanguageBundle.getInstance().addObserver((o, arg) ->
+                updateBundle(LanguageBundle.getInstance().getResourceBundle()));
+
         FXMLLoader fxmlLoader;
         date = new Date();
         // initialize required dependencies
@@ -69,7 +83,7 @@ public class HomeController implements Initializable {
 
         try {
             fxmlLoader = new FXMLLoader(getClass().getResource(Locations.PrayerTimes.toString()));
-            mainContainer.getChildren().add(1, fxmlLoader.load());
+            mainContainer.getChildren().add(0, fxmlLoader.load());
             prayerTimesController = fxmlLoader.getController();
             prayerTimesController.setData(settings, prayerTimesToday);
         } catch (Exception ex) {
@@ -128,6 +142,17 @@ public class HomeController implements Initializable {
             prayerTimesController.setPrayerTimes(prayerTimesToday);
             initReminders();
         });
+    }
+
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        final String dir = Utility.toUTF(bundle.getString("dir"));
+        remainingTimeBox.setNodeOrientation(NodeOrientation.valueOf(dir));
+        clockBox.setNodeOrientation(NodeOrientation.valueOf(dir));
+        timeNow.setText(Utility.toUTF(bundle.getString("time.now")));
+        morningAzkarButton.setText(Utility.toUTF(bundle.getString("morningAzkar")));
+        nightAzkarButton.setText(Utility.toUTF(bundle.getString("nightAzkar")));
+        settingsButton.setText(Utility.toUTF(bundle.getString("settings")));
     }
 
 
@@ -209,25 +234,27 @@ public class HomeController implements Initializable {
     // ============ Prayer Times Methods ============
     // ==============================================
     private void handlePrayerRemainingTime(Date dateNow) {
-        Date nextPrayerTime;
-        // take current Prayer ( when isha is finished, and it's before 12pm )
-        if (prayerTimesToday.nextPrayer().equals(Prayer.NONE)) {
-            currentPrayerText.setText("مر على " + prayerTimesController.getCurrentPrayerValue());
-            nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.currentPrayer());
-        } else {
-            currentPrayerText.setText("متبقي على " + prayerTimesController.getCurrentPrayerValue());
-            nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.nextPrayer());
-        }
+        if (bundle != null) {
+            Date nextPrayerTime = null;
+            // take current Prayer ( when isha is finished, and it's before 12pm )
+            if (prayerTimesToday.nextPrayer().equals(Prayer.NONE)) {
+                currentPrayerText.setText(Utility.toUTF(bundle.getString("havePassedSince")) + " " + prayerTimesController.getCurrentPrayerValue());
+                nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.currentPrayer());
+            } else {
+                currentPrayerText.setText(Utility.toUTF(bundle.getString("leftFor")) + " " + prayerTimesController.getCurrentPrayerValue());
+                nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.nextPrayer());
+            }
 
-        if (dateNow.compareTo(nextPrayerTime) < 0) {
-            // dateNow is before nextPrayerTime
-            remainingTime = "- ";
-        } else if (dateNow.compareTo(nextPrayerTime) > 0) {
-            // dateNow is after nextPrayerTime
-            remainingTime = "+ ";
+            if (dateNow.compareTo(nextPrayerTime) < 0) {
+                // dateNow is before nextPrayerTime
+                remainingTime = "- ";
+            } else if (dateNow.compareTo(nextPrayerTime) > 0) {
+                // dateNow is after nextPrayerTime
+                remainingTime = "+ ";
+            }
+            remainingTime += Utilities.findDifference(dateNow, nextPrayerTime);
+            remainingTimeLabel.setText(remainingTime);
         }
-        remainingTime += Utilities.findDifference(dateNow, nextPrayerTime);
-        remainingTimeLabel.setText(remainingTime);
     }
 
     private void initReminders() {
