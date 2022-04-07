@@ -151,3 +151,13 @@
 [07-04-2022] [11:15:58.803 PM] => App Launched
 [07-04-2022] [11:18:45.536 PM] => App Launched
 [07-04-2022] [11:19:59.056 PM] => App Launched
+[07-04-2022] [11:26:30.033 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [11:26:30.033 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [11:42:43.143 PM] => App Launched
+[07-04-2022] [11:45:41.408 PM] => App Launched
+[07-04-2022] [11:49:42.774 PM] => App Launched
+[07-04-2022] [11:55:54.828 PM] => App Launched
+[08-04-2022] [12:02:26.568 AM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[08-04-2022] [12:02:26.568 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[08-04-2022] [12:05:49.470 AM] => App Launched
+[08-04-2022] [12:07:05.102 AM] => App Launched

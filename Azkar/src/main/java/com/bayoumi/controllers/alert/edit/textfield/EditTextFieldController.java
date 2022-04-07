@@ -16,7 +16,7 @@ public class EditTextFieldController implements Initializable {
     @FXML
     private JFXTextField textfield;
 
-    public void setData(String prompt, String value) {
+    public void setData(String prompt, String value) {// TODO: handle localization for this view
         textfield.setPromptText(prompt);
         textfield.setText(value);
     }

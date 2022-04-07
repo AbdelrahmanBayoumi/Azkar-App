@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TreeTableColumn?>
@@ -12,30 +13,37 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.absolute.AbsoluteAzkarController">
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.absolute.AbsoluteAzkarController">
    <VBox layoutY="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
       <HBox alignment="CENTER" spacing="30.0">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
          </padding>
-         <JFXButton fx:id="returnToDefaultBTN" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="10.0" onAction="#returnToDefault" styleClass="back-button" text="إسترجاع الأذكار الإفتراضية">
-            <font>
-               <Font name="System Bold" size="18.0" />
-            </font>
+         <JFXTextField fx:id="newZekr" focusTraversable="false" labelFloat="true" onAction="#newZekrAddAction" promptText="الذكر" HBox.hgrow="ALWAYS">
+            <styleClass>
+               <String fx:value="text-field-normal" />
+               <String fx:value="font-text-medium" />
+               <String fx:value="_17" />
+            </styleClass></JFXTextField>
+         <JFXButton fx:id="addButton" focusTraversable="false" onAction="#newZekrAddAction" prefWidth="140.0" text="إضافة">
+            <styleClass>
+               <String fx:value="font-text-bold" />
+               <String fx:value="_18" />
+            </styleClass>
+         </JFXButton>
+         <JFXButton fx:id="returnToDefaultBTN" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="10.0" onAction="#returnToDefault" text="إسترجاع الأذكار الإفتراضية">
             <graphic>
                <FontAwesomeIconView glyphName="REPEAT" size="25" />
             </graphic>
+            <styleClass>
+               <String fx:value="back-button" />
+               <String fx:value="font-text-bold" />
+               <String fx:value="_18" />
+            </styleClass>
          </JFXButton>
-         <JFXButton focusTraversable="false" onAction="#newZekrAddAction" prefWidth="140.0" text="إضافة">
-            <font>
-               <Font name="System Bold" size="18.0" />
-            </font>
-         </JFXButton>
-         <JFXTextField fx:id="newZekr" focusTraversable="false" labelFloat="true" nodeOrientation="RIGHT_TO_LEFT" onAction="#newZekrAddAction" promptText="الذكر" styleClass="text-field-normal" HBox.hgrow="ALWAYS" />
       </HBox>
-      <JFXTreeTableView fx:id="azkarTable" nodeOrientation="RIGHT_TO_LEFT" VBox.vgrow="ALWAYS">
+      <JFXTreeTableView fx:id="azkarTable" styleClass="table" VBox.vgrow="ALWAYS">
          <columnResizePolicy>
             <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -50,10 +58,6 @@
       <effect>
          <DropShadow />
       </effect>
-      <Label style="-fx-text-fill: -fx-secondary-text;" text="الأذكار المطلقة">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-      </Label>
+      <Label fx:id="absoluteAzkar" style="-fx-text-fill: -fx-secondary-text; -fx-font-size: 30;" styleClass="font-text-bold" text="الأذكار المطلقة" />
    </HBox>
 </AnchorPane>

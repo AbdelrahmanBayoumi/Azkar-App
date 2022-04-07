@@ -430,8 +430,9 @@
 
 .table .column-header .label {
     -fx-text-fill: black;
-    -fx-font-weight: bold;
+    -fx-font-weight: normal;
     -fx-alignment: CENTER;
+    -fx-font-family: "Tajawal-Bold";
 }
 
 .tree-table-row-cell {
@@ -439,11 +440,10 @@
     -fx-border-color: black;
     -fx-border-style: solid;
     -fx-border-width: 0.25;
-    -fx-font: normal 20px 'serif';
+    -fx-font: normal 20px 'Tajawal-Medium';
 }
 
 .tree-table-row-cell:even {
-    /*-fx-background-color:  #cececea6;*/
     -fx-background-color: -fx-even-table;
 }
 
@@ -453,16 +453,15 @@
 
 .tree-table-row-cell:hover {
     -fx-font-size: 20px;
-    -fx-font-weight: bold;
     -fx-background-color: -fx-hover-table;
     -fx-border-style: solid;
     -fx-border-width: 1;
 }
 
 .table {
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);
-    -fx-border-radius: 30;
-    -fx-background-radius: 30;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);*/
+    /*-fx-border-radius: 30;*/
+    /*-fx-background-radius: 30;*/
 }
 
 .table-btn {
