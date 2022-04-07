@@ -5,6 +5,7 @@ import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
 import com.bayoumi.controllers.dialog.UpdateConfirmController;
 import com.bayoumi.models.UpdateInfo;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.validation.SingleInstance;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
@@ -22,7 +23,7 @@ public class BuilderUI {
     public static boolean showUpdateDetails(UpdateInfo updateInfo, String currentVersion) {
         try {
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/dialog/UpdateConfirm.fxml"));
+            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.UpdateConfirm.toString()));
             stage.setScene(new Scene(loader.load()));
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -56,7 +57,7 @@ public class BuilderUI {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
-            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/alert/confirm/ConfirmAlert.fxml"));
+            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.ConfirmAlert.toString()));
             stage.setScene(new Scene(loader.load()));
             ConfirmAlertController controller = loader.getController();
             controller.setData(isDanger, text);
@@ -74,7 +75,7 @@ public class BuilderUI {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
-            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource("/com/bayoumi/views/alert/edit/textfield/EditTextField.fxml"));
+            FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.EditTextField.toString()));
             stage.setScene(new Scene(loader.load()));
             EditTextFieldController controller = loader.getController();
             controller.setData(prompt, value);

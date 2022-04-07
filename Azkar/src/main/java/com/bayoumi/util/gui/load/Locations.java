@@ -12,6 +12,9 @@ public enum Locations {
     OtherSettings("/com/bayoumi/views/settings/other/OtherSettings.fxml"),
     PrayerTimeSettings("/com/bayoumi/views/settings/prayertimes/PrayerTimeSettings.fxml"),
     AzkarSettings("/com/bayoumi/views/settings/azkar/AzkarSettings.fxml"),
+    UpdateConfirm("/com/bayoumi/views/dialog/UpdateConfirm.fxml"),
+    ConfirmAlert("/com/bayoumi/views/alert/confirm/ConfirmAlert.fxml"),
+    EditTextField("/com/bayoumi/views/alert/edit/textfield/EditTextField.fxml"),
     Feedback("/com/bayoumi/views/feedback/Feedback.fxml");
 
     private final String name;

@@ -86,7 +86,6 @@ public class NotificationSettings {
         try {
             Preferences.getInstance().set(PreferencesType.NOTIFICATION_POS, this.position.toString());
         } catch (Exception ex) {
-            // TODO: show ERROR ALERT with the chosen language
             BuilderUI.showOkAlert(Alert.AlertType.ERROR, "ERROR in saving notification position", false);
             Logger.error(null, ex, getClass().getName() + ".save()");
         }
