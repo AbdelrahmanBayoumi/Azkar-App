@@ -8,6 +8,27 @@
     src: url('../fonts/DroidKufi-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'Tajawal-Medium';
+    src: url('../fonts/Tajawal/Tajawal-Medium.ttf');
+}
+
+@font-face {
+    font-family: 'Tajawal-Bold';
+    src: url('../fonts/Tajawal/Tajawal-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Tajawal-Regular';
+    src: url('../fonts/Tajawal/Tajawal-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Kitab-Regular';
+    src: url('../fonts/Kitab-Regular.ttf');
+}
+
+
 * {
     /* ====== Colors ====== */
     -fx-primary: #2A9D8F;
@@ -36,16 +57,13 @@
     -fx-even-table: #E5F1F4;
     -fx-odd-table: #fbf9fa;
     -fx-hover-table: white;
+    -fx-bold-font-family: Tajawal-Bold;
+    -fx-medium-font-family: "Tajawal-Medium";
 }
 
 .spp {
     -fx-scale-x: 1.5;
     -fx-scale-y: 1.5;
-}
-
-.font-primary {
-    -fx-font-family: "Droid Arabic Kufi";
-    -fx-padding: -13 0 0 0;
 }
 
 .root {
@@ -287,27 +305,35 @@
     -jfx-selected-color: -fx-secondary;
     -jfx-unselected-color: -fx-secondary;
     -fx-text-fill: -fx-primary-text;
-    -fx-font-size: 15;
-    -fx-font-weight: bold;
 }
 
 
 .radio-button:selected {
-    -fx-font-weight: bold;
-    -fx-font-size: 20;
+    -fx-font-size: 16;
 }
 
 .radio-button:hover {
-    -fx-font-size: 20;
+    -fx-font-size: 16;
 }
 
 /* ============ combo-box ============ */
+.combo-box {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.combo-box .list-cell {
+    -fx-alignment: CENTER;
+}
+
+.combo-box .list-cell:selected:empty {
+    -fx-alignment: CENTER;
+}
+
 .combo-box-normal {
     -fx-text-fill: -fx-primary-text;
     -jfx-focus-color: -fx-primary-text;
     -jfx-unfocus-color: -fx-primary-text;
-    -fx-font-weight: BOLD;
-    -fx-font-size: 17;
 }
 
 /* ============ TextField ============ */
@@ -512,19 +538,14 @@
 
 
 /* == Prayer Times == */
-.prayer-view .label {
-    -fx-font-family: Calibri;
-    -fx-font-size: 24;
-}
-
 .prayer-view .box-prayer {
     -fx-border-color: gray;
     -fx-border-width: 0 0 1 0;
 }
 
-.box-prayer .label {
-    -fx-font-size: 25;
-}
+/*.box-prayer .label {*/
+/*    -fx-font-size: 25;*/
+/*}*/
 
 /*.box-prayer:hover {*/
 /*    -fx-background-color: -fx-secondary;*/
@@ -536,13 +557,12 @@
 
 .box-prayer-selected {
     -fx-background-color: -fx-secondary;
-    -fx-background-radius: 5;
+    -fx-background-radius: 0;
 }
 
 .box-prayer-selected .label {
     -fx-text-fill: -fx-secondary-text;
-    /*-fx-font-weight: bold;*/
-    -fx-font-size: 30;
+    -fx-font-size: 27;
 }
 
 /*==== SLIDER ====*/
@@ -609,6 +629,17 @@
     -fx-font-size: 15;
 }
 
+.pop-over-label {
+    -fx-padding: 10;
+    -fx-background-color: #E9C46A;
+    -fx-text-fill: #000000;
+    -fx-font-family: "Tajawal-Bold";
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+    -fx-max-width: 400;
+}
+
 /* ==== Zekr ==== */
 /*.zekr-listView .scroll-bar:horizontal .increment-arrow,*/
 /*.zekr-listView .scroll-bar:horizontal .decrement-arrow,*/
@@ -627,4 +658,70 @@
     -fx-padding: 20;
     -fx-alignment: center;
     -fx-text-alignment: center;
+}
+
+/* === fonts === */
+.font-text-bold {
+    -fx-font-family: "Tajawal-Bold";
+}
+
+.font-text-medium {
+    -fx-font-family: "Tajawal-Medium";
+}
+
+.font-button-medium {
+    -fx-font-family: "Tajawal-Medium";
+}
+
+/* === fonts-sizes === */
+.normal-font-weight {
+    -fx-font-weight: normal;
+}
+
+.bold-font-weight {
+    -fx-font-weight: bold;
+}
+
+._15 {
+    -fx-font-size: 15;
+}
+
+._16 {
+    -fx-font-size: 16;
+}
+
+._17 {
+    -fx-font-size: 17;
+}
+
+._18 {
+    -fx-font-size: 18;
+}
+
+._19 {
+    -fx-font-size: 19;
+}
+
+._20 {
+    -fx-font-size: 20;
+}
+
+._21 {
+    -fx-font-size: 21;
+}
+
+._22 {
+    -fx-font-size: 22;
+}
+
+._23 {
+    -fx-font-size: 23;
+}
+
+._24 {
+    -fx-font-size: 24;
+}
+
+._25 {
+    -fx-font-size: 25;
 }

@@ -20,16 +20,18 @@
                   <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="fajrText" text="الفجر">
-                           <font>
-                              <Font name="Arial Bold" size="27.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_25" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
                   <Label fx:id="fajrTime" text="--:--">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_25" />
+                     </styleClass>
                   </Label>
                </children>
                <padding>
@@ -41,16 +43,18 @@
                   <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="sunriseText" text="الشروق">
-                           <font>
-                              <Font name="Arial Bold" size="27.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_25" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
                   <Label fx:id="sunriseTime" text="--:--">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_25" />
+                     </styleClass>
                   </Label>
                </children>
                <padding>
@@ -62,16 +66,18 @@
                   <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="dhuhrText" text="الظهر">
-                           <font>
-                              <Font name="Almarai" size="27.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_25" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
                   <Label fx:id="dhuhrTime" text="--:--">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_25" />
+                     </styleClass>
                   </Label>
                </children>
                <padding>
@@ -83,16 +89,18 @@
                   <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="asrText" text="العصر">
-                           <font>
-                              <Font name="Arial Bold" size="27.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_25" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
                   <Label fx:id="asrTime" text="--:--">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_25" />
+                     </styleClass>
                   </Label>
                </children>
                <padding>
@@ -104,16 +112,18 @@
                   <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="maghribText" text="المغرب">
-                           <font>
-                              <Font name="Arial Bold" size="27.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_25" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
                   <Label fx:id="maghribTime" text="--:--">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_25" />
+                     </styleClass>
                   </Label>
                </children>
                <padding>
@@ -125,16 +135,18 @@
                   <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="ishaText" text="العشاء">
-                           <font>
-                              <Font name="Arial Bold" size="27.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_25" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
                   <Label fx:id="ishaTime" text="--:--">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_25" />
+                     </styleClass>
                   </Label>
                </children>
                <padding>
@@ -145,7 +157,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="otherTimings" onMouseClicked="#openSunnahBox" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-font-family: system;" text="مواقيت أخرى">
+                        <Label fx:id="otherTimings" onMouseClicked="#openSunnahBox" style="-fx-font-size: 16;" styleClass="font-text-bold" text="مواقيت أخرى">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -192,16 +204,18 @@
                         <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label fx:id="middleOfTheNightTimeText" text="منتصف الليل">
-                                 <font>
-                                    <Font name="Calibri" size="25.0" />
-                                 </font>
+                                 <styleClass>
+                                    <String fx:value="_22" />
+                                    <String fx:value="font-text-medium" />
+                                 </styleClass>
                               </Label>
                            </children>
                         </HBox>
                         <Label fx:id="middleOfTheNightTime" text="--:--">
-                           <font>
-                              <Font name="Calibri" size="25.0" />
-                           </font>
+                           <styleClass>
+                              <String fx:value="_22" />
+                              <String fx:value="font-text-medium" />
+                           </styleClass>
                         </Label>
                      </children>
                      <padding>
@@ -212,17 +226,19 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label fx:id="lastThirdOfTheNightTimeText" text="الثلث الأخير من الليل">
-                                 <font>
-                                    <Font name="Calibri" size="25.0" />
-                                 </font>
+                              <Label fx:id="lastThirdOfTheNightTimeText" text="Last third of the night">
+                                 <styleClass>
+                                    <String fx:value="_22" />
+                                    <String fx:value="font-text-medium" />
+                                 </styleClass>
                               </Label>
                            </children>
                         </HBox>
-                        <Label fx:id="lastThirdOfTheNightTime" text="--:--">
-                           <font>
-                              <Font name="Calibri" size="25.0" />
-                           </font>
+                        <Label fx:id="lastThirdOfTheNightTime" text="33:44 PM">
+                           <styleClass>
+                              <String fx:value="_22" />
+                              <String fx:value="font-text-medium" />
+                           </styleClass>
                         </Label>
                      </children>
                      <padding>

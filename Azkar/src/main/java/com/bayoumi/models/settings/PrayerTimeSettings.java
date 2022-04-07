@@ -184,11 +184,11 @@ public class PrayerTimeSettings extends Observable {
             this.value = value;
         }
 
-        public static StringConverter<Method> getStringConverter() {
+        public static StringConverter<Method> getStringConverter(boolean isArabic) {
             return new StringConverter<Method>() {
                 @Override
                 public String toString(Method object) {
-                    return object.getArabicName();
+                    return isArabic ? object.getArabicName() : object.getEnglishName();
                 }
 
                 @Override

@@ -1,53 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox fx:id="periodBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0"
-      style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);"
-      xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.bayoumi.controllers.home.periods.AzkarPeriodsController">
+<VBox fx:id="periodBox" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.periods.AzkarPeriodsController">
     <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
     <Label fx:id="title" text="معدل ظهور الأذكار">
-        <font>
-          <Font name="System Bold" size="20.0"/>
-        </font>
+      <styleClass>
+         <String fx:value="_20" />
+         <String fx:value="font-text-bold" />
+      </styleClass>
     </Label>
     <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 5 دقائق">
-        <font>
-          <Font name="System Bold" size="15.0"/>
-        </font>
+      <styleClass>
+         <String fx:value="font-text-bold" />
+         <String fx:value="_15" />
+      </styleClass>
     </Label>
     <HBox alignment="CENTER" style="-fx-background-radius: 20; -fx-background-color: derive( -fx-secondary-text,-5%);">
-        <JFXButton fx:id="highFrequency" focusTraversable="false" minWidth="76.0" onAction="#highFrequencyAction"
-                   styleClass="frequency-btn" text="عالي">
-            <font>
-                <Font name="System Bold" size="16.0"/>
-            </font>
+        <JFXButton fx:id="highFrequency" focusTraversable="false" minWidth="76.0" onAction="#highFrequencyAction" text="عالي">
+         <styleClass>
+            <String fx:value="frequency-btn" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_16" />
+         </styleClass>
         </JFXButton>
-        <JFXButton fx:id="midFrequency" focusTraversable="false" minWidth="76.0" onAction="#midFrequencyAction"
-                   styleClass="frequency-btn" text="متوسط">
-            <font>
-                <Font name="System Bold" size="16.0"/>
-            </font>
+        <JFXButton fx:id="midFrequency" focusTraversable="false" minWidth="76.0" onAction="#midFrequencyAction" text="متوسط">
+         <styleClass>
+            <String fx:value="frequency-btn" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_16" />
+         </styleClass>
         </JFXButton>
-        <JFXButton fx:id="lowFrequency" focusTraversable="false" minWidth="76.0" onAction="#lowFrequencyAction"
-                   styleClass="frequency-btn" text="منخفض">
-            <font>
-                <Font name="System Bold" size="16.0"/>
-            </font>
+        <JFXButton fx:id="lowFrequency" focusTraversable="false" minWidth="76.0" onAction="#lowFrequencyAction" text="منخفض">
+         <styleClass>
+            <String fx:value="frequency-btn" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_16" />
+         </styleClass>
         </JFXButton>
-        <JFXButton fx:id="rearFrequency" focusTraversable="false" minWidth="76.0" onAction="#rearFrequencyAction"
-                   styleClass="frequency-btn" text="نادر">
-            <font>
-                <Font name="System Bold" size="16.0"/>
-            </font>
+        <JFXButton fx:id="rearFrequency" focusTraversable="false" minWidth="76.0" onAction="#rearFrequencyAction" text="نادر">
+         <styleClass>
+            <String fx:value="frequency-btn" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_16" />
+         </styleClass>
         </JFXButton>
     </HBox>
 </VBox>

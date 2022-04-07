@@ -53,6 +53,7 @@ public class FeedbackController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // TODO: handle localization for this window
         focusedButton = suggestion;
         progress.setVisible(false);
         sendBtn.disableProperty().bindBidirectional(progress.visibleProperty());

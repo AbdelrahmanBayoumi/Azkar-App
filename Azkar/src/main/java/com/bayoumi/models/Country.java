@@ -1,5 +1,6 @@
 package com.bayoumi.models;
 
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.LocationsDBManager;
 
@@ -20,10 +21,15 @@ public class Country {
         this.summerTiming = summerTiming;
     }
 
-    public static ArrayList<Country> getAllData() {
+    public static ArrayList<Country> getAll(String locale) {
         final ArrayList<Country> countries = new ArrayList<>();
         try {
-            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM Countries ORDER BY Ar_Name ASC").executeQuery();
+            ResultSet res;
+            if (locale.equals("ar")) {
+                res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM Countries ORDER BY Ar_Name ASC").executeQuery();
+            } else {
+                res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM Countries ORDER BY En_Name ASC").executeQuery();
+            }
             while (res.next()) {
                 countries.add(new Country(res.getString("Code")
                         , res.getString("En_Name"), res.getString("Ar_Name"),
@@ -104,6 +110,13 @@ public class Country {
 
     public void setEnglishName(String englishName) {
         this.englishName = englishName;
+    }
+
+    public String getName() {
+        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+            return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
+        }
+        return this.getEnglishName();
     }
 
     public String getArabicName() {

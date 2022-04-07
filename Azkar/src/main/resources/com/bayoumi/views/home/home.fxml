@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stackPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="535.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
+<StackPane fx:id="stackPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="540.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
    <VBox prefHeight="200.0" prefWidth="100.0">
       <VBox prefHeight="85.0" style="-fx-background-color: -fx-secondary;" VBox.vgrow="ALWAYS" />
       <VBox prefHeight="160.0" style="-fx-background-color: -fx-bg;" VBox.vgrow="ALWAYS" />
@@ -25,21 +26,24 @@
          <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT">
             <children>
                <Label fx:id="hijriDate" style="-fx-text-fill: -fx-secondary-text;" text="DD MMMM YYYY">
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
+                  <styleClass>
+                     <String fx:value="font-text-medium" />
+                     <String fx:value="_20" />
+                  </styleClass>
                </Label>
                <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                   <Label fx:id="day" style="-fx-text-fill: -fx-secondary-text;" text="السبت">
-                     <font>
-                        <Font name="Calisto MT Bold" size="20.0" />
-                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_20" />
+                     </styleClass>
                   </Label>
                </HBox>
                <Label fx:id="gregorianDate" style="-fx-text-fill: -fx-secondary-text;" text="DD MMMM YYYY">
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
+                  <styleClass>
+                     <String fx:value="font-text-medium" />
+                     <String fx:value="_20" />
+                  </styleClass>
                </Label>
             </children>
          </HBox>
@@ -59,6 +63,10 @@
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_18" />
+                                 </styleClass>
                               </Label>
                               <MaterialDesignIconView glyphName="CLOCK" size="28" />
                            </children>
@@ -77,7 +85,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label fx:id="currentPrayerText" text="باقي على المغرب">
+                              <Label fx:id="currentPrayerText" styleClass="font-text-medium" text="باقي على المغرب">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -99,7 +107,7 @@
                   </HBox>
                   <HBox alignment="BOTTOM_CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="morningAzkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToMorningAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار الصباح">
+                        <JFXButton fx:id="morningAzkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToMorningAzkar" prefHeight="100.0" style="-fx-background-radius: 20;" text="أذكار الصباح">
                            <graphic>
                               <ImageView fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -110,8 +118,16 @@
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
+                           <styleClass>
+                              <String fx:value="box-noraml" />
+                              <String fx:value="font-button-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                           <padding>
+                              <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                           </padding>
                         </JFXButton>
-                        <JFXButton fx:id="nightAzkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToNightAzkar" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="أذكار المساء">
+                        <JFXButton fx:id="nightAzkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToNightAzkar" prefHeight="100.0" style="-fx-background-radius: 20;" text="أذكار المساء">
                            <graphic>
                               <ImageView fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -122,14 +138,30 @@
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
+                           <styleClass>
+                              <String fx:value="box-noraml" />
+                              <String fx:value="font-button-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                           <padding>
+                              <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                           </padding>
                         </JFXButton>
-                        <JFXButton fx:id="settingsButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToSettings" prefHeight="100.0" prefWidth="130.0" style="-fx-background-radius: 20;" styleClass="box-noraml" text="الإعدادات">
+                        <JFXButton fx:id="settingsButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="9.0" minHeight="95.0" minWidth="130.0" onAction="#goToSettings" prefHeight="100.0" style="-fx-background-radius: 20;" text="الإعدادات">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
                            <graphic>
                               <FontAwesomeIconView glyphName="GEAR" size="45" />
                            </graphic>
+                           <styleClass>
+                              <String fx:value="box-noraml" />
+                              <String fx:value="font-button-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                           <padding>
+                              <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                           </padding>
                         </JFXButton>
                      </children>
                   </HBox>

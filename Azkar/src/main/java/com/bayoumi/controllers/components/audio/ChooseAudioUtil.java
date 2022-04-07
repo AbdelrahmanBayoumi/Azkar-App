@@ -3,18 +3,21 @@ package com.bayoumi.controllers.components.audio;
 import com.bayoumi.Launcher;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.file.FileUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 
+import java.util.ResourceBundle;
+
 public class ChooseAudioUtil {
 
-    public static ChooseAudioController adhan(Pane container) {
+    public static ChooseAudioController adhan(ResourceBundle bundle, Pane container) {
         try {
             FXMLLoader loader = new FXMLLoader(ChooseAudioUtil.class.getResource("/com/bayoumi/views/components/ChooseAudio.fxml"));
             container.getChildren().add(loader.load());
             ChooseAudioController chooseAudioController = loader.getController();
-            chooseAudioController.setData("المؤذن",
+            chooseAudioController.setData(Utility.toUTF(bundle.getString("muezzin")),
                     Settings.getInstance().getPrayerTimeSettings().getAdhanAudio(),
                     FileUtils.getAdhanList(),
                     "jarFiles/audio/adhan/",

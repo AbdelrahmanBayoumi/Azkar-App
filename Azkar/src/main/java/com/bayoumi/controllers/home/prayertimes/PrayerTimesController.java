@@ -61,7 +61,11 @@ public class PrayerTimesController implements Initializable {
         this.bundle = bundle;
         final String dir = Utility.toUTF(bundle.getString("dir"));
         if (dir.equals("LEFT_TO_RIGHT")) {
-            prayerTimesBox.setMinWidth(379);
+            middleOfTheNightTimeText.setStyle("-fx-font-size: 22");
+            middleOfTheNightTime.setStyle("-fx-font-size: 22");
+            lastThirdOfTheNightTime.setStyle("-fx-font-size: 22");
+            lastThirdOfTheNightTimeText.setStyle("-fx-font-size: 22");
+            prayerTimesBox.setMinWidth(355);
         } else {
             prayerTimesBox.setMinWidth(Region.USE_COMPUTED_SIZE);
         }

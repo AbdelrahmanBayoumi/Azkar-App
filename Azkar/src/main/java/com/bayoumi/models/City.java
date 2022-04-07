@@ -1,5 +1,6 @@
 package com.bayoumi.models;
 
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.LocationsDBManager;
 
@@ -94,7 +95,10 @@ public class City {
     }
 
     public String getName() {
-        return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
+        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+            return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
+        }
+        return this.getEnglishName();
     }
 
     @Override

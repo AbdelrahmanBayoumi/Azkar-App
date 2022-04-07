@@ -1,0 +1,122 @@
+[05-04-2022] [12:13:58.215 AM] => App Launched
+[05-04-2022] [12:14:03.273 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[05-04-2022] [04:20:33.569 PM] => App Launched
+[05-04-2022] [04:27:05.383 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[05-04-2022] [04:27:05.384 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[05-04-2022] [04:42:22.334 PM] => App Launched
+[05-04-2022] [04:44:13.241 PM] => App Launched
+[05-04-2022] [04:44:31.488 PM] => App Launched
+[05-04-2022] [04:46:59.862 PM] => App Launched
+[05-04-2022] [04:49:15.131 PM] => App Launched
+[05-04-2022] [04:49:46.814 PM] => App Launched
+[05-04-2022] [04:56:17.723 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[05-04-2022] [04:56:17.723 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[05-04-2022] [04:58:16.759 PM] => App closed - Used for 510072 ms
+
+[05-04-2022] [04:59:38.763 PM] => App Launched
+[05-04-2022] [05:04:19.101 PM] => App Launched
+[05-04-2022] [05:09:25.503 PM] => App Launched
+[05-04-2022] [05:10:01.806 PM] => App Launched
+[05-04-2022] [05:10:56.784 PM] => App Launched
+[05-04-2022] [05:14:11.505 PM] => App Launched
+[05-04-2022] [05:20:42.381 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[05-04-2022] [05:20:42.382 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[05-04-2022] [05:21:07.948 PM] => App Launched
+[05-04-2022] [05:22:40.840 PM] => App Launched
+[05-04-2022] [05:29:11.662 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[05-04-2022] [05:29:11.663 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[05-04-2022] [05:36:15.314 PM] => App Launched
+[05-04-2022] [05:39:18.483 PM] => App Launched
+[05-04-2022] [05:42:07.083 PM] => App Launched
+[05-04-2022] [05:52:24.561 PM] => App Launched
+[05-04-2022] [05:53:10.720 PM] => App Launched
+[05-04-2022] [05:53:57.031 PM] => App Launched
+[05-04-2022] [05:54:47.691 PM] => App Launched
+[05-04-2022] [05:55:53.587 PM] => App Launched
+[05-04-2022] [06:01:33.605 PM] => App Launched
+[05-04-2022] [06:07:56.718 PM] => App Launched
+[05-04-2022] [06:09:01.765 PM] => App Launched
+[05-04-2022] [06:11:54.113 PM] => App Launched
+[05-04-2022] [06:17:20.867 PM] => App Launched
+[05-04-2022] [06:18:31.793 PM] => App Launched
+[05-04-2022] [06:18:57.845 PM] => App Launched
+[05-04-2022] [06:57:39.376 PM] => App closed - Used for 2321774 ms
+
+[05-04-2022] [07:01:37.729 PM] => App Launched
+[05-04-2022] [07:02:41.159 PM] => App closed - Used for 63560 ms
+
+[06-04-2022] [02:27:57.797 AM] => App Launched
+[06-04-2022] [02:29:25.423 AM] => App Launched
+[06-04-2022] [02:29:50.687 AM] => App Launched
+[06-04-2022] [02:33:17.435 AM] => App Launched
+[06-04-2022] [02:33:49.387 AM] => App Launched
+[06-04-2022] [02:34:01.750 AM] => App Launched
+[06-04-2022] [02:34:43.344 AM] => App Launched
+[06-04-2022] [02:37:01.361 AM] => App Launched
+[06-04-2022] [02:39:08.270 AM] => App Launched
+[06-04-2022] [02:39:32.795 AM] => App Launched
+[06-04-2022] [02:39:48.530 AM] => App Launched
+[06-04-2022] [02:46:19.545 AM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[06-04-2022] [02:46:19.554 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[06-04-2022] [02:56:37.523 AM] => App Launched
+[06-04-2022] [03:03:08.609 AM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[06-04-2022] [03:03:08.610 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[06-04-2022] [03:06:17.542 AM] => App Launched
+[06-04-2022] [03:08:50.280 AM] => App Launched
+[06-04-2022] [03:11:18.333 AM] => App Launched
+[06-04-2022] [03:11:36.091 AM] => App Launched
+[06-04-2022] [03:49:46.948 AM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[06-04-2022] [03:49:46.948 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[06-04-2022] [04:00:50.706 AM] => App Launched
+[06-04-2022] [04:05:24.967 AM] => App Launched
+[06-04-2022] [04:07:25.188 AM] => App Launched
+[06-04-2022] [04:12:14.640 AM] => App Launched
+[06-04-2022] [04:13:23.418 AM] => App Launched
+[06-04-2022] [04:14:32.726 AM] => App Launched
+[06-04-2022] [04:15:52.965 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [02:51:37.722 AM] => App Launched
+[07-04-2022] [02:52:06.453 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [05:27:12.907 PM] => App Launched
+[07-04-2022] [05:27:26.314 PM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [05:28:49.267 PM] => App Launched
+[07-04-2022] [05:28:56.685 PM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [05:29:03.683 PM] => Exception[ No route to host: connect ] in => com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController.getAutoLocation()
+[07-04-2022] [05:29:20.901 PM] => App Launched
+[07-04-2022] [05:29:24.652 PM] => Exception[ checkip.amazonaws.com ] in => com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController.getAutoLocation()
+[07-04-2022] [05:30:24.083 PM] => Exception[ checkip.amazonaws.com ] in => com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController.getAutoLocation()
+[07-04-2022] [05:30:36.908 PM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [05:30:47.874 PM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [05:31:10.150 PM] => Exception[ Read timed out ] in => com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController.getAutoLocation()
+[07-04-2022] [05:35:51.933 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [05:35:51.934 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [05:53:13.453 PM] => App Launched
+[07-04-2022] [05:55:07.564 PM] => App Launched
+[07-04-2022] [05:58:23.473 PM] => App Launched
+[07-04-2022] [06:01:55.382 PM] => App Launched
+[07-04-2022] [06:08:31.316 PM] => App Launched
+[07-04-2022] [06:15:02.667 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [06:15:02.668 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [06:57:29.005 PM] => App closed - Used for 2937792 ms
+
+[07-04-2022] [07:09:23.432 PM] => App Launched
+[07-04-2022] [07:09:32.646 PM] => Exception[ 
+/F:/Work/Coding/GitHub/AbdelrahmanBayoumi/Azkar-App/Azkar/target/classes/com/bayoumi/views/settings/other/OtherSettings.fxml:110
+ ] in => com.bayoumi.controllers.settings.SettingsController.openOtherSettings()
+[07-04-2022] [07:10:26.256 PM] => App Launched
+[07-04-2022] [07:14:02.583 PM] => App Launched
+[07-04-2022] [07:15:18.029 PM] => App Launched
+[07-04-2022] [10:22:54.018 PM] => App Launched
+[07-04-2022] [10:24:41.823 PM] => App Launched
+[07-04-2022] [10:26:14.048 PM] => App Launched
+[07-04-2022] [10:27:01.529 PM] => App Launched
+[07-04-2022] [10:28:17.718 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [10:28:17.718 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [10:28:17.718 PM] => com.bayoumi.models.settings.OtherSettings.checkForUpdate(): error => only installers and single bundle archives on macOS are supported for background updates
+[07-04-2022] [10:30:40.151 PM] => App Launched
+[07-04-2022] [10:30:48.661 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [10:30:48.661 PM] => com.bayoumi.models.settings.OtherSettings.checkForUpdate(): error => only installers and single bundle archives on macOS are supported for background updates
+[07-04-2022] [10:30:48.661 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [10:30:55.977 PM] => com.bayoumi.models.settings.OtherSettings.checkForUpdate(): error => only installers and single bundle archives on macOS are supported for background updates
+[07-04-2022] [10:30:55.977 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [10:30:55.977 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [10:32:05.016 PM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}

@@ -6,6 +6,7 @@
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
@@ -15,10 +16,9 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefWidth="660.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController">
-    <VBox fx:id="container" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" styleClass="root" stylesheets="@../../../css/style.css">
+    <VBox fx:id="container" alignment="CENTER" spacing="20.0" styleClass="root">
         <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
         </padding>
@@ -27,10 +27,11 @@
                 <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
             </padding>
             <HBox alignment="CENTER" spacing="20.0">
-                <Label text="الآذان">
-                    <font>
-                        <Font name="System Bold" size="17.0" />
-                    </font>
+                <Label fx:id="adhanLabel" text="الآذان">
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_17" />
+               </styleClass>
                 </Label>
                 <FontAwesomeIconView glyphName="VOLUME_UP" size="25" />
             </HBox>
@@ -40,23 +41,44 @@
                 <Insets bottom="20.0" top="10.0" />
             </padding>
             <Label text="أدخل الدولة والمدينة">
-                <font>
-                    <Font name="System Bold" size="17.0" />
-                </font>
+            <styleClass>
+               <String fx:value="_17" />
+               <String fx:value="font-text-bold" />
+            </styleClass>
             </Label>
-            <HBox alignment="CENTER" spacing="20.0">
+            <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
                 <padding>
                     <Insets left="20.0" right="20.0" />
                 </padding>
-                <JFXComboBox fx:id="countries" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="الدولة" styleClass="combo-box-normal" HBox.hgrow="ALWAYS" />
-                <JFXComboBox fx:id="cities" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="المدينة" styleClass="combo-box-normal" HBox.hgrow="ALWAYS" />
+                <JFXComboBox fx:id="countries" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="الدولة" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="combo-box-normal" />
+                  <String fx:value="_17" />
+                  <String fx:value="font-text-bold" />
+               </styleClass></JFXComboBox>
+                <JFXComboBox fx:id="cities" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="المدينة" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="combo-box-normal" />
+                  <String fx:value="_17" />
+                  <String fx:value="font-text-bold" />
+               </styleClass></JFXComboBox>
             </HBox>
-            <HBox alignment="CENTER" spacing="20.0">
+            <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
                 <padding>
                     <Insets left="20.0" right="20.0" />
                 </padding>
-                <JFXTextField fx:id="longitude" editable="false" labelFloat="true" promptText="خط الطول" styleClass="text-field-normal" text="0" HBox.hgrow="ALWAYS" />
-                <JFXTextField fx:id="latitude" editable="false" labelFloat="true" promptText="خط العرض" styleClass="text-field-normal" text="0" HBox.hgrow="ALWAYS" />
+                <JFXTextField fx:id="longitude" editable="false" labelFloat="true" promptText="خط الطول" text="0" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="text-field-normal" />
+                  <String fx:value="font-text-medium" />
+                  <String fx:value="_17" />
+               </styleClass></JFXTextField>
+                <JFXTextField fx:id="latitude" editable="false" labelFloat="true" promptText="خط العرض" text="0" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="text-field-normal" />
+                  <String fx:value="font-text-medium" />
+                  <String fx:value="_17" />
+               </styleClass></JFXTextField>
             </HBox>
             <HBox alignment="CENTER_RIGHT">
                 <padding>
@@ -69,19 +91,22 @@
                     <padding>
                         <Insets left="10.0" />
                     </padding>
-                    <Label fx:id="statusLabel" style="-fx-text-fill: green;" text="جاري التحميل...">
-                        <font>
-                            <Font name="System Bold" size="16.0" />
-                        </font>
+                    <Label fx:id="statusLabel" style="-fx-text-fill: green;" text="جاري التحميل..." wrapText="true">
+                  <styleClass>
+                     <String fx:value="font-text-bold" />
+                     <String fx:value="_16" />
+                  </styleClass>
                     </Label>
                 </HBox>
-                <JFXButton fx:id="autoLocationButton" contentDisplay="RIGHT" graphicTextGap="10.0" onAction="#getAutoLocation" styleClass="secondary-button" text="تحديد تلقائي للمكان">
+                <JFXButton fx:id="autoLocationButton" contentDisplay="RIGHT" graphicTextGap="10.0" onAction="#getAutoLocation" text="تحديد تلقائي للمكان">
                     <graphic>
                         <FontAwesomeIconView glyphName="MAP_MARKER" size="20" />
                     </graphic>
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
+               <styleClass>
+                  <String fx:value="secondary-button" />
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_15" />
+               </styleClass>
                 </JFXButton>
             </HBox>
         </VBox>
@@ -90,35 +115,52 @@
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
             <HBox alignment="CENTER" spacing="15.0">
-                <Label minWidth="252.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
+                <Label fx:id="calculationMethodText" minWidth="285.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_18" />
+               </styleClass>
                 </Label>
                 <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                    <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0; -fx-font-weight: bold;" styleClass="text-field-normal">
+                    <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
                         <VBox.margin>
                             <Insets />
                         </VBox.margin>
                         <cursor>
                             <Cursor fx:constant="HAND" />
                         </cursor>
+                  <styleClass>
+                     <String fx:value="text-field-normal" />
+                     <String fx:value="font-text-bold" />
+                     <String fx:value="_17" />
+                  </styleClass>
                     </ComboBox>
                 </VBox>
             </HBox>
             <HBox alignment="CENTER" spacing="15.0">
-                <Label minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
+                <Label fx:id="asrMadhabText" minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_18" />
+               </styleClass>
                 </Label>
                 <HBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
-                    <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" selected="true" style="-fx-font-size: 15; -fx-font-weight: bold;" styleClass="radio-button-normal" text="شافعي، مالكي، حنبلي">
+                    <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" selected="true" text="شافعي، مالكي، حنبلي">
                         <toggleGroup>
                             <ToggleGroup fx:id="asrJuristic" />
                         </toggleGroup>
+                  <styleClass>
+                     <String fx:value="radio-button-normal" />
+                     <String fx:value="font-text-bold" />
+                     <String fx:value="_15" />
+                  </styleClass>
                     </JFXRadioButton>
-                    <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-size: 15; -fx-font-weight: bold;" styleClass="radio-button-normal" text="حنفي" toggleGroup="$asrJuristic" />
+                    <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" text="حنفي" toggleGroup="$asrJuristic">
+                  <styleClass>
+                     <String fx:value="radio-button-normal" />
+                     <String fx:value="font-text-bold" />
+                     <String fx:value="_15" />
+                  </styleClass></JFXRadioButton>
                 </HBox>
             </HBox>
             <Separator prefWidth="200.0">
@@ -126,10 +168,11 @@
                     <Insets left="40.0" right="40.0" />
                 </VBox.margin>
             </Separator>
-            <Label text="يتم مراعاة التوقيت الصيفي تلقائيا حسب الدولة" textAlignment="CENTER" wrapText="true">
-                <font>
-                    <Font name="System Bold" size="15.0" />
-                </font>
+            <Label fx:id="daylightSavingNote" text="يتم مراعاة التوقيت الصيفي تلقائيا حسب الدولة" textAlignment="CENTER" wrapText="true">
+            <styleClass>
+               <String fx:value="_15" />
+               <String fx:value="font-text-bold" />
+            </styleClass>
             </Label>
             <JFXCheckBox fx:id="summerTiming" nodeOrientation="LEFT_TO_RIGHT" text="زيادة (+1 ساعة) على أي حال" wrapText="true">
                 <VBox.margin>
@@ -138,6 +181,10 @@
                 <cursor>
                     <Cursor fx:constant="HAND" />
                 </cursor>
+            <styleClass>
+               <String fx:value="_15" />
+               <String fx:value="font-text-medium" />
+            </styleClass>
             </JFXCheckBox>
         </VBox>
     </VBox>

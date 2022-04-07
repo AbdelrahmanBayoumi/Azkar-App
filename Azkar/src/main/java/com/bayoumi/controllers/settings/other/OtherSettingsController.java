@@ -2,9 +2,11 @@ package com.bayoumi.controllers.settings.other;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
@@ -18,9 +20,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -31,9 +36,10 @@ import java.util.ResourceBundle;
 
 public class OtherSettingsController implements Initializable, SettingsInterface {
 
+    private OtherSettings otherSettings;
+    private ResourceBundle bundle;
     @FXML
     public Label hijriDateLabel;
-    private OtherSettings otherSettings;
     @FXML
     private ComboBox<Language> languageComboBox;
     @FXML
@@ -43,17 +49,36 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private JFXCheckBox darkTheme;
+    private JFXCheckBox darkTheme, autoUpdateCheckBox;
     @FXML
-    private Label version;
+    private Label version, adjustingTheHijriDateText, languageText;
     @FXML
     private VBox loadingBox;
     @FXML
-    private JFXCheckBox autoUpdateCheckBox;
+    private Text adjustingTheHijriDateNote;
+    @FXML
+    private Button checkForUpdateButton, forProblemsAndSuggestionsButton;
+    @FXML
+    private StackPane root;
+
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        languageText.setText(Utility.toUTF(bundle.getString("language")));
+        format24.setText(Utility.toUTF(bundle.getString("hour24System")));
+        darkTheme.setText(Utility.toUTF(bundle.getString("darkTheme")));
+        minimizeAtStart.setText(Utility.toUTF(bundle.getString("minimizeAtStart")));
+        adjustingTheHijriDateText.setText(Utility.toUTF(bundle.getString("adjustingTheHijriDateText")));
+        adjustingTheHijriDateNote.setText(Utility.toUTF(bundle.getString("adjustingTheHijriDateNote")));
+        checkForUpdateButton.setText(Utility.toUTF(bundle.getString("checkForUpdate")));
+        forProblemsAndSuggestionsButton.setText(Utility.toUTF(bundle.getString("forProblemsAndSuggestions")));
+        autoUpdateCheckBox.setText(Utility.toUTF(bundle.getString("checkForUpdatesAutomatically")));
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         otherSettings = Settings.getInstance().getOtherSettings();
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+
         hijriDateLabel.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
 
         hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
@@ -126,7 +151,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
                     break;
                 case -1:
                     Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, "توجد مشكلة في البحث عن تحديثات جديدة", true));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("problemInSearchingForUpdates")), Utility.toUTF(bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
                     break;
             }
             Platform.runLater(() -> loadingBox.setVisible(false));

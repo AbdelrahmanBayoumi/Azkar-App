@@ -5,11 +5,12 @@ import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.City;
 import com.bayoumi.models.Country;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ComboBoxAutoComplete;
-import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.web.IpChecker;
 import com.bayoumi.util.web.LocationService;
@@ -19,10 +20,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,24 +46,38 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
     @FXML
     private ToggleGroup asrJuristic;
     @FXML
-    private JFXRadioButton hanafiRadioButton;
-    @FXML
-    private JFXRadioButton standardJuristic;
+    private JFXRadioButton hanafiRadioButton, standardJuristic;
     @FXML
     private JFXCheckBox summerTiming;
     @FXML
-    private JFXTextField longitude;
-    @FXML
-    private JFXTextField latitude;
+    private JFXTextField longitude, latitude;
     @FXML
     private JFXButton autoLocationButton;
     @FXML
-    private Label statusLabel;
+    private Label statusLabel, adhanLabel, calculationMethodText, asrMadhabText, daylightSavingNote;
     private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
     private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
+    private ResourceBundle bundle;
+
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        adhanLabel.setText(Utility.toUTF(bundle.getString("adhan")));
+        countries.setPromptText(Utility.toUTF(bundle.getString("country")));
+        cities.setPromptText(Utility.toUTF(bundle.getString("city")));
+        longitude.setPromptText(Utility.toUTF(bundle.getString("longitude")));
+        latitude.setPromptText(Utility.toUTF(bundle.getString("latitude")));
+        autoLocationButton.setText(Utility.toUTF(bundle.getString("autoLocate")));
+        calculationMethodText.setText(Utility.toUTF(bundle.getString("calculationMethod")));
+        asrMadhabText.setText(Utility.toUTF(bundle.getString("asrMadhab")));
+        daylightSavingNote.setText(Utility.toUTF(bundle.getString("daylightSavingNote")));
+        summerTiming.setText(Utility.toUTF(bundle.getString("extraOneHourDayLightSaving")));
+        standardJuristic.setText(Utility.toUTF(bundle.getString("asrMadhabJumhoor")));
+        hanafiRadioButton.setText(Utility.toUTF(bundle.getString("hanafi")));
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
         statusLabel.setVisible(false);
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
@@ -70,10 +85,9 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         initCountries();
         initCities();
-        PopOverUtil.init(methodComboBox, "الجانب الرياضي لكيفية عمل الحساب متفق عليه بشكل عام في العالم الإسلامي. ثم مرة أخرى ، هذا افتراض أقوم به بناءً على عدد البلدان التي تستخدم الحساب القائم على الزاوية (ويرجى ملاحظة أنني لست مؤهلاً دينياً أو رسمياً وأقدم هذه المعلومات بتواضع مطلق على أمل أن تكون مفيدة ). ومع ذلك ، بناءً على الموقع ، وتفضيلات الحكومة ، و \"عوامل\" أخرى ، هناك اختلافات في الأساليب التي تنتج ، في بعض الأحيان ، تباينًا كبيرًا في التوقيت. إذا كان الجانب الرياضي يثير اهتمامك ، فقم بإلقاء نظرة على هذا الشرح الممتاز:" + "\nhttp://praytimes.org/wiki/Prayer_Times_Calculation.");
         // init Methods
         methodComboBox.setItems(FXCollections.observableArrayList(PrayerTimeSettings.Method.getListOfMethods()));
-        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter());
+        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")));
         methodComboBox.setValue(prayerTimeSettings.getMethod());
         // init Asr Juristic
         if (prayerTimeSettings.getAsrJuristic() == 1) {
@@ -84,24 +98,32 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         summerTiming.setSelected(prayerTimeSettings.isSummerTiming());
         ScrollHandler.init(container, scrollPane, 4);
 
-        chooseAudioController = ChooseAudioUtil.adhan(adhanContainer);
+        chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
     }
 
     private void initCountries() {
         // getAllData
-        countries.getItems().addAll(Country.getAllData());
+        final String local = Settings.getInstance().getOtherSettings().getLanguageLocal();
+        countries.getItems().addAll(Country.getAll(local));
         countryComboBoxAutoComplete.setItems(countries.getItems());
         // StringConverter
         countries.setConverter(new StringConverter<Country>() {
             @Override
             public String toString(Country object) {
-                return object != null ? object.getArabicName() : "";
+                if (local.equals("ar")) {
+                    return object != null ? object.getArabicName() : "";
+                }
+                return object != null ? object.getEnglishName() : "";
             }
 
             @Override
             public Country fromString(String string) {
+                if (local.equals("ar")) {
+                    return countries.getItems().stream().filter(object ->
+                            object.getArabicName().equals(string)).findFirst().orElse(null);
+                }
                 return countries.getItems().stream().filter(object ->
-                        object.getArabicName().equals(string)).findFirst().orElse(null);
+                        object.getEnglishName().equals(string)).findFirst().orElse(null);
             }
         });
         countries.setOnAction(this::changeCountry);
@@ -144,13 +166,17 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
                 cities.setValue(cities.getItems().get(0));
             }
         }
+        final String local = Settings.getInstance().getOtherSettings().getLanguageLocal();
         cities.setConverter(new StringConverter<City>() {
             @Override
             public String toString(City object) {
-                if (object.getArabicName() == null || object.getArabicName().trim().equals("")) {
-                    return object.getEnglishName();
+                if (local.equals("ar")) {
+                    if (object.getArabicName() == null || object.getArabicName().trim().equals("")) {
+                        return object.getEnglishName();
+                    }
+                    return object.getArabicName();
                 }
-                return object.getArabicName();
+                return object.getEnglishName();
             }
 
             @Override
@@ -196,22 +222,6 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         longitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
     }
 
-    private void initPopOver() {
-        //Build PopOver look and feel
-        Label label = new Label("الجانب الرياضي لكيفية عمل الحساب متفق عليه بشكل عام في العالم الإسلامي. ثم مرة أخرى ، هذا افتراض أقوم به بناءً على عدد البلدان التي تستخدم الحساب القائم على الزاوية (ويرجى ملاحظة أنني لست مؤهلاً دينياً أو رسمياً وأقدم هذه المعلومات بتواضع مطلق على أمل أن تكون مفيدة ). ومع ذلك ، بناءً على الموقع ، وتفضيلات الحكومة ، و \"عوامل\" أخرى ، هناك اختلافات في الأساليب التي تنتج ، في بعض الأحيان ، تباينًا كبيرًا في التوقيت. إذا كان الجانب الرياضي يثير اهتمامك ، فقم بإلقاء نظرة على هذا الشرح الممتاز:" + "\nhttp://praytimes.org/wiki/Prayer_Times_Calculation.");
-        label.setStyle("-fx-padding: 10;-fx-background-color: #E9C46A;-fx-text-fill: #000000; -fx-font-weight: bold; -fx-text-alignment: right; -fx-max-width: 400; -fx-wrap-text: true;");
-        //Create PopOver and add look and feel
-        PopOver popOver = new PopOver(label);
-        methodComboBox.setOnMouseEntered(mouseEvent -> {
-            //Show PopOver when mouse enters label
-            popOver.show(methodComboBox);
-        });
-        methodComboBox.setOnMouseExited(mouseEvent -> {
-            //Hide PopOver when mouse exits label
-            popOver.hide();
-        });
-    }
-
     @Override
     public void saveToDB() {
         prayerTimeSettings.setCountry(countries.getValue().getCode());
@@ -236,7 +246,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         longitude.setDisable(true);
         autoLocationButton.setDisable(true);
         statusLabel.setVisible(true);
-        statusLabel.setText("جاري التحميل...");
+        statusLabel.setText(Utility.toUTF(bundle.getString("loading")) + "..");
         statusLabel.setStyle("-fx-text-fill: green");
         new Thread(() -> {
             try {
@@ -274,7 +284,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
                 Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
                 Platform.runLater(() -> {
                     statusLabel.setVisible(true);
-                    statusLabel.setText("خطأ في التحديد التلقائي للموقع.. برجاء المحاولة مرة أخرى!");
+                    statusLabel.setText(Utility.toUTF(bundle.getString("autoSelectionError")));
                     statusLabel.setStyle("-fx-text-fill: red");
                 });
             }

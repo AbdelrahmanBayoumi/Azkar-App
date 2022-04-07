@@ -66,7 +66,6 @@ public class ComboBoxAutoComplete<T> {
             } else {
                 Stream<T> items = cmb.getItems().stream();
                 String txtUsr = unaccent(filter.toLowerCase());
-
                 items.filter(city -> unaccent(((City) city).getName().replaceAll("[إأآ]", "ا"))
                         .toLowerCase().contains(txtUsr.replaceAll("[إأآ]", "ا"))).forEach(filteredList::add);
                 cmb.getTooltip().setText(txtUsr);
@@ -103,7 +102,7 @@ public class ComboBoxAutoComplete<T> {
                 Stream<T> items = cmb.getItems().stream();
                 String txtUsr = unaccent(filter.toLowerCase());
 
-                items.filter(country -> unaccent(((Country) country).getArabicName().replaceAll("[إأآ]", "ا"))
+                items.filter(country -> unaccent(((Country) country).getName().replaceAll("[إأآ]", "ا"))
                         .toLowerCase().contains(txtUsr.replaceAll("[إأآ]", "ا"))).forEach(filteredList::add);
                 cmb.getTooltip().setText(txtUsr);
                 Window stage = cmb.getScene().getWindow();

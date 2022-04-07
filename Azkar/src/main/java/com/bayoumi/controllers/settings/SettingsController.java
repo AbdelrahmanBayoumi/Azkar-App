@@ -1,11 +1,14 @@
 package com.bayoumi.controllers.settings;
 
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.load.Locations;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
@@ -14,7 +17,6 @@ import java.util.ResourceBundle;
 public class SettingsController implements Initializable {
 
     private SettingsInterface settingsI;
-
     // ====== GUI Objects ======
     private JFXButton selectedButton;
     @FXML
@@ -27,8 +29,18 @@ public class SettingsController implements Initializable {
     private BorderPane borderPane;
 
 
+    public void updateBundle(ResourceBundle bundle) {
+        cityButton.setText(Utility.toUTF(bundle.getString("city")));
+        azkarButton.setText(Utility.toUTF(bundle.getString("azkar")));
+        otherButton.setText(Utility.toUTF(bundle.getString("other")));
+        borderPane.setNodeOrientation(NodeOrientation.valueOf(Utility.toUTF(bundle.getString("dir"))));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
+
         openCitySettings();
         borderPane.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {

@@ -5,6 +5,7 @@ import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.models.City;
 import com.bayoumi.models.Country;
 import com.bayoumi.models.Onboarding;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
@@ -35,6 +36,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OnboardingController implements Initializable {
+    private ResourceBundle bundle;
     private ChooseAudioController chooseAudioController;
     @FXML
     private ScrollPane scrollPane;
@@ -64,18 +66,22 @@ public class OnboardingController implements Initializable {
     private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
     private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
 
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initPopOver();
         prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         initCountries();
         initCities();
-        methodComboBox.setItems(FXCollections.observableArrayList(
-                PrayerTimeSettings.Method.getListOfMethods()
-        ));
-        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter());
+        methodComboBox.setItems(FXCollections.observableArrayList(PrayerTimeSettings.Method.getListOfMethods()));
+        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")));
         methodComboBox.setValue(prayerTimeSettings.getMethod());
 
         if (prayerTimeSettings.getAsrJuristic() == 1) {
@@ -85,7 +91,7 @@ public class OnboardingController implements Initializable {
         }
         autoLocationButton.fire();
 
-        chooseAudioController = ChooseAudioUtil.adhan(adhanContainer);
+        chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
         if (chooseAudioController != null) {
             chooseAudioController.initFromFirstValue();
         }
@@ -119,19 +125,27 @@ public class OnboardingController implements Initializable {
 
     private void initCountries() {
         // getAllData
-        countries.getItems().addAll(Country.getAllData());
+        final String local = Settings.getInstance().getOtherSettings().getLanguageLocal();
+        countries.getItems().addAll(Country.getAll(local));
         countryComboBoxAutoComplete.setItems(countries.getItems());
         // StringConverter
         countries.setConverter(new StringConverter<Country>() {
             @Override
             public String toString(Country object) {
-                return object != null ? object.getArabicName() : "";
+                if (local.equals("ar")) {
+                    return object != null ? object.getArabicName() : "";
+                }
+                return object != null ? object.getEnglishName() : "";
             }
 
             @Override
             public Country fromString(String string) {
+                if (local.equals("ar")) {
+                    return countries.getItems().stream().filter(object ->
+                            object.getArabicName().equals(string)).findFirst().orElse(null);
+                }
                 return countries.getItems().stream().filter(object ->
-                        object.getArabicName().equals(string)).findFirst().orElse(null);
+                        object.getEnglishName().equals(string)).findFirst().orElse(null);
             }
         });
         countries.setOnAction(this::changeCountry);
