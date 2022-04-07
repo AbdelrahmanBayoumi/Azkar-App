@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.PrayerCalculationsController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <HBox alignment="CENTER" spacing="15.0">
+         <children>
+            <Label fx:id="calculationMethodText" minWidth="285.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_18" />
+               </styleClass>
+            </Label>
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+               <children>
+                  <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="text-field-normal" />
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_17" />
+                     </styleClass>
+                  </ComboBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" spacing="15.0">
+         <children>
+            <Label fx:id="asrMadhabText" minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_18" />
+               </styleClass>
+            </Label>
+            <HBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" selected="true" text="شافعي، مالكي، حنبلي">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="asrJuristic" />
+                     </toggleGroup>
+                     <styleClass>
+                        <String fx:value="radio-button-normal" />
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_15" />
+                     </styleClass>
+                  </JFXRadioButton>
+                  <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" text="حنفي" toggleGroup="$asrJuristic">
+                     <styleClass>
+                        <String fx:value="radio-button-normal" />
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_15" />
+                     </styleClass>
+                  </JFXRadioButton>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0">
+         <VBox.margin>
+            <Insets left="40.0" right="40.0" />
+         </VBox.margin>
+      </Separator>
+      <Label fx:id="daylightSavingNote" text="يتم مراعاة التوقيت الصيفي تلقائيا حسب الدولة" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="_15" />
+            <String fx:value="font-text-bold" />
+         </styleClass>
+      </Label>
+      <JFXCheckBox fx:id="summerTiming" nodeOrientation="LEFT_TO_RIGHT" text="زيادة (+1 ساعة) على أي حال" wrapText="true">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <styleClass>
+            <String fx:value="_15" />
+            <String fx:value="font-text-medium" />
+         </styleClass>
+      </JFXCheckBox>
+   </children>
+</VBox>

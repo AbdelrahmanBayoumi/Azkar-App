@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="CENTER" spacing="30.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 30 30 20 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.SelectLocationController">
+   <padding>
+      <Insets bottom="20.0" top="10.0" />
+   </padding>
+   <children>
+      <Label fx:id="enterCountryAndCity" text="أدخل الدولة والمدينة">
+         <styleClass>
+            <String fx:value="_17" />
+            <String fx:value="font-text-bold" />
+         </styleClass>
+      </Label>
+      <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+         <children>
+            <JFXComboBox fx:id="countries" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="الدولة" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="combo-box-normal" />
+                  <String fx:value="_17" />
+                  <String fx:value="font-text-bold" />
+               </styleClass>
+            </JFXComboBox>
+            <JFXComboBox fx:id="cities" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="المدينة" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="combo-box-normal" />
+                  <String fx:value="_17" />
+                  <String fx:value="font-text-bold" />
+               </styleClass>
+            </JFXComboBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+         <children>
+            <JFXTextField fx:id="longitude" editable="false" labelFloat="true" promptText="خط الطول" text="0" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="text-field-normal" />
+                  <String fx:value="font-text-medium" />
+                  <String fx:value="_17" />
+               </styleClass>
+            </JFXTextField>
+            <JFXTextField fx:id="latitude" editable="false" labelFloat="true" promptText="خط العرض" text="0" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="text-field-normal" />
+                  <String fx:value="font-text-medium" />
+                  <String fx:value="_17" />
+               </styleClass>
+            </JFXTextField>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT">
+         <padding>
+            <Insets right="20.0" />
+         </padding>
+         <VBox.margin>
+            <Insets bottom="-10.0" />
+         </VBox.margin>
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <children>
+                  <Label fx:id="statusLabel" style="-fx-text-fill: green;" text="جاري التحميل..." wrapText="true">
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_16" />
+                     </styleClass>
+                  </Label>
+               </children>
+            </HBox>
+            <JFXButton fx:id="autoLocationButton" contentDisplay="RIGHT" graphicTextGap="10.0" onAction="#getAutoLocation" text="تحديد تلقائي للمكان">
+               <graphic>
+                  <FontAwesomeIconView glyphName="MAP_MARKER" size="20" />
+               </graphic>
+               <styleClass>
+                  <String fx:value="secondary-button" />
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_15" />
+               </styleClass>
+            </JFXButton>
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -165,3 +165,38 @@
 [08-04-2022] [12:15:41.055 AM] => App Launched
 [08-04-2022] [12:31:53.489 AM] => App Launched
 [08-04-2022] [12:32:39.659 AM] => App Launched
+[08-04-2022] [12:34:14.687 AM] => App Launched
+[08-04-2022] [12:34:20.795 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [12:40:46.546 AM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[08-04-2022] [12:40:46.546 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[08-04-2022] [12:48:11.151 AM] => App Launched
+[08-04-2022] [12:48:15.198 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [12:49:08.036 AM] => App Launched
+[08-04-2022] [12:49:11.800 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [12:49:57.544 AM] => App Launched
+[08-04-2022] [12:50:41.247 AM] => App Launched
+[08-04-2022] [12:56:52.471 AM] => App Launched
+[08-04-2022] [12:56:57.105 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:06:29.792 AM] => App Launched
+[08-04-2022] [01:08:06.050 AM] => App Launched
+[08-04-2022] [01:08:07.987 AM] => Exception[ 
+/F:/Work/Coding/GitHub/AbdelrahmanBayoumi/Azkar-App/Azkar/target/classes/com/bayoumi/views/components/SelectLocation.fxml
+ ] in => com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController.initialize()
+[08-04-2022] [01:08:30.806 AM] => App Launched
+[08-04-2022] [01:08:56.679 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:12:09.303 AM] => App Launched
+[08-04-2022] [01:12:20.363 AM] => App Launched
+[08-04-2022] [01:12:24.667 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:12:37.181 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:16:03.638 AM] => App Launched
+[08-04-2022] [01:16:16.285 AM] => App Launched
+[08-04-2022] [01:16:20.330 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:16:31.430 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:22:48.320 AM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[08-04-2022] [01:22:48.321 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[08-04-2022] [01:39:11.332 AM] => App Launched
+[08-04-2022] [01:39:13.271 AM] => Exception[ null ] in => com.bayoumi.controllers.onboarding.OnboardingController.initialize()
+[08-04-2022] [01:39:37.609 AM] => App Launched
+[08-04-2022] [01:39:41.739 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[08-04-2022] [01:43:28.008 AM] => App Launched
+[08-04-2022] [01:43:32.095 AM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
