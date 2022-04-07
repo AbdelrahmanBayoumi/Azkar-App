@@ -161,3 +161,5 @@
 [08-04-2022] [12:02:26.568 AM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
 [08-04-2022] [12:05:49.470 AM] => App Launched
 [08-04-2022] [12:07:05.102 AM] => App Launched
+[08-04-2022] [12:13:16.265 AM] => App Launched
+[08-04-2022] [12:15:41.055 AM] => App Launched

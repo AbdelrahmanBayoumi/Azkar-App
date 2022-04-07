@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="CENTER" minHeight="200.0" prefWidth="500.0" spacing="20.0" styleClass="root" stylesheets="@../../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController">
    <padding>
       <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
@@ -23,12 +22,12 @@
             <Insets left="30.0" right="30.0" />
          </padding>
          <children>
-            <JFXButton cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" styleClass="back-button" text="إلغاء">
+            <JFXButton fx:id="discardButton" cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" styleClass="back-button" text="إلغاء">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </JFXButton>
-            <JFXButton defaultButton="true" focusTraversable="false" onAction="#confirmAction" prefWidth="9000.0" text="تأكيد">
+            <JFXButton fx:id="confirmBTN" defaultButton="true" focusTraversable="false" onAction="#confirmAction" prefWidth="9000.0" text="تأكيد">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
@@ -13,24 +14,31 @@
     </padding>
    <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
       <Label fx:id="text" text="Label" textAlignment="CENTER" wrapText="true">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
+         <styleClass>
+            <String fx:value="font-text-bold" />
+            <String fx:value="_20" />
+         </styleClass>
       </Label>
    </VBox>
    <HBox alignment="CENTER" spacing="20.0">
       <padding>
          <Insets left="30.0" right="30.0" />
       </padding>
-      <JFXButton cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" styleClass="back-button" text="إلغاء">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
+      <JFXButton fx:id="discardButton" cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" text="إلغاء">
+         <styleClass>
+            <String fx:value="back-button" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_20" />
+         </styleClass>
       </JFXButton>
       <JFXButton fx:id="confirmBTN" defaultButton="true" focusTraversable="false" onAction="#confirmAction" prefWidth="9000.0" text="تأكيد">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
+         <styleClass>
+            <String fx:value="font-text-bold" />
+            <String fx:value="_20" />
+         </styleClass>
       </JFXButton>
    </HBox>
 </VBox>

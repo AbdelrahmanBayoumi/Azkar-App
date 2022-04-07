@@ -1,5 +1,7 @@
 package com.bayoumi.controllers.alert.confirm;
 
+import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.util.Utility;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -16,9 +18,12 @@ public class ConfirmAlertController implements Initializable {
     @FXML
     private Label text;
     @FXML
-    private JFXButton confirmBTN;
+    private JFXButton confirmBTN, discardButton;
 
     public void setData(boolean isDanger, String text) {
+        final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+        confirmBTN.setText(Utility.toUTF(bundle.getString("confirm")));
+        discardButton.setText(Utility.toUTF(bundle.getString("discard")));
         this.text.setText(text);
         if (isDanger) {
             confirmBTN.getStyleClass().add("close-button");
