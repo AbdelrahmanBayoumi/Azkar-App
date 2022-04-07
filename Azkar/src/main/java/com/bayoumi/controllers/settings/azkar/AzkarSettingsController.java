@@ -7,6 +7,7 @@ import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.NotificationSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
@@ -58,52 +59,57 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private AzkarSettings azkarSettings;
     private NotificationSettings notificationSettings;
     private JFXButton currentFrequency;
+    private MediaPlayer MEDIA_PLAYER;
+    private double previousValue = 50;
+    private boolean isMuted = false;
     @FXML
     private VBox periodBox;
     @FXML
     private JFXComboBox<Pos> posComboBox;
     @FXML
-    private JFXButton highFrequency;
+    private JFXButton highFrequency, midFrequency, lowFrequency, rearFrequency;
     @FXML
-    private JFXButton midFrequency;
-    @FXML
-    private JFXButton lowFrequency;
-    @FXML
-    private JFXButton rearFrequency;
-    @FXML
-    private Spinner<Integer> azkarPeriod;
-    @FXML
-    private Label minPlurality;
-    @FXML
-    private Spinner<Integer> azkarPeriod_hour;
-    @FXML
-    private Label hourPlurality;
+    private Spinner<Integer> azkarPeriod, azkarPeriod_hour;
     @FXML
     private JFXCheckBox stopAzkar;
     @FXML
     private JFXComboBox<String> azkarAlarmComboBox;
     @FXML
-    private JFXButton playButton;
-    @FXML
-    private JFXButton showZekrButton, goToAzkarDBButton;
+    private JFXButton playButton, showZekrButton, goToAzkarDBButton;
     @FXML
     private OctIconView volume;
     @FXML
     private JFXSlider volumeSlider;
-    private MediaPlayer MEDIA_PLAYER;
     @FXML
     private HBox volumeBox;
-    private double previousValue = 50;
-    private boolean isMuted = false;
+    @FXML
+    private Label minPlurality, hourPlurality, choosePeriod, zakrAppearEvery, theSoundAndLocationOfTheAlertForAzkar;
 
-    private void updateBundle(ResourceBundle bundle) {
+    public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
+        hourPlurality.setText(Utility.toUTF(bundle.getString("oneHour")));
+        minPlurality.setText(Utility.toUTF(bundle.getString("oneMinute")));
+
+        choosePeriod.setText(Utility.toUTF(bundle.getString("settings.azkar.choosePeriod")));
+        highFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.high")));
+        midFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.mid")));
+        lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
+        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
+        zakrAppearEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrAppearEvery")) + ":");
+        stopAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.stopTheAutomaticAppearanceOfAzkar")));
+        goToAzkarDBButton.setText(Utility.toUTF(bundle.getString("settings.azkar.azkarDatabase")));
+        showZekrButton.setText(Utility.toUTF(bundle.getString("settings.azkar.showZekr")));
+        posComboBox.setPromptText(Utility.toUTF(bundle.getString("settings.azkar.notificationLocation")));
+        azkarAlarmComboBox.setPromptText(Utility.toUTF(bundle.getString("settings.azkar.alarmSound")));
+        theSoundAndLocationOfTheAlertForAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.theSoundAndLocationOfTheAlertForAzkar")));
+
+        PopOverUtil.init(goToAzkarDBButton, (Utility.toUTF(bundle.getString("settings.azkar.azkarDatabaseButtonNote"))));
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
-        LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
 
         playIcon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
         playIcon.setStyle("-fx-fill: -fx-secondary;");
@@ -160,7 +166,11 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         notificationSettings = Settings.getInstance().getNotificationSettings();
         posComboBox.setItems(FXCollections.observableArrayList(Pos.TOP_RIGHT, Pos.BOTTOM_RIGHT, Pos.TOP_LEFT, Pos.BOTTOM_LEFT, Pos.CENTER));
         posComboBox.setValue(notificationSettings.getPosition());
-        posComboBox.setConverter(NotificationSettings.posArabicConverter());
+        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+            posComboBox.setConverter(NotificationSettings.posArabicConverter());
+        } else {
+            posComboBox.setConverter(NotificationSettings.posEnglishConverter());
+        }
 
         azkarPeriod.getValueFactory().setValue(azkarSettings.getHighPeriod() % 60);
         azkarPeriod_hour.getValueFactory().setValue(azkarSettings.getHighPeriod() / 60);
@@ -168,8 +178,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         stopAzkar.setSelected(azkarSettings.isStopped());
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
-
-        PopOverUtil.init(goToAzkarDBButton, "يمكنك (إضافة أو تعديل أو حذف) ذكر من الأذكار المطلقة" + "\n" + "الأذكار المطلقة: المستخدمة في الإشعارات");
     }
 
     @FXML

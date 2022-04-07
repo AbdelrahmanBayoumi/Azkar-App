@@ -16,6 +16,35 @@ public class NotificationSettings {
         loadSettings();
     }
 
+    public static StringConverter<Pos> posEnglishConverter() {
+        return new StringConverter<Pos>() {
+            @Override
+            public String toString(Pos object) {
+                if (object.equals(Pos.TOP_RIGHT)) {
+                    return "Top Right";
+                }
+                if (object.equals(Pos.BOTTOM_RIGHT)) {
+                    return "Bottom Right";
+                }
+                if (object.equals(Pos.TOP_LEFT)) {
+                    return "Top Left";
+                }
+                if (object.equals(Pos.BOTTOM_LEFT)) {
+                    return "Bottom Left";
+                }
+                if (object.equals(Pos.CENTER)) {
+                    return "Center";
+                }
+                return object.toString();
+            }
+
+            @Override
+            public Pos fromString(String string) {
+                return null;
+            }
+        };
+    }
+
     public static StringConverter<Pos> posArabicConverter() {
         return new StringConverter<Pos>() {
             @Override

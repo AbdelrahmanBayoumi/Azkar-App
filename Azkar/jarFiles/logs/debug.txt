@@ -120,3 +120,34 @@
 [07-04-2022] [10:30:55.977 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
 [07-04-2022] [10:30:55.977 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
 [07-04-2022] [10:32:05.016 PM] => LocationService.getCity(IP): City{countryCode='EG', englishName='Cairo', arabicName='null', latitude=30.0778, longitude=31.2852, timezone=2.0}
+[07-04-2022] [10:36:56.997 PM] => App Launched
+[07-04-2022] [10:43:27.938 PM] => com.bayoumi.util.update.UpdateHandler.getUpdateDescriptor(): Can't check update url: C:\Users\abdel\AppData\Local\Temp\install4jNative\9078\windows-x64\i4jparams.conf (The system cannot find the file specified)
+[07-04-2022] [10:43:27.939 PM] => com.bayoumi.util.update.UpdateHandler.checkUpdate(): Update check Server Error
+[07-04-2022] [10:44:49.488 PM] => App Launched
+[07-04-2022] [10:45:44.746 PM] => Exception[ 
+/F:/Work/Coding/GitHub/AbdelrahmanBayoumi/Azkar-App/Azkar/target/classes/com/bayoumi/views/settings/azkar/AzkarSettings.fxml
+ ] in => com.bayoumi.controllers.settings.SettingsController.openAzkarSettings()
+[07-04-2022] [10:46:26.244 PM] => App Launched
+[07-04-2022] [10:46:32.272 PM] => Exception[ 
+/F:/Work/Coding/GitHub/AbdelrahmanBayoumi/Azkar-App/Azkar/target/classes/com/bayoumi/views/settings/azkar/AzkarSettings.fxml
+ ] in => com.bayoumi.controllers.settings.SettingsController.openAzkarSettings()
+[07-04-2022] [10:46:52.642 PM] => App Launched
+[07-04-2022] [10:46:59.149 PM] => Exception[ 
+/F:/Work/Coding/GitHub/AbdelrahmanBayoumi/Azkar-App/Azkar/target/classes/com/bayoumi/views/settings/azkar/AzkarSettings.fxml
+ ] in => com.bayoumi.controllers.settings.SettingsController.openAzkarSettings()
+[07-04-2022] [10:47:33.593 PM] => App Launched
+[07-04-2022] [10:51:24.681 PM] => App Launched
+[07-04-2022] [10:57:12.383 PM] => App Launched
+[07-04-2022] [10:59:07.457 PM] => App closed - Used for 115260 ms
+
+[07-04-2022] [11:06:34.534 PM] => App Launched
+[07-04-2022] [11:07:56.350 PM] => App Launched
+[07-04-2022] [11:08:01.315 PM] => Exception[ 
+/F:/Work/Coding/GitHub/AbdelrahmanBayoumi/Azkar-App/Azkar/target/classes/com/bayoumi/views/settings/azkar/AzkarSettings.fxml
+ ] in => com.bayoumi.controllers.settings.SettingsController.openAzkarSettings()
+[07-04-2022] [11:08:28.461 PM] => App Launched
+[07-04-2022] [11:11:15.629 PM] => App Launched
+[07-04-2022] [11:11:58.744 PM] => App Launched
+[07-04-2022] [11:15:58.803 PM] => App Launched
+[07-04-2022] [11:18:45.536 PM] => App Launched
+[07-04-2022] [11:19:59.056 PM] => App Launched

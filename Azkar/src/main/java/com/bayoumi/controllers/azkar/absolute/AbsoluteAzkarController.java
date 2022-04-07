@@ -34,6 +34,7 @@ public class AbsoluteAzkarController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // TODO: handle localization for this view
         tableConfiguration();
         AbsoluteZekr.fetchData();
         returnToDefaultBTN.setOnMouseEntered(event -> returnToDefaultBTN.setContentDisplay(ContentDisplay.LEFT));

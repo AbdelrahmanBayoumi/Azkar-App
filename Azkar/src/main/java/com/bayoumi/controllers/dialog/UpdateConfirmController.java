@@ -21,7 +21,7 @@ public class UpdateConfirmController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+// TODO: handle localization for this view
     }
 
     public void setData(UpdateInfo updateInfo, String oldVersionValue) {

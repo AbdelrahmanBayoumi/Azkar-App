@@ -40,7 +40,7 @@
             <padding>
                 <Insets bottom="20.0" top="10.0" />
             </padding>
-            <Label text="أدخل الدولة والمدينة">
+            <Label fx:id="enterCountryAndCity" text="أدخل الدولة والمدينة">
             <styleClass>
                <String fx:value="_17" />
                <String fx:value="font-text-bold" />

@@ -66,7 +66,7 @@ public class OnboardingController implements Initializable {
     private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
     private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
 
-    public void updateBundle(ResourceBundle bundle) {
+    public void updateBundle(ResourceBundle bundle) {// TODO: handle localization for this view
         this.bundle = bundle;
     }
 

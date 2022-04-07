@@ -22,7 +22,7 @@ public class ZekrBoxController {
         this.repeatBTN.setText("التكرار" + "    " + "(" + repeat + ")");
     }
 
-    public void setData(String text, int repeatValue) {
+    public void setData(String text, int repeatValue) {// TODO: handle localization for this view
         this.text.setText(text);
         this.repeatValue = repeatValue;
         updateRepeatButton(this.repeatValue);

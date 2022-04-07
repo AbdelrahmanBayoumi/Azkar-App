@@ -20,7 +20,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -54,7 +53,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
     @FXML
     private JFXButton autoLocationButton;
     @FXML
-    private Label statusLabel, adhanLabel, calculationMethodText, asrMadhabText, daylightSavingNote;
+    private Label enterCountryAndCity, statusLabel, adhanLabel, calculationMethodText, asrMadhabText, daylightSavingNote;
     private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
     private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
     private ResourceBundle bundle;
@@ -73,6 +72,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         summerTiming.setText(Utility.toUTF(bundle.getString("extraOneHourDayLightSaving")));
         standardJuristic.setText(Utility.toUTF(bundle.getString("asrMadhabJumhoor")));
         hanafiRadioButton.setText(Utility.toUTF(bundle.getString("hanafi")));
+        enterCountryAndCity.setText(Utility.toUTF(bundle.getString("enterCountryAndCity")));
     }
 
     @Override
