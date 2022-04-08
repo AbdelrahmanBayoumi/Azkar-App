@@ -54,18 +54,19 @@ public class SelectLocationController implements Initializable {
         latitude.setPromptText(Utility.toUTF(bundle.getString("latitude")));
         autoLocationButton.setText(Utility.toUTF(bundle.getString("autoLocate")));
         enterCountryAndCity.setText(Utility.toUTF(bundle.getString("enterCountryAndCity")));
+        initCountries();
+        initCities();
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
         prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         statusLabel.setVisible(false);
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
         initDoubleValidation();
-        initCountries();
-        initCities();
     }
 
     private void initDoubleValidation() {

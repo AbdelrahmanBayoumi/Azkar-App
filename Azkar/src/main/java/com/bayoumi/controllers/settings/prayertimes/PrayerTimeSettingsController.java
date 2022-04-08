@@ -17,14 +17,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 
 public class PrayerTimeSettingsController implements Initializable, SettingsInterface {
     private PrayerTimeSettings prayerTimeSettings;
@@ -59,8 +55,6 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
             Logger.error(null, ex, getClass().getName() + ".initialize()");
         }
     }
-
-
 
 
     @Override

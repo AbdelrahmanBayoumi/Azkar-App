@@ -134,8 +134,9 @@ public class OtherSettings extends Observable {
         return language;
     }
 
-    public void setLanguage(Language language) {
+    public OtherSettings setLanguage(Language language) {
         this.language = language;
+        return this;
     }
 
     public String getLanguageLocal() {

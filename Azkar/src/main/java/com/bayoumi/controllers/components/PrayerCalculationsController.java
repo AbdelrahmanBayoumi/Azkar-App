@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.components;
 
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
 
 public class PrayerCalculationsController implements Initializable {
 
+    private PrayerTimeSettings prayerTimeSettings;
     @FXML
     private Label calculationMethodText, asrMadhabText, daylightSavingNote;
     @FXML
@@ -29,18 +31,20 @@ public class PrayerCalculationsController implements Initializable {
     @FXML
     public JFXCheckBox summerTiming;
 
-    public void updateBundle(ResourceBundle bundle) {
+    private void updateBundle(ResourceBundle bundle) {
         calculationMethodText.setText(Utility.toUTF(bundle.getString("calculationMethod")));
         asrMadhabText.setText(Utility.toUTF(bundle.getString("asrMadhab")));
         daylightSavingNote.setText(Utility.toUTF(bundle.getString("daylightSavingNote")));
         summerTiming.setText(Utility.toUTF(bundle.getString("extraOneHourDayLightSaving")));
         standardJuristic.setText(Utility.toUTF(bundle.getString("asrMadhabJumhoor")));
         hanafiRadioButton.setText(Utility.toUTF(bundle.getString("hanafi")));
+        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getOtherSettings().getLanguage().equals(Language.Arabic)));
+        methodComboBox.setValue(null);
+        methodComboBox.setValue(prayerTimeSettings.getMethod());
     }
 
     public void setData() {
-        PrayerTimeSettings prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
-        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         methodComboBox.setValue(prayerTimeSettings.getMethod());
         // init Asr Juristic
         if (prayerTimeSettings.getAsrJuristic() == 1) {
@@ -49,11 +53,14 @@ public class PrayerCalculationsController implements Initializable {
             standardJuristic.setSelected(true);
         }
         summerTiming.setSelected(prayerTimeSettings.isSummerTiming());
-        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")));
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         methodComboBox.setItems(FXCollections.observableArrayList(PrayerTimeSettings.Method.getListOfMethods()));
+        LanguageBundle.getInstance().addObserver((o, arg) -> {
+            updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        });
     }
 }

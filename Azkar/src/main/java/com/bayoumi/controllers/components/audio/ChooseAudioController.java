@@ -21,7 +21,7 @@ public class ChooseAudioController implements Initializable {
     private FontAwesomeIconView playIcon;
     private String path, fileExtension;
     @FXML
-    private JFXComboBox<String> audioBox;
+    public JFXComboBox<String> audioBox;
     @FXML
     private JFXButton playButton;
 

@@ -19,15 +19,17 @@ public class LanguageBundle extends Observable {
     private LanguageBundle() {
         this.resourceBundle = ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getOtherSettings().getLanguageLocal()));
         // if there is a change in HijriDate offset
-        Settings.getInstance().getOtherSettings().addObserver((o, arg) -> {
-            this.resourceBundle = ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getOtherSettings().getLanguageLocal()));
-            this.setChanged();
-            this.notifyObservers();
-        });
+        Settings.getInstance().getOtherSettings().addObserver((o, arg) ->
+                setResourceBundle(ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getOtherSettings().getLanguageLocal()))));
     }
 
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
     }
 
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+        this.setChanged();
+        this.notifyObservers();
+    }
 }
