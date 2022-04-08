@@ -37,6 +37,7 @@ public class FileUtils {
     }
 
     public static ObservableList<String> getAdhanList() {
+        // TODO: localization for adhan name
         ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
         addFilesNameToListRemoveExtension(new File("jarFiles/audio/adhan"), audioFiles, ".mp3");
         return audioFiles;

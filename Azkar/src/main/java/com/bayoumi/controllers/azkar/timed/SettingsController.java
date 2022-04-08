@@ -25,7 +25,8 @@ public class SettingsController implements SettingsInterface {
     private ObservableList<Text> list;
     private JFXDialog dialog;
 
-    public void setData(ObservableList<Text> list, JFXDialog dialog) {// TODO: handle localization for this view
+    public void setData(ObservableList<Text> list, JFXDialog dialog) {
+        // TODO: handle localization for this view
         this.list = list;
         this.dialog = dialog;
 

@@ -45,7 +45,8 @@ public class TimedAzkarController implements Initializable {
     private Image morningImage;
     private Image nightImage;
 
-    public void setData(String type) {// TODO: handle localization for this view
+    public void setData(String type) {
+        // TODO: handle localization for this view
         if (type.toLowerCase().contains("morning")) {
             title.setText("أذكار الصباح");
             image.setImage(morningImage);

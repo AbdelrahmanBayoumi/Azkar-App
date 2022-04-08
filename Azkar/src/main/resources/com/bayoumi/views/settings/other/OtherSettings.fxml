@@ -157,9 +157,9 @@
                   </JFXButton>
                </children>
             </HBox>
-            <VBox alignment="CENTER" spacing="2.0">
+            <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="2.0">
                <children>
-                  <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
+                  <HBox alignment="CENTER">
                      <children>
                         <Label alignment="CENTER" styleClass="font-text-medium" text="website: ">
                            <font>
@@ -178,6 +178,11 @@
                   </HBox>
                   <HBox alignment="CENTER">
                      <children>
+                        <Label alignment="CENTER" styleClass="font-text-medium" text="Product Version : Azkar App ">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                         <Label fx:id="version" styleClass="font-text-medium" text="0.0">
                            <font>
                               <Font size="16.0" />
@@ -185,11 +190,6 @@
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
                            </cursor>
-                        </Label>
-                        <Label alignment="CENTER" styleClass="font-text-medium" text="Product Version : Azkar App ">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
                         </Label>
                      </children>
                   </HBox>
