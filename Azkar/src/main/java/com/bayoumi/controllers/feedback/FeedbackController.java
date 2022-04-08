@@ -1,7 +1,9 @@
 package com.bayoumi.controllers.feedback;
 
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
 import com.bayoumi.util.forms.Feedback;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
@@ -15,9 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.Notifications;
 
@@ -27,6 +31,8 @@ import java.util.ResourceBundle;
 
 public class FeedbackController implements Initializable {
 
+    @FXML
+    private Label title;
     @FXML
     private JFXButton suggestion;
     @FXML
@@ -43,7 +49,10 @@ public class FeedbackController implements Initializable {
     private JFXButton sendBtn;
     @FXML
     private ProgressIndicator progress;
+    @FXML
+    private StackPane root;
     private JFXButton focusedButton;
+    private ResourceBundle bundle;
 
     private void reset() {
         subject.setText("");
@@ -51,9 +60,23 @@ public class FeedbackController implements Initializable {
         details.setText("");
     }
 
+    public void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        title.setText(Utility.toUTF(bundle.getString("notes")));
+        suggestion.setText(Utility.toUTF(bundle.getString("suggestion")));
+        problem.setText(Utility.toUTF(bundle.getString("reportProblem")));
+        other.setText(Utility.toUTF(bundle.getString("otherFeedback")));
+        email.setPromptText(Utility.toUTF(bundle.getString("email")));
+        subject.setPromptText(Utility.toUTF(bundle.getString("theNote")));
+        details.setPromptText(Utility.toUTF(bundle.getString("moreDetails")));
+        sendBtn.setText(Utility.toUTF(bundle.getString("send")));
+        root.setNodeOrientation(NodeOrientation.valueOf(Utility.toUTF(bundle.getString("dir"))));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO: handle localization for this window
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+
         focusedButton = suggestion;
         progress.setVisible(false);
         sendBtn.disableProperty().bindBidirectional(progress.visibleProperty());
@@ -69,7 +92,7 @@ public class FeedbackController implements Initializable {
 
     private RequiredFieldValidator generateRequiredFieldValidator() {
         RequiredFieldValidator requiredFieldValidator = new RequiredFieldValidator();
-        requiredFieldValidator.setMessage("هذا الحقل مطلوب");
+        requiredFieldValidator.setMessage(Utility.toUTF(bundle.getString("requiredField")));
         requiredFieldValidator.setIcon(getErrorIcon());
         return requiredFieldValidator;
     }
@@ -89,7 +112,7 @@ public class FeedbackController implements Initializable {
             }
         });
         RegexValidator emailValidator = new RegexValidator();
-        emailValidator.setMessage("البريد الإلكتروني غير صحيح!");
+        emailValidator.setMessage(Utility.toUTF(bundle.getString("emailIsNotCorrect")) + "!");
         emailValidator.setRegexPattern("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         emailValidator.setIcon(getErrorIcon());
@@ -132,7 +155,7 @@ public class FeedbackController implements Initializable {
                     VBox vBox = new VBox(10);
                     vBox.setAlignment(Pos.CENTER);
                     vBox.setPadding(new Insets(10));
-                    Label label = new Label("تم الإرسال");
+                    Label label = new Label(Utility.toUTF(bundle.getString("sentSuccess")));
                     label.setStyle("-fx-font-size: 25px");
                     FontAwesomeIconView checkIcon = new FontAwesomeIconView(FontAwesomeIcon.CHECK_CIRCLE);
                     checkIcon.setStyle("-fx-fill: green;-fx-font-size: 50;-fx-font-family: \"FontAwesome\"");

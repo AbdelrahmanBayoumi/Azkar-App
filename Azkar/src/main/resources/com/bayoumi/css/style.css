@@ -1,12 +1,12 @@
-@font-face {
-    font-family: 'Droid Arabic Kufi';
-    src: url('../fonts/DroidKufi-Bold.ttf');
-}
+/*@font-face {*/
+/*    font-family: 'Droid Arabic Kufi';*/
+/*    src: url('../fonts/DroidKufi-Bold.ttf');*/
+/*}*/
 
-@font-face {
-    font-family: 'Droid Arabic Kufi';
-    src: url('../fonts/DroidKufi-Regular.ttf');
-}
+/*@font-face {*/
+/*    font-family: 'Droid Arabic Kufi';*/
+/*    src: url('../fonts/DroidKufi-Regular.ttf');*/
+/*}*/
 
 @font-face {
     font-family: 'Tajawal-Medium';
@@ -619,9 +619,8 @@
 .dialog-pane > .content.label {
     -fx-padding: 20;
     -fx-alignment: center;
-    -fx-font-weight: bold;
-    -fx-font-family: "Droid Arabic Kufi";
-    -fx-font-size: 16px;
+    -fx-font-family: "Tajawal-Bold";
+    -fx-font-size: 16;
 }
 
 .dialog-pane .button {
@@ -649,7 +648,7 @@
 
 .zekr-text {
     -fx-background-color: red;
-    -fx-font-family: 'Droid Arabic Kufi';
+    -fx-font-family: 'Tajawal-Bold';
     -fx-font-size: 20;
     /*-fx-font-weight: BOLD;*/
     -fx-max-height: infinity;
