@@ -7,10 +7,12 @@ import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
@@ -199,12 +201,20 @@ public class HomeController implements Initializable {
     // ==============================================
     @FXML
     public void goToMorningAzkar() {
-        showTimedAzkar("morning");
+        if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            showTimedAzkar("morning");
+        } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("morningAzkarNotAvailable")))) {
+            showTimedAzkar("morning");
+        }
     }
 
     @FXML
     public void goToNightAzkar() {
-        showTimedAzkar("night");
+        if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            showTimedAzkar("night");
+        } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("nightAzkarNotAvailable")))) {
+            showTimedAzkar("night");
+        }
     }
 
     private void showTimedAzkar(String type) {
