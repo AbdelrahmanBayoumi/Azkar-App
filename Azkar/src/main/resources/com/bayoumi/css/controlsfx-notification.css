@@ -1,15 +1,22 @@
-.root{
+@font-face {
+    font-family: 'Tajawal-Bold';
+    src: url('../fonts/Tajawal/Tajawal-Bold.ttf');
+}
+
+.root {
     -fx-background-color: transparent;
 }
+
 /******************************************************************************
  *
  * Light theme
  *
  *****************************************************************************/
-.notification-bar{
+.notification-bar {
     -fx-background-color: transparent;
     -fx-padding: 7 7 7 7;
 }
+
 .notification-bar > .pane {
     -fx-background-color: white;
     -fx-padding: 7 7 7 7;
@@ -29,14 +36,16 @@
     -fx-text-fill: #292929;
     -fx-font-weight: bold;
 }
+
 .notification-bar > .pane .label {
     -fx-text-fill: black;
     -fx-font-size: 17;
-    -fx-font-weight: bold;
     -fx-text-alignment: right;
     -fx-max-width: 400;
     -fx-wrap-text: true;
+    -fx-font-family: "Tajawal-Bold";
 }
+
 
 /*.message-box {*/
 /*    -fx-background-color: white;*/
@@ -59,10 +68,11 @@
  * Dark theme
  *
  *****************************************************************************/
-.notification-bar.dark{
+.notification-bar.dark {
     -fx-background-color: transparent;
     -fx-padding: 7 7 7 7;
 }
+
 .notification-bar.dark > .pane {
     -fx-background-color: #2A2E37;
 }
