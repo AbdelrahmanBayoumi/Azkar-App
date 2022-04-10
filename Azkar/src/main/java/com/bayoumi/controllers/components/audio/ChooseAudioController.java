@@ -1,10 +1,12 @@
 package com.bayoumi.controllers.components.audio;
 
+import com.bayoumi.models.Muezzin;
+import com.bayoumi.models.settings.Settings;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -13,15 +15,15 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
     public static MediaPlayer MEDIA_PLAYER;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
-    private String path, fileExtension;
     @FXML
-    public JFXComboBox<String> audioBox;
+    public JFXComboBox<Muezzin> audioBox;
     @FXML
     private JFXButton playButton;
 
@@ -35,28 +37,31 @@ public class ChooseAudioController implements Initializable {
         return MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING);
     }
 
-    public String getValue() {
-        if (audioBox == null || audioBox.getValue() == null || audioBox.getValue().equals("")) {
-            return "بدون صوت";
+    public Muezzin getValue() {
+        if (audioBox == null || audioBox.getValue() == null || audioBox.getValue().equals(Muezzin.NO_SOUND)) {
+            return Muezzin.NO_SOUND;
         }
         return audioBox.getValue();
     }
 
-    public void setData(String promptText, String initialValue, ObservableList<String> items, String path, String fileExtension) {
-        this.path = path;
-        this.fileExtension = fileExtension;
+    public void setData(String promptText, Muezzin initialValue, List<Muezzin> items) {
         audioBox.setPromptText(promptText);
         audioBox.setValue(initialValue);
-        audioBox.setItems(items);
-        playButton.setDisable(audioBox.getValue().equals("بدون صوت"));
+        audioBox.setItems(FXCollections.observableArrayList(items));
+        playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+            audioBox.setConverter(Muezzin.arabicConverter());
+        } else {
+            audioBox.setConverter(Muezzin.englishConverter());
+        }
     }
 
     public void initFromFirstValue() {
         if (audioBox == null || audioBox.getItems() == null) {
             return;
         }
-        audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(1) : "بدون صوت");
-        playButton.setDisable(audioBox.getValue().equals("بدون صوت"));
+        audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(1) : Muezzin.NO_SOUND);
+        playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
     }
 
     @Override
@@ -68,7 +73,7 @@ public class ChooseAudioController implements Initializable {
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-secondary;");
         audioBox.setOnAction(event -> {
-            playButton.setDisable(audioBox.getValue().equals("بدون صوت"));
+            playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
             if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
                 MEDIA_PLAYER.stop();
                 playButton.setGraphic(playIcon);
@@ -83,10 +88,10 @@ public class ChooseAudioController implements Initializable {
             MEDIA_PLAYER.stop();
             playButton.setGraphic(playIcon);
         } else {
-            String fileName = audioBox.getValue();
-            System.out.println(fileName);
-            if (!fileName.equals("بدون صوت")) {
-                MEDIA_PLAYER = new MediaPlayer(new Media(new File(path + fileName + fileExtension).toURI().toString()));
+            Muezzin muezzin = audioBox.getValue();
+            System.out.println(muezzin);
+            if (!muezzin.equals(Muezzin.NO_SOUND)) {
+                MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
                 MEDIA_PLAYER.setVolume(100);
                 MEDIA_PLAYER.play();
                 // playing

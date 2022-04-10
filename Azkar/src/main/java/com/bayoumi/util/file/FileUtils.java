@@ -1,9 +1,11 @@
 package com.bayoumi.util.file;
 
+import com.bayoumi.models.Muezzin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtils {
@@ -36,10 +38,35 @@ public class FileUtils {
         return audioFiles;
     }
 
-    public static ObservableList<String> getAdhanList() {
-        // TODO: localization for adhan name
-        ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
-        addFilesNameToListRemoveExtension(new File("jarFiles/audio/adhan"), audioFiles, ".mp3");
+    public static void main(String[] args) {
+        List<Muezzin> muezzinList = new ArrayList<>();
+        for (String s : getAdhanFilesNames()) {
+            for (Muezzin muezzin : Muezzin.values()) {
+                if (s.equals(muezzin.getFileName())) {
+                    muezzinList.add(muezzin);
+                }
+            }
+        }
+        muezzinList.forEach((muezzin) -> {
+            System.out.println(muezzin);
+        });
+    }
+
+    public static List<Muezzin> getAdhanList() {
+        List<Muezzin> muezzinList = new ArrayList<>();
+        for (String s : getAdhanFilesNames()) {
+            for (Muezzin muezzin : Muezzin.values()) {
+                if (s.equals(muezzin.getFileName())) {
+                    muezzinList.add(muezzin);
+                }
+            }
+        }
+        return muezzinList;
+    }
+
+    public static List<String> getAdhanFilesNames() {
+        List<String> audioFiles = new ArrayList<>();
+        addFilesNameToList(new File(Muezzin.PARENT_PATH), audioFiles);
         return audioFiles;
     }
 }

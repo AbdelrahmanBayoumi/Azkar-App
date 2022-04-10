@@ -107,7 +107,7 @@ public class OnboardingController implements Initializable {
         prayerTimeSettings.setSummerTiming(calculationsController.summerTiming.isSelected());
         prayerTimeSettings.setLatitude(selectLocationController.cities.getValue().getLatitude());
         prayerTimeSettings.setLongitude(selectLocationController.cities.getValue().getLongitude());
-        prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue());
+        prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
         ChooseAudioController.stopIfPlaying();
         prayerTimeSettings.save();
         // save other settings

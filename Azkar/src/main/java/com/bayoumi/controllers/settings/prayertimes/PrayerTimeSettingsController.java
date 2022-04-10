@@ -71,7 +71,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
             prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.latitude.getText()));
             prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.longitude.getText()));
 
-            prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue());
+            prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
             prayerTimeSettings.save();
             ChooseAudioController.stopIfPlaying();
         } catch (Exception e) {

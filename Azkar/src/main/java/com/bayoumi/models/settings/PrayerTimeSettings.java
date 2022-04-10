@@ -147,10 +147,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public String getAdhanAudio() {
-        if (FileUtils.getAdhanList().contains(adhanAudio)) {
+        if (FileUtils.getAdhanFilesNames().contains(adhanAudio)) {
             return adhanAudio;
         }
-        return "بدون صوت";
+        return "";
     }
 
     public void setAdhanAudio(String adhanAudio) {

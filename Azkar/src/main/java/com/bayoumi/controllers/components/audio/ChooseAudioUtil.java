@@ -1,6 +1,7 @@
 package com.bayoumi.controllers.components.audio;
 
 import com.bayoumi.Launcher;
+import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -18,10 +19,8 @@ public class ChooseAudioUtil {
             container.getChildren().add(loader.load());
             ChooseAudioController chooseAudioController = loader.getController();
             chooseAudioController.setData(Utility.toUTF(bundle.getString("muezzin")),
-                    Settings.getInstance().getPrayerTimeSettings().getAdhanAudio(),
-                    FileUtils.getAdhanList(),
-                    "jarFiles/audio/adhan/",
-                    ".mp3");
+                    Muezzin.getFromFileName(Settings.getInstance().getPrayerTimeSettings().getAdhanAudio()),
+                    FileUtils.getAdhanList());
 
             return chooseAudioController;
         } catch (Exception ex) {

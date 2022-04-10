@@ -310,7 +310,7 @@ public class HomeController implements Initializable {
                 240,
                 settings.getNotificationSettings().getPosition(),
                 null,
-                new NotificationAudio("adhan/" + settings.getPrayerTimeSettings().getAdhanAudio() + ".mp3", 100)));
+                new NotificationAudio("adhan/" + Settings.getInstance().getPrayerTimeSettings().getAdhanAudio(), 100)));
     }
 
 }
