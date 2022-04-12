@@ -12,7 +12,7 @@ public class Constants {
 
     // Program characteristics
     public static String assetsPath;
-    public final static String VERSION = "1.1.0";
+    public final static String VERSION = "1.1.1";
 
     public final static Mode RUNNING_MODE = Mode.PRODUCTION;
 
