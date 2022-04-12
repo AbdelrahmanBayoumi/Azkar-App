@@ -12,9 +12,9 @@ public class Constants {
 
     // Program characteristics
     public static String assetsPath;
-    public final static String VERSION = "1.0.1";
+    public final static String VERSION = "1.1.0";
 
-    public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
+    public final static Mode RUNNING_MODE = Mode.PRODUCTION;
 
     static {
         try {
