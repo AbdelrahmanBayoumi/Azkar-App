@@ -302,15 +302,23 @@ public class HomeController implements Initializable {
         ReminderUtil.getInstance().validate(date);
     }
 
+    private String adhanFileName;
 
     private void playAdhan(String prayerName) {
         System.out.println("playAdhan() => " + prayerName);
+        String adhanFileName = Settings.getInstance().getPrayerTimeSettings().getAdhanAudio();
+        if (adhanFileName == null || adhanFileName.equals("")) {
+            adhanFileName = "";
+        } else {
+            adhanFileName = "adhan/" + adhanFileName;
+        }
+        String finalAdhanFileName = adhanFileName;
         Platform.runLater(() -> Notification.create(new NotificationContent(prayerName,
                         new Image("/com/bayoumi/images/Kaaba.png")),
                 240,
                 settings.getNotificationSettings().getPosition(),
                 null,
-                new NotificationAudio("adhan/" + Settings.getInstance().getPrayerTimeSettings().getAdhanAudio(), 100)));
+                new NotificationAudio(finalAdhanFileName, 100)));
     }
 
 }

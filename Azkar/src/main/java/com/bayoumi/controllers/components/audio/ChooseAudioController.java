@@ -48,6 +48,7 @@ public class ChooseAudioController implements Initializable {
         audioBox.setPromptText(promptText);
         audioBox.setValue(initialValue);
         audioBox.setItems(FXCollections.observableArrayList(items));
+        audioBox.getItems().add(Muezzin.NO_SOUND);
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
         if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
             audioBox.setConverter(Muezzin.arabicConverter());
@@ -60,7 +61,7 @@ public class ChooseAudioController implements Initializable {
         if (audioBox == null || audioBox.getItems() == null) {
             return;
         }
-        audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(1) : Muezzin.NO_SOUND);
+        audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
     }
 

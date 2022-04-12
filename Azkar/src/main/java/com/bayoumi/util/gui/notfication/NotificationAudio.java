@@ -25,7 +25,7 @@ public class NotificationAudio {
     }
 
     public void play() {
-        if (!fileName.contains("بدون صوت")) {
+        if (!fileName.contains("بدون صوت") && !fileName.equals("")) {
             mediaPlayer = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
             mediaPlayer.setVolume(this.volume / 100.0);
             mediaPlayer.play();
