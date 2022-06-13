@@ -39,7 +39,7 @@
 
 
 Desktop Application 💻 for: 
-- Calculating Muslim prayer times 🕌
+- Calculating Muslim prayer times and <b> alarm </b> 🕌
 - Morning and Nights Azkar with reminder 🤲
 - With notification for random Azkar that pops-up in specific time 💬.
 
