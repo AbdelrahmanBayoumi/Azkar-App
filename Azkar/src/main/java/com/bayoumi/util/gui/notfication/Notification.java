@@ -3,6 +3,8 @@ package com.bayoumi.util.gui.notfication;
 import com.bayoumi.controllers.notification.NotificationsControlsFXController;
 import com.bayoumi.util.Logger;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -16,20 +18,34 @@ public class Notification {
             Parent notificationView = loader.load();
             ((NotificationsControlsFXController) loader.getController()).setData(content.getText(), content.getImage());
             audio.play();
-            Platform.runLater(() -> Notifications.create()
-                    .graphic(notificationView)
-                    .hideCloseButton()
-                    .hideAfter(Duration.seconds(duration))
-                    .onAction(event -> {
-                        System.out.println("Closing Notification ..."); // TODO : Delete println
-                        if (audio.getMediaPlayer() != null) {
-                            audio.stop();
-                        }
-                        if (onClickAction != null) {
-                            onClickAction.run();
-                        }
-                    })
-                    .position(position).show());
+            final Runnable closeCallback = () -> {
+                System.out.println("Closing Notification ..."); // TODO : Delete println
+                if (audio.getMediaPlayer() != null) {
+                    audio.stop();
+                }
+//                if (onClickAction != null) {
+//                    onClickAction.run();
+//                }
+            };
+            EventHandler<ActionEvent> onClickHandler = null;
+            if (onClickAction != null) {
+                onClickHandler = event -> {
+                    System.out.println("Clicked: " + onClickAction);
+                    onClickAction.run();
+                };
+            }
+            EventHandler<ActionEvent> finalOnClickHandler = onClickHandler;
+
+            Platform.runLater(() -> {
+                Notifications.create()
+                        .graphic(notificationView)
+                        .hideAfter(Duration.seconds(duration))
+                        .onAction(finalOnClickHandler)
+                        .closeHandler(closeCallback)
+                        .position(position)
+                        .hideCloseButton()
+                        .show(((NotificationsControlsFXController) loader.getController()).closeButton);
+            });
         } catch (Exception ex) {
             Logger.error(null, ex, Notification.class.getName() + ".createControlsFX()");
             ex.printStackTrace();

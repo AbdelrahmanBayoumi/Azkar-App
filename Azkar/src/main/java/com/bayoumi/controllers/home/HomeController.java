@@ -245,7 +245,7 @@ public class HomeController implements Initializable {
     // ==============================================
     private void handlePrayerRemainingTime(Date dateNow) {
         if (bundle != null) {
-            Date nextPrayerTime = null;
+            Date nextPrayerTime;
             // take current Prayer ( when isha is finished, and it's before 12pm )
             if (prayerTimesToday.nextPrayer().equals(Prayer.NONE)) {
                 currentPrayerText.setText(Utility.toUTF(bundle.getString("havePassedSince")) + " " + prayerTimesController.getCurrentPrayerValue());
@@ -301,8 +301,6 @@ public class HomeController implements Initializable {
     private void checkForReminders(Date date) {
         ReminderUtil.getInstance().validate(date);
     }
-
-    private String adhanFileName;
 
     private void playAdhan(String prayerName) {
         System.out.println("playAdhan() => " + prayerName);

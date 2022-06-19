@@ -36,6 +36,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.*;
 import javafx.util.Duration;
@@ -112,6 +113,7 @@ public class Notifications {
     private final List<String> styleClass = new ArrayList<>();
     private int threshold;
     private Notifications thresholdNotification;
+    private Runnable closeCallback;
 
     /***************************************************************************
      * * Constructors * *
@@ -149,6 +151,16 @@ public class Notifications {
         this.title = title;
         return this;
     }
+
+
+    /**
+     * Specify the graphic to show in the notification.
+     */
+    public Notifications closeHandler(Runnable closeCallback) {
+        this.closeCallback = closeCallback;
+        return this;
+    }
+
 
     /**
      * Specify the graphic to show in the notification.
@@ -284,6 +296,10 @@ public class Notifications {
     /**
      * Instructs the notification to be shown.
      */
+    public void show(Button closeButton) {
+        NotificationPopupHandler.getInstance().show(this, closeButton);
+    }
+
     public void show() {
         NotificationPopupHandler.getInstance().show(this);
     }
@@ -310,11 +326,27 @@ public class Notifications {
 
         private boolean isShowing = false;
 
-        static final NotificationPopupHandler getInstance() {
+        static NotificationPopupHandler getInstance() {
             return INSTANCE;
         }
 
-        public void show(Notifications notification) {
+
+        public void show(Notifications notifications, Button closeButton) {
+            final NotificationBarPopUp barPopUp = show(notifications);
+            closeButton.setOnAction(event -> {
+//                if (notifications.onAction != null) {
+//                    ActionEvent actionEvent = new ActionEvent(barPopUp.getNotificationBar(), barPopUp.getNotificationBar());
+//                    notifications.onAction.handle(actionEvent);
+//                }
+                // animate out the popup
+                createHideTimeline(barPopUp.getPopup(), barPopUp.getNotificationBar(), notifications.position, Duration.ZERO).play();
+                if (notifications.closeCallback != null) {
+                    notifications.closeCallback.run();
+                }
+            });
+        }
+
+        public NotificationBarPopUp show(Notifications notification) {
             Window window;
             if (notification.owner == null) {
                 /*
@@ -349,7 +381,7 @@ public class Notifications {
                 screenHeight = notification.owner.getHeight();
                 window = notification.owner;
             }
-            show(window, notification);
+            return show(window, notification);
         }
 
         private Optional<Screen> getScreenBounds(Window window) {
@@ -365,7 +397,7 @@ public class Notifications {
                     .findFirst();
         }
 
-        private void show(Window owner, final Notifications notification) {
+        private NotificationBarPopUp show(Window owner, final Notifications notification) {
             // Stylesheets which are added to the scene of a popup aren't
             // considered for styling. For this reason, we need to find the next
             // window in the hierarchy which isn't a popup.
@@ -497,16 +529,18 @@ public class Notifications {
                     }
                 }
             };
-
             notificationBar.getStyleClass().addAll(notificationToShow.styleClass);
 
             notificationBar.setOnMouseClicked(e -> {
                 if (notificationToShow.onAction != null) {
-                    ActionEvent actionEvent = new ActionEvent(notificationBar, notificationBar);
-                    notificationToShow.onAction.handle(actionEvent);
-
+                    if (notificationToShow.closeCallback != null) {
+                        notificationToShow.closeCallback.run();
+                    }
                     // animate out the popup
                     createHideTimeline(popup, notificationBar, p, Duration.ZERO).play();
+
+                    ActionEvent actionEvent = new ActionEvent(notificationBar, notificationBar);
+                    notificationToShow.onAction.handle(actionEvent);
                 }
             });
             popup.getContent().add(notificationBar);
@@ -573,6 +607,12 @@ public class Notifications {
             // begin a timeline to get rid of the popup
             Timeline timeline = createHideTimeline(popup, notificationBar, p, notification.hideAfterDuration);
             timeline.play();
+            timeline.setOnFinished(event -> {
+                if (notification.closeCallback != null) {
+                    notification.closeCallback.run();
+                }
+            });
+            return new NotificationBarPopUp(notificationBar, popup);
         }
 
         private void hide(Popup popup, Pos p) {
@@ -720,6 +760,32 @@ public class Notifications {
                 }
             }
 
+        }
+    }
+
+    static class NotificationBarPopUp {
+        private NotificationBar notificationBar;
+        private Popup popup;
+
+        public NotificationBar getNotificationBar() {
+            return notificationBar;
+        }
+
+        public void setNotificationBar(NotificationBar notificationBar) {
+            this.notificationBar = notificationBar;
+        }
+
+        public Popup getPopup() {
+            return popup;
+        }
+
+        public void setPopup(Popup popup) {
+            this.popup = popup;
+        }
+
+        public NotificationBarPopUp(NotificationBar notificationBar, Popup popup) {
+            this.notificationBar = notificationBar;
+            this.popup = popup;
         }
     }
 }

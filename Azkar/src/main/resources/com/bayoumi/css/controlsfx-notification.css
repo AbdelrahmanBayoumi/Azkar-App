@@ -121,3 +121,19 @@
 .notification-bar > .pane .close-button > .graphic {
     -fx-shape: "M395.992,296.758l1.794-1.794l7.292,7.292l-1.795,1.794 L395.992,296.758z M403.256,294.992l1.794,1.794l-7.292,7.292l-1.794-1.795 L403.256,294.992z";
 }
+
+.notification-close-button {
+    -fx-background-color: transparent;
+}
+.notification-close-button .glyph-icon{
+    -fx-fill: #949494;
+}
+
+.notification-close-button:hover {
+    -fx-background-color: linear-gradient(#a3a3a3, #8b8b8b 34%, #777777 36%, #777777 63%, #8b8b8b 65%, #adadad);
+    -fx-text-fill: white;
+}
+
+.notification-close-button:hover .glyph-icon {
+    -fx-fill: white;
+}

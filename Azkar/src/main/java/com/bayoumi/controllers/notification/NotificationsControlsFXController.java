@@ -3,9 +3,11 @@ package com.bayoumi.controllers.notification;
 import com.bayoumi.util.gui.Draggable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
@@ -13,9 +15,13 @@ import java.util.ResourceBundle;
 
 public class NotificationsControlsFXController implements Initializable {
     @FXML
+    private AnchorPane parent;
+    @FXML
     private HBox notificationBox;
     @FXML
     private Label text;
+    @FXML
+    public Button closeButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -30,6 +36,9 @@ public class NotificationsControlsFXController implements Initializable {
                 }
             }
         });
+        closeButton.setVisible(false);
+        parent.setOnMouseEntered(event -> closeButton.setVisible(true));
+        parent.setOnMouseExited(event -> closeButton.setVisible(false));
     }
 
     public void setData(String msg, Image image) {

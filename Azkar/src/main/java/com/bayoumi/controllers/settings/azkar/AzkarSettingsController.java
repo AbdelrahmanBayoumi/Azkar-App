@@ -255,7 +255,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         try {
             Stage stage = new Stage();
             stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString())))));
-            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             HelperMethods.SetIcon(stage);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
@@ -291,10 +290,14 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         notificationSettings.setPosition(posComboBox.getValue());
         Platform.runLater(()
                 -> {
+            Image image = null;
+            if (new Random().nextInt(999) % 2 == 0) {
+                image = new Image("/com/bayoumi/images/Kaaba.png");
+            }
             try {
                 Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
                                 new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                                new Image("/com/bayoumi/images/Kaaba.png")),
+                                image),
                         10,
                         notificationSettings.getPosition(),
                         null,
