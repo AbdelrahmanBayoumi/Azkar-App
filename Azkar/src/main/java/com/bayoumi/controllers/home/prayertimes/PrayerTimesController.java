@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -30,6 +31,7 @@ public class PrayerTimesController implements Initializable {
     // ==== Helper Objects ====
     private String currentPrayerValue;
     private ResourceBundle bundle;
+    private SimpleDateFormat formatter;
     // ==== Settings Objects ====
     private Settings settings;
     private PrayerTimes prayerTimesToday;
@@ -55,6 +57,34 @@ public class PrayerTimesController implements Initializable {
             }
         });
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
+
+        // -- Handle showing remaining time onHover for each prayer
+        fajrTime.setOnMouseEntered(event -> showRemainingTime(fajrTime, new Date(), prayerTimesToday.fajr));
+        sunriseTime.setOnMouseEntered(event -> showRemainingTime(sunriseTime, new Date(), prayerTimesToday.sunrise));
+        dhuhrTime.setOnMouseEntered(event -> showRemainingTime(dhuhrTime, new Date(), prayerTimesToday.dhuhr));
+        asrTime.setOnMouseEntered(event -> showRemainingTime(asrTime, new Date(), prayerTimesToday.asr));
+        maghribTime.setOnMouseEntered(event -> showRemainingTime(maghribTime, new Date(), prayerTimesToday.maghrib));
+        ishaTime.setOnMouseEntered(event -> showRemainingTime(ishaTime, new Date(), prayerTimesToday.isha));
+
+        fajrTime.setOnMouseExited(event -> setPrayerTimeWithFormat(fajrTime, prayerTimesToday.fajr, formatter));
+        sunriseTime.setOnMouseExited(event -> setPrayerTimeWithFormat(sunriseTime, prayerTimesToday.sunrise, formatter));
+        dhuhrTime.setOnMouseExited(event -> setPrayerTimeWithFormat(dhuhrTime, prayerTimesToday.dhuhr, formatter));
+        asrTime.setOnMouseExited(event -> setPrayerTimeWithFormat(asrTime, prayerTimesToday.asr, formatter));
+        maghribTime.setOnMouseExited(event -> setPrayerTimeWithFormat(maghribTime, prayerTimesToday.maghrib, formatter));
+        ishaTime.setOnMouseExited(event -> setPrayerTimeWithFormat(ishaTime, prayerTimesToday.isha, formatter));
+    }
+
+    private void showRemainingTime(Label label, Date dateNow, Date nextPrayerTime) {
+        String remainingTime = "";
+        if (dateNow.compareTo(nextPrayerTime) < 0) {
+            // dateNow is before nextPrayerTime
+            remainingTime = "- ";
+        } else if (dateNow.compareTo(nextPrayerTime) > 0) {
+            // dateNow is after nextPrayerTime
+            remainingTime = "+ ";
+        }
+        remainingTime += Utilities.findDifference(dateNow, nextPrayerTime);
+        label.setText(remainingTime);
     }
 
     public void updateBundle(ResourceBundle bundle) {
@@ -142,10 +172,12 @@ public class PrayerTimesController implements Initializable {
         sunnahBox.setVisible(false);
     }
 
+    private void setPrayerTimeWithFormat(Label label, Date date, SimpleDateFormat formatter) {
+        label.setText(formatter.format(date));
+    }
 
     public void setPrayerTimesValuesToGUI() {
         Platform.runLater(() -> {
-            SimpleDateFormat formatter;
             if (settings.getOtherSettings().isEnable24Format()) {
                 formatter = new SimpleDateFormat("HH:mm", new Locale(settings.getOtherSettings().getLanguageLocal()));
             } else {
@@ -153,17 +185,16 @@ public class PrayerTimesController implements Initializable {
             }
             formatter.setTimeZone(TimeZone.getDefault());
 
-            fajrTime.setText(formatter.format(prayerTimesToday.fajr));
-            sunriseTime.setText(formatter.format(prayerTimesToday.sunrise));
-            dhuhrTime.setText(formatter.format(prayerTimesToday.dhuhr));
-            asrTime.setText(formatter.format(prayerTimesToday.asr));
-            maghribTime.setText(formatter.format(prayerTimesToday.maghrib));
-            ishaTime.setText(formatter.format(prayerTimesToday.isha));
+            setPrayerTimeWithFormat(fajrTime, prayerTimesToday.fajr, formatter);
+            setPrayerTimeWithFormat(sunriseTime, prayerTimesToday.sunrise, formatter);
+            setPrayerTimeWithFormat(dhuhrTime, prayerTimesToday.dhuhr, formatter);
+            setPrayerTimeWithFormat(asrTime, prayerTimesToday.asr, formatter);
+            setPrayerTimeWithFormat(maghribTime, prayerTimesToday.maghrib, formatter);
+            setPrayerTimeWithFormat(ishaTime, prayerTimesToday.isha, formatter);
 
             SunnahTimes sunnahTimes = new SunnahTimes(prayerTimesToday);
-            middleOfTheNightTime.setText(formatter.format(sunnahTimes.middleOfTheNight));
-            lastThirdOfTheNightTime.setText(formatter.format(sunnahTimes.lastThirdOfTheNight));
-
+            setPrayerTimeWithFormat(middleOfTheNightTime, sunnahTimes.middleOfTheNight, formatter);
+            setPrayerTimeWithFormat(lastThirdOfTheNightTime, sunnahTimes.lastThirdOfTheNight, formatter);
 
             if (Utilities.isFriday(prayerTimesToday.dhuhr)) {
                 dhuhrText.setText(Utility.toUTF(bundle.getString("jummah")));
