@@ -1,52 +1,45 @@
 <div align=center>
-       <a href="/README_AR.md">
-         <img  src="https://user-images.githubusercontent.com/48678280/174657158-9bc1a1d3-8d9c-4162-8d5b-71cc5d4c1fc6.png">
+       <a href="/README.md">
+      <img src="https://user-images.githubusercontent.com/48678280/174651387-5b23ab0a-792f-421b-a5bc-73f74e8f36b5.png">
        </a>
        <a href="https://azkar-site.web.app/">
-            <img src="https://user-images.githubusercontent.com/48678280/174669335-b9cdf440-4ba4-48a6-a218-addb0c749db6.png">
+              <img src="https://user-images.githubusercontent.com/48678280/174642913-baa71a47-0edc-4678-a532-a3b9099dfb6d.png" alt="Logo">
        </a>
 
 <br>
 </div>
+
 
 <div align=center>
 
-| <a href="https://azkar-site.web.app/#download"><img src="https://user-images.githubusercontent.com/48678280/174668116-c7b68018-f8a6-483f-9cc1-5966edb09566.png" alt="download"></a>  |<a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/wiki/%F0%9F%93%8C-%D9%85%D9%85%D9%8A%D8%B2%D8%A7%D8%AA-%D8%A7%D9%84%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D8%AC"><img src="https://user-images.githubusercontent.com/48678280/174659793-9175c292-e788-415b-a47d-2b1549ba95c1.png" alt="features"></a> |
+| <a href="https://azkar-site.web.app/#download"><img src="https://user-images.githubusercontent.com/48678280/174614672-d8c20507-1e18-4aeb-bca6-7ad8a14db9f2.png" alt="features"></a>  |<a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/wiki/%F0%9F%93%8C-%D9%85%D9%85%D9%8A%D8%B2%D8%A7%D8%AA-%D8%A7%D9%84%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D8%AC"><img src="https://user-images.githubusercontent.com/48678280/174638506-bedeba29-d2ca-4916-a4a6-e3508e79abae.png" alt="features"></a> |
 | ------------- | ------------- |
-| <a href="/DEVELOPMENT_MANUAL.md"><img src="https://user-images.githubusercontent.com/48678280/174668532-78b5768c-25cb-4a5e-bf44-6fff1ebb02f8.png" alt="manual"></a>  | <a href="/TOOLS.md"><img src="https://user-images.githubusercontent.com/48678280/174610070-7edda8be-b3eb-4ff3-bfeb-5363f6b6e25f.png" alt="tools"></a> |
+| <a href="/DEVELOPMENT_MANUAL_AR.md"><img src="https://user-images.githubusercontent.com/48678280/174637716-52df410f-ffa7-42ed-9532-cc38b1d1ce25.png" alt="features"></a>  | <a href="/TOOLS.md"><img src="https://user-images.githubusercontent.com/48678280/174610216-3680ad4d-6cb4-4b4c-a153-fb0ee02a4f8a.png" alt="tools"></a> |
 
 
-
-       
        
 </div>
 <br>
-<h1 align=center>🖼️ Demo</h1>
+<h1 align=center>🖼️ عرض توضيحي</h1>
 
-| Quick demo (YouTube) 📸 | Notification Animation 💬 |
+| عرض توضيحي (على اليوتيوب) 📸 | حركة الإشعار 💬 |
 | ------------- | ------------- |
 | <a href="https://youtu.be/valBHDTIC1E"><img src="https://user-images.githubusercontent.com/48678280/141684196-899fb7f8-bf23-40b1-a98f-7570760056b0.png" alt="overview image"></a>  | <img src="https://user-images.githubusercontent.com/48678280/141681074-bde467a2-bc48-4e1c-8e51-861f224b2d34.gif" alt="notification">  |
-| <div align=center>Morning Azkar ☀️</div> | <div align=center>Night Azkar 🌙</div> |
+| <div align=center>أذكار الصباح ☀️</div> | <div align=center>أذكار المساء 🌙</div> |
 | <img src="https://user-images.githubusercontent.com/48678280/141684574-ad164c5a-ac22-4c27-8774-6847e10cde3b.jpg" alt="notification"> | <img src="https://user-images.githubusercontent.com/48678280/141684402-51d9a132-2dad-4648-ad4f-d6cf814a9c93.png" alt="notification"> |
 
 
-
-
 <br>
 
-## Contributing 💡
-If you want to contribute to this project and make it better with new ideas, your pull request is very welcomed.
-If you find any issue just put it in the repository issue section, thank you.
 
+## المساهمة 💡
+إذا كنت ترغب في المساهمة في هذا المشروع وتحسينه بأفكار جديدة، فبإمكانك عمل pull request وطلبك مرحب به للغاية. إذا وجدت أي مشكلة، فقط ضعها في قسم الـIssues في المستودع، شكرًا لك.
 
 
 <div align=center>
+<h2>🌟 ضع نجمة على هذا المستودع 🌟</h2>
 
-<h2>🌟Star this repository🌟</h2>
-
-Please ⭐️ this repo and share it with others
-       
-       
+من فضلك ضع ⭐️ على هذا المستودع وشاركه مع الآخرين
 </div>
 
 
