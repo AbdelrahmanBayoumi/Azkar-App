@@ -73,14 +73,14 @@
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
-            <version>5.7.2</version>
+            <version>6.0.0</version>
         </dependency>
 
         <!-- Unirest in Java: Simplified, lightweight HTTP client library. -->
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.13.7</version>
+            <version>3.13.10</version>
         </dependency>
 
         <!-- jgforms Support submitting Google Forms through Java API. For submitting feedback and bugs. -->
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>8.5.4</version>
+            <version>8.5.12</version>
         </dependency>
 
         <!-- Ummalqura-Calendar for Hijri Calendar. -->
