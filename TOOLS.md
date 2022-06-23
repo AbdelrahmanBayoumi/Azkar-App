@@ -14,7 +14,7 @@ Drag & Drop, Rapid Application Development.
 - [FontawesomeFX](https://bitbucket.org/Jerady/fontawesomefx/src/master/) for font Icons.
 - [ControlsFX](https://github.com/controlsfx/controlsfx) High quality UI controls to complement the core JavaFX distribution.
 - [sqlite](https://www.sqlite.org/) SQL database engine.
-- [Sentry.io](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiI-diPw-71AhUU03cKHSyAByYYABAAGgJlZg&ae=2&ohost=www.google.com&cid=CAESWOD2CMhzW1zfbqIWBqlqUW5mRHWka7Y_JgIJLsN9d2QCA6RbmBJG-8tMbf-B_jFFv9_x7J_k-p_esQbcS7IbeauC657468XNraA_rzJdzC_TYxpDY3pPCiY&sig=AOD64_0TJcOwcmaxzM4BQBIYQ781JvoQTg&q&adurl&ved=2ahUKEwjvgc-Pw-71AhWk57sIHSzbAWAQ0Qx6BAgCEAE&dct=1)[Sentry.io](https://sentry.io/) Open-source error tracking with full stacktraces & asynchronous context.
+- [Sentry.io](https://sentry.io/) Open-source error tracking with full stacktraces & asynchronous context.
 - [Unirest](https://github.com/kong/unirest-java) in Java: Simplified, lightweight HTTP client library.
 - [jgforms](https://github.com/stepio/jgforms) Support submitting Google Forms through Java API. For submitting feedback and bugs.
 - [Flyway](https://github.com/flyway/flyway) for database migrations
