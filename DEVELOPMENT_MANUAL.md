@@ -1,7 +1,8 @@
 
 ## Requirements
-* Java 8 (**for development**), to use the app normally you can download it from [Here  ⬇️](https://azkar-site.web.app/#download)
-
+- [Java 8](https://www.oracle.com/java/technologies/javase/javase8u211-later-archive-downloads.html) (**for development**), to use the app normally you can download it from [Here  ⬇️](https://azkar-site.web.app/#download)
+- [Maven 3.3+ ](https://maven.apache.org)
+    - [(How to Install)](https://youtu.be/--Iv5vBIHjI)
 
 ## Installation for development
 1. Download the repository files (project) from the download section or clone this project by typing in the bash the following command:
