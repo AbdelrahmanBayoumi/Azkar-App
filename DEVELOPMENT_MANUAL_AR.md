@@ -1,7 +1,8 @@
 
 ## المتطلبات
-* الإصدار 8 من Java (بالنسبة للمطورين)، لاستخدام التطبيق بشكل طبيعي يمكنك تحميله: [ من هنا ⬇️](https://azkar-site.web.app/#download)
-
+* الإصدار [8 من Java](https://www.oracle.com/java/technologies/javase/javase8u211-later-archive-downloads.html) (بالنسبة للمطورين)، لاستخدام التطبيق بشكل طبيعي يمكنك تحميله: [ من هنا ⬇️](https://azkar-site.web.app/#download)
+- بالإضافة إلى [Maven 3.3+ ](https://maven.apache.org)
+    - [(شرح التثبيت)](https://youtu.be/--Iv5vBIHjI)
 
 ## تثبيت المشروع للتطوير
 
