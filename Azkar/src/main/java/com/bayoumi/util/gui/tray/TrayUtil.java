@@ -1,16 +1,19 @@
 package com.bayoumi.util.gui.tray;
 
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.controlsfx.control.Notifications;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class TrayUtil {
 
@@ -21,13 +24,27 @@ public class TrayUtil {
     public TrayUtil(Stage stage) {
         // stores a reference to the stage.
         this.stage = stage;
-        // instructs the javafx system not to exit implicitly when the last application window is shut.
+        // instructs the javafx system [ not ] to exit implicitly when the last application window is shut.
         Platform.setImplicitExit(false);
         // sets up the tray icon (using awt code run on the swing thread).
-        javax.swing.SwingUtilities.invokeLater(this::addAppToTray);
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            try {
+                addAppToTray();
+            } catch (Exception e) {
+                Platform.runLater(() -> Notifications
+                        .create()
+                        .text(Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("trayIconError")))
+                        .showError());
+                Platform.setImplicitExit(true);
+            }
+        });
         stage.setOnCloseRequest(event -> {
             System.out.println(event);
             if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
+                if (Platform.isImplicitExit()) {
+                    tray.remove(trayIcon);
+                    Utility.exitProgramAction();
+                }
                 this.stage.hide();
                 event.consume();
             } else {
@@ -36,7 +53,7 @@ public class TrayUtil {
         });
     }
 
-    private void addAppToTray() {
+    private void addAppToTray() throws Exception {
         try {
             // ensure awt toolkit is initialized.
             java.awt.Toolkit.getDefaultToolkit();
@@ -48,7 +65,7 @@ public class TrayUtil {
 
             // set up a system tray icon.
             tray = java.awt.SystemTray.getSystemTray();
-            BufferedImage trayIconImage = ImageIO.read(TrayUtil.class.getResource("/com/bayoumi/images/icon.png"));
+            BufferedImage trayIconImage = ImageIO.read(Objects.requireNonNull(TrayUtil.class.getResource("/com/bayoumi/images/icon.png")));
             int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
             trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
             trayIcon.setToolTip("Azkar App");
@@ -70,6 +87,7 @@ public class TrayUtil {
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.error("Unable to init system tray", ex, TrayUtil.class.getName() + ".addAppToTray()");
+            throw ex;
         }
     }
 
