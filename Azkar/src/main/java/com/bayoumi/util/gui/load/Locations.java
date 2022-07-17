@@ -17,6 +17,7 @@ public enum Locations {
     EditTextField("/com/bayoumi/views/alert/edit/textfield/EditTextField.fxml"),
     PrayerCalculations("/com/bayoumi/views/components/PrayerCalculations.fxml"),
     SelectLocation("/com/bayoumi/views/components/SelectLocation.fxml"),
+    ChooseNotificationColor("/com/bayoumi/views/settings/azkar/ChooseNotificationColor.fxml"),
     Feedback("/com/bayoumi/views/feedback/Feedback.fxml");
 
     private final String name;

@@ -2,6 +2,8 @@ package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.Preferences;
+import com.bayoumi.models.PreferencesType;
 import com.bayoumi.models.settings.AzkarSettings;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.NotificationSettings;
@@ -12,6 +14,8 @@ import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.IntegerSpinner;
 import com.bayoumi.util.gui.PopOverUtil;
+import com.bayoumi.util.gui.load.Loader;
+import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
@@ -74,7 +78,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private JFXComboBox<String> azkarAlarmComboBox;
     @FXML
-    private JFXButton playButton, showZekrButton, goToAzkarDBButton;
+    private JFXButton playButton, showZekrButton, goToAzkarDBButton, notificationColorButton;
     @FXML
     private OctIconView volume;
     @FXML
@@ -98,6 +102,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         stopAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.stopTheAutomaticAppearanceOfAzkar")));
         goToAzkarDBButton.setText(Utility.toUTF(bundle.getString("settings.azkar.azkarDatabase")));
         showZekrButton.setText(Utility.toUTF(bundle.getString("settings.azkar.showZekr")));
+        notificationColorButton.setText(Utility.toUTF(bundle.getString("settings.azkar.notificationColor")));
         posComboBox.setPromptText(Utility.toUTF(bundle.getString("settings.azkar.notificationLocation")));
         azkarAlarmComboBox.setPromptText(Utility.toUTF(bundle.getString("settings.azkar.alarmSound")));
         theSoundAndLocationOfTheAlertForAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.theSoundAndLocationOfTheAlertForAzkar")));
@@ -247,6 +252,18 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         currentFrequency.getStyleClass().remove("frequency-btn-selected");
         currentFrequency = b;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
+    }
+
+    @FXML
+    private void goToNotificationColor() {
+        try {
+            final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.ChooseNotificationColor);
+            ((ChooseNotificationColorController) popUp.getController()).setData(Preferences.getInstance()
+                    .get(PreferencesType.NOTIFICATION_BORDER_COLOR, "#E9C46A"));
+            popUp.showAndWait();
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".goToAzkar()");
+        }
     }
 
     @FXML

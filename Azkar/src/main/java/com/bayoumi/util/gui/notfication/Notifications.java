@@ -101,6 +101,7 @@ public class Notifications {
 
     private String title;
     private String text;
+    private String borderColor = "#E9C46A";
     private Node graphic;
     private ObservableList<Action> actions = FXCollections.observableArrayList();
     private Pos position = Pos.BOTTOM_RIGHT;
@@ -141,6 +142,14 @@ public class Notifications {
      */
     public Notifications text(String text) {
         this.text = text;
+        return this;
+    }
+
+    /**
+     * Specify the border color of the notification.
+     */
+    public Notifications borderColor(String borderColor) {
+        this.borderColor = borderColor;
         return this;
     }
 
@@ -543,6 +552,8 @@ public class Notifications {
                     notificationToShow.onAction.handle(actionEvent);
                 }
             });
+
+
             popup.getContent().add(notificationBar);
             popup.show(owner, 0, 0);
 
@@ -600,6 +611,7 @@ public class Notifications {
             popup.setAnchorY(anchorY);
 
             isShowing = true;
+            notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";");
             notificationBar.doShow();
 
             addPopupToMap(p, popup);

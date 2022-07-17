@@ -26,7 +26,7 @@ public class Preferences {
 
     private void save(PreferencesType key, String value) {
         try {
-            System.out.println("INSERT INTO preferences (key,value) VALUES('" + key + "','" + value + "')");
+//            System.out.println("INSERT INTO preferences (key,value) VALUES('" + key + "','" + value + "')");
             DatabaseManager.getInstance().con.prepareStatement("INSERT INTO preferences (key,value) VALUES('" + key + "','" + value + "')").execute();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".save()");
@@ -57,12 +57,12 @@ public class Preferences {
     }
 
     public void set(PreferencesType key, String value) {
-        System.out.println("set >> " + key + ": [" + value + "]");
+//        System.out.println("set >> " + key + ": [" + value + "]");
         if (isExist(key)) {
-            System.out.println("Key Exists..");
+//            System.out.println("Key Exists..");
             update(key, value);
         } else {
-            System.out.println("New Key..");
+//            System.out.println("New Key..");
             save(key, value);
         }
     }

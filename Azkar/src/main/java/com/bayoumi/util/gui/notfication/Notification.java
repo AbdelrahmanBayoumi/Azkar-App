@@ -1,6 +1,8 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.controllers.notification.NotificationsControlsFXController;
+import com.bayoumi.models.Preferences;
+import com.bayoumi.models.PreferencesType;
 import com.bayoumi.util.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -37,14 +39,20 @@ public class Notification {
             EventHandler<ActionEvent> finalOnClickHandler = onClickHandler;
 
             Platform.runLater(() -> {
-                Notifications.create()
-                        .graphic(notificationView)
-                        .hideAfter(Duration.seconds(duration))
-                        .onAction(finalOnClickHandler)
-                        .closeHandler(closeCallback)
-                        .position(position)
-                        .hideCloseButton()
-                        .show(((NotificationsControlsFXController) loader.getController()).closeButton);
+                try {
+                    Notifications.create()
+                            .graphic(notificationView)
+                            .hideAfter(Duration.seconds(duration))
+                            .onAction(finalOnClickHandler)
+                            .closeHandler(closeCallback)
+                            .position(position)
+                            .borderColor(Preferences.getInstance().get(PreferencesType.NOTIFICATION_BORDER_COLOR, "#E9C46A"))
+                            .hideCloseButton()
+                            .show(((NotificationsControlsFXController) loader.getController()).closeButton);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Logger.error(null, e, Notification.class.getName() + ".createControlsFX()");
+                }
             });
         } catch (Exception ex) {
             Logger.error(null, ex, Notification.class.getName() + ".createControlsFX()");
