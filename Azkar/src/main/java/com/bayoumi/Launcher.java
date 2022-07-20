@@ -1,6 +1,7 @@
 package com.bayoumi;
 
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
+import com.bayoumi.controllers.dialog.DownloadResourcesController;
 import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.models.Onboarding;
 import com.bayoumi.models.settings.OtherSettings;
@@ -13,6 +14,8 @@ import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.db.LocationsDBManager;
 import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.load.Loader;
+import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
@@ -32,6 +35,7 @@ public class Launcher extends Application {
     // preloader flags
     public static final SimpleBooleanProperty workFine = new SimpleBooleanProperty(true);
     public static double preloaderProgress = 0;
+    private boolean locationsDBError = false;
     // for logging purpose
     public static Long startTime;
     // GUI Object
@@ -85,7 +89,11 @@ public class Launcher extends Application {
             incrementPreloader();
 
             // --- initialize database connection (locationsDB) ---
-            LocationsDBManager.getInstance();
+            try {
+                LocationsDBManager.getInstance();
+            } catch (Exception ex) {
+                locationsDBError = true;
+            }
             incrementPreloader();
 
             // --- load Homepage FXML ---
@@ -118,6 +126,17 @@ public class Launcher extends Application {
     }
 
     public void start(Stage primaryStage) {
+        if (locationsDBError) {
+            try {
+                final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
+                ((DownloadResourcesController) popUp.getController())
+                        .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", popUp.getStage());
+                popUp.showAndWait();
+            } catch (Exception ex) {
+                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show locationsDB download");
+                ex.printStackTrace();
+            }
+        }
         // initialize tray icon
         new TrayUtil(primaryStage);
         // add loaded scene to primaryStage
@@ -134,7 +153,7 @@ public class Launcher extends Application {
         if (Onboarding.isFirstTimeOpened()) {
             try {
                 Stage onboardingStage = new Stage();
-                onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/bayoumi/views/onboarding/Onboarding.fxml")))));
+                onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Onboarding.toString())))));
                 onboardingStage.initModality(Modality.APPLICATION_MODAL);
                 HelperMethods.SetIcon(onboardingStage);
                 onboardingStage.setTitle("Onboarding - Azkar");

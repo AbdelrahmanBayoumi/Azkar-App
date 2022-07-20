@@ -2,8 +2,12 @@ package com.bayoumi.util.web;
 
 import com.bayoumi.models.Query;
 import kong.unirest.GetRequest;
+import kong.unirest.ProgressMonitor;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
+
+import java.io.File;
+import java.nio.file.StandardCopyOption;
 
 public class WebUtilities {
 
@@ -14,6 +18,13 @@ public class WebUtilities {
         }
         System.out.println("URL: " + getRequest.getUrl());
         return new JSONObject(getRequest.asJson().getBody().toString());
+    }
+
+    public static File downloadFile(String url, String downloadedFilePath, ProgressMonitor progressMonitor) {
+        Unirest.config().cookieSpec("STANDARD");
+        return Unirest.get(url)
+                .downloadMonitor(progressMonitor)
+                .asFile(downloadedFilePath, StandardCopyOption.REPLACE_EXISTING).getBody();
     }
 
 }

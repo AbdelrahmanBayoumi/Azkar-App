@@ -71,4 +71,10 @@ public class Utility {
     public static String formatIntToTwoDigit(int i) {
         return String.format("%02d", i);
     }
+
+    public static double formatNum(double num) {
+        double returnedVal = Double.parseDouble(String.format("%.3f", num));
+        return Math.abs(returnedVal) == 0 ? 0 : returnedVal;
+    }
+
 }

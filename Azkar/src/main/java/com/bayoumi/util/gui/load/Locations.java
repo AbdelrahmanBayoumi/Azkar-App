@@ -18,6 +18,8 @@ public enum Locations {
     PrayerCalculations("/com/bayoumi/views/components/PrayerCalculations.fxml"),
     SelectLocation("/com/bayoumi/views/components/SelectLocation.fxml"),
     ChooseNotificationColor("/com/bayoumi/views/settings/azkar/ChooseNotificationColor.fxml"),
+    DownloadResources("/com/bayoumi/views/dialog/DownloadResources.fxml"),
+    Onboarding("/com/bayoumi/views/onboarding/Onboarding.fxml"),
     Feedback("/com/bayoumi/views/feedback/Feedback.fxml");
 
     private final String name;
