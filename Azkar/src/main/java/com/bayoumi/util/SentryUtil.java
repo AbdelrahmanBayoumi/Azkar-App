@@ -11,7 +11,7 @@ public class SentryUtil {
                 options.setTracesSampleRate(0.2);
                 options.setDiagnosticLevel(SentryLevel.DEBUG);
                 options.setDebug(true);
-                options.setRelease("azkar.app@" + Constants.VERSION + "+3");
+                options.setRelease("azkar.app@" + Constants.VERSION + "+1");
             });
             Sentry.setTag("os.name", System.getProperty("os.name"));
             Sentry.setTag("os.version", System.getProperty("os.version"));

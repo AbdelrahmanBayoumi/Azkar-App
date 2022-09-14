@@ -34,7 +34,7 @@ public class DownloadResourcesController {
         progressText.setText("");
 
         stage.setOnCloseRequest(event -> {
-            if(!isFinished){
+            if (!isFinished) {
                 Utility.exitProgramAction();
             }
         });
