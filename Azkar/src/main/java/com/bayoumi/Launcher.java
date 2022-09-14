@@ -51,11 +51,7 @@ public class Launcher extends Application {
     @Override
     public void stop() {
         System.out.println("stop()...");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Long exitTime = System.currentTimeMillis();
-            Logger.info("App closed - Used for "
-                    + (exitTime - startTime) + " ms\n");
-        }));
+        Utility.exitProgramAction();
     }
 
     @Override
@@ -138,7 +134,11 @@ public class Launcher extends Application {
             }
         }
         // initialize tray icon
-        new TrayUtil(primaryStage);
+        try {
+            new TrayUtil(primaryStage);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         // add loaded scene to primaryStage
         primaryStage.setScene(scene);
         // set Title and Icon to primaryStage

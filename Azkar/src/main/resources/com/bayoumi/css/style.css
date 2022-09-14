@@ -479,11 +479,11 @@
     -fx-background-color: transparent;
 }
 
+/* ============ Scroll Pane ============ */
 .scroll-pane {
     -fx-background-color: -fx-bg;
 }
 
-/* ============ Scroll Pane ============ */
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;

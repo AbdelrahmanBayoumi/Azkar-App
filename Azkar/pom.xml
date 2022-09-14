@@ -66,21 +66,21 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.36.0.3</version>
+            <version>3.39.3.0</version>
         </dependency>
 
         <!-- Sentry.io Open-source error tracking with full stackTraces & asynchronous context. -->
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
-            <version>6.0.0</version>
+            <version>6.4.1</version>
         </dependency>
 
         <!-- Unirest in Java: Simplified, lightweight HTTP client library. -->
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>3.13.10</version>
+            <version>3.13.11</version>
         </dependency>
 
         <!-- jgforms Support submitting Google Forms through Java API. For submitting feedback and bugs. -->
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>8.5.12</version>
+            <version>9.3.0</version>
         </dependency>
 
         <!-- Ummalqura-Calendar for Hijri Calendar. -->
@@ -106,7 +106,6 @@
 
     </dependencies>
     <build>
-
         <finalName>${app.name}</finalName>
 
         <plugins>

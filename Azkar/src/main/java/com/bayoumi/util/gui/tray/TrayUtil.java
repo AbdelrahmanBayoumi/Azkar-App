@@ -1,12 +1,10 @@
 package com.bayoumi.util.gui.tray;
 
-import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.controlsfx.control.Notifications;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -31,10 +29,7 @@ public class TrayUtil {
             try {
                 addAppToTray();
             } catch (Exception e) {
-                Platform.runLater(() -> Notifications
-                        .create()
-                        .text(Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("trayIconError")))
-                        .showError());
+                e.printStackTrace();
                 Platform.setImplicitExit(true);
             }
         });
@@ -42,7 +37,9 @@ public class TrayUtil {
             System.out.println(event);
             if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
                 if (Platform.isImplicitExit()) {
-                    tray.remove(trayIcon);
+                    if (tray != null) {
+                        tray.remove(trayIcon);
+                    }
                     Utility.exitProgramAction();
                 }
                 this.stage.hide();
@@ -79,7 +76,7 @@ public class TrayUtil {
                 }
             });
 
-            // setup the popup menu for the application.
+            // set up the popup menu for the application.
             createPopupMenu();
 
             // add the application tray icon to the system tray.
