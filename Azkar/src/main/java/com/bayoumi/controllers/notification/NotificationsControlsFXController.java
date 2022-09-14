@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.notification;
 
+import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import com.bayoumi.util.gui.Draggable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
@@ -39,6 +41,12 @@ public class NotificationsControlsFXController implements Initializable {
         closeButton.setVisible(false);
         parent.setOnMouseEntered(event -> closeButton.setVisible(true));
         parent.setOnMouseExited(event -> closeButton.setVisible(false));
+
+        parent.addEventHandler(MouseEvent.ANY, new ClickHandlerAndIgnoreDrag(e -> {
+            if (closeButton != null) {
+                closeButton.fire();
+            }
+        }));
     }
 
     public void setData(String msg, Image image) {

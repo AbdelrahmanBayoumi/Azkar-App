@@ -26,6 +26,7 @@
  */
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import impl.org.controlsfx.skin.NotificationBar;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -38,6 +39,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.*;
 import javafx.util.Duration;
 import org.controlsfx.control.action.Action;
@@ -540,7 +542,7 @@ public class Notifications {
             };
             notificationBar.getStyleClass().addAll(notificationToShow.styleClass);
 
-            notificationBar.setOnMouseClicked(e -> {
+            notificationBar.addEventHandler(MouseEvent.ANY, new ClickHandlerAndIgnoreDrag(e -> {
                 if (notificationToShow.onAction != null) {
                     if (notificationToShow.closeCallback != null) {
                         notificationToShow.closeCallback.run();
@@ -551,8 +553,7 @@ public class Notifications {
                     ActionEvent actionEvent = new ActionEvent(notificationBar, notificationBar);
                     notificationToShow.onAction.handle(actionEvent);
                 }
-            });
-
+            }));
 
             popup.getContent().add(notificationBar);
             popup.show(owner, 0, 0);
