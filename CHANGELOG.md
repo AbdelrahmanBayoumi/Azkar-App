@@ -4,6 +4,16 @@
 
 ## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.1.1...HEAD)
 
+## [1.2.5](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.5) - 2022-09-##
+
+### Added
+- ❎ Display close button in notification [#22](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/22)
+    - Close Notification onClick only not onDrag [`c741f21`](https://github.com/AbdelrahmanBayoumi/Azkar-App/commit/c741f21788ed5827b1cae56a8edbf3607a034517)
+- ⏳ Show elapsed time for each Prayer [#35](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/35)
+- 🎨 Ability to change notification's border color [#28](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/28)
+- ⬇️ Ability to Download LocationsDB if not exist [#27](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/27)
+
+[Full Changelog](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.1.1...1.2.5)
 
 ## [1.1.1](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.1.1) - 2022-04-12
 
