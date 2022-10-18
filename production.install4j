@@ -12,7 +12,7 @@
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
       <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.png" />
       <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.ico" />
-      <variable name="BASE_RELEASE_URL" value="https://azkar.onrender.com/release" />
+      <variable name="BASE_RELEASE_URL" value="https://azkar-server.herokuapp.com/release" />
       <variable name="RELEASE_URL_64" value="${compiler:BASE_RELEASE_URL}/" />
       <variable name="RELEASE_URL_32" value="${compiler:BASE_RELEASE_URL}/win_exe32/" />
       <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
@@ -24,7 +24,7 @@
       <mountPoint id="58" />
     </mountPoints>
     <entries>
-      <fileEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar-App/Azkar/target/jfx/app/Azkar-jfx.jar" />
+      <fileEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/target/jfx/app/Azkar-jfx.jar" />
       <fileEntry mountPoint="58" file="${compiler:ICON_ICO}" />
       <fileEntry mountPoint="58" file="${compiler:ICON_PNG}" />
       <dirEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/target/jfx/app/lib" entryMode="subdir" subDirectory="lib" />

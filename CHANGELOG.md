@@ -2,9 +2,9 @@
 <p align=center>سجل التغيير هو ملف يحتوي على قائمة مرتبة ترتيبًا زمنيًا بالتغييرات الملحوظة لكل إصدار من المشروع.</p>
 
 
-## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.1.1...HEAD)
+## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.5...HEAD)
 
-## [1.2.5](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.5) - 2022-09-##
+## [1.2.5](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.5) - 2022-10-18
 
 ### Added
 - ❎ Display close button in notification [#22](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/22)
