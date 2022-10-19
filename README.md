@@ -60,7 +60,7 @@ Please ⭐️ this repo and share it with others
        
 <p align="center">
    <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest">
-     <img src="https://img.shields.io/badge/Azkar-v1.1.1-green?style=flat"/> 
+     <img src="https://img.shields.io/badge/Azkar-v1.2.5-green?style=flat"/> 
    </a>
   <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/issues">
     <img src="https://img.shields.io/github/issues/AbdelrahmanBayoumi/Azkar-App"/> 
