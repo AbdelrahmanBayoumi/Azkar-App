@@ -12,7 +12,7 @@ public class Constants {
 
     // Program characteristics
     public static String assetsPath;
-    public final static String VERSION = "1.2.5";
+    public final static String VERSION = "1.2.6";
     public final static String LOCATIONS_DB_URL = "https://github.com/AbdelrahmanBayoumi/LocationsDB/releases/latest/download/locations.db";
 
     public final static Mode RUNNING_MODE = Mode.PRODUCTION;

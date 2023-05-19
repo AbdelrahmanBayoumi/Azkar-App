@@ -1,6 +1,5 @@
 package com.bayoumi.util.time;
 
-import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
 
