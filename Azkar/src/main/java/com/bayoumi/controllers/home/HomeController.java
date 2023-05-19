@@ -78,7 +78,7 @@ public class HomeController implements Initializable {
                 updateBundle(LanguageBundle.getInstance().getResourceBundle()));
 
         FXMLLoader fxmlLoader;
-        date = new Date();
+        date = Utilities.getCurrentDate();
         // initialize required dependencies
         settings = Settings.getInstance();
         prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
@@ -160,7 +160,7 @@ public class HomeController implements Initializable {
 
     private void initClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            date = new Date();
+            date = Utilities.getCurrentDate();
 
             // -- increment time --
             String timeNow;

@@ -1,5 +1,7 @@
 package com.bayoumi.util.time;
 
+import com.bayoumi.models.settings.OtherSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
 
 import java.text.ParseException;
@@ -9,6 +11,21 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Utilities {
+    public static Date getCurrentDate() {
+        Date date = new Date();
+        if (Settings.getInstance().getPrayerTimeSettings().isSummerTiming()) {
+            return addHoursToJavaUtilDate(date, 1);
+        }
+        return date;
+    }
+
+    public static Date addHoursToJavaUtilDate(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
+    }
+
     public static String convertMillisecondsToMin(long milliseconds) {
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds);
         long seconds = (TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60);
@@ -166,7 +183,7 @@ public class Utilities {
     }
 
 //    public static void main(String[] args) {
-//        Date date = new Date();
+//        Date date = Utilities.getCurrentDate();
 //        System.out.println("==================");
 //        System.out.println(getGregorianDate("ar", date));
 //        System.out.println(getGregorianDate("en", date));

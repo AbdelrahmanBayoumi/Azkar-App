@@ -59,12 +59,12 @@ public class PrayerTimesController implements Initializable {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
 
         // -- Handle showing remaining time onHover for each prayer
-        fajrTime.setOnMouseEntered(event -> showRemainingTime(fajrTime, new Date(), prayerTimesToday.fajr));
-        sunriseTime.setOnMouseEntered(event -> showRemainingTime(sunriseTime, new Date(), prayerTimesToday.sunrise));
-        dhuhrTime.setOnMouseEntered(event -> showRemainingTime(dhuhrTime, new Date(), prayerTimesToday.dhuhr));
-        asrTime.setOnMouseEntered(event -> showRemainingTime(asrTime, new Date(), prayerTimesToday.asr));
-        maghribTime.setOnMouseEntered(event -> showRemainingTime(maghribTime, new Date(), prayerTimesToday.maghrib));
-        ishaTime.setOnMouseEntered(event -> showRemainingTime(ishaTime, new Date(), prayerTimesToday.isha));
+        fajrTime.setOnMouseEntered(event -> showRemainingTime(fajrTime, Utilities.getCurrentDate(), prayerTimesToday.fajr));
+        sunriseTime.setOnMouseEntered(event -> showRemainingTime(sunriseTime, Utilities.getCurrentDate(), prayerTimesToday.sunrise));
+        dhuhrTime.setOnMouseEntered(event -> showRemainingTime(dhuhrTime, Utilities.getCurrentDate(), prayerTimesToday.dhuhr));
+        asrTime.setOnMouseEntered(event -> showRemainingTime(asrTime, Utilities.getCurrentDate(), prayerTimesToday.asr));
+        maghribTime.setOnMouseEntered(event -> showRemainingTime(maghribTime, Utilities.getCurrentDate(), prayerTimesToday.maghrib));
+        ishaTime.setOnMouseEntered(event -> showRemainingTime(ishaTime, Utilities.getCurrentDate(), prayerTimesToday.isha));
 
         fajrTime.setOnMouseExited(event -> setPrayerTimeWithFormat(fajrTime, prayerTimesToday.fajr, formatter));
         sunriseTime.setOnMouseExited(event -> setPrayerTimeWithFormat(sunriseTime, prayerTimesToday.sunrise, formatter));

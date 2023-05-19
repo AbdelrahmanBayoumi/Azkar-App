@@ -29,7 +29,7 @@ public class PrayerTimesUtil {
     // ==== TEST =====
     public static void main(String[] args) {
         final Coordinates coordinates = new Coordinates(31.1981, 29.9192);
-        Date todayDate = new Date();
+        Date todayDate = Utilities.getCurrentDate();
         final DateComponents dateComponents = DateComponents.from(todayDate);
         final CalculationParameters parameters = getPrayerTimesSettings();
 
