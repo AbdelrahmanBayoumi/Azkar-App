@@ -1,0 +1,1 @@
+- Add one hour to time anyway if user wants to Fix Daylight saving time

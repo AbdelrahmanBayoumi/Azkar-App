@@ -122,10 +122,10 @@ public class PrayerTimesController implements Initializable {
         setPrayerTimesValuesToGUI();
     }
 
-    public void prayerTimelineAction() {
+    public void prayerTimelineAction(Date currentDate) {
         // get 'next Prayer' and if 'next Prayer'=NONE get 'currentPrayer'
         // to update the new current prayerBox
-        switch (prayerTimesToday.nextPrayer().equals(Prayer.NONE) ? prayerTimesToday.currentPrayer() : prayerTimesToday.nextPrayer()) {
+        switch (prayerTimesToday.nextPrayer(currentDate).equals(Prayer.NONE) ? prayerTimesToday.currentPrayer(currentDate) : prayerTimesToday.nextPrayer(currentDate)) {
             case FAJR:
                 changeCurrentPrayerBox(fajrBox, Utility.toUTF(bundle.getString("fajrPrayer")));
                 break;

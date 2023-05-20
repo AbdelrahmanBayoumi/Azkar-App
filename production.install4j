@@ -6,7 +6,7 @@
       <variable name="PARENT_DIR" value="." />
       <variable name="APP_FULL_NAME" value="Azkar" />
       <variable name="APP_SHORT_NAME" value="Azkar" />
-      <variable name="APP_VERSION" value="1.2.5" />
+      <variable name="APP_VERSION" value="1.2.6" />
       <variable name="Publisher" value="Abdelrahman Bayoumi" />
       <variable name="Publisher_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App" />
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
@@ -1103,7 +1103,7 @@ return true;</property>
     </windows>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="60" />
+    <mediaSet refId="792" />
   </buildIds>
   <buildOptions verbose="true" />
 </install4j>
