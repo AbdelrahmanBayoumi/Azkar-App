@@ -8,12 +8,15 @@ import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
 import com.bayoumi.util.services.EditablePeriodTimerTask;
 import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.Random;
 
 public class AzkarService {
 
     private static EditablePeriodTimerTask absoluteAzkarTask;
+    public static Stage FAKE_STAGE;
 
     public static void stopService() {
         if (AzkarService.absoluteAzkarTask != null) {
@@ -28,6 +31,14 @@ public class AzkarService {
     }
 
     public static void init(AzkarPeriodsController azkarPeriodsController) {
+        if (FAKE_STAGE == null) {
+           Platform.runLater(() -> {
+               FAKE_STAGE = new Stage(StageStyle.UTILITY);
+               FAKE_STAGE.setOpacity(0);
+               FAKE_STAGE.show();
+               FAKE_STAGE.toBack();
+           });
+        }
         azkarPeriodsController.setFrequencyLabel();
         absoluteAzkarTask = null;
         absoluteAzkarTask = new EditablePeriodTimerTask(()

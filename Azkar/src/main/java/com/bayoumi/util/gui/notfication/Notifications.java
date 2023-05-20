@@ -27,6 +27,7 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
+import com.bayoumi.util.services.azkar.AzkarService;
 import impl.org.controlsfx.skin.NotificationBar;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -365,12 +366,7 @@ public class Notifications {
                  */
                 window = Utils.getWindow(null);
                 if (window == null) {
-                    Stage fakeStage = new Stage(StageStyle.UTILITY);
-                    fakeStage.setOpacity(0);
-                    fakeStage.show();
-                    fakeStage.toBack();
-
-                    window = fakeStage;
+                    window = AzkarService.FAKE_STAGE;
                 }
                 Screen screen = notification.screen != null
                         ? notification.screen
