@@ -1,5 +1,7 @@
 package com.bayoumi.util;
 
+import io.sentry.Sentry;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,6 +51,8 @@ public class Logger {
             synchronized (LOCK) {
                 if (Constants.RUNNING_MODE.equals(Constants.Mode.DEVELOPMENT)) {
                     throwable.printStackTrace();
+                } else {
+                    Sentry.captureException(throwable);
                 }
                 String DataAndTime = DATE_TIME_FORMAT.format(new Date());
                 String m = DataAndTime + " => "
