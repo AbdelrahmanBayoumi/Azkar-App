@@ -26,9 +26,11 @@
  */
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import com.bayoumi.util.services.azkar.AzkarService;
 import impl.org.controlsfx.skin.NotificationBar;
+import io.sentry.Sentry;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -367,6 +369,14 @@ public class Notifications {
                 window = Utils.getWindow(null);
                 if (window == null) {
                     window = AzkarService.FAKE_STAGE;
+                    if (window == null) {
+                        Sentry.captureException(new IllegalStateException("Could not find a valid owner window for the notification"));
+                        AzkarService.FAKE_STAGE = new Stage(StageStyle.UTILITY);
+                        AzkarService.FAKE_STAGE.setOpacity(0);
+                        AzkarService.FAKE_STAGE.show();
+                        AzkarService.FAKE_STAGE.toBack();
+                        window = AzkarService.FAKE_STAGE;
+                    }
                 }
                 Screen screen = notification.screen != null
                         ? notification.screen
