@@ -9,8 +9,5 @@
         <module name="Azkar" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Azkar" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
