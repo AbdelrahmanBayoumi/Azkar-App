@@ -1,2 +1,7 @@
-- Add one hour to time anyway if user wants to Fix Daylight saving time
-- Now when first notification if shown it doesn't steal focus from the current application running
+- Added option to fix Daylight Saving Time by adding one hour to the time.
+- Modified notification behavior to prevent stealing focus from the current application.
+- Fixed spelling errors.
+------------------
+- إضافة خيار لتعديل التوقيت في حالة التوقيت الصيفي عن طريق إضافة ساعة إلى الوقت.
+- تعديل سلوك الإشعارات حيث لا تسلب التركيز من التطبيق الحالي الذي يعمل.
+- إصلاح أخطاء الإملاء.
