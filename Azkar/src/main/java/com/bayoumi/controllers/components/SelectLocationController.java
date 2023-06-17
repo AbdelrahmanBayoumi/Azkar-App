@@ -228,7 +228,7 @@ public class SelectLocationController implements Initializable {
                             latitude.setText(String.valueOf(cityFromCoordinates.getLongitude()));
                         });
                     } else {
-                        throw new Exception("Error in getCityFromCoordinates() && getCityFromEngName()");
+                        throw new Exception("Error in getCityFromCoordinates() && getCityFromEngName(): " + city);
                     }
                 }
                 statusLabel.setVisible(false);
