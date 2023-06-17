@@ -618,7 +618,9 @@ public class Notifications {
             popup.setAnchorY(anchorY);
 
             isShowing = true;
-            notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";");
+            if (notificationBar.getGraphic() != null && notificationBar.getGraphic().getParent() != null && notificationBar.getGraphic().getParent().getParent() != null) {
+                notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";");
+            }
             notificationBar.doShow();
 
             addPopupToMap(p, popup);

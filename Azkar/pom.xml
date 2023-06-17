@@ -41,7 +41,7 @@
             <version>9.0.2</version>
         </dependency>
 
-        <!-- JFoenix library is an open source Java library, that implements Google Material Design using Java components. -->
+        <!-- JFoenix is an open source Java library, that implements Google Material Design using Java components. -->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
