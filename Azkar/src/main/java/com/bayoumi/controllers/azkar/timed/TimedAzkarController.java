@@ -42,8 +42,7 @@ public class TimedAzkarController implements Initializable {
     @FXML
     private JFXButton settingsButton;
 
-    private Image morningImage;
-    private Image nightImage;
+    private Image morningImage, nightImage;
 
     public void setData(String type) {
         // TODO: handle localization for this view

@@ -17,7 +17,7 @@
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
-            <Text fx:id="text" strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
+            <Text fx:id="text" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" text="اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ" textAlignment="CENTER">
                 <font>
                     <Font name="System Bold" size="25.0" />
                 </font>
@@ -31,18 +31,28 @@
         </cursor>
     </HBox>
     <HBox alignment="CENTER" minHeight="49.0" style="-fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20;">
-        <JFXButton fx:id="copyBTN" focusTraversable="false" graphicTextGap="20.0" minHeight="49.0" onAction="#copy" prefWidth="370.0" style="-fx-text-fill: -fx-secondary-text; -fx-background-radius: 0 0 0 20;" styleClass="transparent-button" text="نسخ">
+        <JFXButton fx:id="copyBTN" cache="true" focusTraversable="false" graphicTextGap="20.0" minHeight="49.0" onAction="#copy" prefWidth="370.0" style="-fx-text-fill: -fx-secondary-text; -fx-background-radius: 0 0 0 20;" text="نسخ">
             <graphic>
                 <FontAwesomeIconView fx:id="copyIcon" glyphName="COPY" size="25" style="-fx-fill: -fx-secondary-text;" />
             </graphic>
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
+         <styleClass>
+            <String fx:value="transparent-button" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_20" />
+         </styleClass>
         </JFXButton>
-        <JFXButton fx:id="repeatBTN" focusTraversable="false" graphicTextGap="20.0" minHeight="49.0" onAction="#repeat" prefWidth="370.0" style="-fx-text-fill: -fx-secondary-text; -fx-background-radius: 0 0 20 0;" styleClass="transparent-button" text="التكرار     (1)">
+        <JFXButton fx:id="repeatBTN" cache="true" focusTraversable="false" graphicTextGap="20.0" minHeight="49.0" onAction="#repeat" prefWidth="370.0" style="-fx-text-fill: -fx-secondary-text; -fx-background-radius: 0 0 20 0;" text="التكرار     (1)">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
+         <styleClass>
+            <String fx:value="transparent-button" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_20" />
+         </styleClass>
         </JFXButton>
     </HBox>
 </VBox>

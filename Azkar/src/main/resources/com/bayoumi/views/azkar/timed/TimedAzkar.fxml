@@ -36,7 +36,7 @@
                   <Image url="@../../../images/sun_50px.png" />
                </image>
             </ImageView>
-            <Label fx:id="title" style="-fx-text-fill: -fx-secondary-text;" text="أذكار الصباح">
+            <Label fx:id="title" style="-fx-font-size: 30; -fx-text-fill: -fx-secondary-text;" styleClass="font-text-bold" text="أذكار الصباح">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>

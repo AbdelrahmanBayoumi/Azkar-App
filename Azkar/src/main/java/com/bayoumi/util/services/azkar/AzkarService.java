@@ -32,12 +32,12 @@ public class AzkarService {
 
     public static void init(AzkarPeriodsController azkarPeriodsController) {
         if (FAKE_STAGE == null) {
-           Platform.runLater(() -> {
-               FAKE_STAGE = new Stage(StageStyle.UTILITY);
-               FAKE_STAGE.setOpacity(0);
-               FAKE_STAGE.show();
-               FAKE_STAGE.toBack();
-           });
+            Platform.runLater(() -> {
+                FAKE_STAGE = new Stage(StageStyle.UTILITY);
+                FAKE_STAGE.setOpacity(0);
+                FAKE_STAGE.show();
+                FAKE_STAGE.toBack();
+            });
         }
         azkarPeriodsController.setFrequencyLabel();
         absoluteAzkarTask = null;
