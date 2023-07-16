@@ -93,30 +93,6 @@ public class DatabaseManager {
         return false;
     }
 
-    public String getVersion() {
-        try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM program_characteristics").executeQuery();
-            if (res.next()) {
-                return res.getString("version");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Logger.error(null, ex, getClass().getName() + ".getVersion()");
-        }
-        return "0.0.0";
-    }
-
-    public void setVersion(String version) {
-        try {
-            DatabaseManager databaseManager = DatabaseManager.getInstance();
-            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE program_characteristics set version = ?");
-            databaseManager.stat.setString(1, version);
-            databaseManager.stat.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.error(null, ex, getClass().getName() + ".setVersion(version: " + version + ")");
-        }
-    }
-
     public String getID() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT ID FROM program_characteristics").executeQuery();

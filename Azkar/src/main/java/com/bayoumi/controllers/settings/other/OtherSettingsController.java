@@ -5,9 +5,9 @@ import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.load.Locations;
@@ -99,7 +99,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         darkTheme.setSelected(otherSettings.isEnableDarkMode());
         darkTheme.setDisable(true);
 
-        version.setText(DatabaseManager.getInstance().getVersion());
+        version.setText(Constants.VERSION);
 
         autoUpdateCheckBox.setSelected(otherSettings.isAutomaticCheckForUpdates());
     }

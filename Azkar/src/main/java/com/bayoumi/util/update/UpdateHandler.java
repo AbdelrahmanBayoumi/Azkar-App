@@ -1,8 +1,8 @@
 package com.bayoumi.util.update;
 
 import com.bayoumi.models.UpdateInfo;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.install4j.api.launcher.ApplicationLauncher;
 import com.install4j.api.launcher.Variables;
@@ -96,7 +96,7 @@ public class UpdateHandler {
                 version = Variables.getCompilerVariable("sys.version");
             } catch (Exception ex) {
                 Logger.info(getClass().getName() + ".showInstallPrompt(): " + "error => cannot get sys.version");
-                version = DatabaseManager.getInstance().getVersion();
+                version = Constants.VERSION;
             }
             if (BuilderUI.showUpdateDetails(UpdateHandler.getInstance().getUpdateInfo(), version)) {
                 new Thread(() -> UpdateHandler.getInstance().install()).start();
@@ -116,7 +116,7 @@ public class UpdateHandler {
         }
         try {
             Logger.info(UpdateHandler.class.getName() + ".install(): " + "New update found");
-            Logger.info(UpdateHandler.class.getName() + ".install(): " + "Current Version: " + DatabaseManager.getInstance().getVersion());
+            Logger.info(UpdateHandler.class.getName() + ".install(): " + "Current Version: " + Constants.VERSION);
             Logger.info(UpdateHandler.class.getName() + ".install(): " + "New Version: " + UpdateHandler.getInstance().getUpdateInfo());
             Logger.info(UpdateHandler.class.getName() + "Launching updater on local desktop.");
 
