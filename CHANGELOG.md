@@ -4,7 +4,7 @@
 
 ## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.7...HEAD)
 
-## [1.2.7](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.6) - 2022-07-17
+## [1.2.7](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.7) - 2022-07-17
 - Bundle EXE with 1.8_271 not 1.8_221
 - Fix Timed Azkar window delay
 - Exception: Error in getCityFromCoordinates() && getCityFromEngName() [#43](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/43)
