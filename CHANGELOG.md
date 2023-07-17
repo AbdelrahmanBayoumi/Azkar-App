@@ -2,7 +2,15 @@
 <p align=center>سجل التغيير هو ملف يحتوي على قائمة مرتبة ترتيبًا زمنيًا بالتغييرات الملحوظة لكل إصدار من المشروع.</p>
 
 
-## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.6...HEAD)
+## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.7...HEAD)
+
+## [1.2.7](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.6) - 2022-07-17
+- Bundle EXE with 1.8_271 not 1.8_221
+- Fix Timed Azkar window delay
+- Exception: Error in getCityFromCoordinates() && getCityFromEngName() [#43](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/43)
+- Fix NullPointerException [#42](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/42)
+
+[Full Changelog](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.6...1.2.7)
 
 ## [1.2.6](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.6) - 2022-06-06
 
