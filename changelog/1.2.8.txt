@@ -1,0 +1,4 @@
+- Show the time that has passed since the current prayer (for 30 minutes from the Adhan)
+------------------
+- اظهار الوقت الذي مر على الصلاة الحالية (لمدة 30د من الأذان)
+

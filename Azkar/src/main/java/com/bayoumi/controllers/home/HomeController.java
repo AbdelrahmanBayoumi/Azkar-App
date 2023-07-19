@@ -245,15 +245,15 @@ public class HomeController implements Initializable {
     // ==============================================
     private void handlePrayerRemainingTime(Date dateNow) {
         if (bundle != null) {
-            Date nextPrayerTime;
             // take current Prayer ( when isha is finished, and it's before 12pm )
             if (prayerTimesToday.nextPrayer(dateNow).equals(Prayer.NONE)) {
                 currentPrayerText.setText(Utility.toUTF(bundle.getString("havePassedSince")) + " " + prayerTimesController.getCurrentPrayerValue());
-                nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.currentPrayer(dateNow));
-            } else {
+            } else if (prayerTimesToday.nextPrayer(dateNow).equals(prayerTimesController.getCurrentPrayer())) {
                 currentPrayerText.setText(Utility.toUTF(bundle.getString("leftFor")) + " " + prayerTimesController.getCurrentPrayerValue());
-                nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesToday.nextPrayer(dateNow));
+            } else {
+                currentPrayerText.setText(Utility.toUTF(bundle.getString("havePassedSince")) + " " + prayerTimesController.getCurrentPrayerValue());
             }
+            final Date nextPrayerTime = prayerTimesToday.timeForPrayer(prayerTimesController.getCurrentPrayer());
 
             if (dateNow.compareTo(nextPrayerTime) < 0) {
                 // dateNow is before nextPrayerTime

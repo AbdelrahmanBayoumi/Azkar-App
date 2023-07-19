@@ -30,6 +30,7 @@ public class PrayerTimesController implements Initializable {
 
     // ==== Helper Objects ====
     private String currentPrayerValue;
+    private Prayer currentPrayer;
     private ResourceBundle bundle;
     private SimpleDateFormat formatter;
     // ==== Settings Objects ====
@@ -125,7 +126,24 @@ public class PrayerTimesController implements Initializable {
     public void prayerTimelineAction(Date currentDate) {
         // get 'next Prayer' and if 'next Prayer'=NONE get 'currentPrayer'
         // to update the new current prayerBox
-        switch (prayerTimesToday.nextPrayer(currentDate).equals(Prayer.NONE) ? prayerTimesToday.currentPrayer(currentDate) : prayerTimesToday.nextPrayer(currentDate)) {
+        final Prayer currentPrayerValue = prayerTimesToday.currentPrayer(currentDate);
+        final Prayer nextPrayerValue = prayerTimesToday.nextPrayer(currentDate);
+        if (nextPrayerValue.equals(Prayer.NONE)) {
+            currentPrayer = prayerTimesToday.currentPrayer(currentDate);
+        } else if (currentPrayerValue.equals(Prayer.NONE)) {
+            currentPrayer = nextPrayerValue;
+        } else {
+            // if the differance between the abs of currentDate and currentPrayerDate is less than 35 min
+            // then the currentPrayer is the currentPrayer else the currentPrayer is the nextPrayerValue
+            final Date currentPrayerDate = prayerTimesToday.timeForPrayer(currentPrayerValue);
+            if ((currentDate.getTime() - currentPrayerDate.getTime()) < 35 * 60 * 1000) {
+                currentPrayer = currentPrayerValue;
+            } else {
+                currentPrayer = nextPrayerValue;
+            }
+        }
+
+        switch (currentPrayer) {
             case FAJR:
                 changeCurrentPrayerBox(fajrBox, Utility.toUTF(bundle.getString("fajrPrayer")));
                 break;
@@ -160,6 +178,10 @@ public class PrayerTimesController implements Initializable {
 
     public String getCurrentPrayerValue() {
         return currentPrayerValue;
+    }
+
+    public Prayer getCurrentPrayer() {
+        return currentPrayer;
     }
 
     @FXML
