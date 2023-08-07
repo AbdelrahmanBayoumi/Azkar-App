@@ -9,4 +9,6 @@
 
        git clone https://github.com/AbdelrahmanBayoumi/Azkar-App.git
 2. Import it in Intellij IDEA or any other Java IDE and let Maven download the required dependencies for you.
-3. Run the application 😁
+3. To use Sentry (for error reporting) you need to add your own DSN in the `src/main/resources/sentry.properties` file.
+    - See `sentry.properties.example` for an example.
+4. Run the application 😁
