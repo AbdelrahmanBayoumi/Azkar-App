@@ -22,8 +22,8 @@ import java.util.ResourceBundle;
 public class ChooseNotificationColorController implements Initializable {
 
     public void setData(String currentBorderColor) {
-        setColor(currentBorderColor);
         try {
+            setColor(currentBorderColor);
             colorPicker.setValue(Color.web(currentBorderColor));
         } catch (Exception ignored) {
             colorPicker.setValue(Color.web(Constants.NOTIFICATION_BORDER_COLOR));
