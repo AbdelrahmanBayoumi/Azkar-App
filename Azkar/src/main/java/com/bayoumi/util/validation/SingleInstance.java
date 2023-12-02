@@ -44,9 +44,9 @@ public class SingleInstance {
     private void singleInstanceApplicationCheck() {
         try {
             InetAddress localAddress = InetAddress.getLocalHost();
-            System.out.println("InetAddress.getLocalHost(): " + localAddress + ":" + PORT);
+            Logger.debug("InetAddress.getLocalHost(): " + localAddress + ":" + PORT);
             server = new ServerSocket(PORT, 1, localAddress);
-            System.out.println("Server Online ...");
+            Logger.debug("Server Online ...");
             // listen to other Instances
             new Thread(() -> {
                 try {
@@ -73,7 +73,7 @@ public class SingleInstance {
             Scanner scan = new Scanner(serverClient.getInputStream());
             while (scan.hasNext()) {
                 clientMessage = scan.next();
-                System.out.println("Other Instance: " + clientMessage);
+                Logger.debug("Other Instance: " + clientMessage);
                 Platform.runLater(this::openCurrentStage);
             }
         } catch (IOException ex) {
@@ -84,7 +84,7 @@ public class SingleInstance {
     private void sendToServer() {
         try {
             final Socket socket = new Socket(InetAddress.getLocalHost(), PORT);
-            System.out.println("Connection Success ...");
+            Logger.debug("Connection Success ...");
             try {
                 PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
                 String clientMessage = "1";
@@ -101,7 +101,7 @@ public class SingleInstance {
 
     private void showAlreadyRunningError() {
         // catch anything unexpected !
-        System.out.println("Program already running, exiting");
+        Logger.debug("Program already running, exiting");
         Alert warning = new Alert(Alert.AlertType.WARNING);
         warning.setHeaderText("Program already running, exiting");
         warning.showAndWait();
@@ -111,17 +111,17 @@ public class SingleInstance {
     public void openCurrentStage() {
         Platform.runLater(() -> {
             if (currentStage == null) {
-                System.out.println("null");
+                Logger.debug("null");
                 System.exit(0);
             } else if (currentStage.isIconified()) {
-                System.out.println("isIconified");
+                Logger.debug("isIconified");
                 currentStage.setIconified(false);
             } else if (!currentStage.isShowing()) {
-                System.out.println("not isShowing");
+                Logger.debug("not isShowing");
                 currentStage.show();
                 currentStage.toFront();
             } else {
-                System.out.println("setAlwaysOnTop");
+                Logger.debug("setAlwaysOnTop");
                 currentStage.setAlwaysOnTop(true);
                 currentStage.setAlwaysOnTop(false);
             }

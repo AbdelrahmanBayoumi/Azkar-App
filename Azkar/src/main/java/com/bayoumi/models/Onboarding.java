@@ -15,7 +15,6 @@ public class Onboarding {
             }
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, Onboarding.class.getName() + ".isFirstTimeOpened()");
-            ex.printStackTrace();
         }
         return false;
     }
@@ -28,7 +27,6 @@ public class Onboarding {
                     .executeUpdate();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, Onboarding.class.getName() + ".setFirstTimeOpened()");
-            ex.printStackTrace();
         }
     }
 }

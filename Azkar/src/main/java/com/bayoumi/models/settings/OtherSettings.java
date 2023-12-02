@@ -49,13 +49,13 @@ public class OtherSettings extends Observable {
             }
             if (isFirstInstance) {
                 isFirstInstance = false;
-                System.out.println("Start automaticCheckForUpdates");
+                Logger.debug("Start automaticCheckForUpdates");
                 Timer t = new java.util.Timer();
                 t.schedule(
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                System.out.println("automaticCheckForUpdates: run()");
+                                Logger.debug("automaticCheckForUpdates: run()");
                                 if (UpdateHandler.getInstance().checkUpdate() == 1 && automaticCheckForUpdates) {
                                     UpdateHandler.getInstance().showInstallPrompt();
                                 }

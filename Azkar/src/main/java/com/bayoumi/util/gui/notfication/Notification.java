@@ -21,7 +21,7 @@ public class Notification {
             ((NotificationsControlsFXController) loader.getController()).setData(content.getText(), content.getImage());
             audio.play();
             final Runnable closeCallback = () -> {
-                System.out.println("Closing Notification ..."); // TODO : Delete println
+                Logger.debug("Closing Notification ..."); // TODO : Delete println
                 if (audio.getMediaPlayer() != null) {
                     audio.stop();
                 }
@@ -32,7 +32,7 @@ public class Notification {
             EventHandler<ActionEvent> onClickHandler = null;
             if (onClickAction != null) {
                 onClickHandler = event -> {
-                    System.out.println("Clicked: " + onClickAction);
+                    Logger.debug("Clicked: " + onClickAction);
                     onClickAction.run();
                 };
             }
@@ -50,13 +50,11 @@ public class Notification {
                             .hideCloseButton()
                             .show(((NotificationsControlsFXController) loader.getController()).closeButton);
                 } catch (Exception e) {
-                    e.printStackTrace();
                     Logger.error(null, e, Notification.class.getName() + ".createControlsFX()");
                 }
             });
         } catch (Exception ex) {
             Logger.error(null, ex, Notification.class.getName() + ".createControlsFX()");
-            ex.printStackTrace();
         }
     }
 
@@ -118,7 +116,6 @@ public class Notification {
             playAlarmSound(Settings.getInstance().getAzkarSettings().getVolume());
         } catch (Exception ex) {
             Logger.error(null, ex, Notification.class.getName() + ".create()");
-            ex.printStackTrace();
         }
     }
 * */

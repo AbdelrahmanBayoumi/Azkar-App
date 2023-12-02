@@ -1,5 +1,7 @@
 package com.bayoumi.util.services.reminders;
 
+import com.bayoumi.util.Logger;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +29,7 @@ public class ReminderUtil {
     public void validate(Date date) {
         reminderList.forEach(reminder -> {
             if (isEqualIgnoreMillis(date, reminder.getDate())) {
-                System.out.println("reminder: " + reminder);
+                Logger.debug("reminder: " + reminder);
                 reminder.getCallback().run();
             }
         });

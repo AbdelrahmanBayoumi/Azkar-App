@@ -1,6 +1,7 @@
 package com.bayoumi.util.web;
 
 import com.bayoumi.models.Query;
+import com.bayoumi.util.Logger;
 import kong.unirest.GetRequest;
 import kong.unirest.ProgressMonitor;
 import kong.unirest.Unirest;
@@ -16,7 +17,7 @@ public class WebUtilities {
         for (Query q : query) {
             getRequest = getRequest.queryString(q.getKey(), q.getValue());
         }
-        System.out.println("URL: " + getRequest.getUrl());
+        Logger.debug("URL: " + getRequest.getUrl());
         return new JSONObject(getRequest.asJson().getBody().toString());
     }
 

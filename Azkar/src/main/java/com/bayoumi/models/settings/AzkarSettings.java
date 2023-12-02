@@ -60,7 +60,6 @@ public class AzkarSettings extends Observable {
                 this.volume = res.getInt(10);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }
     }

@@ -163,7 +163,6 @@ public class FeedbackController implements Initializable {
                     Notifications.create().graphic(vBox).show();
                 });
             } catch (Exception ex) {
-                ex.printStackTrace();
                 Logger.error(null, ex, getClass().getName() + ".send()");
             }
             progress.setVisible(false);

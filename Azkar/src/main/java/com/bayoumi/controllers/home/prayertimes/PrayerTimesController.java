@@ -6,6 +6,7 @@ import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
 import com.bayoumi.util.time.Utilities;
@@ -228,7 +229,7 @@ public class PrayerTimesController implements Initializable {
 
     @FXML
     private void reload() {
-        System.out.println("reload() start");
+        Logger.debug("reload() start");
         new Thread(() -> {
             try {
                 Platform.runLater(() -> loadingBox.setVisible(true));

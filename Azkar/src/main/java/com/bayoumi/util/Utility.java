@@ -17,7 +17,7 @@ public class Utility {
 
     public static void printAllRunningThreads() {
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        threadSet.forEach(thread -> System.out.println(thread.getName()));
+        threadSet.forEach(thread -> Logger.debug(thread.getName()));
     }
 
     public static String toUTF(String val) {
@@ -60,7 +60,7 @@ public class Utility {
         try {
             Files.createDirectories(Paths.get(path));
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            Logger.error(null, e, Utility.class.getName() + ".createDirectory()");
         }
     }
 

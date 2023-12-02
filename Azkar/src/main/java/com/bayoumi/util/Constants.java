@@ -27,14 +27,14 @@ public class Constants {
                 assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
             }
         } catch (Exception ex) {
-            System.out.println(ex.getLocalizedMessage());
+            Logger.error(ex.getLocalizedMessage(), ex, Constants.class.getName() + " -> static init");
         }
     }
 
     public static void copyDatabaseToAppData() throws IOException {
         Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
         Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
-        System.out.println(from);
+        Logger.debug(from);
         Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db/data.db");
         copyIfNotExist(from, to);
     }

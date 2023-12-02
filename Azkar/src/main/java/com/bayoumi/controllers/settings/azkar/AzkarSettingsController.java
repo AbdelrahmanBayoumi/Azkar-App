@@ -191,7 +191,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             playButton.setGraphic(playIcon);
         } else {
             String fileName = azkarAlarmComboBox.getValue();
-            System.out.println(fileName);
+            Logger.debug(fileName);
             if (!fileName.equals("بدون صوت")) {
                 MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
                 MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);
@@ -290,7 +290,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             notificationSettings.setPosition(posComboBox.getValue());
             notificationSettings.save();
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".saveToDB()");
         }
     }
@@ -320,7 +319,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
                         new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume()));
             } catch (Exception ex) {
                 Logger.error("createControlsFX", ex, getClass().getName() + "showZekr().runLater => createControlsFX()");
-                ex.printStackTrace();
             }
         });
     }

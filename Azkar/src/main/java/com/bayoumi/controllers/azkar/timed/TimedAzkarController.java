@@ -80,7 +80,6 @@ public class TimedAzkarController implements Initializable {
                 controller.setData(zekr.getText(), zekr.getRepeat());
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".initAzkarContainer()");
         }
     }

@@ -67,7 +67,6 @@ public class SettingsController implements Initializable {
 //                settingsI = (SettingsInterface) Loader.getInstance().getController(Locations.AzkarSettings);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".openAzkarSettings()");
         }
     }
@@ -82,7 +81,6 @@ public class SettingsController implements Initializable {
                 settingsI = loader.getController();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".openCitySettings()");
         }
     }
@@ -97,7 +95,6 @@ public class SettingsController implements Initializable {
                 settingsI = loader.getController();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".openOtherSettings()");
         }
     }

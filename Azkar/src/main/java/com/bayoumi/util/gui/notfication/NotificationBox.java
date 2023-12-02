@@ -80,8 +80,8 @@ public class NotificationBox extends AnchorPane {
             //Setting Translate Transition
             TranslateTransition translate = new TranslateTransition(Duration.millis(2000), this);
             double layoutY = this.getLayoutY();
-            System.out.println("layoutY: " + layoutY);
-            System.out.println("XGXG: " + Screen.getPrimary().getVisualBounds().getHeight() + 1000);
+            Logger.debug("layoutY: " + layoutY);
+            Logger.debug("XGXG: " + Screen.getPrimary().getVisualBounds().getHeight() + 1000);
             this.setTranslateY(Screen.getPrimary().getVisualBounds().getHeight() + 1000);
             translate.setToY(layoutY);
             //Setting Pause Transition

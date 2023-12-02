@@ -36,7 +36,6 @@ public class DatabaseManager {
             return true;
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
-            ex.printStackTrace();
         }
         return false;
     }
@@ -71,7 +70,6 @@ public class DatabaseManager {
                 return res.getInt(1);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".getCount()");
         }
         return 0;
@@ -100,7 +98,6 @@ public class DatabaseManager {
                 return res.getString("ID");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error(null, ex, getClass().getName() + ".getID()");
         }
         return "";

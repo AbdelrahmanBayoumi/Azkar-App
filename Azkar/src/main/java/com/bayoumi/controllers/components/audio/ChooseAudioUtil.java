@@ -24,7 +24,6 @@ public class ChooseAudioUtil {
 
             return chooseAudioController;
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error("loading ChooseAudio", ex, ChooseAudioUtil.class.getName() + ".adhan()");
             Launcher.workFine.setValue(false);
         }

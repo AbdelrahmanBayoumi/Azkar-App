@@ -89,7 +89,6 @@ public class HomeController implements Initializable {
             prayerTimesController = fxmlLoader.getController();
             prayerTimesController.setData(settings, prayerTimesToday);
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error("loading PrayerTimes", ex, getClass().getName() + ".initialize()");
             Launcher.workFine.setValue(false);
         }
@@ -114,7 +113,6 @@ public class HomeController implements Initializable {
             azkarPeriodsController.setData(settings);
             container.getChildren().add(2, periodBox);
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error("loading AzkarPeriods", ex, getClass().getName() + ".initialize()");
             Launcher.workFine.setValue(false);
         }
@@ -303,7 +301,7 @@ public class HomeController implements Initializable {
     }
 
     private void playAdhan(String prayerName) {
-        System.out.println("playAdhan() => " + prayerName);
+        Logger.debug("playAdhan() => " + prayerName);
         String adhanFileName = Settings.getInstance().getPrayerTimeSettings().getAdhanAudio();
         if (adhanFileName == null || adhanFileName.equals("")) {
             adhanFileName = "";

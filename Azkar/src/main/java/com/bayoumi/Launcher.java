@@ -50,7 +50,7 @@ public class Launcher extends Application {
 
     @Override
     public void stop() {
-        System.out.println("stop()...");
+        Logger.debug("stop()...");
         Utility.exitProgramAction();
     }
 
@@ -102,12 +102,11 @@ public class Launcher extends Application {
             try {
                 SentryUtil.init();
             } catch (Exception ex) {
-                System.out.println(ex.getLocalizedMessage());
+                Logger.debug(ex.getLocalizedMessage());
             }
             incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
-            ex.printStackTrace();
             workFine.setValue(false);
         }
     }
@@ -129,15 +128,14 @@ public class Launcher extends Application {
                         .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", popUp.getStage());
                 popUp.showAndWait();
             } catch (Exception ex) {
-                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show locationsDB download");
-                ex.printStackTrace();
+                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".start() => show locationsDB download");
             }
         }
         // initialize tray icon
         try {
             new TrayUtil(primaryStage);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.error(null, ex, getClass().getName() + "new TrayUtil()");
         }
         // add loaded scene to primaryStage
         primaryStage.setScene(scene);
@@ -161,7 +159,6 @@ public class Launcher extends Application {
                 onboardingStage.setOnCloseRequest(event -> ChooseAudioController.stopIfPlaying());
             } catch (Exception ex) {
                 Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show Onboarding stage");
-                ex.printStackTrace();
             }
         }
         com.install4j.api.launcher.StartupNotification.registerStartupListener(s ->

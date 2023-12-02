@@ -34,7 +34,7 @@ public class TrayUtil {
             }
         });
         stage.setOnCloseRequest(event -> {
-            System.out.println(event);
+            Logger.debug(event);
             if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
                 if (Platform.isImplicitExit()) {
                     if (tray != null) {
@@ -82,7 +82,6 @@ public class TrayUtil {
             // add the application tray icon to the system tray.
             tray.add(trayIcon);
         } catch (Exception ex) {
-            ex.printStackTrace();
             Logger.error("Unable to init system tray", ex, TrayUtil.class.getName() + ".addAppToTray()");
             throw ex;
         }
@@ -118,7 +117,7 @@ public class TrayUtil {
         // tray icon (removing the tray icon will also shut down AWT).
         java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
         exitItem.addActionListener(event -> {
-            System.out.println(event);
+            Logger.debug(event);
             tray.remove(trayIcon);
             Utility.exitProgramAction();
         });

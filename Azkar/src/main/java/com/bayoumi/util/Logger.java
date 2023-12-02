@@ -45,6 +45,12 @@ public class Logger {
         }).start();
     }
 
+    public static void debug(Object msg) {
+        if (Constants.RUNNING_MODE.equals(Constants.Mode.DEVELOPMENT)) {
+            System.out.println(DATE_TIME_FORMAT.format(new Date()) + " => " + msg.toString());
+        }
+    }
+
 
     public static void error(String msg, Throwable throwable, String CLASS_NAME) {
         new Thread(() -> {

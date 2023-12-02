@@ -1,6 +1,7 @@
 package com.bayoumi.util.file;
 
 import com.bayoumi.models.Muezzin;
+import com.bayoumi.util.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -52,9 +53,7 @@ public class FileUtils {
                 }
             }
         }
-        muezzinList.forEach((muezzin) -> {
-            System.out.println(muezzin);
-        });
+        muezzinList.forEach(Logger::debug);
     }
 
     public static List<Muezzin> getAdhanList() {

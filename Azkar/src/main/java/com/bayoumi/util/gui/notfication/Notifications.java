@@ -26,6 +26,7 @@
  */
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import com.bayoumi.util.services.azkar.AzkarService;
 import impl.org.controlsfx.skin.NotificationBar;
@@ -536,7 +537,7 @@ public class Notifications {
                             try {
                                 popup.setAnchorY(y - PADDING);
                             } catch (Exception ex) {
-                                System.out.println("ex:" + ex);
+                                Logger.debug("ex:" + ex);
                             }
                             break;
                         default:

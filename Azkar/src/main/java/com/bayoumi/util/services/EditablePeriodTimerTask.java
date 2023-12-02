@@ -1,5 +1,7 @@
 package com.bayoumi.util.services;
 
+import com.bayoumi.util.Logger;
+
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,7 +38,7 @@ public class EditablePeriodTimerTask extends TimerTask {
         Objects.requireNonNull(p);
 //        System.out.println("updateTimer():- " + Thread.currentThread().getName());
 //        System.out.println("updateTimer():- " + "new : " + p);
-        System.out.println(String.format("Period set to: %d s", p / 1000));
+        Logger.debug(String.format("Period set to: %d s", p / 1000));
         stopTask();
         timer = new Timer();
         timer.schedule(new EditablePeriodTimerTask(task, period), p, p);
@@ -54,7 +56,7 @@ public class EditablePeriodTimerTask extends TimerTask {
     @Override
     public void run() {
         task.run();
-        System.out.println("run():- " + Thread.currentThread().getName());
+        Logger.debug("run():- " + Thread.currentThread().getName());
 //        updateTimer("run()");
     }
 

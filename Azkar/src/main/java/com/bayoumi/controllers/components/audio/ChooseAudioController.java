@@ -2,6 +2,7 @@ package com.bayoumi.controllers.components.audio;
 
 import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Logger;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -90,7 +91,7 @@ public class ChooseAudioController implements Initializable {
             playButton.setGraphic(playIcon);
         } else {
             Muezzin muezzin = audioBox.getValue();
-            System.out.println(muezzin);
+            Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
                 MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
                 MEDIA_PLAYER.setVolume(100);
