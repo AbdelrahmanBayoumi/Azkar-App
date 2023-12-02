@@ -72,22 +72,22 @@ public class Feedback {
 
     private URL buildFeedbackURL() throws MalformedURLException {
         Builder builder = Builder.formKey("1FAIpQLSdgpuszSwl_sGLbGHgFGZo1zB0tJ05QSYlmxCZQMaMIuElrRw");
-        if (this.getType() != null && !this.getType().equals("")) {
+        if (this.getType() != null && !this.getType().isEmpty()) {
             builder.put(FeedbackForm.TYPE, this.getType());
         }
-        if (this.getSubject() != null && !this.getSubject().equals("")) {
+        if (this.getSubject() != null && !this.getSubject().isEmpty()) {
             builder.put(FeedbackForm.SUBJECT, this.getSubject());
         }
-        if (this.getEmail() != null && !this.getEmail().equals("")) {
+        if (this.getEmail() != null && !this.getEmail().isEmpty()) {
             builder.put(FeedbackForm.EMAIL, this.getEmail());
         }
-        if (this.getOS() != null && !this.getOS().equals("")) {
+        if (this.getOS() != null && !this.getOS().isEmpty()) {
             builder.put(FeedbackForm.OS, this.getOS());
         }
-        if (this.getDetails() != null && !this.getDetails().equals("")) {
+        if (this.getDetails() != null && !this.getDetails().isEmpty()) {
             builder.put(FeedbackForm.DETAILS, this.getDetails());
         }
-        if (this.getLogPath() != null && !this.getLogPath().equals("")) {
+        if (this.getLogPath() != null && !this.getLogPath().isEmpty()) {
             builder.put(FeedbackForm.LOG_PATH, this.getLogPath());
         }
         return builder.toUrl();

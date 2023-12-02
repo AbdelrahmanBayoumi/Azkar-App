@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.settings;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;

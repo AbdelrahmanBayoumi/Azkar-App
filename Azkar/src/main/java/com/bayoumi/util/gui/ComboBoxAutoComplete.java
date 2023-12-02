@@ -1,8 +1,8 @@
 package com.bayoumi.util.gui;
 
 
-import com.bayoumi.models.City;
-import com.bayoumi.models.Country;
+import com.bayoumi.models.location.City;
+import com.bayoumi.models.location.Country;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,7 +1,7 @@
 package com.bayoumi.controllers.settings.azkar;
 
-import com.bayoumi.models.Preferences;
-import com.bayoumi.models.PreferencesType;
+import com.bayoumi.models.settings.Preferences;
+import com.bayoumi.models.settings.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Utility;

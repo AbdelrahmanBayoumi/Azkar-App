@@ -10,6 +10,11 @@ import java.util.List;
 
 public class FileUtils {
 
+    /**
+     * Add files names From the given folder to the given list
+     * @param folder the folder that contains the files
+     * @param list   the list that will contain the files names
+     */
     public static void addFilesNameToList(File folder, List<String> list) {
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles != null) {

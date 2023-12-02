@@ -1,7 +1,5 @@
 package com.bayoumi.models.settings;
 
-import com.bayoumi.models.Preferences;
-import com.bayoumi.models.PreferencesType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.BuilderUI;
 import javafx.geometry.Pos;

@@ -2,8 +2,8 @@ package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.models.Preferences;
-import com.bayoumi.models.PreferencesType;
+import com.bayoumi.models.settings.Preferences;
+import com.bayoumi.models.settings.PreferencesType;
 import com.bayoumi.models.settings.AzkarSettings;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.NotificationSettings;

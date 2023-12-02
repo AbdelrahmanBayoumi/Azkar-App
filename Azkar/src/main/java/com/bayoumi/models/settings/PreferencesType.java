@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.settings;
 
 public enum PreferencesType {
     NOTIFICATION_BORDER_COLOR("notification_border_color"),

@@ -1,7 +1,7 @@
 package com.bayoumi.controllers.components;
 
-import com.bayoumi.models.City;
-import com.bayoumi.models.Country;
+import com.bayoumi.models.location.City;
+import com.bayoumi.models.location.Country;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;

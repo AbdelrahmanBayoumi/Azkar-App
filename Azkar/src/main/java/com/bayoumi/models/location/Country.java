@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.location;
 
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
