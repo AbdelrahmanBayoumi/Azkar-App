@@ -2,6 +2,8 @@ package com.bayoumi.controllers.components;
 
 import com.bayoumi.models.location.City;
 import com.bayoumi.models.location.Country;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
@@ -50,7 +52,22 @@ public class SelectLocationController implements Initializable {
     public void setData() {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
         // init selected button
-        toggleSelectButtonStyle(manualSelectButton);
+        final boolean isManualSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+        if (isManualSelected) {
+            manualSelect(null);
+        } else {
+            autoSelect(null);
+        }
+        // init auto location text fields
+        if(!isManualSelected){
+            autoCountry.setText(prayerTimeSettings.getCountry());
+            autoCity.setText(prayerTimeSettings.getCity());
+            autoLatitude.setText(String.valueOf(prayerTimeSettings.getLatitude()));
+            autoLongitude.setText(String.valueOf(prayerTimeSettings.getLongitude()));
+        }
+        // init manual location text fields
+        initCountries();
+        initCities();
     }
 
     private void updateBundle(ResourceBundle bundle) {
@@ -65,8 +82,8 @@ public class SelectLocationController implements Initializable {
         autoLatitude.setPromptText(Utility.toUTF(bundle.getString("latitude")));
         autoLocationButton.setText(Utility.toUTF(bundle.getString("autoLocate")));
         enterCountryAndCity.setText(Utility.toUTF(bundle.getString("enterCountryAndCity")));
-        initCountries();
-        initCities();
+        autoSelectButton.setText(Utility.toUTF(bundle.getString("autoLocate")));
+        manualSelectButton.setText(Utility.toUTF(bundle.getString("manualLocate")));
     }
 
 
@@ -77,7 +94,6 @@ public class SelectLocationController implements Initializable {
         statusLabel.setVisible(false);
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
-        initDoubleValidation();
     }
 
     private void initDoubleValidation() {
@@ -167,14 +183,7 @@ public class SelectLocationController implements Initializable {
             }
         });
         if (!countries.getItems().isEmpty()) {
-            cities.getItems().clear();
-            if (countries.getValue() != null) {
-                cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
-                cityComboBoxAutoComplete.setItems(cities.getItems());
-            }
-            if (!cities.getItems().isEmpty()) {
-                cities.setValue(cities.getItems().get(0));
-            }
+            changeCountry(null);
         }
         final String local = Language.getLocalFromPreferences();
         cities.setConverter(new StringConverter<City>() {
@@ -209,40 +218,19 @@ public class SelectLocationController implements Initializable {
         manualLongitude.setDisable(true);
         autoLocationButton.setDisable(true);
         statusLabel.setVisible(true);
-        statusLabel.setText(Utility.toUTF(bundle.getString("loading")) + "..");
+        statusLabel.setText(Utility.toUTF(bundle.getString("loading")) + "...");
         statusLabel.setStyle("-fx-text-fill: green");
         new Thread(() -> {
             try {
                 City city = LocationService.getCity(IpChecker.getIp());
-                Logger.info("LocationService.getCity(IP): " + city);
-                Country countryFormCode = Country.getCountryFormCode(city.getCountryCode());
-                if (countryFormCode != null) {
-                    Platform.runLater(() -> countries.setValue(countryFormCode));
-                } else {
-                    throw new Exception("Error in fetching city => cannot getCountryFormCode()!");
-                }
-                City cityFromEngName = City.getCityFromEngName(city.getEnglishName(), city.getCountryCode());
-                if (cityFromEngName != null) {
-                    Platform.runLater(() -> {
-                        cities.setValue(cityFromEngName);
-                        cities.getSelectionModel().select(cityFromEngName);
-                        manualLatitude.setText(String.valueOf(cityFromEngName.getLatitude()));
-                        manualLatitude.setText(String.valueOf(cityFromEngName.getLongitude()));
-                    });
-                } else {
-                    City cityFromCoordinates = City.getCityFromCoordinates(city.getLongitude(), city.getLatitude(), city.getCountryCode());
-                    if (cityFromCoordinates != null) {
-                        Platform.runLater(() -> {
-                            cities.setValue(cityFromCoordinates);
-                            cities.getSelectionModel().select(cityFromCoordinates);
-                            manualLatitude.setText(String.valueOf(cityFromCoordinates.getLatitude()));
-                            manualLatitude.setText(String.valueOf(cityFromCoordinates.getLongitude()));
-                        });
-                    } else {
-                        throw new Exception("Error in getCityFromCoordinates() && getCityFromEngName(): " + city);
-                    }
-                }
-                statusLabel.setVisible(false);
+                Logger.debug("LocationService.getCity(IP): " + city);
+                Platform.runLater(() -> {
+                    autoCountry.setText(city.getCountryName());
+                    autoCity.setText(city.getEnglishName());
+                    autoLatitude.setText(String.valueOf(city.getLatitude()));
+                    autoLongitude.setText(String.valueOf(city.getLongitude()));
+                    statusLabel.setVisible(false);
+                });
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
                 Platform.runLater(() -> {
@@ -260,23 +248,33 @@ public class SelectLocationController implements Initializable {
     }
 
     @FXML
-    private void manualSelect() {
+    private void manualSelect(ActionEvent event) {
         if (selectedButton != null && selectedButton.equals(manualSelectButton)) {
             return;
         }
         toggleSelectButtonStyle(manualSelectButton);
         manualContainer.setVisible(true);
         autoContainer.setVisible(false);
+
+        // if action is from UI not from setData() => save in preferences
+        if (event != null) {
+            Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "true");
+        }
     }
 
     @FXML
-    private void autoSelect() {
+    private void autoSelect(ActionEvent event) {
         if (selectedButton != null && selectedButton.equals(autoSelectButton)) {
             return;
         }
         toggleSelectButtonStyle(autoSelectButton);
         manualContainer.setVisible(false);
         autoContainer.setVisible(true);
+
+        // if action is from UI not from setData() => save in preferences
+        if (event != null) {
+            Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "false");
+        }
     }
 
     private void toggleSelectButtonStyle(JFXButton newButton) {
@@ -287,5 +285,9 @@ public class SelectLocationController implements Initializable {
         if (selectedButton != null) {
             selectedButton.getStyleClass().add("secondary-button");
         }
+    }
+
+    public boolean isAutoDetectionValid(){
+        return !autoCountry.getText().trim().isEmpty() && !autoCity.getText().trim().isEmpty() && !autoLatitude.getText().trim().isEmpty() && !autoLongitude.getText().trim().isEmpty();
     }
 }

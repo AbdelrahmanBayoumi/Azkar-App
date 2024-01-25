@@ -10,7 +10,8 @@ public enum PreferencesType {
     ENABLE_24_FORMAT("enable_24_format", "false"),
     MINIMIZED("minimized", "false"),
     HIJRI_OFFSET("hijri_offset", "0"),
-    AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true");
+    AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true"),
+    IS_MANUAL_LOCATION_SELECTED("IS_MANUAL_LOCATION_SELECTED", "true");
 
     private final String name;
     private final String defaultValue;

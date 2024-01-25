@@ -24,8 +24,6 @@ public class LocationService {
     }
 
     public static City getCity(final String IP) throws Exception {
-
-//        JSONObject jsonRoot = WebUtilities.getJsonResponse("http://ip-api.com/json/" + IP);
         JSONObject jsonRoot = WebUtilities.getJsonResponse("https://api.ip2location.io/?key=" + getAPIKEY() + "&ip=" + IP);
         Logger.debug("jsonRoot: " + jsonRoot);
         if (!jsonRoot.isEmpty()) {
@@ -33,13 +31,13 @@ public class LocationService {
             return new City(jsonRoot.getString("country_code"),
                     jsonRoot.getString("country_name"),
                     jsonRoot.getString("region_name"),
-                    null,
+                    jsonRoot.getString("region_name"),
                     jsonRoot.getDouble("latitude"),
                     jsonRoot.getDouble("longitude"),
                     (tz.toZoneId().getRules().getStandardOffset(Instant.now()).getTotalSeconds() / 3600.0)
             );
         } else {
-            throw new Exception("Error in fetching city data,ENDPOINT: " + "http://ip-api.com/json/" + IP);
+            throw new Exception("Error in fetching city data, " + "https://api.ip2location.io/?key=" + getAPIKEY() + "&ip=" + IP);
         }
     }
 }

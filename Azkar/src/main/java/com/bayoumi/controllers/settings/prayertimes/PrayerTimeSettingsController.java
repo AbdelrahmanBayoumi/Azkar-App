@@ -5,6 +5,8 @@ import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.controllers.settings.SettingsInterface;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
@@ -62,20 +64,32 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         try {
             final PrayerCalculationsController calculationsController = (PrayerCalculationsController) Loader.getInstance().getController(Locations.PrayerCalculations);
             final SelectLocationController selectLocationController = (SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation);
+            boolean isManualSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+            if (!isManualSelected && selectLocationController.isAutoDetectionValid()) {
+                prayerTimeSettings.setCountry(selectLocationController.autoCountry.getText());
+                prayerTimeSettings.setCity(selectLocationController.autoCity.getText());
+                prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.autoLatitude.getText()));
+                prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.autoLongitude.getText()));
+            } else {
+                if(!isManualSelected){
+                    Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "true");
+                }
+                prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
+                prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
+                prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.manualLatitude.getText()));
+                prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.manualLongitude.getText()));
+            }
 
-            prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
-            prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
             prayerTimeSettings.setMethod(calculationsController.methodComboBox.getValue());
             prayerTimeSettings.setAsrJuristic(calculationsController.hanafiRadioButton.isSelected() ? 1 : 0);
             prayerTimeSettings.setSummerTiming(calculationsController.summerTiming.isSelected());
-            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.manualLatitude.getText()));
-            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.manualLongitude.getText()));
+
 
             prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
             prayerTimeSettings.save();
             ChooseAudioController.stopIfPlaying();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(null, e, getClass().getName() + ".saveToDB()");
         }
     }
 

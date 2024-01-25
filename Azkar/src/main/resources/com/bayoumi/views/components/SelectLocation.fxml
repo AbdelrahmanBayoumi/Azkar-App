@@ -150,7 +150,7 @@
                               <FontAwesomeIconView glyphName="MAP_MARKER" size="20" />
                            </graphic>
                            <styleClass>
-                              <String fx:value="secondary-button" />
+                              <String fx:value="primary-button" />
                               <String fx:value="font-text-bold" />
                               <String fx:value="_15" />
                            </styleClass>

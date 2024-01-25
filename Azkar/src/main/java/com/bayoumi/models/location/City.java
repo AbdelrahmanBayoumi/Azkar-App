@@ -134,12 +134,21 @@ public class City {
     public String toString() {
         return "City{" +
                 "countryCode='" + countryCode + '\'' +
+                ", countryName='" + countryName + '\'' +
                 ", englishName='" + englishName + '\'' +
                 ", arabicName='" + arabicName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", timezone=" + timezone +
                 '}';
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     public String getCountryCode() {
