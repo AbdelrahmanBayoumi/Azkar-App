@@ -68,8 +68,8 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
             prayerTimeSettings.setMethod(calculationsController.methodComboBox.getValue());
             prayerTimeSettings.setAsrJuristic(calculationsController.hanafiRadioButton.isSelected() ? 1 : 0);
             prayerTimeSettings.setSummerTiming(calculationsController.summerTiming.isSelected());
-            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.latitude.getText()));
-            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.longitude.getText()));
+            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.manualLatitude.getText()));
+            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.manualLongitude.getText()));
 
             prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
             prayerTimeSettings.save();

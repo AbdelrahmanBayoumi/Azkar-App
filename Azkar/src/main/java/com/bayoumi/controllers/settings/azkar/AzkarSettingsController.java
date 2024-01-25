@@ -2,12 +2,9 @@ package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.AbsoluteZekr;
-import com.bayoumi.models.settings.Preferences;
-import com.bayoumi.models.settings.PreferencesType;
-import com.bayoumi.models.settings.AzkarSettings;
-import com.bayoumi.models.settings.LanguageBundle;
-import com.bayoumi.models.settings.NotificationSettings;
-import com.bayoumi.models.settings.Settings;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.models.settings.*;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.file.FileUtils;
@@ -170,7 +167,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         notificationSettings = Settings.getInstance().getNotificationSettings();
         posComboBox.setItems(FXCollections.observableArrayList(Pos.TOP_RIGHT, Pos.BOTTOM_RIGHT, Pos.TOP_LEFT, Pos.BOTTOM_LEFT, Pos.CENTER));
         posComboBox.setValue(notificationSettings.getPosition());
-        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+        if (Language.getLocalFromPreferences().equals("ar")) {
             posComboBox.setConverter(NotificationSettings.posArabicConverter());
         } else {
             posComboBox.setConverter(NotificationSettings.posEnglishConverter());

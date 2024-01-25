@@ -2,6 +2,7 @@ package com.bayoumi.controllers.components;
 
 import com.bayoumi.models.location.City;
 import com.bayoumi.models.location.Country;
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
@@ -19,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.net.URL;
@@ -36,22 +38,31 @@ public class SelectLocationController implements Initializable {
     @FXML
     public JFXComboBox<City> cities;
     @FXML
-    public JFXTextField longitude, latitude;
+    public JFXTextField manualLongitude, manualLatitude, autoCountry, autoCity, autoLongitude, autoLatitude;
     @FXML
-    public JFXButton autoLocationButton;
+    public JFXButton autoLocationButton, autoSelectButton, manualSelectButton;
+    public JFXButton selectedButton;
     private ComboBoxAutoComplete<City> cityComboBoxAutoComplete;
     private ComboBoxAutoComplete<Country> countryComboBoxAutoComplete;
+    @FXML
+    private VBox manualContainer, autoContainer;
 
     public void setData() {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        // init selected button
+        toggleSelectButtonStyle(manualSelectButton);
     }
 
     private void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         countries.setPromptText(Utility.toUTF(bundle.getString("country")));
         cities.setPromptText(Utility.toUTF(bundle.getString("city")));
-        longitude.setPromptText(Utility.toUTF(bundle.getString("longitude")));
-        latitude.setPromptText(Utility.toUTF(bundle.getString("latitude")));
+        manualLongitude.setPromptText(Utility.toUTF(bundle.getString("longitude")));
+        manualLatitude.setPromptText(Utility.toUTF(bundle.getString("latitude")));
+        autoCountry.setPromptText(Utility.toUTF(bundle.getString("country")));
+        autoCity.setPromptText(Utility.toUTF(bundle.getString("city")));
+        autoLongitude.setPromptText(Utility.toUTF(bundle.getString("longitude")));
+        autoLatitude.setPromptText(Utility.toUTF(bundle.getString("latitude")));
         autoLocationButton.setText(Utility.toUTF(bundle.getString("autoLocate")));
         enterCountryAndCity.setText(Utility.toUTF(bundle.getString("enterCountryAndCity")));
         initCountries();
@@ -96,13 +107,13 @@ public class SelectLocationController implements Initializable {
                 return d.toString();
             }
         };
-        latitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
-        longitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
+        manualLatitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
+        manualLongitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
     }
 
     private void initCountries() {
         // getAllData
-        final String local = Settings.getInstance().getOtherSettings().getLanguageLocal();
+        final String local = Language.getLocalFromPreferences();
         countries.getItems().addAll(Country.getAll(local));
         countryComboBoxAutoComplete.setItems(countries.getItems());
         // StringConverter
@@ -150,8 +161,8 @@ public class SelectLocationController implements Initializable {
     private void initCities() {
         cities.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             if (newValue != null) {
-                latitude.setText(String.valueOf(cities.getValue().getLatitude()));
-                longitude.setText(String.valueOf(cities.getValue().getLongitude()));
+                manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
+                manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
                 statusLabel.setVisible(false);
             }
         });
@@ -165,12 +176,12 @@ public class SelectLocationController implements Initializable {
                 cities.setValue(cities.getItems().get(0));
             }
         }
-        final String local = Settings.getInstance().getOtherSettings().getLanguageLocal();
+        final String local = Language.getLocalFromPreferences();
         cities.setConverter(new StringConverter<City>() {
             @Override
             public String toString(City object) {
                 if (local.equals("ar")) {
-                    if (object.getArabicName() == null || object.getArabicName().trim().equals("")) {
+                    if (object.getArabicName() == null || object.getArabicName().trim().isEmpty()) {
                         return object.getEnglishName();
                     }
                     return object.getArabicName();
@@ -194,8 +205,8 @@ public class SelectLocationController implements Initializable {
     private void getAutoLocation() {
         countries.setDisable(true);
         cities.setDisable(true);
-        latitude.setDisable(true);
-        longitude.setDisable(true);
+        manualLatitude.setDisable(true);
+        manualLongitude.setDisable(true);
         autoLocationButton.setDisable(true);
         statusLabel.setVisible(true);
         statusLabel.setText(Utility.toUTF(bundle.getString("loading")) + "..");
@@ -215,8 +226,8 @@ public class SelectLocationController implements Initializable {
                     Platform.runLater(() -> {
                         cities.setValue(cityFromEngName);
                         cities.getSelectionModel().select(cityFromEngName);
-                        latitude.setText(String.valueOf(cityFromEngName.getLatitude()));
-                        latitude.setText(String.valueOf(cityFromEngName.getLongitude()));
+                        manualLatitude.setText(String.valueOf(cityFromEngName.getLatitude()));
+                        manualLatitude.setText(String.valueOf(cityFromEngName.getLongitude()));
                     });
                 } else {
                     City cityFromCoordinates = City.getCityFromCoordinates(city.getLongitude(), city.getLatitude(), city.getCountryCode());
@@ -224,8 +235,8 @@ public class SelectLocationController implements Initializable {
                         Platform.runLater(() -> {
                             cities.setValue(cityFromCoordinates);
                             cities.getSelectionModel().select(cityFromCoordinates);
-                            latitude.setText(String.valueOf(cityFromCoordinates.getLatitude()));
-                            latitude.setText(String.valueOf(cityFromCoordinates.getLongitude()));
+                            manualLatitude.setText(String.valueOf(cityFromCoordinates.getLatitude()));
+                            manualLatitude.setText(String.valueOf(cityFromCoordinates.getLongitude()));
                         });
                     } else {
                         throw new Exception("Error in getCityFromCoordinates() && getCityFromEngName(): " + city);
@@ -242,9 +253,39 @@ public class SelectLocationController implements Initializable {
             }
             countries.setDisable(false);
             cities.setDisable(false);
-            latitude.setDisable(false);
-            longitude.setDisable(false);
+            manualLatitude.setDisable(false);
+            manualLongitude.setDisable(false);
             autoLocationButton.setDisable(false);
         }).start();
+    }
+
+    @FXML
+    private void manualSelect() {
+        if (selectedButton != null && selectedButton.equals(manualSelectButton)) {
+            return;
+        }
+        toggleSelectButtonStyle(manualSelectButton);
+        manualContainer.setVisible(true);
+        autoContainer.setVisible(false);
+    }
+
+    @FXML
+    private void autoSelect() {
+        if (selectedButton != null && selectedButton.equals(autoSelectButton)) {
+            return;
+        }
+        toggleSelectButtonStyle(autoSelectButton);
+        manualContainer.setVisible(false);
+        autoContainer.setVisible(true);
+    }
+
+    private void toggleSelectButtonStyle(JFXButton newButton) {
+        if (selectedButton != null) {
+            selectedButton.getStyleClass().remove("secondary-button");
+        }
+        selectedButton = newButton;
+        if (selectedButton != null) {
+            selectedButton.getStyleClass().add("secondary-button");
+        }
     }
 }

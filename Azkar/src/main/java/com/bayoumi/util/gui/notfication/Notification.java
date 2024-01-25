@@ -1,8 +1,8 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.controllers.notification.NotificationsControlsFXController;
-import com.bayoumi.models.settings.Preferences;
-import com.bayoumi.models.settings.PreferencesType;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

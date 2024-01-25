@@ -1,6 +1,6 @@
 package com.bayoumi.models.location;
 
-import com.bayoumi.models.settings.Settings;
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.LocationsDBManager;
 
@@ -10,6 +10,7 @@ import java.util.Objects;
 
 public class City {
     private String countryCode;
+    private String countryName;
     private String englishName;
     private String arabicName;
     private double latitude;
@@ -25,18 +26,28 @@ public class City {
         this.timezone = timezone;
     }
 
+    public City(String countryCode, String countryName, String englishName, String arabicName, double latitude, double longitude, double timezone) {
+        this.countryCode = countryCode;
+        this.countryName = countryName;
+        this.englishName = englishName;
+        this.arabicName = arabicName;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.timezone = timezone;
+    }
+
     /*
-    CREATE TABLE "cityd" (
-        "country"	VARCHAR,
-        "city"	VARCHAR,
-        "latitude"	DOUBLE,
-        "longitude"	DOUBLE,
-        "time_zone"	DOUBLE DEFAULT 0,
-        "locId"	INTEGER NOT NULL,
-        "Ar_Name"	VARCHAR,
-        PRIMARY KEY("locId")
-    )
-    * */
+        CREATE TABLE "cityd" (
+            "country"	VARCHAR,
+            "city"	VARCHAR,
+            "latitude"	DOUBLE,
+            "longitude"	DOUBLE,
+            "time_zone"	DOUBLE DEFAULT 0,
+            "locId"	INTEGER NOT NULL,
+            "Ar_Name"	VARCHAR,
+            PRIMARY KEY("locId")
+        )
+        * */
     public static ArrayList<City> getCitiesInCountry(String code) {
         ArrayList<City> cities = new ArrayList<>();
         try {
@@ -95,7 +106,7 @@ public class City {
     }
 
     public String getName() {
-        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+        if (Language.getLocalFromPreferences().equals("ar")) {
             return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
         }
         return this.getEnglishName();

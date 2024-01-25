@@ -7,6 +7,8 @@ import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
 import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
@@ -100,9 +102,10 @@ public class HomeController implements Initializable {
         }
 
         initClock();
-        day.setText(Utilities.getDay(settings.getOtherSettings().getLanguageLocal(), date));
-        gregorianDate.setText(Utilities.getGregorianDate(settings.getOtherSettings().getLanguageLocal(), date));
-        hijriDate.setText(new HijriDate(settings.getOtherSettings().getHijriOffset()).getString(settings.getOtherSettings().getLanguageLocal()));
+        String localFromPreferences = Language.getLocalFromPreferences();
+        day.setText(Utilities.getDay(localFromPreferences, date));
+        gregorianDate.setText(Utilities.getGregorianDate(localFromPreferences, date));
+        hijriDate.setText(new HijriDate(Preferences.getInstance().getInt(PreferencesType.HIJRI_OFFSET)).getString(localFromPreferences));
 
         initReminders();
 
@@ -118,8 +121,9 @@ public class HomeController implements Initializable {
         }
 
         // if there is a change in HijriDate offset
-        settings.getOtherSettings().addObserver((o, arg) -> {
-            hijriDate.setText(new HijriDate(settings.getOtherSettings().getHijriOffset()).getString(settings.getOtherSettings().getLanguageLocal()));
+        Preferences.getInstance().addObserver((key, value) -> {
+            hijriDate.setText(new HijriDate(Preferences.getInstance().getInt(PreferencesType.HIJRI_OFFSET))
+                    .getString(Language.get(value).getLocale()));
             prayerTimesController.setPrayerTimesValuesToGUI();
         });
 
@@ -162,22 +166,24 @@ public class HomeController implements Initializable {
 
             // -- increment time --
             String timeNow;
-            if (settings.getOtherSettings().isEnable24Format()) {
-                timeNow = Utilities.getTime24(settings.getOtherSettings().getLanguageLocal(), date);
+            final Preferences preferences = Preferences.getInstance();
+            final String locale = Language.getLocalFromPreferences();
+            if (preferences.getBoolean(PreferencesType.ENABLE_24_FORMAT)) {
+                timeNow = Utilities.getTime24(locale, date);
             } else {
-                timeNow = Utilities.getTime(settings.getOtherSettings().getLanguageLocal(), date);
+                timeNow = Utilities.getTime(locale, date);
             }
             timeLabel.setText(timeNow);
 
             // is new day? => change Dates and the prayer times
             if (timeNow.equals("12:00:00 AM") || timeNow.equals("12:00:00 ص") || timeNow.equals("00:00:00")
-                    || !Utilities.getDay(settings.getOtherSettings().getLanguageLocal(), date).equals(day.getText())) {
+                    || !Utilities.getDay(locale, date).equals(day.getText())) {
                 // update week day name
-                day.setText(Utilities.getDay(settings.getOtherSettings().getLanguageLocal(), date));
+                day.setText(Utilities.getDay(locale, date));
                 // update Gregorian date
-                gregorianDate.setText(Utilities.getGregorianDate(settings.getOtherSettings().getLanguageLocal(), date));
+                gregorianDate.setText(Utilities.getGregorianDate(locale, date));
                 // update Hijri date
-                hijriDate.setText(new HijriDate(settings.getOtherSettings().getHijriOffset()).getString(settings.getOtherSettings().getLanguageLocal()));
+                hijriDate.setText(new HijriDate(Preferences.getInstance().getInt(PreferencesType.HIJRI_OFFSET)).getString(locale));
                 // get prayer times for the new day
                 prayerTimesToday = PrayerTimesUtil.getPrayerTimesToday(settings.getPrayerTimeSettings(), date);
                 prayerTimesController.setPrayerTimes(prayerTimesToday);
@@ -199,7 +205,7 @@ public class HomeController implements Initializable {
     // ==============================================
     @FXML
     public void goToMorningAzkar() {
-        if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+        if (Language.getLanguageFromPreferences().equals(Language.Arabic)) {
             showTimedAzkar("morning");
         } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("morningAzkarNotAvailable")))) {
             showTimedAzkar("morning");
@@ -208,7 +214,7 @@ public class HomeController implements Initializable {
 
     @FXML
     public void goToNightAzkar() {
-        if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+        if (Language.getLanguageFromPreferences().equals(Language.Arabic)) {
             showTimedAzkar("night");
         } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("nightAzkarNotAvailable")))) {
             showTimedAzkar("night");

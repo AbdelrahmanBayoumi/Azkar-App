@@ -38,7 +38,7 @@ public class PrayerCalculationsController implements Initializable {
         summerTiming.setText(Utility.toUTF(bundle.getString("extraOneHourDayLightSaving")));
         standardJuristic.setText(Utility.toUTF(bundle.getString("asrMadhabJumhoor")));
         hanafiRadioButton.setText(Utility.toUTF(bundle.getString("hanafi")));
-        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getOtherSettings().getLanguage().equals(Language.Arabic)));
+        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Language.getLanguageFromPreferences().equals(Language.Arabic)));
         methodComboBox.setValue(null);
         methodComboBox.setValue(prayerTimeSettings.getMethod());
     }

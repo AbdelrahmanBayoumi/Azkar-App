@@ -1,5 +1,8 @@
 package com.bayoumi.models.settings;
 
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.util.Logger;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
@@ -51,6 +54,19 @@ public enum Language {
             }
         }
         return Language.English;
+    }
+
+    public static String getLocalFromPreferences() {
+        return getLanguageFromPreferences().getLocale();
+    }
+
+    public static Language getLanguageFromPreferences() {
+        try {
+            return Language.get(Preferences.getInstance().get(PreferencesType.LANGUAGE));
+        } catch (Exception e) {
+            Logger.error(null, e, Language.class.getName() + ".getLanguageFromPreferences()");
+            return Language.English;
+        }
     }
 }
 

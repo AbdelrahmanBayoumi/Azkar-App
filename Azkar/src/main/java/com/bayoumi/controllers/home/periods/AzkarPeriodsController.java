@@ -107,25 +107,25 @@ public class AzkarPeriodsController implements Initializable {
     public void setFrequencyLabel() {
         String msg = Utility.toUTF(bundle.getString("azkar.period.showEvery")) + " ";
         if (currentFrequency.equals(highFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Language.getLanguageFromPreferences().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getHighPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getHighPeriod());
             }
         } else if (currentFrequency.equals(midFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Language.getLanguageFromPreferences().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getMidPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getMidPeriod());
             }
         } else if (currentFrequency.equals(lowFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Language.getLanguageFromPreferences().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getLowPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getLowPeriod());
             }
         } else if (currentFrequency.equals(rearFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Language.getLanguageFromPreferences().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getRearPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getRearPeriod());

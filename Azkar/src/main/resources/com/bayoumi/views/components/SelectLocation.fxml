@@ -5,97 +5,174 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" spacing="30.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 30 30 20 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.SelectLocationController">
+<VBox alignment="CENTER" spacing="15.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 30 30 20 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.SelectLocationController">
    <padding>
-      <Insets bottom="20.0" top="10.0" />
+      <Insets bottom="20.0" />
    </padding>
    <children>
-      <Label fx:id="enterCountryAndCity" text="أدخل الدولة والمدينة">
-         <styleClass>
-            <String fx:value="_17" />
-            <String fx:value="font-text-bold" />
-         </styleClass>
-      </Label>
-      <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
+      <HBox nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-radius: 30 30 0 0;">
          <children>
-            <JFXComboBox fx:id="countries" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="الدولة" HBox.hgrow="ALWAYS">
+            <JFXButton fx:id="autoSelectButton" focusTraversable="false" maxWidth="1.7976931348623157E308" onAction="#autoSelect" style="-fx-background-radius: 30 0 0 0;" text="اختيار تلقائي" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
                <styleClass>
-                  <String fx:value="combo-box-normal" />
-                  <String fx:value="_17" />
-                  <String fx:value="font-text-bold" />
-               </styleClass>
-            </JFXComboBox>
-            <JFXComboBox fx:id="cities" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="275.0" promptText="المدينة" HBox.hgrow="ALWAYS">
-               <styleClass>
-                  <String fx:value="combo-box-normal" />
-                  <String fx:value="_17" />
-                  <String fx:value="font-text-bold" />
-               </styleClass>
-            </JFXComboBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-         <children>
-            <JFXTextField fx:id="longitude" editable="false" labelFloat="true" promptText="خط الطول" text="0" HBox.hgrow="ALWAYS">
-               <styleClass>
-                  <String fx:value="text-field-normal" />
-                  <String fx:value="font-text-medium" />
-                  <String fx:value="_17" />
-               </styleClass>
-            </JFXTextField>
-            <JFXTextField fx:id="latitude" editable="false" labelFloat="true" promptText="خط العرض" text="0" HBox.hgrow="ALWAYS">
-               <styleClass>
-                  <String fx:value="text-field-normal" />
-                  <String fx:value="font-text-medium" />
-                  <String fx:value="_17" />
-               </styleClass>
-            </JFXTextField>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_RIGHT">
-         <padding>
-            <Insets right="20.0" />
-         </padding>
-         <VBox.margin>
-            <Insets bottom="-10.0" />
-         </VBox.margin>
-         <children>
-            <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-               <children>
-                  <Label fx:id="statusLabel" style="-fx-text-fill: green;" text="جاري التحميل..." wrapText="true">
-                     <styleClass>
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_16" />
-                     </styleClass>
-                  </Label>
-               </children>
-            </HBox>
-            <JFXButton fx:id="autoLocationButton" contentDisplay="RIGHT" graphicTextGap="10.0" onAction="#getAutoLocation" text="تحديد تلقائي للمكان">
-               <graphic>
-                  <FontAwesomeIconView glyphName="MAP_MARKER" size="20" />
-               </graphic>
-               <styleClass>
-                  <String fx:value="secondary-button" />
                   <String fx:value="font-text-bold" />
                   <String fx:value="_15" />
+                  <String fx:value="transparent-button" />
                </styleClass>
+               <padding>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="manualSelectButton" focusTraversable="false" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" onAction="#manualSelect" style="-fx-background-radius: 0 30 0 0;" text="اختيار يدوي" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_15" />
+                  <String fx:value="transparent-button" />
+               </styleClass>
+               <padding>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </padding>
             </JFXButton>
          </children>
       </HBox>
+      <AnchorPane>
+         <children>
+            <VBox fx:id="manualContainer" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="enterCountryAndCity" text="ادخل الدولة والمدينة">
+                     <styleClass>
+                        <String fx:value="_17" />
+                        <String fx:value="font-text-bold" />
+                     </styleClass>
+                  </Label>
+                  <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <JFXComboBox fx:id="countries" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="100.0" promptText="الدولة" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="combo-box-normal" />
+                              <String fx:value="_17" />
+                              <String fx:value="font-text-bold" />
+                           </styleClass>
+                        </JFXComboBox>
+                        <JFXComboBox fx:id="cities" labelFloat="true" maxWidth="1.7976931348623157E308" prefWidth="100.0" promptText="المدينة" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="combo-box-normal" />
+                              <String fx:value="_17" />
+                              <String fx:value="font-text-bold" />
+                           </styleClass>
+                        </JFXComboBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <JFXTextField fx:id="manualLongitude" editable="false" labelFloat="true" promptText="خط الطول" text="0" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="text-field-normal" />
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                        </JFXTextField>
+                        <JFXTextField fx:id="manualLatitude" editable="false" labelFloat="true" promptText="خط العرض" text="0" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="text-field-normal" />
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                        </JFXTextField>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="autoContainer" alignment="TOP_CENTER" spacing="30.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <JFXTextField fx:id="autoCountry" editable="false" labelFloat="true" promptText="الدولة" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="text-field-normal" />
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                        </JFXTextField>
+                        <JFXTextField fx:id="autoCity" editable="false" labelFloat="true" promptText="المدينة" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="text-field-normal" />
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                        </JFXTextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="128.0" maxHeight="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <JFXTextField fx:id="autoLongitude" editable="false" labelFloat="true" promptText="خط الطول" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="text-field-normal" />
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                        </JFXTextField>
+                        <JFXTextField fx:id="autoLatitude" editable="false" labelFloat="true" promptText="خط العرض" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="text-field-normal" />
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_17" />
+                           </styleClass>
+                        </JFXTextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <children>
+                        <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" style="-fx-text-fill: green;" text="جاري التحميل..." wrapText="true" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_16" />
+                           </styleClass>
+                        </Label>
+                        <JFXButton fx:id="autoLocationButton" contentDisplay="RIGHT" graphicTextGap="10.0" onAction="#getAutoLocation" text="تحديد تلقائي للمكان">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="MAP_MARKER" size="20" />
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="secondary-button" />
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_15" />
+                           </styleClass>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+      </AnchorPane>
    </children>
+   <stylesheets>
+      <URL value="@../../css/base.css" />
+      <URL value="@../../css/style.css" />
+   </stylesheets>
 </VBox>

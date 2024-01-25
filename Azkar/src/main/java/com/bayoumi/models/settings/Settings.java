@@ -6,13 +6,11 @@ public class Settings {
     private final AzkarSettings azkarSettings;
     private final PrayerTimeSettings prayerTimeSettings;
     private final NotificationSettings notificationSettings;
-    private final OtherSettings otherSettings;
 
     private Settings() {
         azkarSettings = new AzkarSettings();
         prayerTimeSettings = new PrayerTimeSettings();
         notificationSettings = new NotificationSettings();
-        otherSettings = new OtherSettings();
     }
 
     public static Settings getInstance() {
@@ -32,9 +30,5 @@ public class Settings {
 
     public NotificationSettings getNotificationSettings() {
         return notificationSettings;
-    }
-
-    public OtherSettings getOtherSettings() {
-        return otherSettings;
     }
 }

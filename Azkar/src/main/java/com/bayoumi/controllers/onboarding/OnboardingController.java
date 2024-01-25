@@ -5,7 +5,12 @@ import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.settings.*;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.PrayerTimeSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ScrollHandler;
@@ -68,7 +73,7 @@ public class OnboardingController implements Initializable {
 
     private void chooseLanguage(Language language) throws Exception {
         languageChooseBox.setVisible(false);
-        Settings.getInstance().getOtherSettings().setLanguage(language).save();
+        Preferences.getInstance().set(PreferencesType.LANGUAGE, language.getName());
 
         chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
         if (chooseAudioController != null) {
@@ -111,10 +116,9 @@ public class OnboardingController implements Initializable {
         ChooseAudioController.stopIfPlaying();
         prayerTimeSettings.save();
         // save other settings
-        OtherSettings otherSettings = Settings.getInstance().getOtherSettings();
-        otherSettings.setEnable24Format(format24.isSelected());
-        otherSettings.setMinimized(minimizeAtStart.isSelected());
-        otherSettings.save();
+        Preferences preferences = Preferences.getInstance();
+        preferences.set(PreferencesType.ENABLE_24_FORMAT, format24.isSelected() + "");
+        preferences.set(PreferencesType.MINIMIZED, minimizeAtStart.isSelected() + "");
 
         Onboarding.setFirstTimeOpened(0);
 

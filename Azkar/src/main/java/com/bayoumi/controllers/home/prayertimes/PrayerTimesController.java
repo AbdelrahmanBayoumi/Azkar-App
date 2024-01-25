@@ -4,6 +4,9 @@ import com.batoulapps.adhan.Prayer;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
@@ -201,10 +204,10 @@ public class PrayerTimesController implements Initializable {
 
     public void setPrayerTimesValuesToGUI() {
         Platform.runLater(() -> {
-            if (settings.getOtherSettings().isEnable24Format()) {
-                formatter = new SimpleDateFormat("HH:mm", new Locale(settings.getOtherSettings().getLanguageLocal()));
+            if (Preferences.getInstance().getBoolean(PreferencesType.ENABLE_24_FORMAT)) {
+                formatter = new SimpleDateFormat("HH:mm", new Locale(Language.getLocalFromPreferences()));
             } else {
-                formatter = new SimpleDateFormat("hh:mm a", new Locale(settings.getOtherSettings().getLanguageLocal()));
+                formatter = new SimpleDateFormat("hh:mm a", new Locale(Language.getLocalFromPreferences()));
             }
             formatter.setTimeZone(TimeZone.getDefault());
 

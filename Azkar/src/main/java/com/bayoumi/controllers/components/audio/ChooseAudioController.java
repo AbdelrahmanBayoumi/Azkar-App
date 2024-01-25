@@ -1,7 +1,7 @@
 package com.bayoumi.controllers.components.audio;
 
 import com.bayoumi.models.Muezzin;
-import com.bayoumi.models.settings.Settings;
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.util.Logger;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -51,7 +51,7 @@ public class ChooseAudioController implements Initializable {
         audioBox.setItems(FXCollections.observableArrayList(items));
         audioBox.getItems().add(Muezzin.NO_SOUND);
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
-        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+        if (Language.getLocalFromPreferences().equals("ar")) {
             audioBox.setConverter(Muezzin.arabicConverter());
         } else {
             audioBox.setConverter(Muezzin.englishConverter());
