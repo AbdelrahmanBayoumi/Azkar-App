@@ -73,7 +73,7 @@ public class OnboardingController implements Initializable {
 
     private void chooseLanguage(Language language) throws Exception {
         languageChooseBox.setVisible(false);
-        Preferences.getInstance().set(PreferencesType.LANGUAGE, language.getName());
+        Preferences.getInstance().set(PreferencesType.LANGUAGE, language.getLocale());
 
         chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
         if (chooseAudioController != null) {
@@ -105,13 +105,26 @@ public class OnboardingController implements Initializable {
         final PrayerCalculationsController calculationsController = (PrayerCalculationsController) Loader.getInstance().getController(Locations.PrayerCalculations);
         final SelectLocationController selectLocationController = (SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation);
 
-        prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
-        prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
+        // TODO: remove this duplicated code
+        boolean isManualSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+        if (!isManualSelected && selectLocationController.isAutoDetectionValid()) {
+            prayerTimeSettings.setCountry(selectLocationController.autoCountry.getText());
+            prayerTimeSettings.setCity(selectLocationController.autoCity.getText());
+            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.autoLatitude.getText()));
+            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.autoLongitude.getText()));
+        } else {
+            if (!isManualSelected) {
+                Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "true");
+            }
+            prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
+            prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
+            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.manualLatitude.getText()));
+            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.manualLongitude.getText()));
+        }
+
         prayerTimeSettings.setMethod(calculationsController.methodComboBox.getValue());
         prayerTimeSettings.setAsrJuristic(calculationsController.hanafiRadioButton.isSelected() ? 1 : 0);
         prayerTimeSettings.setSummerTiming(calculationsController.summerTiming.isSelected());
-        prayerTimeSettings.setLatitude(selectLocationController.cities.getValue().getLatitude());
-        prayerTimeSettings.setLongitude(selectLocationController.cities.getValue().getLongitude());
         prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
         ChooseAudioController.stopIfPlaying();
         prayerTimeSettings.save();
