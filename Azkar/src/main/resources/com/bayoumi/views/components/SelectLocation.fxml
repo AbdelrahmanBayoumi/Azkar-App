@@ -33,7 +33,7 @@
                   <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                </padding>
             </JFXButton>
-            <JFXButton fx:id="manualSelectButton" focusTraversable="false" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" onAction="#manualSelect" style="-fx-background-radius: 0 30 0 0;" text="اختيار يدوي" HBox.hgrow="ALWAYS">
+            <JFXButton fx:id="manualSelectButton" focusTraversable="false" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" style="-fx-background-radius: 0 30 0 0;" text="اختيار يدوي" HBox.hgrow="ALWAYS" onAction="#manualSelect">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

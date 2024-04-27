@@ -1,5 +1,5 @@
 package com.bayoumi.models.preferences;
 
 public interface PreferencesObserver {
-    void update(PreferencesType key, String value);
+    void update(PreferencesType key, Object value);
 }

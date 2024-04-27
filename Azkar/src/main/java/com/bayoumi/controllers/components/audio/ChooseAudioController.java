@@ -2,6 +2,7 @@ package com.bayoumi.controllers.components.audio;
 
 import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -51,7 +52,7 @@ public class ChooseAudioController implements Initializable {
         audioBox.setItems(FXCollections.observableArrayList(items));
         audioBox.getItems().add(Muezzin.NO_SOUND);
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
-        if (Language.getLocalFromPreferences().equals("ar")) {
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
             audioBox.setConverter(Muezzin.arabicConverter());
         } else {
             audioBox.setConverter(Muezzin.englishConverter());
@@ -81,6 +82,7 @@ public class ChooseAudioController implements Initializable {
                 playButton.setGraphic(playIcon);
                 playButton.setPadding(new Insets(5, 14, 5, 8));
             }
+            Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
     }
 

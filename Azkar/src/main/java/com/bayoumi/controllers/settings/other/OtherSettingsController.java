@@ -1,10 +1,9 @@
 package com.bayoumi.controllers.settings.other;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -34,23 +33,18 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+// TODO: remove implements SettingsInterface
 public class OtherSettingsController implements Initializable, SettingsInterface {
 
     private ResourceBundle bundle;
     @FXML
-    public Label hijriDateLabel;
-    @FXML
     private ComboBox<Language> languageComboBox;
     @FXML
-    private JFXCheckBox format24;
-    @FXML
-    private JFXCheckBox minimizeAtStart;
+    private JFXCheckBox minimizeAtStart, format24, darkTheme, autoUpdateCheckBox;
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private JFXCheckBox darkTheme, autoUpdateCheckBox;
-    @FXML
-    private Label version, adjustingTheHijriDateText, languageText;
+    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText;
     @FXML
     private VBox loadingBox;
     @FXML
@@ -71,39 +65,41 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         checkForUpdateButton.setText(Utility.toUTF(bundle.getString("checkForUpdate")));
         forProblemsAndSuggestionsButton.setText(Utility.toUTF(bundle.getString("forProblemsAndSuggestions")));
         autoUpdateCheckBox.setText(Utility.toUTF(bundle.getString("checkForUpdatesAutomatically")));
+        if (hijriDateOffset.getValue() != null) {
+            hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(this.bundle.getLocale().toString()));
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             updateBundle(LanguageBundle.getInstance().getResourceBundle());
+            LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
 
-            final Preferences preferences = Preferences.getInstance();
-            hijriDateLabel.setText(new HijriDate(preferences.getInt(PreferencesType.HIJRI_OFFSET))
-                    .getString(Language.getLocalFromPreferences()));
+            final Settings settings = Settings.getInstance();
 
+            hijriDateLabel.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale()));
             hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
-            hijriDateOffset.getValueFactory().setValue(preferences.getInt(PreferencesType.HIJRI_OFFSET));
-
+            hijriDateOffset.getValueFactory().setValue(settings.getHijriOffset());
             hijriDateOffset.valueProperty().addListener((observable, oldValue, newValue) ->
-                    hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(Language.getLocalFromPreferences())));
+                    hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(settings.getLanguage().getLocale())));
 
 
             languageComboBox.setConverter(Language.stringConvertor(languageComboBox));
             languageComboBox.setItems(FXCollections.observableArrayList(Language.values()));
-            languageComboBox.setValue(Language.get(Preferences.getInstance().get(PreferencesType.LANGUAGE)));
+            languageComboBox.setValue(settings.getLanguage());
 
-            format24.setSelected(Preferences.getInstance().getBoolean(PreferencesType.ENABLE_24_FORMAT));
+            format24.setSelected(settings.getEnable24Format());
 
-            minimizeAtStart.setSelected(Preferences.getInstance().getBoolean(PreferencesType.MINIMIZED));
+            minimizeAtStart.setSelected(settings.getMinimized());
 
-            darkTheme.setSelected(Preferences.getInstance().getBoolean(PreferencesType.ENABLE_DARK_MODE));
+            darkTheme.setSelected(settings.getNightMode());
 
             darkTheme.setDisable(true);
 
             version.setText(Constants.VERSION);
 
-            autoUpdateCheckBox.setSelected(Preferences.getInstance().getBoolean(PreferencesType.AUTOMATIC_CHECK_FOR_UPDATES));
+            autoUpdateCheckBox.setSelected(settings.getAutomaticCheckForUpdates());
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".initialize()");
         }
@@ -120,13 +116,6 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
     @Override
     public void saveToDB() {
-        Preferences preferences = Preferences.getInstance();
-        preferences.set(PreferencesType.LANGUAGE, languageComboBox.getValue().getLocale());
-        preferences.set(PreferencesType.ENABLE_24_FORMAT, format24.isSelected() + "");
-        preferences.set(PreferencesType.ENABLE_DARK_MODE, darkTheme.isSelected() + "");
-        preferences.set(PreferencesType.HIJRI_OFFSET, hijriDateOffset.getValue() + "");
-        preferences.set(PreferencesType.MINIMIZED, minimizeAtStart.isSelected() + "");
-        preferences.set(PreferencesType.AUTOMATIC_CHECK_FOR_UPDATES, autoUpdateCheckBox.isSelected() + "");
     }
 
     @FXML
@@ -160,5 +149,35 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             }
             Platform.runLater(() -> loadingBox.setVisible(false));
         }).start();
+    }
+
+    @FXML
+    private void saveLanguage() {
+        Settings.getInstance().setLanguage(languageComboBox.getValue().getLocale());
+    }
+
+    @FXML
+    private void autoUpdateCheck() {
+        Settings.getInstance().setAutomaticCheckForUpdates(autoUpdateCheckBox.isSelected());
+    }
+
+    @FXML
+    private void hijriDateOffsetUpdate() {
+        Settings.getInstance().setHijriOffset(hijriDateOffset.getValue());
+    }
+
+    @FXML
+    private void darkThemeSelect() {
+        Settings.getInstance().setNightMode(darkTheme.isSelected());
+    }
+
+    @FXML
+    private void format24Select() {
+        Settings.getInstance().setEnable24Format(format24.isSelected());
+    }
+
+    @FXML
+    private void minimizeAtStartSelect() {
+        Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
     }
 }

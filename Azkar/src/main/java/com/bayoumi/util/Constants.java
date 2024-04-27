@@ -17,8 +17,6 @@ public class Constants {
 
     public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
 
-    public final static String NOTIFICATION_BORDER_COLOR = "#E9C46A";
-
     static {
         try {
             if (Files.isWritable(Paths.get(Constants.class.getProtectionDomain().getCodeSource().getLocation().toURI()))) {

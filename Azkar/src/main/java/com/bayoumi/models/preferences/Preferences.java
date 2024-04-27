@@ -1,5 +1,6 @@
 package com.bayoumi.models.preferences;
 
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.update.UpdateHandler;
@@ -7,7 +8,7 @@ import com.bayoumi.util.update.UpdateHandler;
 import java.sql.ResultSet;
 import java.util.Timer;
 
-public class Preferences extends PreferencesObservable {
+public class Preferences {
     private static Preferences instance;
 
     public static Preferences getInstance() {
@@ -29,14 +30,18 @@ public class Preferences extends PreferencesObservable {
         }
 
         // 2. check for updates if enabled
+        checkForUpdate();
+    }
+
+    private void checkForUpdate() {
         Logger.debug("Start automaticCheckForUpdates");
-        final Timer timer = new java.util.Timer();
+        final Timer timer = new Timer();
         timer.schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
                         Logger.debug("automaticCheckForUpdates: run()");
-                        if (UpdateHandler.getInstance().checkUpdate() == 1 && getBoolean(PreferencesType.AUTOMATIC_CHECK_FOR_UPDATES, "true")) {
+                        if (UpdateHandler.getInstance().checkUpdate() == 1 & Settings.getInstance().getAutomaticCheckForUpdates()) {
                             UpdateHandler.getInstance().showInstallPrompt();
                         }
                         // close the thread
@@ -80,15 +85,14 @@ public class Preferences extends PreferencesObservable {
     }
 
     public void set(PreferencesType key, String value) {
-        Logger.debug("set >> " + key + ": [" + value + "]");
         if (isExist(key)) {
-            Logger.debug("Key Exists..");
+            Logger.debug("[Preferences] Update >> " + key + ": [" + value + "]");
             update(key, value);
         } else {
-            Logger.debug("New Key..");
+            Logger.debug("[Preferences] Insert >> " + key + ": [" + value + "]");
             save(key, value);
         }
-        notifyObservers(key, value);
+//        notifyObservers(key, value);
     }
 
     public String get(PreferencesType key, String defaultValue) {
@@ -113,8 +117,8 @@ public class Preferences extends PreferencesObservable {
         return get(key, key.getDefaultValue());
     }
 
-    public boolean getBoolean(PreferencesType key, String defaultValue) {
-        return get(key, defaultValue).equalsIgnoreCase("true");
+    public boolean getBoolean(PreferencesType key, boolean defaultValue) {
+        return get(key, String.valueOf(defaultValue)).equalsIgnoreCase("true");
     }
 
     public boolean getBoolean(PreferencesType key) {
@@ -127,6 +131,10 @@ public class Preferences extends PreferencesObservable {
 
     public int getInt(PreferencesType key) {
         return Integer.parseInt(get(key, key.getDefaultValue()));
+    }
+
+    public double getDouble(PreferencesType key) {
+        return Double.parseDouble(get(key, key.getDefaultValue()));
     }
 
 

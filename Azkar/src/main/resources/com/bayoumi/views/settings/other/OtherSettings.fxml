@@ -28,7 +28,7 @@
                <children>
                   <HBox alignment="CENTER" spacing="15.0">
                      <children>
-                        <Label fx:id="languageText" minWidth="50.0" text="اللغة" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="languageText" minWidth="70.0" text="اللغة" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -36,7 +36,7 @@
                         </Label>
                         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox fx:id="languageComboBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
+                              <ComboBox fx:id="languageComboBox" maxWidth="1.7976931348623157E308" onAction="#saveLanguage" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -52,7 +52,7 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="30.0">
                      <children>
-                        <JFXCheckBox fx:id="format24" nodeOrientation="LEFT_TO_RIGHT" text="نظام 24 ساعة">
+                        <JFXCheckBox fx:id="format24" nodeOrientation="LEFT_TO_RIGHT" onAction="#format24Select" text="نظام 24 ساعة">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -61,7 +61,7 @@
                               <String fx:value="_15" />
                            </styleClass>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="darkTheme" nodeOrientation="LEFT_TO_RIGHT" text="الوضع الليلي">
+                        <JFXCheckBox fx:id="darkTheme" nodeOrientation="LEFT_TO_RIGHT" onAction="#darkThemeSelect" text="الوضع الليلي">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -70,7 +70,7 @@
                               <String fx:value="_15" />
                            </styleClass>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" text="دائما تصغير البرنامج عند البدء">
+                        <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" onAction="#minimizeAtStartSelect" text="دائما تصغير البرنامج عند البدء">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -102,7 +102,7 @@
                               <String fx:value="font-text-bold" />
                            </styleClass>
                         </Label>
-                        <Spinner fx:id="hijriDateOffset" focusTraversable="false" prefWidth="90.0" />
+                        <Spinner fx:id="hijriDateOffset" focusTraversable="false" onMouseClicked="#hijriDateOffsetUpdate" prefWidth="90.0" />
                      </children>
                   </HBox>
                   <TextFlow>
@@ -119,7 +119,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXCheckBox fx:id="autoUpdateCheckBox" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" styleClass="font-text-medium" text="تحقق من وجود تحديثات تلقائيا">
+                        <JFXCheckBox fx:id="autoUpdateCheckBox" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" onAction="#autoUpdateCheck" styleClass="font-text-medium" text="تحقق من وجود تحديثات تلقائيا">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>

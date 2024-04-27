@@ -4,9 +4,6 @@ import com.batoulapps.adhan.Prayer;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
-import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
@@ -77,6 +74,8 @@ public class PrayerTimesController implements Initializable {
         asrTime.setOnMouseExited(event -> setPrayerTimeWithFormat(asrTime, prayerTimesToday.asr, formatter));
         maghribTime.setOnMouseExited(event -> setPrayerTimeWithFormat(maghribTime, prayerTimesToday.maghrib, formatter));
         ishaTime.setOnMouseExited(event -> setPrayerTimeWithFormat(ishaTime, prayerTimesToday.isha, formatter));
+
+        settings = Settings.getInstance();
     }
 
     private void showRemainingTime(Label label, Date dateNow, Date nextPrayerTime) {
@@ -116,8 +115,7 @@ public class PrayerTimesController implements Initializable {
         middleOfTheNightTimeText.setText(Utility.toUTF(bundle.getString("middleOfTheNightTime")));
     }
 
-    public void setData(Settings settings, PrayerTimes prayerTimesToday) {
-        this.settings = settings;
+    public void setData(PrayerTimes prayerTimesToday) {
         setPrayerTimes(prayerTimesToday);
         LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
     }
@@ -204,10 +202,10 @@ public class PrayerTimesController implements Initializable {
 
     public void setPrayerTimesValuesToGUI() {
         Platform.runLater(() -> {
-            if (Preferences.getInstance().getBoolean(PreferencesType.ENABLE_24_FORMAT)) {
-                formatter = new SimpleDateFormat("HH:mm", new Locale(Language.getLocalFromPreferences()));
+            if (settings.getEnable24Format()) {
+                formatter = new SimpleDateFormat("HH:mm", new Locale(settings.getLanguage().getLocale()));
             } else {
-                formatter = new SimpleDateFormat("hh:mm a", new Locale(Language.getLocalFromPreferences()));
+                formatter = new SimpleDateFormat("hh:mm a", new Locale(settings.getLanguage().getLocale()));
             }
             formatter.setTimeZone(TimeZone.getDefault());
 

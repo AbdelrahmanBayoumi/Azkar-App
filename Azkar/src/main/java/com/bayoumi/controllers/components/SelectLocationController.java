@@ -2,8 +2,6 @@ package com.bayoumi.controllers.components;
 
 import com.bayoumi.models.location.City;
 import com.bayoumi.models.location.Country;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
@@ -21,14 +19,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 
 public class SelectLocationController implements Initializable {
     private PrayerTimeSettings prayerTimeSettings;
@@ -50,24 +45,25 @@ public class SelectLocationController implements Initializable {
     private VBox manualContainer, autoContainer;
 
     public void setData() {
+        System.out.println("[SelectLocationController] setData()");
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
-        // init selected button
-        final boolean isManualSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
-        if (isManualSelected) {
-            manualSelect(null);
-        } else {
-            autoSelect(null);
-        }
+        final boolean isManualSelected = prayerTimeSettings.isManualLocationSelected();
         // init auto location text fields
-        if(!isManualSelected){
+        if (!isManualSelected) {
             autoCountry.setText(prayerTimeSettings.getCountry());
             autoCity.setText(prayerTimeSettings.getCity());
             autoLatitude.setText(String.valueOf(prayerTimeSettings.getLatitude()));
             autoLongitude.setText(String.valueOf(prayerTimeSettings.getLongitude()));
         }
         // init manual location text fields
-        initCountries();
-        initCities();
+        initCountriesAndCities();
+
+        // init selected button
+        if (isManualSelected) {
+            manualSelect(null);
+        } else {
+            autoSelect(null);
+        }
     }
 
     private void updateBundle(ResourceBundle bundle) {
@@ -89,54 +85,17 @@ public class SelectLocationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("[SelectLocationController] initialize()");
         LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
         prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         statusLabel.setVisible(false);
         countryComboBoxAutoComplete = new ComboBoxAutoComplete<>(countries);
         cityComboBoxAutoComplete = new ComboBoxAutoComplete<>(cities);
-    }
-
-    private void initDoubleValidation() {
-        Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
-        UnaryOperator<TextFormatter.Change> filter = c -> {
-            String text = c.getControlNewText();
-            if (validEditingState.matcher(text).matches()) {
-                return c;
-            } else {
-                return null;
-            }
-        };
-
-        StringConverter<Double> converter = new StringConverter<Double>() {
-
-            @Override
-            public Double fromString(String s) {
-                if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
-                    return 0.0;
-                } else {
-                    return Double.valueOf(s);
-                }
-            }
-
-            @Override
-            public String toString(Double d) {
-                return d.toString();
-            }
-        };
-        manualLatitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
-        manualLongitude.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
-    }
-
-    private void initCountries() {
-        // getAllData
-        final String local = Language.getLocalFromPreferences();
-        countries.getItems().addAll(Country.getAll(local));
-        countryComboBoxAutoComplete.setItems(countries.getItems());
-        // StringConverter
+        // ===== Set Converters =====
         countries.setConverter(new StringConverter<Country>() {
             @Override
             public String toString(Country object) {
-                if (local.equals("ar")) {
+                if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                     return object != null ? object.getArabicName() : "";
                 }
                 return object != null ? object.getEnglishName() : "";
@@ -144,7 +103,7 @@ public class SelectLocationController implements Initializable {
 
             @Override
             public Country fromString(String string) {
-                if (local.equals("ar")) {
+                if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                     return countries.getItems().stream().filter(object ->
                             object.getArabicName().equals(string)).findFirst().orElse(null);
                 }
@@ -152,44 +111,10 @@ public class SelectLocationController implements Initializable {
                         object.getEnglishName().equals(string)).findFirst().orElse(null);
             }
         });
-        countries.setOnAction(this::changeCountry);
-        if (!countries.getItems().isEmpty()) {
-            countries.setValue(countries.getItems().get(0));
-        }
-        Country countryFormCode = Country.getCountryFormCode(prayerTimeSettings.getCountry());
-        if (countryFormCode != null) {
-            countries.setValue(countryFormCode);
-        }
-    }
-
-    private void changeCountry(ActionEvent event) {
-        cities.getItems().clear();
-        if (countries.getValue() != null) {
-            cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
-            cityComboBoxAutoComplete.setItems(cities.getItems());
-        }
-        if (!cities.getItems().isEmpty()) {
-            cities.setValue(cities.getItems().get(0));
-        }
-        statusLabel.setVisible(false);
-    }
-
-    private void initCities() {
-        cities.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (newValue != null) {
-                manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
-                manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
-                statusLabel.setVisible(false);
-            }
-        });
-        if (!countries.getItems().isEmpty()) {
-            changeCountry(null);
-        }
-        final String local = Language.getLocalFromPreferences();
         cities.setConverter(new StringConverter<City>() {
             @Override
             public String toString(City object) {
-                if (local.equals("ar")) {
+                if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                     if (object.getArabicName() == null || object.getArabicName().trim().isEmpty()) {
                         return object.getEnglishName();
                     }
@@ -203,10 +128,65 @@ public class SelectLocationController implements Initializable {
                 return null;
             }
         });
+    }
+
+    private void initCountriesAndCities() {
+        cities.setOnAction(null);
+        initCountries();
+        initCities();
+        cities.setOnAction((e) -> onManualLocationUpdate());
+    }
+
+    private void initCountries() {
+        // getAllData
+        final String local = Settings.getInstance().getLanguage().getLocale();
+        countries.getItems().addAll(Country.getAll(local));
+        countryComboBoxAutoComplete.setItems(countries.getItems());
+        countries.setOnAction((e) -> changeCountry(e, false));
+        Country countryFormCode = Country.getCountryFormCode(prayerTimeSettings.getCountry());
+        if (countryFormCode != null) {
+            countries.setValue(countryFormCode);
+        } else if (!countries.getItems().isEmpty()) {
+            countries.setValue(countries.getItems().get(0));
+        }
+    }
+
+    private void changeCountry(ActionEvent event, boolean isInit) {
+        cities.setOnAction(null);
+        cities.getItems().clear();
+        if (countries.getValue() != null) {
+            cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+            cityComboBoxAutoComplete.setItems(cities.getItems());
+        }
+        if (!cities.getItems().isEmpty()) {
+            System.out.println("cities.setValue(cities.getItems().get(0));");
+            cities.setValue(cities.getItems().get(0));
+        }
+        statusLabel.setVisible(false);
+        if (!isInit) {
+            onManualLocationUpdate();
+        }
+        cities.setOnAction((e) -> onManualLocationUpdate());
+    }
+
+    private void initCities() {
+        cities.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            if (newValue != null) {
+                manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
+                manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
+                statusLabel.setVisible(false);
+            }
+        });
+        if (!countries.getItems().isEmpty()) {
+            changeCountry(null, true);
+        }
+
         City cityFromEngName = City.getCityFromEngName(prayerTimeSettings.getCity(), prayerTimeSettings.getCountry());
         if (cityFromEngName != null) {
             cities.setValue(cityFromEngName);
             cities.getSelectionModel().select(cityFromEngName);
+        } else {
+            cities.setValue(cities.getItems().get(0));
         }
     }
 
@@ -230,6 +210,7 @@ public class SelectLocationController implements Initializable {
                     autoLatitude.setText(String.valueOf(city.getLatitude()));
                     autoLongitude.setText(String.valueOf(city.getLongitude()));
                     statusLabel.setVisible(false);
+                    onAutoLocationUpdate();
                 });
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".getAutoLocation()");
@@ -256,9 +237,9 @@ public class SelectLocationController implements Initializable {
         manualContainer.setVisible(true);
         autoContainer.setVisible(false);
 
-        // if action is from UI not from setData() => save in preferences
+        // if action is from UI not from setData() => save in settings
         if (event != null) {
-            Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "true");
+            onManualLocationUpdate();
         }
     }
 
@@ -271,10 +252,33 @@ public class SelectLocationController implements Initializable {
         manualContainer.setVisible(false);
         autoContainer.setVisible(true);
 
-        // if action is from UI not from setData() => save in preferences
+        // if action is from UI not from setData() => save in settings
         if (event != null) {
-            Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "false");
+            onAutoLocationUpdate();
         }
+    }
+
+    @FXML
+    private void onManualLocationUpdate() {
+        prayerTimeSettings.setManualLocationSelected(true);
+        if (countries.getValue() == null && cities.getValue() == null) {
+            return;
+        }
+        prayerTimeSettings.setCountry(countries.getValue().getCode());
+        prayerTimeSettings.setCity(cities.getValue().getEnglishName());
+        prayerTimeSettings.setLatitude(Double.parseDouble(manualLatitude.getText()));
+        prayerTimeSettings.setLongitude(Double.parseDouble(manualLongitude.getText()));
+        prayerTimeSettings.handleNotifyObservers();
+    }
+
+    private void onAutoLocationUpdate() {
+        if (!isAutoDetectionValid()) return;
+        prayerTimeSettings.setManualLocationSelected(false);
+        prayerTimeSettings.setCountry(autoCountry.getText());
+        prayerTimeSettings.setCity(autoCity.getText());
+        prayerTimeSettings.setLatitude(Double.parseDouble(autoLatitude.getText()));
+        prayerTimeSettings.setLongitude(Double.parseDouble(autoLongitude.getText()));
+        prayerTimeSettings.handleNotifyObservers();
     }
 
     private void toggleSelectButtonStyle(JFXButton newButton) {
@@ -287,7 +291,7 @@ public class SelectLocationController implements Initializable {
         }
     }
 
-    public boolean isAutoDetectionValid(){
+    public boolean isAutoDetectionValid() {
         return !autoCountry.getText().trim().isEmpty() && !autoCity.getText().trim().isEmpty() && !autoLatitude.getText().trim().isEmpty() && !autoLongitude.getText().trim().isEmpty();
     }
 }

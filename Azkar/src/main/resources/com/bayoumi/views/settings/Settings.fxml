@@ -11,9 +11,9 @@
    <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
       <left>
          <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-            <JFXButton fx:id="cityButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="20.0" onAction="#openCitySettings" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" text="المدينة" textAlignment="CENTER" wrapText="true">
+            <JFXButton fx:id="azkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="20.0" onAction="#openAzkarSettings" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" text="الأذكار" textAlignment="CENTER" wrapText="true">
                <graphic>
-                  <FontAwesomeIconView glyphName="GLOBE" size="40" />
+                  <FontAwesomeIconView glyphName="BOOK" size="40" />
                </graphic>
                <styleClass>
                   <String fx:value="primary-button" />
@@ -21,14 +21,14 @@
                   <String fx:value="font-text-bold" />
                </styleClass>
             </JFXButton>
-            <JFXButton fx:id="azkarButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="20.0" onAction="#openAzkarSettings" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" text="الأذكار" textAlignment="CENTER" wrapText="true">
+            <JFXButton fx:id="cityButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="20.0" onAction="#openCitySettings" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" text="المدينة" textAlignment="CENTER" wrapText="true">
                <graphic>
-                  <FontAwesomeIconView glyphName="BOOK" size="40" />
+                  <FontAwesomeIconView glyphName="GLOBE" size="40" />
                </graphic>
                <styleClass>
                   <String fx:value="secondary-button" />
-                  <String fx:value="font-text-bold" />
                   <String fx:value="_20" />
+                  <String fx:value="font-text-bold" />
                </styleClass>
             </JFXButton>
             <JFXButton fx:id="otherButton" contentDisplay="TOP" focusTraversable="false" graphicTextGap="20.0" onAction="#openOtherSettings" prefHeight="9000.0" prefWidth="150.0" style="-fx-background-radius: 0;" text="أخرى" textAlignment="CENTER" wrapText="true">
@@ -37,8 +37,8 @@
                </graphic>
                <styleClass>
                   <String fx:value="secondary-button" />
-                  <String fx:value="font-text-bold" />
                   <String fx:value="_20" />
+                  <String fx:value="font-text-bold" />
                </styleClass>
             </JFXButton>
          </VBox>

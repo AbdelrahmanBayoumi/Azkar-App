@@ -1,5 +1,7 @@
 package com.bayoumi.models.settings;
 
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.file.FileUtils;
@@ -7,7 +9,6 @@ import javafx.util.StringConverter;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Observable;
 
 public class PrayerTimeSettings extends Observable {
@@ -20,74 +21,28 @@ public class PrayerTimeSettings extends Observable {
     private double latitude;
     private double longitude;
     private String adhanAudio;
+    private boolean isManualLocationSelected;
 
     protected PrayerTimeSettings() {
         loadSettings();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PrayerTimeSettings that = (PrayerTimeSettings) o;
-        return asrJuristic == that.asrJuristic &&
-                summerTiming == that.summerTiming &&
-                Double.compare(that.latitude, latitude) == 0 &&
-                Double.compare(that.longitude, longitude) == 0 &&
-                Objects.equals(country, that.country) &&
-                Objects.equals(city, that.city) &&
-                Objects.equals(method, that.method) &&
-                Objects.equals(adhanAudio, that.adhanAudio);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(country, city, method, asrJuristic, summerTiming, latitude, longitude, adhanAudio);
-    }
-
-    public void save() {
-        try {
-            if (this.equals(new PrayerTimeSettings())) {
-                // if current obj is equal the one stored in DB then => do nothing (don't save)
-                return;
-            }
-            DatabaseManager databaseManager = DatabaseManager.getInstance();
-            databaseManager.stat = databaseManager.con.prepareStatement("UPDATE prayertimes_settings set country = ?, city = ?, method = ?, asr_juristic = ?, summer_timing = ?,latitude = ?,longitude = ?, adhanAudio = ?;");
-            databaseManager.stat.setString(1, country);
-            databaseManager.stat.setString(2, city);
-            databaseManager.stat.setInt(3, method.getId());
-            databaseManager.stat.setInt(4, asrJuristic);
-            databaseManager.stat.setInt(5, summerTiming ? 1 : 0);
-            databaseManager.stat.setDouble(6, latitude);
-            databaseManager.stat.setDouble(7, longitude);
-            databaseManager.stat.setString(8, adhanAudio);
-            databaseManager.stat.executeUpdate();
-            // fetch new updated data from database
-            loadSettings();
-            // fire change event to all listeners to update their values
-            setChanged();
-            notifyObservers();
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + ".save()");
-        }
-    }
-
     private void loadSettings() {
-        try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM prayertimes_settings").executeQuery();
-            if (res.next()) {
-                this.country = res.getString(1);
-                this.city = res.getString(2);
-                this.method = Method.getMethodByID(res.getInt(3));
-                this.asrJuristic = res.getInt(4);
-                this.summerTiming = res.getInt(5) == 1;
-                this.latitude = res.getDouble("latitude");
-                this.longitude = res.getDouble("longitude");
-                this.adhanAudio = res.getString("adhanAudio");
-            }
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + ".loadSettings()");
-        }
+        this.country = Preferences.getInstance().get(PreferencesType.COUNTRY);
+        this.city = Preferences.getInstance().get(PreferencesType.CITY);
+        this.method = Method.getMethodByID(Preferences.getInstance().getInt(PreferencesType.METHOD));
+        this.asrJuristic = Preferences.getInstance().getInt(PreferencesType.ASR_JURISTIC);
+        this.summerTiming = Preferences.getInstance().getBoolean(PreferencesType.SUMMER_TIMING);
+        this.latitude = Preferences.getInstance().getDouble(PreferencesType.LATITUDE);
+        this.longitude = Preferences.getInstance().getDouble(PreferencesType.LONGITUDE);
+        this.adhanAudio = Preferences.getInstance().get(PreferencesType.ADHAN_AUDIO);
+        this.isManualLocationSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+    }
+
+    public void handleNotifyObservers() {
+        // fire change event to all listeners to update their values
+        setChanged();
+        notifyObservers();
     }
 
     public String getCountry() {
@@ -95,7 +50,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setCountry(String country) {
+        // 1. set value to local variable
         this.country = country;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.COUNTRY, country);
     }
 
     public String getCity() {
@@ -103,7 +61,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setCity(String city) {
+        // 1. set value to local variable
         this.city = city;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.CITY, city);
     }
 
     public boolean isSummerTiming() {
@@ -111,7 +72,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setSummerTiming(boolean summerTiming) {
+        // 1. set value to local variable
         this.summerTiming = summerTiming;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.SUMMER_TIMING, summerTiming + "");
     }
 
     public Method getMethod() {
@@ -119,7 +83,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setMethod(Method method) {
+        // 1. set value to local variable
         this.method = method;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.METHOD, String.valueOf(method.getId()));
     }
 
     public int getAsrJuristic() {
@@ -127,7 +94,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setAsrJuristic(int asrJuristic) {
+        // 1. set value to local variable
         this.asrJuristic = asrJuristic;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.ASR_JURISTIC, asrJuristic + "");
     }
 
     public double getLatitude() {
@@ -135,7 +105,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setLatitude(double latitude) {
+        // 1. set value to local variable
         this.latitude = latitude;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.LATITUDE, latitude + "");
     }
 
     public double getLongitude() {
@@ -143,7 +116,10 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setLongitude(double longitude) {
+        // 1. set value to local variable
         this.longitude = longitude;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.LONGITUDE, longitude + "");
     }
 
     public String getAdhanAudio() {
@@ -154,7 +130,21 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public void setAdhanAudio(String adhanAudio) {
+        // 1. set value to local variable
         this.adhanAudio = adhanAudio;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.ADHAN_AUDIO, adhanAudio);
+    }
+
+    public boolean isManualLocationSelected() {
+        return isManualLocationSelected;
+    }
+
+    public void setManualLocationSelected(boolean manualLocationSelected) {
+        // 1. set value to local variable
+        isManualLocationSelected = manualLocationSelected;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, manualLocationSelected + "");
     }
 
     @Override
@@ -168,6 +158,7 @@ public class PrayerTimeSettings extends Observable {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", adhanAudio='" + adhanAudio + '\'' +
+                ", isManualLocationSelected=" + isManualLocationSelected +
                 '}';
     }
 

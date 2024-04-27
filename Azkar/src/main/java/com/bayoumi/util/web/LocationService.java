@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 public class LocationService {
 
-    private static String getAPIKEY() throws Exception {
+    private static String getIp2locationAPIKEY() throws Exception {
         final Properties properties = new Properties();
         try (InputStream input = Files.newInputStream(Paths.get(Objects.requireNonNull(LocationService.class.getResource("/config.properties")).toURI()))) {
             properties.load(input);
@@ -23,8 +23,24 @@ public class LocationService {
         }
     }
 
-    public static City getCity(final String IP) throws Exception {
-        JSONObject jsonRoot = WebUtilities.getJsonResponse("https://api.ip2location.io/?key=" + getAPIKEY() + "&ip=" + IP);
+    public static City getCityWithIP_API(final String IP) throws Exception {
+        JSONObject jsonRoot = WebUtilities.getJsonResponse("http://ip-api.com/json/" + IP);
+        if (jsonRoot.has("status") && jsonRoot.getString("status").equals("success")) {
+            TimeZone tz = TimeZone.getTimeZone(jsonRoot.getString("timezone"));
+            return new City(jsonRoot.getString("countryCode"),
+                    jsonRoot.getString("city"),
+                    null,
+                    jsonRoot.getDouble("lat"),
+                    jsonRoot.getDouble("lon"),
+                    (tz.toZoneId().getRules().getStandardOffset(Instant.now()).getTotalSeconds() / 3600.0)
+            );
+        } else {
+            throw new Exception("Error in fetching city data, ENDPOINT: " + "http://ip-api.com/json/" + IP);
+        }
+    }
+
+    public static City getCityWithIp2location(final String IP) throws Exception {
+        JSONObject jsonRoot = WebUtilities.getJsonResponse("https://api.ip2location.io/?key=" + getIp2locationAPIKEY() + "&ip=" + IP);
         Logger.debug("jsonRoot: " + jsonRoot);
         if (!jsonRoot.isEmpty()) {
             TimeZone tz = TimeZone.getTimeZone(ZoneOffset.of(jsonRoot.getString("time_zone")));
@@ -37,7 +53,15 @@ public class LocationService {
                     (tz.toZoneId().getRules().getStandardOffset(Instant.now()).getTotalSeconds() / 3600.0)
             );
         } else {
-            throw new Exception("Error in fetching city data, " + "https://api.ip2location.io/?key=" + getAPIKEY() + "&ip=" + IP);
+            throw new Exception("Error in fetching city data, " + "https://api.ip2location.io/?key=" + getIp2locationAPIKEY() + "&ip=" + IP);
+        }
+    }
+
+    public static City getCity(final String IP) throws Exception {
+        try {
+            return getCityWithIP_API(IP);
+        } catch (Exception e) {
+            return getCityWithIp2location(IP);
         }
     }
 }

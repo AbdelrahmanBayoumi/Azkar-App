@@ -1,8 +1,7 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.controllers.notification.NotificationsControlsFXController;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -46,7 +45,7 @@ public class Notification {
                             .onAction(finalOnClickHandler)
                             .closeHandler(closeCallback)
                             .position(position)
-                            .borderColor(Preferences.getInstance().get(PreferencesType.NOTIFICATION_BORDER_COLOR, "#E9C46A"))
+                            .borderColor(Settings.getInstance().getNotificationSettings().getColor())
                             .hideCloseButton()
                             .show(((NotificationsControlsFXController) loader.getController()).closeButton);
                 } catch (Exception e) {

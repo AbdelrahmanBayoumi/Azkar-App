@@ -41,7 +41,7 @@ public class SettingsController implements Initializable {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
         LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
 
-        openCitySettings();
+        openAzkarSettings();
         borderPane.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener((observable, oldWindow, newWindow) -> {
@@ -58,13 +58,9 @@ public class SettingsController implements Initializable {
         try {
             if (!azkarButton.equals(selectedButton)) {
                 toggle(azkarButton);
-
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.AzkarSettings.toString()));
                 borderPane.setCenter(loader.load());
                 settingsI = loader.getController();
-
-//                borderPane.setCenter(Loader.getInstance().getView(Locations.AzkarSettings));
-//                settingsI = (SettingsInterface) Loader.getInstance().getController(Locations.AzkarSettings);
             }
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".openAzkarSettings()");

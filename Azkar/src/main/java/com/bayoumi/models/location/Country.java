@@ -1,6 +1,7 @@
 package com.bayoumi.models.location;
 
 import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.LocationsDBManager;
 
@@ -113,7 +114,7 @@ public class Country {
     }
 
     public String getName() {
-        if (Language.getLocalFromPreferences().equals("ar")) {
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
             return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
         }
         return this.getEnglishName();

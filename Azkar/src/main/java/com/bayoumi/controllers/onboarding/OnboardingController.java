@@ -5,8 +5,6 @@ import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
@@ -73,7 +71,7 @@ public class OnboardingController implements Initializable {
 
     private void chooseLanguage(Language language) throws Exception {
         languageChooseBox.setVisible(false);
-        Preferences.getInstance().set(PreferencesType.LANGUAGE, language.getLocale());
+        Settings.getInstance().setLanguage(language.getLocale());
 
         chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
         if (chooseAudioController != null) {
@@ -86,6 +84,7 @@ public class OnboardingController implements Initializable {
         container.getChildren().add(3, Loader.getInstance().getView(Locations.PrayerCalculations));
         ((PrayerCalculationsController) Loader.getInstance().getController(Locations.PrayerCalculations)).setData();
 
+        ((SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation)).autoSelectButton.fire();
         ((SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation)).autoLocationButton.fire();
     }
 
@@ -106,7 +105,7 @@ public class OnboardingController implements Initializable {
         final SelectLocationController selectLocationController = (SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation);
 
         // TODO: remove this duplicated code
-        boolean isManualSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+        boolean isManualSelected = prayerTimeSettings.isManualLocationSelected();
         if (!isManualSelected && selectLocationController.isAutoDetectionValid()) {
             prayerTimeSettings.setCountry(selectLocationController.autoCountry.getText());
             prayerTimeSettings.setCity(selectLocationController.autoCity.getText());
@@ -114,7 +113,7 @@ public class OnboardingController implements Initializable {
             prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.autoLongitude.getText()));
         } else {
             if (!isManualSelected) {
-                Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, "true");
+                prayerTimeSettings.setManualLocationSelected(true);
             }
             prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
             prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
@@ -125,13 +124,11 @@ public class OnboardingController implements Initializable {
         prayerTimeSettings.setMethod(calculationsController.methodComboBox.getValue());
         prayerTimeSettings.setAsrJuristic(calculationsController.hanafiRadioButton.isSelected() ? 1 : 0);
         prayerTimeSettings.setSummerTiming(calculationsController.summerTiming.isSelected());
-        prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
+        prayerTimeSettings.handleNotifyObservers();
         ChooseAudioController.stopIfPlaying();
-        prayerTimeSettings.save();
         // save other settings
-        Preferences preferences = Preferences.getInstance();
-        preferences.set(PreferencesType.ENABLE_24_FORMAT, format24.isSelected() + "");
-        preferences.set(PreferencesType.MINIMIZED, minimizeAtStart.isSelected() + "");
+        Settings.getInstance().setEnable24Format(format24.isSelected());
+        Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
 
         Onboarding.setFirstTimeOpened(0);
 

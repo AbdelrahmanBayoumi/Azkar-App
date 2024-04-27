@@ -4,60 +4,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreferencesObservable {
-    private final List<PreferencesObserver> OBSERVERS = new ArrayList<>();
+    private final List<PreferencesObserver> observers = new ArrayList<>();
 
-    public void addObserver(PreferencesObserver observer) {
-        OBSERVERS.add(observer);
+    public void addObserver(PreferencesType key, PreferencesObserver observer) {
+        System.out.println("[PreferencesObservable] addObserver: " + key);
+        observers.add(new KeyFilteredObserver(key, observer));
     }
 
     public void removeObserver(PreferencesObserver observer) {
-        OBSERVERS.remove(observer);
+        observers.remove(observer);
     }
 
-    protected void notifyObservers(PreferencesType key, String value) {
-        for (PreferencesObserver observer : OBSERVERS) {
+    protected void notifyObservers(PreferencesType key, Object value) {
+        for (PreferencesObserver observer : observers) {
+            if (observer instanceof KeyFilteredObserver) {
+                KeyFilteredObserver filteredObserver = (KeyFilteredObserver) observer;
+                if (filteredObserver.getKey() == key) {
+                    System.out.println("[PreferencesObservable] notifyObservers: " + key + " = " + value);
+                    observer.update(key, value);
+                }
+            }
+        }
+    }
+
+    private static class KeyFilteredObserver implements PreferencesObserver {
+        private final PreferencesType key;
+        private final PreferencesObserver observer;
+
+        public KeyFilteredObserver(PreferencesType key, PreferencesObserver observer) {
+            this.key = key;
+            this.observer = observer;
+        }
+
+        public PreferencesType getKey() {
+            return key;
+        }
+
+        @Override
+        public void update(PreferencesType key, Object value) {
             observer.update(key, value);
         }
     }
-
-    /*
-    TODO: create function to add observer with a filter to notify only if the key is matched
-      package com.bayoumi.models.preferences;
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
-
-        public class PreferencesObservable {
-            private final Map<PreferencesType, List<PreferencesObserver>> OBSERVERS = new HashMap<>();
-
-            public void addObserver(PreferencesType type, PreferencesObserver observer) {
-                OBSERVERS.computeIfAbsent(type, k -> new ArrayList<>()).add(observer);
-            }
-
-            public void removeObserver(PreferencesType type, PreferencesObserver observer) {
-                List<PreferencesObserver> observers = OBSERVERS.get(type);
-                if (observers != null) {
-                    observers.remove(observer);
-                }
-            }
-
-            protected void notifyObservers(PreferencesType key, String value) {
-                if (key == null) {
-                    for (List<PreferencesObserver> observers : OBSERVERS.values()) {
-                        for (PreferencesObserver observer : observers) {
-                            observer.update(null, value);
-                        }
-                    }
-                } else {
-                    List<PreferencesObserver> observers = OBSERVERS.get(key);
-                    if (observers != null) {
-                        for (PreferencesObserver observer : observers) {
-                            observer.update(key, value);
-                        }
-                    }
-                }
-            }
-        }
-    * */
 }
