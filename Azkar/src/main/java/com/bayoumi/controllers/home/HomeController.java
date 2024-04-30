@@ -118,10 +118,8 @@ public class HomeController implements Initializable {
             Launcher.workFine.setValue(false);
         }
 
-        settings.addObserver(PreferencesType.HIJRI_OFFSET, (key, value) -> {
-            hijriDate.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale()));
-            prayerTimesController.setPrayerTimesValuesToGUI();
-        });
+        settings.addObserver(PreferencesType.HIJRI_OFFSET, (key, value) ->
+                hijriDate.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale())));
 
         settings.addObserver(PreferencesType.ENABLE_24_FORMAT, (key, value) ->
                 prayerTimesController.setPrayerTimesValuesToGUI());
