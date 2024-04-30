@@ -8,7 +8,7 @@ public enum PreferencesType {
     // ======= Prayer Times Settings =======
     COUNTRY("country", "Egypt"),
     CITY("city", "Cairo"),
-    SUMMER_TIMING("summer_timing", "0"),
+    SUMMER_TIMING("summer_timing", "false"),
     METHOD("method", "5"),
     ASR_JURISTIC("asr_juristic", "0"),
     LATITUDE("latitude", "27.556363"),

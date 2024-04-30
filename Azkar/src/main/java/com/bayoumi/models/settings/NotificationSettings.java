@@ -76,14 +76,16 @@ public class NotificationSettings {
 
     private void loadSettings() {
         try {
-            this.position = Pos.valueOf(Preferences.getInstance().get(PreferencesType.NOTIFICATION_POS, "BOTTOM_LEFT"));
-            this.color = Preferences.getInstance().get(PreferencesType.NOTIFICATION_BORDER_COLOR, "#E9C46A");
+            this.position = Pos.valueOf(Preferences.getInstance().get(PreferencesType.NOTIFICATION_POS, PreferencesType.NOTIFICATION_POS.getDefaultValue()));
+            this.color = Preferences.getInstance().get(PreferencesType.NOTIFICATION_BORDER_COLOR, PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue());
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }
     }
 
     public Pos getPosition() {
+        if (position == null)
+            return Pos.BOTTOM_RIGHT;
         return position;
     }
 
@@ -93,6 +95,8 @@ public class NotificationSettings {
     }
 
     public String getColor() {
+        if (color == null || color.isEmpty())
+            return PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue();
         return color;
     }
 
