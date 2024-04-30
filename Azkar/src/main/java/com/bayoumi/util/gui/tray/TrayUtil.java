@@ -29,7 +29,7 @@ public class TrayUtil {
             try {
                 addAppToTray();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.error("Error adding app to system tray", e, TrayUtil.class.getName() + ".TrayUtil()");
                 Platform.setImplicitExit(true);
             }
         });

@@ -1,3 +1,9 @@
+-- Migrate Settings to Unified Preferences Table
+-- This SQL migration script consolidates settings from various application-specific tables into a single preferences table
+-- that stores key-value pairs. It transfers settings from the azkar_settings, other_settings, and prayertimes_settings tables into the preferences table.
+-- The script also handles the cleanup by dropping the original tables to streamline configuration management.
+
+
 CREATE TABLE IF NOT EXISTS preferences
 (
     key

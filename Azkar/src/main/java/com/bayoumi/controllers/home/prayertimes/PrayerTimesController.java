@@ -238,7 +238,7 @@ public class PrayerTimesController implements Initializable {
                 Thread.sleep(200);
                 Platform.runLater(() -> loadingBox.setVisible(false));
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".reload()");
             }
         }).start();
     }
