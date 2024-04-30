@@ -28,7 +28,7 @@ public class AzkarPeriodsController implements Initializable {
     @FXML
     private JFXButton highFrequency, midFrequency, lowFrequency, rearFrequency, currentFrequency;
 
-    public void setData(Settings settings) {
+    public void setData() {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
 
         currentFrequency = getSelectedButton();
@@ -88,7 +88,6 @@ public class AzkarPeriodsController implements Initializable {
         AzkarService.updateTimer();
         setFrequencyLabel();
         settings.getAzkarSettings().setSelectedPeriod(currentFrequency.getText());
-        settings.getAzkarSettings().saveSelectedPeriod();
     }
 
     private JFXButton getSelectedButton() {
@@ -107,25 +106,25 @@ public class AzkarPeriodsController implements Initializable {
     public void setFrequencyLabel() {
         String msg = Utility.toUTF(bundle.getString("azkar.period.showEvery")) + " ";
         if (currentFrequency.equals(highFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getHighPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getHighPeriod());
             }
         } else if (currentFrequency.equals(midFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getMidPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getMidPeriod());
             }
         } else if (currentFrequency.equals(lowFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getLowPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getLowPeriod());
             }
         } else if (currentFrequency.equals(rearFrequency)) {
-            if (settings.getOtherSettings().getLanguage().equals(Language.Arabic)) {
+            if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
                 msg += ArabicNumeralDiscrimination.getTimeArabicPlurality(bundle, settings.getAzkarSettings().getRearPeriod());
             } else {
                 msg += ArabicNumeralDiscrimination.getTimeGeneralPlurality(bundle, settings.getAzkarSettings().getRearPeriod());

@@ -4,7 +4,8 @@ import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.dialog.DownloadResourcesController;
 import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.settings.OtherSettings;
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
@@ -84,6 +85,10 @@ public class Launcher extends Application {
             }
             incrementPreloader();
 
+            // --- initialize Preferences ---
+            Preferences.init();
+            incrementPreloader();
+
             // --- initialize database connection (locationsDB) ---
             try {
                 LocationsDBManager.getInstance();
@@ -120,7 +125,7 @@ public class Launcher extends Application {
         LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(preloaderProgress));
     }
 
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
         if (locationsDBError) {
             try {
                 final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
@@ -141,7 +146,7 @@ public class Launcher extends Application {
         primaryStage.setScene(scene);
         // set Title and Icon to primaryStage
         HelperMethods.SetAppDecoration(primaryStage);
-        if (Onboarding.isFirstTimeOpened() || !OtherSettings.getIsMinimizedDB()) {
+        if (Onboarding.isFirstTimeOpened() || !Settings.getInstance().getMinimized()) {
             primaryStage.show();
         }
         // assign current primaryStage to SingleInstance Class

@@ -3,7 +3,6 @@ package com.bayoumi.controllers.settings.other;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
-import com.bayoumi.models.settings.OtherSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
@@ -36,22 +35,15 @@ import java.util.ResourceBundle;
 
 public class OtherSettingsController implements Initializable, SettingsInterface {
 
-    private OtherSettings otherSettings;
     private ResourceBundle bundle;
-    @FXML
-    public Label hijriDateLabel;
     @FXML
     private ComboBox<Language> languageComboBox;
     @FXML
-    private JFXCheckBox format24;
-    @FXML
-    private JFXCheckBox minimizeAtStart;
+    private JFXCheckBox minimizeAtStart, format24, darkTheme, autoUpdateCheckBox;
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private JFXCheckBox darkTheme, autoUpdateCheckBox;
-    @FXML
-    private Label version, adjustingTheHijriDateText, languageText;
+    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText;
     @FXML
     private VBox loadingBox;
     @FXML
@@ -72,36 +64,44 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         checkForUpdateButton.setText(Utility.toUTF(bundle.getString("checkForUpdate")));
         forProblemsAndSuggestionsButton.setText(Utility.toUTF(bundle.getString("forProblemsAndSuggestions")));
         autoUpdateCheckBox.setText(Utility.toUTF(bundle.getString("checkForUpdatesAutomatically")));
+        if (hijriDateOffset.getValue() != null) {
+            hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(this.bundle.getLocale().toString()));
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        otherSettings = Settings.getInstance().getOtherSettings();
-        updateBundle(LanguageBundle.getInstance().getResourceBundle());
+        try {
+            updateBundle(LanguageBundle.getInstance().getResourceBundle());
+            LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
 
-        hijriDateLabel.setText(new HijriDate(otherSettings.getHijriOffset()).getString(otherSettings.getLanguageLocal()));
+            final Settings settings = Settings.getInstance();
 
-        hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
-        hijriDateOffset.getValueFactory().setValue(otherSettings.getHijriOffset());
+            hijriDateLabel.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale()));
+            hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
+            hijriDateOffset.getValueFactory().setValue(settings.getHijriOffset());
+            hijriDateOffset.valueProperty().addListener((observable, oldValue, newValue) ->
+                    hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(settings.getLanguage().getLocale())));
 
-        hijriDateOffset.valueProperty().addListener((observable, oldValue, newValue) ->
-                hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(otherSettings.getLanguageLocal())));
 
+            languageComboBox.setConverter(Language.stringConvertor(languageComboBox));
+            languageComboBox.setItems(FXCollections.observableArrayList(Language.values()));
+            languageComboBox.setValue(settings.getLanguage());
 
-        languageComboBox.setConverter(Language.stringConvertor(languageComboBox));
-        languageComboBox.setItems(FXCollections.observableArrayList(Language.values()));
-        languageComboBox.setValue(otherSettings.getLanguage());
+            format24.setSelected(settings.getEnable24Format());
 
-        format24.setSelected(otherSettings.isEnable24Format());
+            minimizeAtStart.setSelected(settings.getMinimized());
 
-        minimizeAtStart.setSelected(otherSettings.isMinimized());
+            darkTheme.setSelected(settings.getNightMode());
 
-        darkTheme.setSelected(otherSettings.isEnableDarkMode());
-        darkTheme.setDisable(true);
+            darkTheme.setDisable(true);
 
-        version.setText(Constants.VERSION);
+            version.setText(Constants.VERSION);
 
-        autoUpdateCheckBox.setSelected(otherSettings.isAutomaticCheckForUpdates());
+            autoUpdateCheckBox.setSelected(settings.getAutomaticCheckForUpdates());
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".initialize()");
+        }
     }
 
     @FXML
@@ -115,13 +115,6 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
     @Override
     public void saveToDB() {
-        otherSettings.setLanguage(languageComboBox.getValue());
-        otherSettings.setEnable24Format(format24.isSelected());
-        otherSettings.setEnableDarkMode(darkTheme.isSelected());
-        otherSettings.setHijriOffset(hijriDateOffset.getValue());
-        otherSettings.setMinimized(minimizeAtStart.isSelected());
-        otherSettings.setAutomaticCheckForUpdates(autoUpdateCheckBox.isSelected());
-        otherSettings.save();
     }
 
     @FXML
@@ -142,18 +135,48 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         new Thread(() -> {
             switch (UpdateHandler.getInstance().checkUpdate()) {
                 case 0:
-                    Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "No Update Found");
+                    Logger.info(getClass().getName() + ".checkForUpdate(): " + "No Update Found");
                     Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, Utility.toUTF(this.bundle.getString("thereAreNoNewUpdates")), Utility.toUTF(this.bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
                     break;
                 case 1:
                     UpdateHandler.getInstance().showInstallPrompt();
                     break;
                 case -1:
-                    Logger.info(OtherSettings.class.getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
+                    Logger.info(getClass().getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
                     Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(this.bundle.getString("problemInSearchingForUpdates")), Utility.toUTF(this.bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
                     break;
             }
             Platform.runLater(() -> loadingBox.setVisible(false));
         }).start();
+    }
+
+    @FXML
+    private void saveLanguage() {
+        Settings.getInstance().setLanguage(languageComboBox.getValue().getLocale());
+    }
+
+    @FXML
+    private void autoUpdateCheck() {
+        Settings.getInstance().setAutomaticCheckForUpdates(autoUpdateCheckBox.isSelected());
+    }
+
+    @FXML
+    private void hijriDateOffsetUpdate() {
+        Settings.getInstance().setHijriOffset(hijriDateOffset.getValue());
+    }
+
+    @FXML
+    private void darkThemeSelect() {
+        Settings.getInstance().setNightMode(darkTheme.isSelected());
+    }
+
+    @FXML
+    private void format24Select() {
+        Settings.getInstance().setEnable24Format(format24.isSelected());
+    }
+
+    @FXML
+    private void minimizeAtStartSelect() {
+        Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
     }
 }

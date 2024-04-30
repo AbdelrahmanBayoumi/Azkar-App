@@ -124,14 +124,14 @@ public class ComboBoxAutoComplete<T> {
 
         if (!code.equals(KeyCode.TAB) && !code.equals(KeyCode.SHIFT)) {
             filter += e.getText();
-            if (code == KeyCode.BACK_SPACE && filter.length() > 0) {
+            if (code == KeyCode.BACK_SPACE && !filter.isEmpty()) {
                 filter = filter.substring(0, filter.length() - 1);
                 cmb.getItems().setAll(originalItems);
             }
             if (code == KeyCode.ESCAPE) {
                 filter = "";
             }
-            if (filter.length() == 0) {
+            if (filter.isEmpty()) {
                 filteredList = originalItems;
                 cmb.getTooltip().hide();
             } else {

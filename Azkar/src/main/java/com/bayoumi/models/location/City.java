@@ -1,15 +1,18 @@
 package com.bayoumi.models.location;
 
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.LocationsDBManager;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class City {
     private String countryCode;
+    private String countryName;
     private String englishName;
     private String arabicName;
     private double latitude;
@@ -25,18 +28,28 @@ public class City {
         this.timezone = timezone;
     }
 
+    public City(String countryCode, String countryName, String englishName, String arabicName, double latitude, double longitude, double timezone) {
+        this.countryCode = countryCode;
+        this.countryName = countryName;
+        this.englishName = englishName;
+        this.arabicName = arabicName;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.timezone = timezone;
+    }
+
     /*
-    CREATE TABLE "cityd" (
-        "country"	VARCHAR,
-        "city"	VARCHAR,
-        "latitude"	DOUBLE,
-        "longitude"	DOUBLE,
-        "time_zone"	DOUBLE DEFAULT 0,
-        "locId"	INTEGER NOT NULL,
-        "Ar_Name"	VARCHAR,
-        PRIMARY KEY("locId")
-    )
-    * */
+        CREATE TABLE "cityd" (
+            "country"	VARCHAR,
+            "city"	VARCHAR,
+            "latitude"	DOUBLE,
+            "longitude"	DOUBLE,
+            "time_zone"	DOUBLE DEFAULT 0,
+            "locId"	INTEGER NOT NULL,
+            "Ar_Name"	VARCHAR,
+            PRIMARY KEY("locId")
+        )
+        * */
     public static ArrayList<City> getCitiesInCountry(String code) {
         ArrayList<City> cities = new ArrayList<>();
         try {
@@ -58,7 +71,10 @@ public class City {
 
     public static City getCityFromEngName(String englishName, String countryCode) {
         try {
-            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * from cityd WHERE city='" + englishName + "' and country='" + countryCode + "'").executeQuery();
+            PreparedStatement statement = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM cityd WHERE city = ? AND country = ?");
+            statement.setString(1, englishName);
+            statement.setString(2, countryCode);
+            ResultSet res = statement.executeQuery();
             if (res.next()) {
                 return new City(
                         res.getString("country"), res.getString("city"),
@@ -72,30 +88,8 @@ public class City {
         return null;
     }
 
-    public static City getCityFromCoordinates(double longitude, double latitude, String countryCode) {
-        try {
-            String sql = "SELECT * from cityd WHERE " +
-                    "(latitude BETWEEN " + latitude + "-0.008 AND " + latitude + "+0.008) AND " +
-                    "(longitude BETWEEN " + longitude + "-0.008 AND " + longitude + "+0.008)  AND " +
-                    "(country='" + countryCode + "');";
-            Logger.debug("sql: " + sql);
-            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement(sql).executeQuery();
-
-            if (res.next()) {
-                return new City(
-                        res.getString("country"), res.getString("city"),
-                        res.getString("Ar_Name"), res.getDouble("latitude"),
-                        res.getDouble("longitude"), res.getDouble("time_zone")
-                );
-            }
-        } catch (Exception ex) {
-            Logger.error(null, ex, City.class.getName() + ".getCityFromCoordinates()");
-        }
-        return null;
-    }
-
     public String getName() {
-        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
             return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
         }
         return this.getEnglishName();
@@ -123,12 +117,21 @@ public class City {
     public String toString() {
         return "City{" +
                 "countryCode='" + countryCode + '\'' +
+                ", countryName='" + countryName + '\'' +
                 ", englishName='" + englishName + '\'' +
                 ", arabicName='" + arabicName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", timezone=" + timezone +
                 '}';
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     public String getCountryCode() {

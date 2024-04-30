@@ -1,13 +1,12 @@
 package com.bayoumi.controllers.azkar.timed;
 
-import com.bayoumi.controllers.settings.SettingsInterface;
-import com.bayoumi.models.settings.AzkarSettings;
 import com.bayoumi.models.settings.Settings;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
-import javafx.collections.FXCollections;
+import com.jfoenix.controls.JFXToggleButton;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
@@ -15,13 +14,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 
-public class SettingsController implements SettingsInterface {
+public class SettingsController {
 
-    private AzkarSettings azkarSettings;
     @FXML
-    private JFXComboBox<String> nightAzkarTimeComboBox;
+    private Spinner<Integer> morningAzkarTimeSpinner, nightAzkarTimeSpinner;
     @FXML
-    private JFXComboBox<String> morningAzkarTimeComboBox;
+    private JFXToggleButton morningAzkarTimeToggle, nightAzkarTimeToggle;
+
     private ObservableList<Text> list;
     private JFXDialog dialog;
 
@@ -30,17 +29,73 @@ public class SettingsController implements SettingsInterface {
         this.list = list;
         this.dialog = dialog;
 
-        // init morning and night azkar reminder
-        nightAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
-        morningAzkarTimeComboBox.setItems(FXCollections.observableArrayList("لا تذكير", "بـ نصف ساعة", "بـ ساعة"));
+        morningAzkarTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 120, 30, 10));
+        nightAzkarTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 120, 30, 10));
 
-        // init Saved data form DB
-        azkarSettings = Settings.getInstance().getAzkarSettings();
-        morningAzkarTimeComboBox.setValue(azkarSettings.getMorningAzkarReminder());
-        nightAzkarTimeComboBox.setValue(azkarSettings.getNightAzkarReminder());
-        dialog.setOnDialogClosed(event -> saveToDB());
+        morningAzkarTimeSpinner.getValueFactory().setValue(Settings.getInstance().getAzkarSettings().getMorningAzkarReminder());
+        nightAzkarTimeSpinner.getValueFactory().setValue(Settings.getInstance().getAzkarSettings().getNightAzkarReminder());
+
+        morningAzkarTimeToggle.setSelected(morningAzkarTimeSpinner.getValueFactory().getValue() != 0);
+        nightAzkarTimeToggle.setSelected(nightAzkarTimeSpinner.getValueFactory().getValue() != 0);
+
+        dialog.setOnDialogClosed(event -> Settings.getInstance().getAzkarSettings().notifyObservers());
     }
 
+    @FXML
+    private void onMorningAzkarTimeChange() {
+        Settings.getInstance().getAzkarSettings().setMorningAzkarReminder(morningAzkarTimeSpinner.getValueFactory().getValue());
+        if (morningAzkarTimeSpinner.getValueFactory().getValue() == 0) {
+            morningAzkarTimeToggle.setSelected(false);
+            morningAzkarTimeSpinner.setDisable(true);
+            toggleAction(morningAzkarTimeToggle);
+        }
+    }
+
+    @FXML
+    private void onNightAzkarTimeChange() {
+        Settings.getInstance().getAzkarSettings().setNightAzkarReminder(nightAzkarTimeSpinner.getValueFactory().getValue());
+        if (nightAzkarTimeSpinner.getValueFactory().getValue() == 0) {
+            nightAzkarTimeToggle.setSelected(false);
+            nightAzkarTimeSpinner.setDisable(true);
+            toggleAction(nightAzkarTimeToggle);
+        }
+    }
+
+    @FXML
+    private void onMorningAzkarTimeToggle() {
+        toggleAction(morningAzkarTimeToggle);
+        if (morningAzkarTimeToggle.isSelected()) {
+            morningAzkarTimeSpinner.setDisable(false);
+            morningAzkarTimeSpinner.getValueFactory().setValue(30);
+            Settings.getInstance().getAzkarSettings().setMorningAzkarReminder(30);
+        } else {
+            morningAzkarTimeSpinner.setDisable(true);
+            morningAzkarTimeSpinner.getValueFactory().setValue(0);
+            Settings.getInstance().getAzkarSettings().setMorningAzkarReminder(0);
+        }
+    }
+
+    @FXML
+    private void onNightAzkarTimeToggle() {
+        toggleAction(nightAzkarTimeToggle);
+        if (nightAzkarTimeToggle.isSelected()) {
+            nightAzkarTimeSpinner.setDisable(false);
+            nightAzkarTimeSpinner.getValueFactory().setValue(30);
+            Settings.getInstance().getAzkarSettings().setNightAzkarReminder(30);
+        } else {
+            nightAzkarTimeSpinner.setDisable(true);
+            nightAzkarTimeSpinner.getValueFactory().setValue(0);
+            Settings.getInstance().getAzkarSettings().setNightAzkarReminder(0);
+        }
+    }
+
+    private void toggleAction(JFXToggleButton toggleButton) {
+        if (toggleButton.isSelected()) {
+            toggleButton.setText("مُفعلة");
+        } else {
+            toggleButton.setText("لا تذكير");
+        }
+    }
 
     @FXML
     private void maximizeFont() {
@@ -67,10 +122,4 @@ public class SettingsController implements SettingsInterface {
         }
     }
 
-    @Override
-    public void saveToDB() {
-        azkarSettings.setMorningAzkarReminder(morningAzkarTimeComboBox.getValue());
-        azkarSettings.setNightAzkarReminder(nightAzkarTimeComboBox.getValue());
-        azkarSettings.save();
-    }
 }

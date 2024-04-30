@@ -133,3 +133,4 @@ buildNumber.properties
 
 # Source Code Files
 src/main/resources/sentry.properties
+src/main/resources/config.properties

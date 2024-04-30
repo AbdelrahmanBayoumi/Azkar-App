@@ -97,7 +97,6 @@ public class NotificationBox extends AnchorPane {
             ParallelTransition parallelTransition = new ParallelTransition(this, pause, translate);
             parallelTransition.play();
         } catch (Exception e) {
-            e.printStackTrace();
             Logger.error(null, e, getClass().getName() + ".initAnimation()");
         }
     }

@@ -1,9 +1,11 @@
 package com.bayoumi.models.location;
 
+import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.LocationsDBManager;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -41,19 +43,36 @@ public class Country {
         return countries;
     }
 
-    public static Country getCountryFormCode(String code) {
+    public static Country getCountryFromCodeOrName(String input) {
         try {
-            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM Countries WHERE Code='" + code + "'").executeQuery();
+            String sql;
+            PreparedStatement stmt;
+
+            // Check if input length is greater than 2 to search by name
+            if (input.length() > 2) {
+                sql = "SELECT * FROM Countries WHERE Code = ? OR En_Name LIKE ?";
+                stmt = LocationsDBManager.getInstance().con.prepareStatement(sql);
+                stmt.setString(1, input);  // Bind the exact match for the code
+                stmt.setString(2, "%" + input + "%");  // Bind the partial match for the English name
+            } else {
+                sql = "SELECT * FROM Countries WHERE Code = ?";
+                stmt = LocationsDBManager.getInstance().con.prepareStatement(sql);
+                stmt.setString(1, input);  // Bind the exact match for the code only
+            }
+
+            ResultSet res = stmt.executeQuery();
             if (res.next()) {
-                return new Country(res.getString("Code")
-                        , res.getString("En_Name"), res.getString("Ar_Name"),
+                return new Country(res.getString("Code"),
+                        res.getString("En_Name"),
+                        res.getString("Ar_Name"),
                         res.getInt("dls") == 1);
             }
         } catch (Exception ex) {
-            Logger.error(null, ex, Country.class.getName() + ".getCountryFormCode()");
+            Logger.error(null, ex, Country.class.getName() + ".getCountryFromCodeOrName()");
         }
         return null;
     }
+
 
     public static String getCountryNameFormCode(String code) {
         try {
@@ -113,7 +132,7 @@ public class Country {
     }
 
     public String getName() {
-        if (Settings.getInstance().getOtherSettings().getLanguageLocal().equals("ar")) {
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
             return this.getArabicName() == null || this.getArabicName().equals("") ? this.getEnglishName() : this.getArabicName();
         }
         return this.getEnglishName();

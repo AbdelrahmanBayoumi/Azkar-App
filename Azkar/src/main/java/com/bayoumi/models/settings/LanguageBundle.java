@@ -1,5 +1,7 @@
 package com.bayoumi.models.settings;
 
+import com.bayoumi.models.preferences.PreferencesType;
+
 import java.util.Locale;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -17,10 +19,9 @@ public class LanguageBundle extends Observable {
     }
 
     private LanguageBundle() {
-        this.resourceBundle = ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getOtherSettings().getLanguageLocal()));
-        // if there is a change in HijriDate offset
-        Settings.getInstance().getOtherSettings().addObserver((o, arg) ->
-                setResourceBundle(ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getOtherSettings().getLanguageLocal()))));
+        this.resourceBundle = ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getLanguage().getLocale()));
+        Settings.getInstance().addObserver(PreferencesType.LANGUAGE, (key, value) ->
+                setResourceBundle(ResourceBundle.getBundle("bundles.language", new Locale(Settings.getInstance().getLanguage().getLocale()))));
     }
 
     public ResourceBundle getResourceBundle() {

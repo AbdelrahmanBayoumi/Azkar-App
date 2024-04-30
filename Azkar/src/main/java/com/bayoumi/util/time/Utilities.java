@@ -1,6 +1,7 @@
 package com.bayoumi.util.time;
 
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 
 import java.text.ParseException;
@@ -53,7 +54,7 @@ public class Utilities {
 
             return Utility.formatIntToTwoDigit(difference_In_Hours) + ":" + Utility.formatIntToTwoDigit(difference_In_Minutes) + ":" + Utility.formatIntToTwoDigit(difference_In_Seconds);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getLocalizedMessage(), e, Utilities.class.getName() + ".findDifference()");
         }
         return null;
     }

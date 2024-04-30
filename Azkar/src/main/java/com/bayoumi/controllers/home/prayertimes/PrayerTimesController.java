@@ -74,6 +74,8 @@ public class PrayerTimesController implements Initializable {
         asrTime.setOnMouseExited(event -> setPrayerTimeWithFormat(asrTime, prayerTimesToday.asr, formatter));
         maghribTime.setOnMouseExited(event -> setPrayerTimeWithFormat(maghribTime, prayerTimesToday.maghrib, formatter));
         ishaTime.setOnMouseExited(event -> setPrayerTimeWithFormat(ishaTime, prayerTimesToday.isha, formatter));
+
+        settings = Settings.getInstance();
     }
 
     private void showRemainingTime(Label label, Date dateNow, Date nextPrayerTime) {
@@ -113,8 +115,7 @@ public class PrayerTimesController implements Initializable {
         middleOfTheNightTimeText.setText(Utility.toUTF(bundle.getString("middleOfTheNightTime")));
     }
 
-    public void setData(Settings settings, PrayerTimes prayerTimesToday) {
-        this.settings = settings;
+    public void setData(PrayerTimes prayerTimesToday) {
         setPrayerTimes(prayerTimesToday);
         LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
     }
@@ -201,10 +202,10 @@ public class PrayerTimesController implements Initializable {
 
     public void setPrayerTimesValuesToGUI() {
         Platform.runLater(() -> {
-            if (settings.getOtherSettings().isEnable24Format()) {
-                formatter = new SimpleDateFormat("HH:mm", new Locale(settings.getOtherSettings().getLanguageLocal()));
+            if (settings.getEnable24Format()) {
+                formatter = new SimpleDateFormat("HH:mm", new Locale(settings.getLanguage().getLocale()));
             } else {
-                formatter = new SimpleDateFormat("hh:mm a", new Locale(settings.getOtherSettings().getLanguageLocal()));
+                formatter = new SimpleDateFormat("hh:mm a", new Locale(settings.getLanguage().getLocale()));
             }
             formatter.setTimeZone(TimeZone.getDefault());
 
@@ -237,7 +238,7 @@ public class PrayerTimesController implements Initializable {
                 Thread.sleep(200);
                 Platform.runLater(() -> loadingBox.setVisible(false));
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".reload()");
             }
         }).start();
     }

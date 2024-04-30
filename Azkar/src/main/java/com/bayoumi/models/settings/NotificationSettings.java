@@ -1,16 +1,18 @@
 package com.bayoumi.models.settings;
 
+import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.gui.BuilderUI;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.util.StringConverter;
 
 public class NotificationSettings {
     private Pos position;
+    private String color;
 
     protected NotificationSettings() {
         this.position = Pos.BOTTOM_RIGHT;
+        this.color = "#E9C46A";
         loadSettings();
     }
 
@@ -74,27 +76,33 @@ public class NotificationSettings {
 
     private void loadSettings() {
         try {
-            this.position = Pos.valueOf(Preferences.getInstance().get(PreferencesType.NOTIFICATION_POS, "BOTTOM_LEFT"));
+            this.position = Pos.valueOf(Preferences.getInstance().get(PreferencesType.NOTIFICATION_POS, PreferencesType.NOTIFICATION_POS.getDefaultValue()));
+            this.color = Preferences.getInstance().get(PreferencesType.NOTIFICATION_BORDER_COLOR, PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue());
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }
     }
 
-    public void save() {
-        try {
-            Preferences.getInstance().set(PreferencesType.NOTIFICATION_POS, this.position.toString());
-        } catch (Exception ex) {
-            BuilderUI.showOkAlert(Alert.AlertType.ERROR, "ERROR in saving notification position", false);
-            Logger.error(null, ex, getClass().getName() + ".save()");
-        }
-    }
-
     public Pos getPosition() {
+        if (position == null)
+            return Pos.BOTTOM_RIGHT;
         return position;
     }
 
     public void setPosition(Pos position) {
         this.position = position;
+        Preferences.getInstance().set(PreferencesType.NOTIFICATION_POS, this.position.toString());
+    }
+
+    public String getColor() {
+        if (color == null || color.isEmpty())
+            return PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue();
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+        Preferences.getInstance().set(PreferencesType.NOTIFICATION_BORDER_COLOR, this.color);
     }
 
     @Override

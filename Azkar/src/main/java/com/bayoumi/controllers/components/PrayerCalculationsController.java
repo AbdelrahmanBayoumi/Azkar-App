@@ -38,8 +38,7 @@ public class PrayerCalculationsController implements Initializable {
         summerTiming.setText(Utility.toUTF(bundle.getString("extraOneHourDayLightSaving")));
         standardJuristic.setText(Utility.toUTF(bundle.getString("asrMadhabJumhoor")));
         hanafiRadioButton.setText(Utility.toUTF(bundle.getString("hanafi")));
-        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getOtherSettings().getLanguage().equals(Language.Arabic)));
-        methodComboBox.setValue(null);
+        methodComboBox.setConverter(PrayerTimeSettings.Method.getStringConverter(Settings.getInstance().getLanguage().equals(Language.Arabic)));
         methodComboBox.setValue(prayerTimeSettings.getMethod());
     }
 
@@ -59,8 +58,24 @@ public class PrayerCalculationsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         methodComboBox.setItems(FXCollections.observableArrayList(PrayerTimeSettings.Method.getListOfMethods()));
-        LanguageBundle.getInstance().addObserver((o, arg) -> {
-            updateBundle(LanguageBundle.getInstance().getResourceBundle());
-        });
+        LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
+    }
+
+    @FXML
+    private void onMethodSelect() {
+        prayerTimeSettings.setMethod(methodComboBox.getValue());
+        prayerTimeSettings.handleNotifyObservers();
+    }
+
+    @FXML
+    private void onAsrJuristicSelect() {
+        prayerTimeSettings.setAsrJuristic(standardJuristic.isSelected() ? 0 : 1);
+        prayerTimeSettings.handleNotifyObservers();
+    }
+
+    @FXML
+    private void onSummerTimingSelect() {
+        prayerTimeSettings.setSummerTiming(summerTiming.isSelected());
+        prayerTimeSettings.handleNotifyObservers();
     }
 }

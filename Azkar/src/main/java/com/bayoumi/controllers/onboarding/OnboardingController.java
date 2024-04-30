@@ -5,7 +5,10 @@ import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.settings.*;
+import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.PrayerTimeSettings;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ScrollHandler;
@@ -68,7 +71,7 @@ public class OnboardingController implements Initializable {
 
     private void chooseLanguage(Language language) throws Exception {
         languageChooseBox.setVisible(false);
-        Settings.getInstance().getOtherSettings().setLanguage(language).save();
+        Settings.getInstance().setLanguage(language.getLocale());
 
         chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
         if (chooseAudioController != null) {
@@ -81,6 +84,7 @@ public class OnboardingController implements Initializable {
         container.getChildren().add(3, Loader.getInstance().getView(Locations.PrayerCalculations));
         ((PrayerCalculationsController) Loader.getInstance().getController(Locations.PrayerCalculations)).setData();
 
+        ((SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation)).autoSelectButton.fire();
         ((SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation)).autoLocationButton.fire();
     }
 
@@ -100,21 +104,31 @@ public class OnboardingController implements Initializable {
         final PrayerCalculationsController calculationsController = (PrayerCalculationsController) Loader.getInstance().getController(Locations.PrayerCalculations);
         final SelectLocationController selectLocationController = (SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation);
 
-        prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
-        prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
+        // TODO: remove this duplicated code
+        boolean isManualSelected = prayerTimeSettings.isManualLocationSelected();
+        if (!isManualSelected && selectLocationController.isAutoDetectionValid()) {
+            prayerTimeSettings.setCountry(selectLocationController.autoCountry.getText());
+            prayerTimeSettings.setCity(selectLocationController.autoCity.getText());
+            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.autoLatitude.getText()));
+            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.autoLongitude.getText()));
+        } else {
+            if (!isManualSelected) {
+                prayerTimeSettings.setManualLocationSelected(true);
+            }
+            prayerTimeSettings.setCountry(selectLocationController.countries.getValue().getCode());
+            prayerTimeSettings.setCity(selectLocationController.cities.getValue().getEnglishName());
+            prayerTimeSettings.setLatitude(Double.parseDouble(selectLocationController.manualLatitude.getText()));
+            prayerTimeSettings.setLongitude(Double.parseDouble(selectLocationController.manualLongitude.getText()));
+        }
+
         prayerTimeSettings.setMethod(calculationsController.methodComboBox.getValue());
         prayerTimeSettings.setAsrJuristic(calculationsController.hanafiRadioButton.isSelected() ? 1 : 0);
         prayerTimeSettings.setSummerTiming(calculationsController.summerTiming.isSelected());
-        prayerTimeSettings.setLatitude(selectLocationController.cities.getValue().getLatitude());
-        prayerTimeSettings.setLongitude(selectLocationController.cities.getValue().getLongitude());
-        prayerTimeSettings.setAdhanAudio(chooseAudioController.getValue().getFileName());
+        prayerTimeSettings.handleNotifyObservers();
         ChooseAudioController.stopIfPlaying();
-        prayerTimeSettings.save();
         // save other settings
-        OtherSettings otherSettings = Settings.getInstance().getOtherSettings();
-        otherSettings.setEnable24Format(format24.isSelected());
-        otherSettings.setMinimized(minimizeAtStart.isSelected());
-        otherSettings.save();
+        Settings.getInstance().setEnable24Format(format24.isSelected());
+        Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
 
         Onboarding.setFirstTimeOpened(0);
 
