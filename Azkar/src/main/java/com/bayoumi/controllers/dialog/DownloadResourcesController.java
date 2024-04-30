@@ -46,12 +46,6 @@ public class DownloadResourcesController {
                     progressText.setText(ByteUtil.format((bytesWritten / 2), locale) + "/" + ByteUtil.format(totalBytes, locale)
                             + " (" + Utility.formatNum((bytesWritten / (totalBytes * 2.0)) * 100) + "%)");
                 });
-//                System.out.println("field: " + field);
-//                System.out.println("fileName: " + fileName);
-//                System.out.println("bytesWritten: " + bytesWritten);
-//                System.out.println("totalBytes: " + totalBytes);
-//                System.out.println("totalBytes*2 - bytesWritten = " + ((totalBytes * 2) - bytesWritten));
-//                System.out.println("-----------------------------");
             });
             Platform.runLater(stage::close);
         }).start();

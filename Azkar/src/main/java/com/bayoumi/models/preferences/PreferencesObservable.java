@@ -7,7 +7,6 @@ public class PreferencesObservable {
     private final List<PreferencesObserver> observers = new ArrayList<>();
 
     public void addObserver(PreferencesType key, PreferencesObserver observer) {
-        System.out.println("[PreferencesObservable] addObserver: " + key);
         observers.add(new KeyFilteredObserver(key, observer));
     }
 
@@ -20,7 +19,6 @@ public class PreferencesObservable {
             if (observer instanceof KeyFilteredObserver) {
                 KeyFilteredObserver filteredObserver = (KeyFilteredObserver) observer;
                 if (filteredObserver.getKey() == key) {
-                    System.out.println("[PreferencesObservable] notifyObservers: " + key + " = " + value);
                     observer.update(key, value);
                 }
             }

@@ -33,7 +33,6 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-// TODO: remove implements SettingsInterface
 public class OtherSettingsController implements Initializable, SettingsInterface {
 
     private ResourceBundle bundle;

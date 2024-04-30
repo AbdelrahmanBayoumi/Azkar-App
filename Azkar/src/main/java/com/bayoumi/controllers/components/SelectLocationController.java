@@ -45,7 +45,6 @@ public class SelectLocationController implements Initializable {
     private VBox manualContainer, autoContainer;
 
     public void setData() {
-        System.out.println("[SelectLocationController] setData()");
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
         final boolean isManualSelected = prayerTimeSettings.isManualLocationSelected();
         // init auto location text fields
@@ -85,7 +84,6 @@ public class SelectLocationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("[SelectLocationController] initialize()");
         LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
         prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
         statusLabel.setVisible(false);
@@ -159,7 +157,6 @@ public class SelectLocationController implements Initializable {
             cityComboBoxAutoComplete.setItems(cities.getItems());
         }
         if (!cities.getItems().isEmpty() && event != null) {
-            System.out.println("cities.setValue(cities.getItems().get(0));");
             cities.setValue(cities.getItems().get(0));
         }
         if (!isInit) {
