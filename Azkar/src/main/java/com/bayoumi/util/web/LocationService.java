@@ -28,6 +28,7 @@ public class LocationService {
         if (jsonRoot.has("status") && jsonRoot.getString("status").equals("success")) {
             TimeZone tz = TimeZone.getTimeZone(jsonRoot.getString("timezone"));
             return new City(jsonRoot.getString("countryCode"),
+                    jsonRoot.getString("country"),
                     jsonRoot.getString("city"),
                     null,
                     jsonRoot.getDouble("lat"),
