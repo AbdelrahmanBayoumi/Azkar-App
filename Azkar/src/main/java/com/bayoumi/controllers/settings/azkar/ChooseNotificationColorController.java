@@ -26,7 +26,9 @@ public class ChooseNotificationColorController implements Initializable {
             setColor(currentBorderColor);
             colorPicker.setValue(Color.web(currentBorderColor));
         } catch (Exception ignored) {
+            setColor(PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue());
             colorPicker.setValue(Color.web(PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue()));
+            Settings.getInstance().getNotificationSettings().setColor(PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue());
         }
     }
 

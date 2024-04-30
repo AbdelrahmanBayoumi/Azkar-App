@@ -138,35 +138,36 @@ public class SelectLocationController implements Initializable {
     }
 
     private void initCountries() {
-        // getAllData
+        countries.setOnAction(null);
         final String local = Settings.getInstance().getLanguage().getLocale();
-        countries.getItems().addAll(Country.getAll(local));
+        countries.getItems().setAll(Country.getAll(local));
         countryComboBoxAutoComplete.setItems(countries.getItems());
-        countries.setOnAction((e) -> changeCountry(e, false));
-        Country countryFormCode = Country.getCountryFormCode(prayerTimeSettings.getCountry());
+        Country countryFormCode = Country.getCountryFromCodeOrName(prayerTimeSettings.getCountry());
         if (countryFormCode != null) {
             countries.setValue(countryFormCode);
         } else if (!countries.getItems().isEmpty()) {
             countries.setValue(countries.getItems().get(0));
         }
+        countries.setOnAction((e) -> changeCountry(e, false));
     }
 
     private void changeCountry(ActionEvent event, boolean isInit) {
         cities.setOnAction(null);
         cities.getItems().clear();
         if (countries.getValue() != null) {
-            cities.getItems().addAll(City.getCitiesInCountry(countries.getValue().getCode()));
+            cities.getItems().setAll(City.getCitiesInCountry(countries.getValue().getCode()));
             cityComboBoxAutoComplete.setItems(cities.getItems());
         }
-        if (!cities.getItems().isEmpty()) {
+        if (!cities.getItems().isEmpty() && event != null) {
             System.out.println("cities.setValue(cities.getItems().get(0));");
             cities.setValue(cities.getItems().get(0));
         }
-        statusLabel.setVisible(false);
         if (!isInit) {
             onManualLocationUpdate();
         }
-        cities.setOnAction((e) -> onManualLocationUpdate());
+        if (event != null) {
+            cities.setOnAction((e) -> onManualLocationUpdate());
+        }
     }
 
     private void initCities() {
@@ -174,7 +175,6 @@ public class SelectLocationController implements Initializable {
             if (newValue != null) {
                 manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
                 manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
-                statusLabel.setVisible(false);
             }
         });
         if (!countries.getItems().isEmpty()) {
