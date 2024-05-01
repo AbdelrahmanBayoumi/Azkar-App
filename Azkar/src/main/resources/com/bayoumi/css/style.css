@@ -1,13 +1,3 @@
-/*@font-face {*/
-/*    font-family: 'Droid Arabic Kufi';*/
-/*    src: url('../fonts/DroidKufi-Bold.ttf');*/
-/*}*/
-
-/*@font-face {*/
-/*    font-family: 'Droid Arabic Kufi';*/
-/*    src: url('../fonts/DroidKufi-Regular.ttf');*/
-/*}*/
-
 @font-face {
     font-family: 'Tajawal-Medium';
     src: url('../fonts/Tajawal/Tajawal-Medium.ttf');
@@ -24,10 +14,9 @@
 }
 
 @font-face {
-    font-family: 'Kitab-Regular';
-    src: url('../fonts/Kitab-Regular.ttf');
+    font-family: "Noto Naskh Arabic";
+    src: url('../fonts/NotoNaskhArabic-Bold.ttf');
 }
-
 
 * {
     /* ====== Colors ====== */
@@ -647,14 +636,8 @@
 /*}*/
 
 .zekr-text {
-    -fx-background-color: red;
-    -fx-font-family: 'Tajawal-Bold';
-    -fx-font-size: 20;
-    /*-fx-font-weight: BOLD;*/
-    -fx-max-height: infinity;
-    -fx-max-width: infinity;
-    -fx-padding: 20;
-    -fx-alignment: center;
+    -fx-font-family: 'Noto Naskh Arabic';
+    -fx-font-weight: BOLD;
     -fx-text-alignment: center;
 }
 

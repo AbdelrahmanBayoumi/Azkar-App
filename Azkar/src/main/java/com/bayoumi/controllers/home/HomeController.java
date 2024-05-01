@@ -35,12 +35,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -219,10 +221,11 @@ public class HomeController implements Initializable {
 
     private void showTimedAzkar(String type) {
         try {
-            final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.TimedAzkar);
-            ((TimedAzkarController) popUp.getController()).setData(type);
-            HelperMethods.ExitKeyCodeCombination(popUp.getStage().getScene(), popUp.getStage());
-            popUp.showAndWait();
+            final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar.toString()));
+            final Stage stage = BuilderUI.initStageDecorated(new Scene(fxmlLoader.load()), Utility.toUTF(bundle.getString(type + "Azkar")));
+            ((TimedAzkarController) fxmlLoader.getController()).setData(type);
+            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
+            stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".showTimedAzkar()");
         }

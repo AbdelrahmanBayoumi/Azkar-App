@@ -1,13 +1,18 @@
 package com.bayoumi.controllers.azkar.timed;
 
+import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
+import java.util.ResourceBundle;
+
 
 public class ZekrBoxController {
+    private ResourceBundle bundle;
     private int repeatValue;
     @FXML
     private Text text;
@@ -18,14 +23,22 @@ public class ZekrBoxController {
     @FXML
     private FontAwesomeIconView copyIcon;
 
+    private void updateBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        copyBTN.setText(Utility.toUTF(bundle.getString("copy")));
+        repeatBTN.setText(Utility.toUTF(bundle.getString("repetition")));
+    }
+
     private void updateRepeatButton(int repeat) {
-        this.repeatBTN.setText("التكرار" + "    " + "(" + repeat + ")");
+        this.repeatBTN.setText((Utility.toUTF(bundle.getString("repetition")) + "  " + "(" + repeat + ")"));
     }
 
     public void setData(String text, int repeatValue) {
         // TODO: handle localization for this view
         this.text.setText(text);
+        this.text.setStyle("-fx-font-family: 'Noto Naskh Arabic'; -fx-font-weight: BOLD; -fx-text-alignment: center;-fx-font-size: " + Settings.getInstance().getAzkarSettings().getTimedAzkarFontSize() + ";");
         this.repeatValue = repeatValue;
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
         updateRepeatButton(this.repeatValue);
     }
 
@@ -50,4 +63,5 @@ public class ZekrBoxController {
             this.repeatBTN.setDisable(true);
         }
     }
+
 }

@@ -18,6 +18,7 @@ public class AzkarSettings extends Observable {
     private int rearPeriod;
     private boolean isStopped;
     private int volume;
+    private int timedAzkarFontSize;
 
 
     protected AzkarSettings() {
@@ -36,6 +37,19 @@ public class AzkarSettings extends Observable {
         this.isStopped = Preferences.getInstance().getBoolean(PreferencesType.IS_AZKAR_STOPPED);
         this.selectedPeriod = Preferences.getInstance().get(PreferencesType.SELECTED_PERIOD);
         this.volume = Preferences.getInstance().getInt(PreferencesType.VOLUME);
+        this.timedAzkarFontSize = Preferences.getInstance().getInt(PreferencesType.TIMED_AZKAR_FONT_SIZE);
+    }
+
+    public int getTimedAzkarFontSize() {
+        return timedAzkarFontSize;
+    }
+
+    public void setTimedAzkarFontSize(int timedAzkarFontSize) {
+        setChanged();
+        // 1. set value to local variable
+        this.timedAzkarFontSize = timedAzkarFontSize;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.TIMED_AZKAR_FONT_SIZE, timedAzkarFontSize + "");
     }
 
     public int getMorningAzkarOffset() {
