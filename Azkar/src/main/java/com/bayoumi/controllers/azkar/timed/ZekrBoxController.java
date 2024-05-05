@@ -34,12 +34,16 @@ public class ZekrBoxController {
     }
 
     public void setData(String text, int repeatValue) {
-        // TODO: handle localization for this view
         this.text.setText(text);
-        this.text.setStyle("-fx-font-family: 'Noto Naskh Arabic'; -fx-font-weight: BOLD; -fx-text-alignment: center;-fx-font-size: " + Settings.getInstance().getAzkarSettings().getTimedAzkarFontSize() + ";");
+        updateFontSize();
         this.repeatValue = repeatValue;
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
         updateRepeatButton(this.repeatValue);
+    }
+
+    public void updateFontSize() {
+        System.out.println("[ZekrBoxController] updateFontSize()");
+        this.text.setStyle("-fx-font-family: 'Noto Naskh Arabic'; -fx-font-weight: BOLD; -fx-text-alignment: center;-fx-font-size: " + Settings.getInstance().getAzkarSettings().getTimedAzkarFontSize() + ";");
     }
 
     @FXML

@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -46,7 +47,6 @@ public class TimedAzkarController implements Initializable {
     }
 
     public void setData(String type) {
-        // TODO: handle localization for this view
         if (type.toLowerCase().contains("morning")) {
             title.setText(Utility.toUTF(bundle.getString("morningAzkar")));
             image.setImage(morningImage);
@@ -77,7 +77,9 @@ public class TimedAzkarController implements Initializable {
             FXMLLoader fxmlLoader;
             for (TimedZekr zekr : list) {
                 fxmlLoader = new FXMLLoader(getClass().getResource(Locations.ZekrBox.toString()));
-                boxContainer.getChildren().add(fxmlLoader.load());
+                final Node zekrBox = fxmlLoader.load();
+                zekrBox.setUserData(fxmlLoader.getController());
+                boxContainer.getChildren().add(zekrBox);
                 controller = fxmlLoader.getController();
                 controller.setData(zekr.getText(), zekr.getRepeat());
             }
@@ -91,7 +93,8 @@ public class TimedAzkarController implements Initializable {
         try {
             final FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar_Settings.toString()));
             final JFXDialog dialog = new JFXDialog(sp, loader.load(), JFXDialog.DialogTransition.TOP);
-            ((SettingsController) loader.getController()).setData(dialog);
+            ((SettingsController) loader.getController()).setData(dialog,
+                    () -> boxContainer.getChildren().forEach(node -> ((ZekrBoxController) node.getUserData()).updateFontSize()));
             dialog.show();
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".openSettings()");

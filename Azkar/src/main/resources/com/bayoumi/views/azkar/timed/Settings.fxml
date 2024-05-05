@@ -44,7 +44,16 @@
                      <String fx:value="_22" />
                   </styleClass>
                </Label>
-               <Label text="تغيير حجم الخط (">
+               <Label layoutX="29.0" layoutY="18.0" text=") ">
+                  <font>
+                     <Font name="System Bold" size="20.0" />
+                  </font>
+                  <styleClass>
+                     <String fx:value="font-text-bold" />
+                     <String fx:value="_22" />
+                  </styleClass>
+               </Label>
+               <Label fx:id="changeFontSizeLabel" text="تغيير حجم الخط">
                   <font>
                      <Font name="System Bold" size="20.0" />
                   </font>
