@@ -8,14 +8,14 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class TimedZekr {
-    public final static ObservableList<TimedZekr> MORNING_LIST = FXCollections.observableArrayList();
-    public final static ObservableList<TimedZekr> NIGHT_LIST = FXCollections.observableArrayList();
+public class TimedZekrOld {
+    public final static ObservableList<TimedZekrOld> MORNING_LIST = FXCollections.observableArrayList();
+    public final static ObservableList<TimedZekrOld> NIGHT_LIST = FXCollections.observableArrayList();
     private int id;
     private String text;
     private int repeat;
 
-    public TimedZekr(int id, String text, int repeat) {
+    public TimedZekrOld(int id, String text, int repeat) {
         this.id = id;
         this.text = text;
         this.repeat = repeat;
@@ -26,7 +26,7 @@ public class TimedZekr {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM night_zekr").executeQuery();
             while (res.next()) {
-                NIGHT_LIST.add(new TimedZekr(res.getInt(1), res.getString(2), res.getInt(3)));
+                NIGHT_LIST.add(new TimedZekrOld(res.getInt(1), res.getString(2), res.getInt(3)));
             }
         } catch (Exception ex) {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + "fetchNightAzkar()");
@@ -38,19 +38,19 @@ public class TimedZekr {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM morning_zekr").executeQuery();
             while (res.next()) {
-                MORNING_LIST.add(new TimedZekr(res.getInt(1), res.getString(2), res.getInt(3)));
+                MORNING_LIST.add(new TimedZekrOld(res.getInt(1), res.getString(2), res.getInt(3)));
             }
         } catch (Exception ex) {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + "fetchMorningAzkar()");
         }
     }
 
-    public static ArrayList<TimedZekr> getMorningAzkar() {
-        ArrayList<TimedZekr> list = new ArrayList<>();
+    public static ArrayList<TimedZekrOld> getMorningAzkar() {
+        ArrayList<TimedZekrOld> list = new ArrayList<>();
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM morning_zekr").executeQuery();
             while (res.next()) {
-                list.add(new TimedZekr(res.getInt(1), res.getString(2), res.getInt(3)));
+                list.add(new TimedZekrOld(res.getInt(1), res.getString(2), res.getInt(3)));
             }
         } catch (Exception ex) {
             Logger.error(null, ex, AbsoluteZekr.class.getName() + "getMorningAzkar()");

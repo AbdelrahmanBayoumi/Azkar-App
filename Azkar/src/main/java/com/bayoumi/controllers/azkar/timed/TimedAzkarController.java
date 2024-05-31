@@ -1,6 +1,6 @@
 package com.bayoumi.controllers.azkar.timed;
 
-import com.bayoumi.models.TimedZekr;
+import com.bayoumi.models.TimedZekrOld;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -50,13 +50,13 @@ public class TimedAzkarController implements Initializable {
         if (type.toLowerCase().contains("morning")) {
             title.setText(Utility.toUTF(bundle.getString("morningAzkar")));
             image.setImage(morningImage);
-            TimedZekr.fetchMorningAzkar();
-            initAzkarContainer(TimedZekr.MORNING_LIST);
+            TimedZekrOld.fetchMorningAzkar();
+            initAzkarContainer(TimedZekrOld.MORNING_LIST);
         } else {
             title.setText(Utility.toUTF(bundle.getString("nightAzkar")));
             image.setImage(nightImage);
-            TimedZekr.fetchNightAzkar();
-            initAzkarContainer(TimedZekr.NIGHT_LIST);
+            TimedZekrOld.fetchNightAzkar();
+            initAzkarContainer(TimedZekrOld.NIGHT_LIST);
         }
     }
 
@@ -70,12 +70,12 @@ public class TimedAzkarController implements Initializable {
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
     }
 
-    private void initAzkarContainer(ObservableList<TimedZekr> list) {
+    private void initAzkarContainer(ObservableList<TimedZekrOld> list) {
         try {
             boxContainer.getChildren().clear();
             ZekrBoxController controller;
             FXMLLoader fxmlLoader;
-            for (TimedZekr zekr : list) {
+            for (TimedZekrOld zekr : list) {
                 fxmlLoader = new FXMLLoader(getClass().getResource(Locations.ZekrBox.toString()));
                 final Node zekrBox = fxmlLoader.load();
                 zekrBox.setUserData(fxmlLoader.getController());
