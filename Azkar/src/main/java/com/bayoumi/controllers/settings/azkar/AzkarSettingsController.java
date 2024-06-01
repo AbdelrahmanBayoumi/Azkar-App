@@ -1,7 +1,7 @@
 package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
-import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.settings.*;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;

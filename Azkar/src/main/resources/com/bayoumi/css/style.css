@@ -236,6 +236,36 @@
     -fx-fill: -fx-primary-button-text;
 }
 
+.secondary-border-button {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-secondary;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-text-fill: -fx-secondary;
+}
+
+.secondary-border-button:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.secondary-border-button .glyph-icon {
+    -fx-fill: -fx-secondary;
+}
+
+.secondary-border-button:hover .glyph-icon {
+    -fx-fill: -fx-secondary-text;
+}
+
+.next-zekr-button {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.next-zekr-button:hover {
+    -fx-background-color: -fx-secondary-hover;
+}
+
 .box-normal-noshadow {
     -fx-background-color: -fx-secondary-text;
     -fx-text-fill: -fx-primary-text;

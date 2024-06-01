@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.azkar;
 
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Logger;

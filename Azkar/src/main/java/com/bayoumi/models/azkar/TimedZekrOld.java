@@ -1,4 +1,4 @@
-package com.bayoumi.models;
+package com.bayoumi.models.azkar;
 
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
