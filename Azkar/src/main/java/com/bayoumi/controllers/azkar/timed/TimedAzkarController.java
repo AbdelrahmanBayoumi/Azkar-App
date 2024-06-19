@@ -89,7 +89,7 @@ public class TimedAzkarController implements Initializable {
 
         scrollPaneChild.setOnMouseClicked(event -> onIncreaseCountClicked());
 
-         PopOverUtil.init(copyButton, Utility.toUTF(bundle.getString("timedAzkarCopyTooltip")));
+        PopOverUtil.init(copyButton, Utility.toUTF(bundle.getString("timedAzkarCopyTooltip")));
     }
 
     private void updateBundle(ResourceBundle bundle) {
