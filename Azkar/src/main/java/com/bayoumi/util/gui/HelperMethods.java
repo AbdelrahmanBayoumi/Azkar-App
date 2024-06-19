@@ -1,5 +1,6 @@
 package com.bayoumi.util.gui;
 
+import com.bayoumi.util.Constants;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -29,7 +30,7 @@ public class HelperMethods {
     }
 
     public static void SetAppDecoration(Stage stage) {
-        stage.setTitle("Azkar");
+        stage.setTitle(Constants.APP_NAME);
         SetIcon(stage);
     }
 

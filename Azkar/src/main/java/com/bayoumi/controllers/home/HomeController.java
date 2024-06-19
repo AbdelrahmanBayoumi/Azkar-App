@@ -203,27 +203,19 @@ public class HomeController implements Initializable {
     // ==============================================
     @FXML
     public void goToMorningAzkar() {
-        if (settings.getLanguage().equals(Language.Arabic)) {
-            showTimedAzkar("morning");
-        } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("morningAzkarNotAvailable")))) {
-            showTimedAzkar("morning");
-        }
+        showTimedAzkar("morning");
     }
 
     @FXML
     public void goToNightAzkar() {
-        if (settings.getLanguage().equals(Language.Arabic)) {
-            showTimedAzkar("night");
-        } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("nightAzkarNotAvailable")))) {
-            showTimedAzkar("night");
-        }
+        showTimedAzkar("night");
     }
 
     private void showTimedAzkar(String type) {
         try {
             final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar.toString()));
             final Stage stage = BuilderUI.initStageDecorated(new Scene(fxmlLoader.load()), Utility.toUTF(bundle.getString(type + "Azkar")));
-            ((TimedAzkarController) fxmlLoader.getController()).setData(type);
+            ((TimedAzkarController) fxmlLoader.getController()).setData(type, stage);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();
         } catch (Exception e) {

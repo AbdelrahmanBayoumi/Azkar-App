@@ -63,7 +63,7 @@ public class LocationService {
             return getCityWithIP_API(IP);
         } catch (Exception e) {
             Logger.error("Error in fetching city data with IP-API, trying with IP2Location", e, LocationService.class.getName() + ".getCity()");
-            try{
+            try {
                 return getCityWithIp2location(IP);
             } catch (Exception ex) {
                 Logger.error("Error in fetching city data with IP2Location", ex, LocationService.class.getName() + ".getCity()");

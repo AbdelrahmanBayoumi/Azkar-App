@@ -42,7 +42,6 @@ public class ZekrBoxController {
     }
 
     public void updateFontSize() {
-        System.out.println("[ZekrBoxController] updateFontSize()");
         this.text.setStyle("-fx-font-family: 'Noto Naskh Arabic'; -fx-font-weight: BOLD; -fx-text-alignment: center;-fx-font-size: " + Settings.getInstance().getAzkarSettings().getTimedAzkarFontSize() + ";");
     }
 

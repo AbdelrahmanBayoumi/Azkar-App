@@ -6,6 +6,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.effect.DropShadow?>
@@ -22,7 +24,7 @@
 
 <StackPane fx:id="sp" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.TimedAzkarController">
    <AnchorPane>
-      <VBox alignment="TOP_CENTER" layoutX="40.0" layoutY="110.0" prefHeight="520.0" prefWidth="760.0" style="-fx-background-color: #fff; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
+      <VBox alignment="TOP_CENTER" layoutX="40.0" layoutY="110.0" onKeyReleased="#keyEventAction" prefHeight="520.0" prefWidth="760.0" style="-fx-background-color: #fff; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
          <children>
             <HBox spacing="20.0">
                <children>
@@ -71,12 +73,28 @@
                <content>
                   <VBox fx:id="scrollPaneChild" alignment="CENTER" style="-fx-background-color: #fff;">
                      <children>
-                        <TextFlow maxWidth="1.7976931348623157E308" textAlignment="CENTER">
+                        <TextFlow fx:id="transliterationTextBox" maxWidth="1.7976931348623157E308" style="-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;" textAlignment="CENTER" VBox.vgrow="NEVER">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                            <children>
-                              <Text fx:id="content" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" text="أَعُوذُ بِاللَّهِ مِنَ الشَّيطَانِ الرَّجِيمِ ﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾" textAlignment="CENTER" />
+                              <Text fx:id="transliteration" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" textAlignment="CENTER" />
+                           </children>
+                        </TextFlow>
+                        <TextFlow fx:id="translationTextBox" layoutX="30.0" layoutY="215.0" maxWidth="1.7976931348623157E308" style="-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Text fx:id="translation" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" textAlignment="CENTER" />
+                           </children>
+                        </TextFlow>
+                        <TextFlow maxWidth="1.7976931348623157E308" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Text fx:id="content" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" textAlignment="CENTER" />
                            </children>
                         </TextFlow>
                         <Separator fx:id="separator">
@@ -89,7 +107,7 @@
                               <Insets bottom="35.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                            <children>
-                              <Text fx:id="fadl" cache="true" fill="#4a4a4a" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="zekr-text" text="[سورة البقرة، الآية: 255] من قالها حين يصبح أُجير من الجن حتى يمسي، ومن قالها حين يمسي أُجير منهم حتى يصبح" textAlignment="CENTER" />
+                              <Text fx:id="fadl" cache="true" fill="#4a4a4a" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="zekr-text" textAlignment="CENTER" />
                            </children>
                         </TextFlow>
                      </children>
@@ -99,6 +117,11 @@
                   </VBox>
                </content>
             </ScrollPane>
+            <ProgressBar fx:id="progress" maxWidth="1.7976931348623157E308" progress="0.0" styleClass="zekr-progress">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="-8.0" />
+               </VBox.margin>
+            </ProgressBar>
             <HBox alignment="CENTER" minHeight="47.0" style="-fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20; -fx-background-radius: 20;">
                <children>
                   <JFXButton fx:id="nextButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" maxHeight="1.7976931348623157E308" onAction="#onNextClicked" prefWidth="60.0" style="-fx-background-radius: 20 0 0 20;" text="Button">
@@ -183,9 +206,9 @@
             </Label>
          </children>
       </HBox>
-      <JFXButton fx:id="settingsButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="14.0" onAction="#openSettings" style="-fx-border-radius: 500;" text="الإعدادات" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="7.5">
+      <JFXButton fx:id="settingsButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="14.0" onAction="#openSettings" style="-fx-border-radius: 500;" text="الإعدادات" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="11.0">
          <graphic>
-            <FontAwesomeIconView glyphName="GEAR" size="40" />
+            <FontAwesomeIconView glyphName="GEAR" size="33" />
          </graphic>
          <font>
             <Font name="System Bold" size="24.0" />
@@ -199,5 +222,10 @@
             <String fx:value="_24" />
          </styleClass>
       </JFXButton>
+      <VBox fx:id="progressBox" alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(0,0,0,0.2);" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ProgressIndicator />
+         </children>
+      </VBox>
    </AnchorPane>
 </StackPane>

@@ -7,6 +7,7 @@ public enum Locations {
     AzkarPeriods("/com/bayoumi/views/home/periods/AzkarPeriods.fxml"),
     ZekrBox("/com/bayoumi/views/azkar/timed/ZekrBox.fxml"),
     TimedAzkar_Settings("/com/bayoumi/views/azkar/timed/Settings.fxml"),
+    Zekr_Description("/com/bayoumi/views/azkar/timed/ZekrDescription.fxml"),
     TimedAzkar("/com/bayoumi/views/azkar/timed/TimedAzkar.fxml"),
     Settings("/com/bayoumi/views/settings/Settings.fxml"),
     OtherSettings("/com/bayoumi/views/settings/other/OtherSettings.fxml"),

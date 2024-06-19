@@ -6,6 +6,7 @@ import com.bayoumi.util.Constants;
 import com.bayoumi.util.Utility;
 import com.jfoenix.controls.JFXDialog;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,6 +23,8 @@ public class SettingsController {
     private Label fontSizeLabel, changeFontSizeLabel;
     @FXML
     private Text textPreview;
+    @FXML
+    private Button minimizeFontButton;
 
     private JFXDialog dialog;
     private boolean isChanged = false;
@@ -44,6 +47,8 @@ public class SettingsController {
             }
         });
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
+
+        minimizeFontButton.requestFocus();
     }
 
     @FXML

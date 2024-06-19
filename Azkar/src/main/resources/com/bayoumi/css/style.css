@@ -25,7 +25,7 @@
     -fx-primary-light: derive(#2A9D8F, 40%);
     -fx-secondary: #33485d;
     -fx-secondary-hover: derive(#264653, -40%);
-    -fx-secondary-light: derive(#264653, -40%);
+    -fx-secondary-light: derive(#264653, 40%);
 
     -fx-third: #F4A261;
     -fx-third-dark: #E76F51;
@@ -658,18 +658,19 @@
 }
 
 /* ==== Zekr ==== */
-/*.zekr-listView .scroll-bar:horizontal .increment-arrow,*/
-/*.zekr-listView .scroll-bar:horizontal .decrement-arrow,*/
-/*.zekr-listView .scroll-bar:horizontal .increment-button,*/
-/*.zekr-listView .scroll-bar:horizontal .decrement-button {*/
-/*    -fx-padding: 0;*/
-/*}*/
-
 .zekr-text {
     -fx-font-family: 'Noto Naskh Arabic';
     -fx-font-weight: BOLD;
     -fx-text-alignment: center;
 }
+.zekr-progress > .track {
+    -fx-background-color: white;
+}
+
+.zekr-progress > .bar {
+    -fx-background-color: -fx-secondary;
+}
+
 
 /* === fonts === */
 .font-text-bold {

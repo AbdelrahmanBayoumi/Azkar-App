@@ -15,6 +15,8 @@ import javafx.scene.control.DialogPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 /**
  * @author Bayoumi
  */
@@ -44,7 +46,7 @@ public class BuilderUI {
         alert.setHeaderText(null);
         alert.setContentText(text);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(BuilderUI.class.getResource("/com/bayoumi/css/style.css").toExternalForm());
+        dialogPane.getStylesheets().add(Objects.requireNonNull(BuilderUI.class.getResource("/com/bayoumi/css/style.css")).toExternalForm());
         if (isRTL) {
             (dialogPane.getChildren().get(1)).setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         }
