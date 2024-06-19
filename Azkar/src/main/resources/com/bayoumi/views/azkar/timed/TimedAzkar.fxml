@@ -2,31 +2,197 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <StackPane fx:id="sp" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.TimedAzkarController">
    <AnchorPane>
-      <VBox layoutX="19.0" layoutY="9.0" prefHeight="530.0" prefWidth="800.0" styleClass="root" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
-         <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" focusTraversable="false" styleClass="root" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-            <FlowPane fx:id="boxContainer" alignment="CENTER" hgap="20.0" nodeOrientation="RIGHT_TO_LEFT" vgap="20.0">
+      <VBox alignment="TOP_CENTER" layoutX="40.0" layoutY="110.0" onKeyReleased="#keyEventAction" prefHeight="520.0" prefWidth="760.0" style="-fx-background-color: #fff; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
+         <children>
+            <HBox spacing="20.0">
+               <children>
+                  <JFXButton fx:id="copyButton" cache="true" focusTraversable="false" graphicTextGap="10.0" maxHeight="1.7976931348623157E308" minWidth="110.0" onAction="#onCopyClicked" text="نسخ">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_16" />
+                        <String fx:value="secondary-border-button" />
+                     </styleClass>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="COPY" size="25" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="playButton" focusTraversable="false" graphicTextGap="10.0" maxHeight="1.7976931348623157E308" minWidth="110.0" onAction="#onPlayClicked" text="تشغيل الصوت">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="PLAY" size="25" />
+                     </graphic>
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_16" />
+                        <String fx:value="secondary-border-button" />
+                     </styleClass>
+                  </JFXButton>
+                  <JFXButton fx:id="toggleZekrDescriptionButton" cache="true" focusTraversable="false" graphicTextGap="10.0" layoutX="207.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onToggleZekrDescription" text="شرح الذكر" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_16" />
+                        <String fx:value="secondary-border-button" />
+                     </styleClass>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BOOK" size="25" />
+                     </graphic>
+                  </JFXButton>
+               </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
-            </FlowPane>
-         </ScrollPane>
+            </HBox>
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: #fff;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+               <content>
+                  <VBox fx:id="scrollPaneChild" alignment="CENTER" style="-fx-background-color: #fff;">
+                     <children>
+                        <TextFlow fx:id="transliterationTextBox" maxWidth="1.7976931348623157E308" style="-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Text fx:id="transliteration" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" textAlignment="CENTER" />
+                           </children>
+                        </TextFlow>
+                        <TextFlow fx:id="translationTextBox" layoutX="30.0" layoutY="215.0" maxWidth="1.7976931348623157E308" style="-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Text fx:id="translation" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" textAlignment="CENTER" />
+                           </children>
+                        </TextFlow>
+                        <TextFlow maxWidth="1.7976931348623157E308" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Text fx:id="content" cache="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" textAlignment="CENTER" />
+                           </children>
+                        </TextFlow>
+                        <Separator fx:id="separator">
+                           <padding>
+                              <Insets left="50.0" right="50.0" />
+                           </padding>
+                        </Separator>
+                        <TextFlow maxWidth="1.7976931348623157E308" textAlignment="CENTER">
+                           <padding>
+                              <Insets bottom="35.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <Text fx:id="fadl" cache="true" fill="#4a4a4a" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="zekr-text" textAlignment="CENTER" />
+                           </children>
+                        </TextFlow>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+               <VBox.margin>
+                  <Insets left="2.0" />
+               </VBox.margin>
+            </ScrollPane>
+            <ProgressBar fx:id="progress" maxWidth="1.7976931348623157E308" progress="0.0" styleClass="zekr-progress">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="-8.0" />
+               </VBox.margin>
+            </ProgressBar>
+            <HBox alignment="CENTER" minHeight="47.0" style="-fx-background-color: -fx-secondary; -fx-background-radius: 0 0 20 20; -fx-background-radius: 20;">
+               <children>
+                  <JFXButton fx:id="nextButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" maxHeight="1.7976931348623157E308" onAction="#onNextClicked" prefWidth="60.0" style="-fx-background-radius: 20 0 0 20;" text="Button">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CHEVRON_LEFT" size="25" style="-fx-fill: #fff;" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <styleClass>
+                        <String fx:value="transparent-button" />
+                        <String fx:value="next-zekr-button" />
+                     </styleClass>
+                  </JFXButton>
+                  <Label fx:id="paginationText" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onNextClicked" prefWidth="200.0" style="-fx-text-fill: -fx-secondary-text;" text="الذكر 21 من 24" HBox.hgrow="ALWAYS">
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_20" />
+                     </styleClass>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <StackPane>
+                     <HBox.margin>
+                        <Insets bottom="-30.0" top="-30.0" />
+                     </HBox.margin>
+                     <children>
+                        <Circle fill="DODGERBLUE" radius="36.0" stroke="BLACK" strokeType="OUTSIDE" style="-fx-stroke: -fx-secondary; -fx-stroke-width: 8; -fx-fill: -fx-bg; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);;" />
+                        <Label fx:id="count" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onIncreaseCountClicked" text="100">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <Label fx:id="countDescription" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onPreviousClicked" prefWidth="200.0" style="-fx-text-fill: -fx-secondary-text;" text="مَرَّةٌ وَاحِدَةٌ" HBox.hgrow="ALWAYS">
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_20" />
+                     </styleClass>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <JFXButton fx:id="previousButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" layoutX="710.0" layoutY="10.0" maxHeight="1.7976931348623157E308" onAction="#onPreviousClicked" prefWidth="60.0" style="-fx-background-radius: 0 20 20 0;">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CHEVRON_RIGHT" size="25" style="-fx-fill: #fff;" />
+                     </graphic>
+                     <styleClass>
+                        <String fx:value="transparent-button" />
+                        <String fx:value="next-zekr-button" />
+                     </styleClass>
+                  </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets right="-7.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets right="7.0" />
+         </padding>
       </VBox>
-      <HBox alignment="CENTER" minHeight="70.0" spacing="20.0" style="-fx-background-color: -fx-secondary;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" minHeight="70.0" spacing="20.0" style="-fx-background-color: -fx-secondary; -fx-background-radius: 0 0 30 30;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <effect>
             <DropShadow />
          </effect>
@@ -43,9 +209,9 @@
             </Label>
          </children>
       </HBox>
-      <JFXButton fx:id="settingsButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="14.0" onAction="#openSettings" style="-fx-border-color: #d1d1d1; -fx-border-radius: 500;" styleClass="box-noraml" text="الإعدادات" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
+      <JFXButton fx:id="settingsButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="14.0" onAction="#openSettings" style="-fx-border-radius: 500;" text="الإعدادات" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="11.0">
          <graphic>
-            <FontAwesomeIconView glyphName="GEAR" size="40" />
+            <FontAwesomeIconView glyphName="GEAR" size="33" />
          </graphic>
          <font>
             <Font name="System Bold" size="24.0" />
@@ -53,6 +219,16 @@
          <padding>
             <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
          </padding>
+         <styleClass>
+            <String fx:value="box-noraml" />
+            <String fx:value="font-text-bold" />
+            <String fx:value="_24" />
+         </styleClass>
       </JFXButton>
+      <VBox fx:id="progressBox" alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(0,0,0,0.2);" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ProgressIndicator />
+         </children>
+      </VBox>
    </AnchorPane>
 </StackPane>

@@ -71,6 +71,8 @@ public class Launcher extends Application {
             Utility.createDirectory(Constants.assetsPath + "/logs");
             Utility.createDirectory(Constants.assetsPath + "/db");
             Utility.createDirectory(Constants.assetsPath + "/audio");
+            // To save the audio file in the temp directory to be able to play it
+            Utility.createDirectory(System.getProperty("java.io.tmpdir") + "/" + Constants.APP_NAME);
             incrementPreloader();
 
             // --- initialize Logger ---
@@ -159,7 +161,7 @@ public class Launcher extends Application {
                 onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Onboarding.toString())))));
                 onboardingStage.initModality(Modality.APPLICATION_MODAL);
                 HelperMethods.SetIcon(onboardingStage);
-                onboardingStage.setTitle("Onboarding - Azkar");
+                onboardingStage.setTitle("Onboarding - " + Constants.APP_NAME);
                 onboardingStage.show();
                 onboardingStage.setOnCloseRequest(event -> ChooseAudioController.stopIfPlaying());
             } catch (Exception ex) {

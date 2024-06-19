@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<?import java.lang.String?>
+<VBox onKeyReleased="#keyEventAction" prefHeight="400.0" prefWidth="600.0" spacing="10.0"
+      style="-fx-border-color: -fx-secondary; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.ZekrDescriptionController">
+    <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: -fx-secondary;"
+                vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+        <VBox fx:id="scrollPaneChild" alignment="CENTER" style="-fx-background-color: #fff;">
+            <Label fx:id="hadithTextTitle" alignment="CENTER" maxWidth="1.7976931348623157E308"
+                   style="-fx-background-color: -fx-secondary; -fx-text-fill: -fx-secondary-text;"
+                   text="لفظ الحديث">
+                <styleClass>
+                    <String fx:value="_21"/>
+                    <String fx:value="font-text-bold"/>
+                </styleClass>
+                <padding>
+                    <Insets bottom="7.0" left="7.0" right="7.0" top="7.0"/>
+                </padding>
+            </Label>
+            <TextFlow maxWidth="1.7976931348623157E308" textAlignment="CENTER" VBox.vgrow="NEVER">
+                <padding>
+                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                </padding>
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0"/>
+                </VBox.margin>
+                <Text fx:id="hadithText" cache="true" strokeType="OUTSIDE" strokeWidth="0.0"
+                      style="-fx-font-size: 22;" styleClass="zekr-text" text="لا يوجد"
+                      textAlignment="CENTER"/>
+            </TextFlow>
+            <Label fx:id="explanationOfHadithVocabularyTitle" alignment="CENTER"
+                   maxWidth="1.7976931348623157E308"
+                   style="-fx-background-color: -fx-secondary; -fx-text-fill: -fx-secondary-text;"
+                   text="شرح الحديث">
+                <styleClass>
+                    <String fx:value="_21"/>
+                    <String fx:value="font-text-bold"/>
+                </styleClass>
+                <padding>
+                    <Insets bottom="7.0" left="7.0" right="7.0" top="7.0"/>
+                </padding>
+            </Label>
+            <TextFlow maxWidth="1.7976931348623157E308" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                </padding>
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0"/>
+                </VBox.margin>
+                <Text fx:id="explanationOfHadithVocabulary" cache="true" strokeType="OUTSIDE"
+                      strokeWidth="0.0" style="-fx-font-size: 22;" styleClass="zekr-text" text="لا يوجد"
+                      textAlignment="CENTER"/>
+            </TextFlow>
+        </VBox>
+    </ScrollPane>
+</VBox>

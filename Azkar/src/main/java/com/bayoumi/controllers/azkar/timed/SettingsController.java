@@ -1,114 +1,70 @@
 package com.bayoumi.controllers.azkar.timed;
 
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Constants;
+import com.bayoumi.util.Utility;
 import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXToggleButton;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.util.ResourceBundle;
+
 
 public class SettingsController {
 
     @FXML
-    private Spinner<Integer> morningAzkarTimeSpinner, nightAzkarTimeSpinner;
+    private Label fontSizeLabel, changeFontSizeLabel;
     @FXML
-    private JFXToggleButton morningAzkarTimeToggle, nightAzkarTimeToggle;
+    private Text textPreview;
+    @FXML
+    private Button minimizeFontButton;
 
-    private ObservableList<Text> list;
     private JFXDialog dialog;
+    private boolean isChanged = false;
 
-    public void setData(ObservableList<Text> list, JFXDialog dialog) {
-        // TODO: handle localization for this view
-        this.list = list;
+    private void updateBundle(ResourceBundle bundle) {
+        changeFontSizeLabel.setText(Utility.toUTF(bundle.getString("settings.azkar.changeFontSize")));
+    }
+
+    public void setData(JFXDialog dialog, Runnable onCloseAction) {
         this.dialog = dialog;
+        isChanged = false;
 
-        morningAzkarTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 120, 30, 10));
-        nightAzkarTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 120, 30, 10));
+        textPreview.setFont(Font.font(Constants.QURAN_FONT_FAMILY, FontWeight.BOLD, Settings.getInstance().getAzkarSettings().getTimedAzkarFontSize()));
+        fontSizeLabel.setText(String.valueOf(Settings.getInstance().getAzkarSettings().getTimedAzkarFontSize()));
 
-        morningAzkarTimeSpinner.getValueFactory().setValue(Settings.getInstance().getAzkarSettings().getMorningAzkarReminder());
-        nightAzkarTimeSpinner.getValueFactory().setValue(Settings.getInstance().getAzkarSettings().getNightAzkarReminder());
+        dialog.setOnDialogClosed(event -> {
+            if (isChanged) {
+                if (onCloseAction != null) onCloseAction.run();
+                Settings.getInstance().getAzkarSettings().notifyObservers();
+            }
+        });
+        updateBundle(LanguageBundle.getInstance().getResourceBundle());
 
-        morningAzkarTimeToggle.setSelected(morningAzkarTimeSpinner.getValueFactory().getValue() != 0);
-        nightAzkarTimeToggle.setSelected(nightAzkarTimeSpinner.getValueFactory().getValue() != 0);
-
-        dialog.setOnDialogClosed(event -> Settings.getInstance().getAzkarSettings().notifyObservers());
-    }
-
-    @FXML
-    private void onMorningAzkarTimeChange() {
-        Settings.getInstance().getAzkarSettings().setMorningAzkarReminder(morningAzkarTimeSpinner.getValueFactory().getValue());
-        if (morningAzkarTimeSpinner.getValueFactory().getValue() == 0) {
-            morningAzkarTimeToggle.setSelected(false);
-            morningAzkarTimeSpinner.setDisable(true);
-            toggleAction(morningAzkarTimeToggle);
-        }
-    }
-
-    @FXML
-    private void onNightAzkarTimeChange() {
-        Settings.getInstance().getAzkarSettings().setNightAzkarReminder(nightAzkarTimeSpinner.getValueFactory().getValue());
-        if (nightAzkarTimeSpinner.getValueFactory().getValue() == 0) {
-            nightAzkarTimeToggle.setSelected(false);
-            nightAzkarTimeSpinner.setDisable(true);
-            toggleAction(nightAzkarTimeToggle);
-        }
-    }
-
-    @FXML
-    private void onMorningAzkarTimeToggle() {
-        toggleAction(morningAzkarTimeToggle);
-        if (morningAzkarTimeToggle.isSelected()) {
-            morningAzkarTimeSpinner.setDisable(false);
-            morningAzkarTimeSpinner.getValueFactory().setValue(30);
-            Settings.getInstance().getAzkarSettings().setMorningAzkarReminder(30);
-        } else {
-            morningAzkarTimeSpinner.setDisable(true);
-            morningAzkarTimeSpinner.getValueFactory().setValue(0);
-            Settings.getInstance().getAzkarSettings().setMorningAzkarReminder(0);
-        }
-    }
-
-    @FXML
-    private void onNightAzkarTimeToggle() {
-        toggleAction(nightAzkarTimeToggle);
-        if (nightAzkarTimeToggle.isSelected()) {
-            nightAzkarTimeSpinner.setDisable(false);
-            nightAzkarTimeSpinner.getValueFactory().setValue(30);
-            Settings.getInstance().getAzkarSettings().setNightAzkarReminder(30);
-        } else {
-            nightAzkarTimeSpinner.setDisable(true);
-            nightAzkarTimeSpinner.getValueFactory().setValue(0);
-            Settings.getInstance().getAzkarSettings().setNightAzkarReminder(0);
-        }
-    }
-
-    private void toggleAction(JFXToggleButton toggleButton) {
-        if (toggleButton.isSelected()) {
-            toggleButton.setText("مُفعلة");
-        } else {
-            toggleButton.setText("لا تذكير");
-        }
+        minimizeFontButton.requestFocus();
     }
 
     @FXML
     private void maximizeFont() {
-        for (Text text : list) {
-            text.setFont(Font.font("System", FontWeight.BOLD, (text.getFont().getSize() + 1) > 60 ? 60 : text.getFont().getSize() + 1));
-        }
+        isChanged = true;
+        textPreview.setFont(Font.font(Constants.QURAN_FONT_FAMILY, FontWeight.BOLD, (textPreview.getFont().getSize() + 1) > 60 ? 60 : textPreview.getFont().getSize() + 1));
+        fontSizeLabel.setText(String.valueOf((int) textPreview.getFont().getSize()));
+        new Thread(() -> Settings.getInstance().getAzkarSettings().setTimedAzkarFontSize((int) textPreview.getFont().getSize())).start();
     }
 
     @FXML
     private void minimizeFont() {
-        for (Text text : list) {
-            text.setFont(Font.font("System", FontWeight.BOLD, (text.getFont().getSize() - 1) < 15 ? 15 : text.getFont().getSize() - 1));
-        }
+        isChanged = true;
+        textPreview.setFont(Font.font(Constants.QURAN_FONT_FAMILY, FontWeight.BOLD, (textPreview.getFont().getSize() - 1) < 10 ? 10 : textPreview.getFont().getSize() - 1));
+        fontSizeLabel.setText(String.valueOf((int) textPreview.getFont().getSize()));
+        new Thread(() -> Settings.getInstance().getAzkarSettings().setTimedAzkarFontSize((int) textPreview.getFont().getSize())).start();
     }
 
     @FXML

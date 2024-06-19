@@ -6,9 +6,8 @@ import com.bayoumi.Launcher;
 import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
-import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.preferences.PreferencesType;
-import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
@@ -35,12 +34,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -201,28 +202,21 @@ public class HomeController implements Initializable {
     // ==============================================
     @FXML
     public void goToMorningAzkar() {
-        if (settings.getLanguage().equals(Language.Arabic)) {
-            showTimedAzkar("morning");
-        } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("morningAzkarNotAvailable")))) {
-            showTimedAzkar("morning");
-        }
+        showTimedAzkar("morning");
     }
 
     @FXML
     public void goToNightAzkar() {
-        if (settings.getLanguage().equals(Language.Arabic)) {
-            showTimedAzkar("night");
-        } else if (BuilderUI.showConfirmAlert(false, Utility.toUTF(bundle.getString("nightAzkarNotAvailable")))) {
-            showTimedAzkar("night");
-        }
+        showTimedAzkar("night");
     }
 
     private void showTimedAzkar(String type) {
         try {
-            final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.TimedAzkar);
-            ((TimedAzkarController) popUp.getController()).setData(type);
-            HelperMethods.ExitKeyCodeCombination(popUp.getStage().getScene(), popUp.getStage());
-            popUp.showAndWait();
+            final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar.toString()));
+            final Stage stage = BuilderUI.initStageDecorated(new Scene(fxmlLoader.load()), Utility.toUTF(bundle.getString(type + "Azkar")));
+            ((TimedAzkarController) fxmlLoader.getController()).setData(type, stage);
+            HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
+            stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".showTimedAzkar()");
         }

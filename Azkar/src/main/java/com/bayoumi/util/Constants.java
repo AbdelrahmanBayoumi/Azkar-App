@@ -12,9 +12,10 @@ public class Constants {
 
     // Program characteristics
     public static String assetsPath;
+    public final static String APP_NAME = "Azkar";
     public final static String VERSION = "1.2.8";
     public final static String LOCATIONS_DB_URL = "https://github.com/AbdelrahmanBayoumi/LocationsDB/releases/latest/download/locations.db";
-
+    public static final String QURAN_FONT_FAMILY = "Noto Naskh Arabic";
     public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
 
     static {
@@ -22,7 +23,7 @@ public class Constants {
             if (Files.isWritable(Paths.get(Constants.class.getProtectionDomain().getCodeSource().getLocation().toURI()))) {
                 assetsPath = "jarFiles";
             } else {
-                assetsPath = System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles";
+                assetsPath = System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles";
             }
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, Constants.class.getName() + " -> static init");
@@ -30,10 +31,10 @@ public class Constants {
     }
 
     public static void copyDatabaseToAppData() throws IOException {
-        Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db");
+        Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles/db");
         Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
         Logger.debug(from);
-        Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/Azkar/jarFiles/db/data.db");
+        Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles/db/data.db");
         copyIfNotExist(from, to);
     }
 

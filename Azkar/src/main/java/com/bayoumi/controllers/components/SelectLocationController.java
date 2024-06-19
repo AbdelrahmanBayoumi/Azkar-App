@@ -157,7 +157,7 @@ public class SelectLocationController implements Initializable {
             cityComboBoxAutoComplete.setItems(cities.getItems());
         }
         if (!cities.getItems().isEmpty() && event != null) {
-            cities.setValue(cities.getItems().get(0));
+            setCityComboBoxValue(cities.getItems().get(0));
         }
         if (!isInit) {
             onManualLocationUpdate();
@@ -168,22 +168,23 @@ public class SelectLocationController implements Initializable {
     }
 
     private void initCities() {
-        cities.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (newValue != null) {
-                manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
-                manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
-            }
-        });
         if (!countries.getItems().isEmpty()) {
             changeCountry(null, true);
         }
-
         City cityFromEngName = City.getCityFromEngName(prayerTimeSettings.getCity(), prayerTimeSettings.getCountry());
         if (cityFromEngName != null) {
-            cities.setValue(cityFromEngName);
-            cities.getSelectionModel().select(cityFromEngName);
+            setCityComboBoxValue(cityFromEngName);
+
         } else {
-            cities.setValue(cities.getItems().get(0));
+            setCityComboBoxValue(cities.getItems().get(0));
+        }
+    }
+
+    private void setCityComboBoxValue(City city) {
+        if (city != null) {
+            cities.setValue(city);
+            manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
+            manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
         }
     }
 
@@ -261,6 +262,8 @@ public class SelectLocationController implements Initializable {
         if (countries.getValue() == null && cities.getValue() == null) {
             return;
         }
+        manualLatitude.setText(String.valueOf(cities.getValue().getLatitude()));
+        manualLongitude.setText(String.valueOf(cities.getValue().getLongitude()));
         prayerTimeSettings.setCountry(countries.getValue().getCode());
         prayerTimeSettings.setCity(cities.getValue().getEnglishName());
         prayerTimeSettings.setLatitude(Double.parseDouble(manualLatitude.getText()));

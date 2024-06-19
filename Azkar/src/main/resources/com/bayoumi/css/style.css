@@ -1,13 +1,3 @@
-/*@font-face {*/
-/*    font-family: 'Droid Arabic Kufi';*/
-/*    src: url('../fonts/DroidKufi-Bold.ttf');*/
-/*}*/
-
-/*@font-face {*/
-/*    font-family: 'Droid Arabic Kufi';*/
-/*    src: url('../fonts/DroidKufi-Regular.ttf');*/
-/*}*/
-
 @font-face {
     font-family: 'Tajawal-Medium';
     src: url('../fonts/Tajawal/Tajawal-Medium.ttf');
@@ -24,10 +14,9 @@
 }
 
 @font-face {
-    font-family: 'Kitab-Regular';
-    src: url('../fonts/Kitab-Regular.ttf');
+    font-family: "Noto Naskh Arabic";
+    src: url('../fonts/NotoNaskhArabic-Bold.ttf');
 }
-
 
 * {
     /* ====== Colors ====== */
@@ -36,7 +25,7 @@
     -fx-primary-light: derive(#2A9D8F, 40%);
     -fx-secondary: #33485d;
     -fx-secondary-hover: derive(#264653, -40%);
-    -fx-secondary-light: derive(#264653, -40%);
+    -fx-secondary-light: derive(#264653, 40%);
 
     -fx-third: #F4A261;
     -fx-third-dark: #E76F51;
@@ -245,6 +234,36 @@
 
 .back-button:hover .glyph-icon {
     -fx-fill: -fx-primary-button-text;
+}
+
+.secondary-border-button {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-secondary;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-text-fill: -fx-secondary;
+}
+
+.secondary-border-button:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.secondary-border-button .glyph-icon {
+    -fx-fill: -fx-secondary;
+}
+
+.secondary-border-button:hover .glyph-icon {
+    -fx-fill: -fx-secondary-text;
+}
+
+.next-zekr-button {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.next-zekr-button:hover {
+    -fx-background-color: -fx-secondary-hover;
 }
 
 .box-normal-noshadow {
@@ -639,24 +658,20 @@
 }
 
 /* ==== Zekr ==== */
-/*.zekr-listView .scroll-bar:horizontal .increment-arrow,*/
-/*.zekr-listView .scroll-bar:horizontal .decrement-arrow,*/
-/*.zekr-listView .scroll-bar:horizontal .increment-button,*/
-/*.zekr-listView .scroll-bar:horizontal .decrement-button {*/
-/*    -fx-padding: 0;*/
-/*}*/
-
 .zekr-text {
-    -fx-background-color: red;
-    -fx-font-family: 'Tajawal-Bold';
-    -fx-font-size: 20;
-    /*-fx-font-weight: BOLD;*/
-    -fx-max-height: infinity;
-    -fx-max-width: infinity;
-    -fx-padding: 20;
-    -fx-alignment: center;
+    -fx-font-family: 'Noto Naskh Arabic';
+    -fx-font-weight: BOLD;
     -fx-text-alignment: center;
 }
+.zekr-progress > .track {
+    -fx-background-color: white;
+}
+
+.zekr-progress > .bar {
+    -fx-background-radius: 30;
+    -fx-background-color: -fx-primary-light;
+}
+
 
 /* === fonts === */
 .font-text-bold {

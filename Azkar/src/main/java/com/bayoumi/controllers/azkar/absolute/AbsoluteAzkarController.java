@@ -1,6 +1,6 @@
 package com.bayoumi.controllers.azkar.absolute;
 
-import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.button.TableViewButton;

@@ -1,7 +1,7 @@
 package com.bayoumi.util.services.azkar;
 
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
-import com.bayoumi.models.AbsoluteZekr;
+import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
