@@ -668,6 +668,7 @@
 }
 
 .zekr-progress > .bar {
+    -fx-background-radius: 30;
     -fx-background-color: -fx-primary-light;
 }
 
