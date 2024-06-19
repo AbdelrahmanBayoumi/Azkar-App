@@ -8,6 +8,7 @@ public class PopOverUtil {
     public static void init(Node node, String text) {
         final Label label = new Label(text);
         label.getStyleClass().add("pop-over-label");
+        label.setMaxHeight(Double.MAX_VALUE);
         final PopOver popOver = new PopOver(label);
         popOver.setCloseButtonEnabled(true);
         node.setOnMouseEntered(mouseEvent -> popOver.show(node));

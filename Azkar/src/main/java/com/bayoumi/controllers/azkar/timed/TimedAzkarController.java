@@ -8,6 +8,7 @@ import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
+import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.web.FileDownloader;
@@ -88,8 +89,7 @@ public class TimedAzkarController implements Initializable {
 
         scrollPaneChild.setOnMouseClicked(event -> onIncreaseCountClicked());
 
-        // TODO: PopOverUtil.init(copyButton, bundle.getString("copy"));
-        // TODO: keyboard shortcuts
+         PopOverUtil.init(copyButton, Utility.toUTF(bundle.getString("timedAzkarCopyTooltip")));
     }
 
     private void updateBundle(ResourceBundle bundle) {
