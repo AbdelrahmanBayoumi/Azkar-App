@@ -668,7 +668,7 @@
 }
 
 .zekr-progress > .bar {
-    -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary-light;
 }
 
 
