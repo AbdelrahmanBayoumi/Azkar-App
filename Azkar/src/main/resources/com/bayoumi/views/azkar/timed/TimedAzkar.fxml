@@ -116,6 +116,9 @@
                      </padding>
                   </VBox>
                </content>
+               <VBox.margin>
+                  <Insets left="2.0" />
+               </VBox.margin>
             </ScrollPane>
             <ProgressBar fx:id="progress" maxWidth="1.7976931348623157E308" progress="0.0" styleClass="zekr-progress">
                <VBox.margin>
