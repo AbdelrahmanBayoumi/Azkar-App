@@ -25,7 +25,7 @@ public class DownloadResourcesController {
         title.setText(Utility.toUTF(bundle.getString("downloadingProgramResources")));
     }
 
-    public void setData(String url, String downloadedFilePath, Stage stage) {
+    public void setData(String url, String downloadedFilePath, Stage stage, Runnable onClosedAndNotFinished) {
         isFinished = false;
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
 
@@ -34,19 +34,18 @@ public class DownloadResourcesController {
         progressText.setText("");
 
         stage.setOnCloseRequest(event -> {
-            if (!isFinished) {
-                Utility.exitProgramAction();
+            if (!isFinished && onClosedAndNotFinished != null) {
+                onClosedAndNotFinished.run();
             }
         });
         new Thread(() -> {
-            WebUtilities.downloadFile(url, downloadedFilePath, (field, fileName, bytesWritten, totalBytes) -> {
-                Platform.runLater(() -> {
-                    this.fileName.setText(fileName);
-                    this.progressbar.setProgress(bytesWritten / (totalBytes * 2.0));
-                    progressText.setText(ByteUtil.format((bytesWritten / 2), locale) + "/" + ByteUtil.format(totalBytes, locale)
-                            + " (" + Utility.formatNum((bytesWritten / (totalBytes * 2.0)) * 100) + "%)");
-                });
-            });
+            WebUtilities.downloadFile(url, downloadedFilePath, (field, fileName, bytesWritten, totalBytes) ->
+                    Platform.runLater(() -> {
+                        this.fileName.setText(fileName);
+                        this.progressbar.setProgress(bytesWritten / (totalBytes * 2.0));
+                        progressText.setText(ByteUtil.format((bytesWritten / 2), locale) + "/" + ByteUtil.format(totalBytes, locale)
+                                + " (" + Utility.formatNum((bytesWritten / (totalBytes * 2.0)) * 100) + "%)");
+                    }));
             Platform.runLater(stage::close);
         }).start();
     }
