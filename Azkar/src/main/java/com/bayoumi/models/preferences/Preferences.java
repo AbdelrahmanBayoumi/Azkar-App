@@ -140,7 +140,6 @@ public class Preferences {
             }
         } catch (Exception ignored) {
         }
-        System.out.println(preferences);
         return preferences;
     }
 }
