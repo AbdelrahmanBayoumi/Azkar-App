@@ -20,6 +20,7 @@ import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
+import com.install4j.api.launcher.StartupNotification;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.application.Preloader;
@@ -127,17 +128,38 @@ public class Launcher extends Application {
         LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(preloaderProgress));
     }
 
-    public void start(Stage primaryStage) throws Exception {
-        if (locationsDBError) {
+    private void handleLocationDBError() {
+        if (!locationsDBError) {
+            return;
+        }
+        try {
+            final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
+            ((DownloadResourcesController) popUp.getController())
+                    .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", popUp.getStage());
+            popUp.showAndWait();
+        } catch (Exception ex) {
+            Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".start() => show locationsDB download");
+        }
+    }
+
+    private void showOnboardingIfFirstTimeOpened() {
+        if (Onboarding.isFirstTimeOpened()) {
             try {
-                final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
-                ((DownloadResourcesController) popUp.getController())
-                        .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", popUp.getStage());
-                popUp.showAndWait();
+                Stage onboardingStage = new Stage();
+                onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Onboarding.toString())))));
+                onboardingStage.initModality(Modality.APPLICATION_MODAL);
+                HelperMethods.SetIcon(onboardingStage);
+                onboardingStage.setTitle("Onboarding - " + Constants.APP_NAME);
+                onboardingStage.show();
+                onboardingStage.setOnCloseRequest(event -> ChooseAudioController.stopIfPlaying());
             } catch (Exception ex) {
-                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".start() => show locationsDB download");
+                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show Onboarding stage");
             }
         }
+    }
+
+    public void start(Stage primaryStage) throws Exception {
+        handleLocationDBError();
         // initialize tray icon
         try {
             new TrayUtil(primaryStage);
@@ -155,20 +177,9 @@ public class Launcher extends Application {
         SingleInstance.getInstance().setCurrentStage(primaryStage);
 
         // show Onboarding stage
-        if (Onboarding.isFirstTimeOpened()) {
-            try {
-                Stage onboardingStage = new Stage();
-                onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Onboarding.toString())))));
-                onboardingStage.initModality(Modality.APPLICATION_MODAL);
-                HelperMethods.SetIcon(onboardingStage);
-                onboardingStage.setTitle("Onboarding - " + Constants.APP_NAME);
-                onboardingStage.show();
-                onboardingStage.setOnCloseRequest(event -> ChooseAudioController.stopIfPlaying());
-            } catch (Exception ex) {
-                Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + "start() => show Onboarding stage");
-            }
-        }
-        com.install4j.api.launcher.StartupNotification.registerStartupListener(s ->
+        showOnboardingIfFirstTimeOpened();
+
+        StartupNotification.registerStartupListener(s ->
                 SingleInstance.getInstance().openCurrentStage());
     }
 
