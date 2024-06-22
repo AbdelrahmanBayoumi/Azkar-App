@@ -126,7 +126,7 @@
                                 <children>
                                     <HBox spacing="10.0" HBox.hgrow="ALWAYS">
                                         <children>
-                                            <JFXComboBox fx:id="azkarAlarmComboBox" labelFloat="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" promptText="أختر صوت للتنبيه" style="-fx-font-size: 17;" HBox.hgrow="ALWAYS">
+                                            <JFXComboBox fx:id="azkarAlarmComboBox" labelFloat="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" promptText="اختر صوت للتنبيه" style="-fx-font-size: 17;" HBox.hgrow="ALWAYS">
                                                 <cursor>
                                                     <Cursor fx:constant="HAND" />
                                                 </cursor>
@@ -162,7 +162,7 @@
                             </HBox>
                             <HBox>
                                 <children>
-                                    <JFXComboBox fx:id="posComboBox" labelFloat="true" maxWidth="1.7976931348623157E308" onAction="#selectPosition" prefWidth="300.0" promptText="أختر مكان التنبيه" style="-fx-font-size: 17;" HBox.hgrow="ALWAYS">
+                                    <JFXComboBox fx:id="posComboBox" labelFloat="true" maxWidth="1.7976931348623157E308" onAction="#selectPosition" prefWidth="300.0" promptText="اختر مكان التنبيه" style="-fx-font-size: 17;" HBox.hgrow="ALWAYS">
                                         <cursor>
                                             <Cursor fx:constant="HAND" />
                                         </cursor>

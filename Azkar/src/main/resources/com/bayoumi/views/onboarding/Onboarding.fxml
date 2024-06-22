@@ -88,7 +88,7 @@
       </HBox>
       <VBox fx:id="languageChooseBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" style="-fx-background-color: rgba(0,0,0,0.9);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="configureTheProgramSettings1" alignment="CENTER" contentDisplay="TOP" graphicTextGap="14.0" maxWidth="1.7976931348623157E308" style="-fx-font-size: 30; -fx-text-fill: #fff;" styleClass="font-text-bold" text="Choose Language - أختر اللغة">
+            <Label fx:id="configureTheProgramSettings1" alignment="CENTER" contentDisplay="TOP" graphicTextGap="14.0" maxWidth="1.7976931348623157E308" style="-fx-font-size: 30; -fx-text-fill: #fff;" styleClass="font-text-bold" text="Choose Language - اختر اللغة">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="GLOBE" size="55" />
                </graphic>
