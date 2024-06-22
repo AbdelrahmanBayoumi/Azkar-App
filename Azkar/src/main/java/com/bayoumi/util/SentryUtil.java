@@ -3,16 +3,16 @@ package com.bayoumi.util;
 import com.bayoumi.Launcher;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
-//import oshi.SystemInfo;
-//import oshi.hardware.GraphicsCard;
-//import oshi.hardware.HardwareAbstractionLayer;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 public class SentryUtil {
 
@@ -76,13 +76,6 @@ public class SentryUtil {
 
         // Hardware Information
         props.put("hardware.available_processors", String.valueOf(Runtime.getRuntime().availableProcessors()));
-//        final HardwareAbstractionLayer hal = systemInfo.getHardware();
-//        props.put("hardware.physical_memory", hal.getMemory().toString());
-//        props.put("hardware.processor", hal.getProcessor().getProcessorIdentifier().getName());
-//        final List<GraphicsCard> graphicsCards = hal.getGraphicsCards();
-//        for (int i = 0; i < graphicsCards.size(); i++) {
-//            props.put("hardware.graphics_card_" + i, graphicsCards.get(i).getName());
-//        }
 
         return props;
     }

@@ -6,6 +6,7 @@ import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.update.UpdateHandler;
 
 import java.sql.ResultSet;
+import java.util.Map;
 import java.util.Timer;
 
 public class Preferences {
@@ -117,16 +118,8 @@ public class Preferences {
         return get(key, key.getDefaultValue());
     }
 
-    public boolean getBoolean(PreferencesType key, boolean defaultValue) {
-        return get(key, String.valueOf(defaultValue)).equalsIgnoreCase("true");
-    }
-
     public boolean getBoolean(PreferencesType key) {
         return get(key, key.getDefaultValue()).equalsIgnoreCase("true");
-    }
-
-    public int getInt(PreferencesType key, String defaultValue) {
-        return Integer.parseInt(get(key, defaultValue));
     }
 
     public int getInt(PreferencesType key) {
@@ -138,4 +131,16 @@ public class Preferences {
     }
 
 
+    public Map<String, String> getAll() {
+        final Map<String, String> preferences = new java.util.HashMap<>();
+        try {
+            final ResultSet result = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM preferences;").executeQuery();
+            while (result.next()) {
+                preferences.put("preferences." + result.getString("key"), result.getString("value"));
+            }
+        } catch (Exception ignored) {
+        }
+        System.out.println(preferences);
+        return preferences;
+    }
 }

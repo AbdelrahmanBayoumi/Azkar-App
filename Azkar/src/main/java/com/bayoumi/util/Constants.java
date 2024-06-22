@@ -16,7 +16,7 @@ public class Constants {
     public final static String VERSION = "1.2.8";
     public final static String LOCATIONS_DB_URL = "https://github.com/AbdelrahmanBayoumi/LocationsDB/releases/latest/download/locations.db";
     public static final String QURAN_FONT_FAMILY = "Noto Naskh Arabic";
-    public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
+    public final static Mode RUNNING_MODE = Mode.PRODUCTION;
 
     static {
         try {
