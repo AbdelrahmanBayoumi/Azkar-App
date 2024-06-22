@@ -65,7 +65,7 @@
                   <String fx:value="_20" />
                </styleClass>
             </Label>
-            <TextArea fx:id="comment" editable="false" focusTraversable="false" prefHeight="100.0" promptText="لا توجد ملاحظات" styleClass="text-field-normal" text="- Check for Update inside the app&#10;- Update Home View Design&#10;- Reminder With Prayer Times" VBox.vgrow="ALWAYS" />
+            <TextArea fx:id="comment" editable="false" focusTraversable="false" prefHeight="100.0" promptText="لا توجد ملاحظات" styleClass="text-field-normal" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <Label fx:id="doYouWantToUpdateTheSoftware" layoutX="156.0" layoutY="30.0" text="هل تريد تحديث البرنامج ؟">
