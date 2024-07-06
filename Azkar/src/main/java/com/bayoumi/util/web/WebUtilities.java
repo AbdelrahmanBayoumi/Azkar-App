@@ -2,9 +2,8 @@ package com.bayoumi.util.web;
 
 import com.bayoumi.models.Query;
 import com.bayoumi.util.Logger;
-import kong.unirest.GetRequest;
-import kong.unirest.ProgressMonitor;
-import kong.unirest.Unirest;
+import kong.unirest.*;
+import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import java.io.File;
@@ -21,11 +20,27 @@ public class WebUtilities {
         return new JSONObject(getRequest.asJson().getBody().toString());
     }
 
-    public static File downloadFile(String url, String downloadedFilePath, ProgressMonitor progressMonitor) {
+    public static File downloadFile(String url, String downloadedFilePath, ProgressMonitor progressMonitor) throws UnirestException {
         Unirest.config().cookieSpec("STANDARD");
-        return Unirest.get(url)
-                .downloadMonitor(progressMonitor)
-                .asFile(downloadedFilePath, StandardCopyOption.REPLACE_EXISTING).getBody();
+        GetRequest getRequest = Unirest.get(url);
+        if (progressMonitor != null) {
+            getRequest = getRequest.downloadMonitor(progressMonitor);
+        }
+        return getRequest.asFile(downloadedFilePath, StandardCopyOption.REPLACE_EXISTING).getBody();
+    }
+
+
+    public static String getLatestVersion(String repoURL) throws UnirestException {
+        HttpResponse<String> response = Unirest.get(repoURL)
+                .header("Accept", "application/vnd.github.v3+json")
+                .asString();
+
+        final JSONArray releases = new JSONArray(response.getBody());
+        if (!releases.isEmpty()) {
+            Logger.debug("[WebUtilities] getLatestVersion: " + releases.getJSONObject(0).getString("tag_name"));
+            return releases.getJSONObject(0).getString("tag_name");
+        }
+        throw new UnirestException("No releases found for the repository.");
     }
 
 }

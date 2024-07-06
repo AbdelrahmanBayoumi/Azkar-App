@@ -7,6 +7,7 @@ import com.bayoumi.models.Onboarding;
 import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.preloader.CustomPreloaderMain;
+import com.bayoumi.services.TimedAzkarService;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.SentryUtil;
@@ -72,6 +73,8 @@ public class Launcher extends Application {
             Utility.createDirectory(Constants.assetsPath + "/logs");
             Utility.createDirectory(Constants.assetsPath + "/db");
             Utility.createDirectory(Constants.assetsPath + "/audio");
+            Utility.createDirectory(Constants.assetsPath + "/azkar");
+
             // To save the audio file in the temp directory to be able to play it
             Utility.createDirectory(System.getProperty("java.io.tmpdir") + "/" + Constants.APP_NAME);
             incrementPreloader();
@@ -113,6 +116,9 @@ public class Launcher extends Application {
                 Logger.debug(ex.getLocalizedMessage());
             }
             incrementPreloader();
+
+            TimedAzkarService.init();
+            incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
             workFine.setValue(false);
@@ -135,7 +141,7 @@ public class Launcher extends Application {
         try {
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
             ((DownloadResourcesController) popUp.getController())
-                    .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", popUp.getStage(), Utility::exitProgramAction);
+                    .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db","locationsDBErrorInDownload", popUp.getStage(), Utility::exitProgramAction);
             popUp.showAndWait();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".start() => show locationsDB download");

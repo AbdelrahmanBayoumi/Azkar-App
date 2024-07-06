@@ -16,7 +16,7 @@ public class Constants {
     public final static String VERSION = "1.2.8";
     public final static String LOCATIONS_DB_URL = "https://github.com/AbdelrahmanBayoumi/LocationsDB/releases/latest/download/locations.db";
     public static final String QURAN_FONT_FAMILY = "Noto Naskh Arabic";
-    public final static Mode RUNNING_MODE = Mode.PRODUCTION;
+    public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
 
     static {
         try {
@@ -35,15 +35,7 @@ public class Constants {
         Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
         Logger.debug(from);
         Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles/db/data.db");
-        copyIfNotExist(from, to);
-    }
-
-    public static void copyIfNotExist(Path from, Path to) throws IOException {
-        File f = new File(to.toString());
-        if (f.exists() && !f.isDirectory()) {
-            return;
-        }
-        Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+        Utility.copyIfNotExist(from, to);
     }
 
 }

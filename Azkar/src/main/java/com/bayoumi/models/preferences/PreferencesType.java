@@ -28,6 +28,7 @@ public enum PreferencesType {
     IS_AZKAR_STOPPED("is_stopped", "false"),
     VOLUME("volume", "100"),
     TIMED_AZKAR_FONT_SIZE("timed_azkar_font_size", "23"),
+    TIMED_AZKAR_DATA_VERSION("timed_azkar_data_version", "0.0.0"),
     // ======= Other Settings =======
     LANGUAGE("language", "ar"),
     HIJRI_OFFSET("hijri_offset", "5"),

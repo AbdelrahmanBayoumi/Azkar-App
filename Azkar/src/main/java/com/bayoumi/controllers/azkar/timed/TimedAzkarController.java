@@ -101,16 +101,16 @@ public class TimedAzkarController implements Initializable {
     }
 
 
-    public void setData(String type, Stage stage) {
+    public void setData(List<TimedZekrDTO> timedZekrDTOList, String type, Stage stage) {
         currentIndex = 0;
         if (type.toLowerCase().contains("morning")) {
             title.setText(Utility.toUTF(bundle.getString("morningAzkar")));
             image.setImage(morningImage);
-            initAzkarContainer(1);
+            initAzkarContainer(timedZekrDTOList);
         } else {
             title.setText(Utility.toUTF(bundle.getString("nightAzkar")));
             image.setImage(nightImage);
-            initAzkarContainer(2);
+            initAzkarContainer(timedZekrDTOList);
         }
 
         count.requestFocus();
@@ -199,7 +199,7 @@ public class TimedAzkarController implements Initializable {
     }
 
 
-    private void initAzkarContainer(int type) {
+    private void initAzkarContainer(List<TimedZekrDTO> timedZekrDTOList) {
         // start with the default font size
         updateFontSize();
         reset();
@@ -218,7 +218,7 @@ public class TimedAzkarController implements Initializable {
                     scrollPaneChild.getChildren().add(1, translationTextBox);
                 }
             }
-            timedAzkarList = TimedZekrDTO.getTimedAzkar(language.getLocale(), type);
+            timedAzkarList = timedZekrDTOList;
             if (timedAzkarList.isEmpty()) {
                 return;
             }

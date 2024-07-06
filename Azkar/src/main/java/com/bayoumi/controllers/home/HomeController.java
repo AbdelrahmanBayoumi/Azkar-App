@@ -7,9 +7,11 @@ import com.bayoumi.controllers.azkar.timed.TimedAzkarController;
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
 import com.bayoumi.models.azkar.AbsoluteZekr;
+import com.bayoumi.models.azkar.TimedZekrDTO;
 import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.TimedAzkarService;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
@@ -35,6 +37,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -46,6 +49,7 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
@@ -212,9 +216,21 @@ public class HomeController implements Initializable {
 
     private void showTimedAzkar(String type) {
         try {
+            List<TimedZekrDTO> timedZekrDTOList;
+            try {
+                timedZekrDTOList = TimedAzkarService.getTimedAzkar(settings.getLanguage().getLocale(), type.equals("morning") ? 1 : 2);
+            } catch (Exception ex) {
+                try {
+                    TimedAzkarService.downloadLatestReleaseFiles();
+                    timedZekrDTOList = TimedAzkarService.getTimedAzkar(settings.getLanguage().getLocale(), type.equals("morning") ? 1 : 2);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+
             final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar.toString()));
             final Stage stage = BuilderUI.initStageDecorated(new Scene(fxmlLoader.load()), Utility.toUTF(bundle.getString(type + "Azkar")));
-            ((TimedAzkarController) fxmlLoader.getController()).setData(type, stage);
+            ((TimedAzkarController) fxmlLoader.getController()).setData(timedZekrDTOList, type, stage);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();
         } catch (Exception e) {
