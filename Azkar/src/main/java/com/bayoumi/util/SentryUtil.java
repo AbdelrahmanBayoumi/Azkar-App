@@ -54,8 +54,6 @@ public class SentryUtil {
         props.put("os.name", System.getProperty("os.name"));
         props.put("os.version", System.getProperty("os.version"));
         props.put("os.architecture", System.getProperty("os.arch"));
-//        final SystemInfo systemInfo = new SystemInfo();
-//        props.put("os.is_elevated", String.valueOf(systemInfo.getOperatingSystem().isElevated()));
 
         // Java Information
         props.put("java.version", System.getProperty("java.version"));
