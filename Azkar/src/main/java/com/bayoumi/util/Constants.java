@@ -1,11 +1,7 @@
 package com.bayoumi.util;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 public class Constants {
     public enum Mode {PRODUCTION, DEVELOPMENT}
@@ -29,13 +25,4 @@ public class Constants {
             Logger.error(ex.getLocalizedMessage(), ex, Constants.class.getName() + " -> static init");
         }
     }
-
-    public static void copyDatabaseToAppData() throws IOException {
-        Utility.createDirectory(System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles/db");
-        Path from = Paths.get(new File("jarFiles/db/data.db").getAbsolutePath());
-        Logger.debug(from);
-        Path to = Paths.get(System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles/db/data.db");
-        Utility.copyIfNotExist(from, to);
-    }
-
 }

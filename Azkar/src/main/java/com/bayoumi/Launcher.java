@@ -141,7 +141,7 @@ public class Launcher extends Application {
         try {
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
             ((DownloadResourcesController) popUp.getController())
-                    .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db","locationsDBErrorInDownload", popUp.getStage(), Utility::exitProgramAction);
+                    .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", "locationsDBErrorInDownload", popUp.getStage(), Utility::exitProgramAction);
             popUp.showAndWait();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".start() => show locationsDB download");
