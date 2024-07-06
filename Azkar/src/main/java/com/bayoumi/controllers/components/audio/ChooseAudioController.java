@@ -2,8 +2,11 @@ package com.bayoumi.controllers.components.audio;
 
 import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.settings.Language;
+import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.Utility;
+import com.bayoumi.util.gui.BuilderUI;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -12,6 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -95,7 +99,14 @@ public class ChooseAudioController implements Initializable {
             Muezzin muezzin = audioBox.getValue();
             Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
-                MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
+                try {
+                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
+                } catch (Exception e) {
+                    Logger.error(null, e, getClass().getName() + ".play()");
+                    ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                    return;
+                }
                 MEDIA_PLAYER.setVolume(100);
                 MEDIA_PLAYER.play();
                 // playing

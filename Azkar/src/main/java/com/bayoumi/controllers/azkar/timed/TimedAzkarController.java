@@ -338,7 +338,13 @@ public class TimedAzkarController implements Initializable {
     }
 
     private void playMedia(File audioFile) {
-        mediaPlayer = new MediaPlayer(new Media(audioFile.toURI().toString()));
+        try {
+            mediaPlayer = new MediaPlayer(new Media(audioFile.toURI().toString()));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".playMedia()");
+            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+            return;
+        }
         mediaPlayer.setVolume(100);
         mediaPlayer.play();
         mediaPlayer.setOnReady(() -> Logger.debug("Media is ready to play."));
