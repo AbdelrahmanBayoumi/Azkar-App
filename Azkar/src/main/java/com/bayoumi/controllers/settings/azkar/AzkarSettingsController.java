@@ -6,10 +6,7 @@ import com.bayoumi.models.settings.*;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.file.FileUtils;
-import com.bayoumi.util.gui.HelperMethods;
-import com.bayoumi.util.gui.IntegerSpinner;
-import com.bayoumi.util.gui.PopOverUtil;
-import com.bayoumi.util.gui.ScrollHandler;
+import com.bayoumi.util.gui.*;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
@@ -30,10 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -218,7 +212,13 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             String fileName = azkarAlarmComboBox.getValue();
             Logger.debug(fileName);
             if (!fileName.equals("بدون صوت")) {
-                MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
+                try {
+                    MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
+                } catch (Exception e) {
+                    Logger.error(null, e, getClass().getName() + ".play()");
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                    return;
+                }
                 MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);
                 MEDIA_PLAYER.play();
                 // playing

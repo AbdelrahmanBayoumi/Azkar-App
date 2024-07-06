@@ -1,5 +1,6 @@
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.util.Logger;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -25,10 +26,14 @@ public class NotificationAudio {
     }
 
     public void play() {
-        if (!fileName.contains("بدون صوت") && !fileName.equals("")) {
-            mediaPlayer = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
-            mediaPlayer.setVolume(this.volume / 100.0);
-            mediaPlayer.play();
+        try {
+            if (!fileName.contains("بدون صوت") && !fileName.isEmpty()) {
+                mediaPlayer = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
+                mediaPlayer.setVolume(this.volume / 100.0);
+                mediaPlayer.play();
+            }
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".play()");
         }
     }
 
