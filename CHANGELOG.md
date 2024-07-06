@@ -7,20 +7,20 @@
 
 ### Add
 
-- 📅 Display elapsed time since the current prayer for up to 30 minutes from the Adhan.
-- 📜 Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration.
+- 📅 Display elapsed time since the current prayer for up to 30 minutes from the Adhan. 
+- 📜 Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration. [#33](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/33)
 
 ### Enhancement
 
-- 🛠️ Enhanced code structure and performance.
-- 🔄 Timed Adhkar settings now save and reflect font size changes instantly.
-- 📌 Notification now is shown above the taskbar in Windows.
+- 🛠️ Enhanced code structure and performance. 
+- 🔄 Timed Adhkar settings now save and reflect font size changes instantly.  [#51](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/51)
+- 📌 Notification now is shown above the taskbar in Windows. [#56](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/56)
 
 ### Fix
 
-- 🎨 Resolved notification color change errors.
-- 🌍 Improved automatic location detection accuracy in some countries.
-- 🔊 Fixed playing notification even if sound driver is not available.
+- 🎨 Resolved notification color change errors. [#46](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/46)
+- 🌍 Improved automatic location detection accuracy in some countries. [#45](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/45)
+- 🔊 Fixed playing notification even if sound driver is not available. [#53](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/53)
 
 [Full Changelog](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.7...1.2.8)
 
