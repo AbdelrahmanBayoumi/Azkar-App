@@ -5,10 +5,12 @@
 ■ Fixes:
     - Resolved notification color change errors.
     - Improved automatic location detection accuracy in some countries.
+    - Fixed playing notification even if sound driver is not available.
 
 ■ Enhancements:
     - Enhanced code structure and performance.
-    - Timed Azkar settings now save and reflect font size changes instantly.
+    - Timed Adhkar settings now save and reflect font size changes instantly.
+    - Notification now is shown above the taskbar in Windows.
 ------------------
 ■ الميزات الجديدة:
 	- عرض الوقت المنقضي منذ الصلاة الحالية لمدة تصل إلى 30 دقيقة من الأذان.
@@ -17,7 +19,9 @@
 ■ الإصلاحات:
 	- حل مشكلة تغيير لون الإشعارات.
 	- تحسين دقة الكشف التلقائي عن الموقع في بعض البلدان.
+    - إصلاح تشغيل الإشعار حتى إذا لم يكن برنامج التشغيل الصوتي متاحًا.
 
 ■ التحسينات:
 	- تحسين هيكلية الكود والأداء.
 	- إعدادات الأذكار المؤقتة تحفظ وتعرض تغييرات حجم الخط فوراً.
+    - يتم عرض الإشعار الآن فوق شريط المهام في الويندوز.
