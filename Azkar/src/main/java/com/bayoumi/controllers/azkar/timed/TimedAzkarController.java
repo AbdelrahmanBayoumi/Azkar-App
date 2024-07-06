@@ -159,7 +159,7 @@ public class TimedAzkarController implements Initializable {
             count.setText(String.valueOf(currentCount + 1));
             progress.setProgress((double) (currentCount + 1) / zekrCount);
         } else {
-            onNextClicked();
+            goToNext();
         }
     }
 
