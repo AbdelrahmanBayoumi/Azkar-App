@@ -381,7 +381,7 @@ public class Notifications {
                 Screen screen = notification.screen != null
                         ? notification.screen
                         : getScreenBounds(window).orElse(Screen.getPrimary());
-                Rectangle2D screenBounds = screen.getBounds();
+                Rectangle2D screenBounds = screen.getVisualBounds();
                 startX = screenBounds.getMinX();
                 startY = screenBounds.getMinY();
                 screenWidth = screenBounds.getWidth();
