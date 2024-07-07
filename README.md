@@ -25,7 +25,8 @@
 | ------------- | ------------- |
 | <a href="https://youtu.be/valBHDTIC1E"><img src="https://user-images.githubusercontent.com/48678280/141684196-899fb7f8-bf23-40b1-a98f-7570760056b0.png" alt="overview image"></a>  | <img src="https://user-images.githubusercontent.com/48678280/141681074-bde467a2-bc48-4e1c-8e51-861f224b2d34.gif" alt="notification">  |
 | <div align=center>Morning Azkar ☀️</div> | <div align=center>Dhikr Explanation 📜</div> |
-| <img src="https://github.com/AbdelrahmanBayoumi/Azkar-App/assets/48678280/fcc8d769-2c83-4a5f-86ed-79fc2dd44b4f" alt="Morning Azkar"> | <img src="https://github.com/AbdelrahmanBayoumi/Azkar-App/assets/48678280/d95eb813-6c78-42e6-8bb8-528a31d81e4e" alt="Dhikr Explanation"> |
+| <img src="https://github.com/AbdelrahmanBayoumi/Azkar-App/assets/48678280/4adf7f60-9c33-48c5-9482-3f70575996ec" alt="Morning Azkar"> | <img src="https://github.com/AbdelrahmanBayoumi/Azkar-App/assets/48678280/2246e2b5-01c4-450d-b11b-e994dab97990" alt="Dhikr Explanation"> |
+
 
 
 <br>
