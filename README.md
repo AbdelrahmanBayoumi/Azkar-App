@@ -54,10 +54,11 @@ Please ⭐️ this repo and share it with others
 [![Website](https://img.shields.io/website?color=black&down_color=black&label=%20&logo=google-earth&logoColor=white&up_color=black&up_message=Website&url=https://azkar-site.web.app/)](https://azkar-site.web.app/)
 ![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red?style=flat) [![Java 8](https://img.shields.io/badge/Java-8-red.svg)](https://www.java.com)
 ![HITS](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAbdelrahmanBayoumi%2FAzkar-App&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=PAGE+VIEWS&edge_flat=false)
-       
+
+
 <p align="center">
    <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/latest">
-     <img src="https://img.shields.io/badge/Azkar-v1.2.8-green?style=flat"/> 
+     <img src="https://img.shields.io/github/v/release/AbdelrahmanBayoumi/Azkar-App?&label=Latest%20release"/> 
    </a>
   <a href="https://github.com/AbdelrahmanBayoumi/Azkar-App/issues">
     <img src="https://img.shields.io/github/issues/AbdelrahmanBayoumi/Azkar-App"/> 
