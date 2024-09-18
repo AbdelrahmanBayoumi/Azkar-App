@@ -93,6 +93,7 @@ public class ChooseAudioController implements Initializable {
         }
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
     }
 
     @Override
