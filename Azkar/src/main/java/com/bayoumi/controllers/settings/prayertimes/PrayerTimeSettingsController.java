@@ -40,6 +40,7 @@ public class PrayerTimeSettingsController implements Initializable, SettingsInte
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
         ScrollHandler.init(container, scrollPane, 4);
         ChooseAudioUtil.adhan(bundle, adhanContainer);
+
         try {
             container.getChildren().add(Loader.getInstance().getView(Locations.SelectLocation));
             ((SelectLocationController) Loader.getInstance().getController(Locations.SelectLocation)).setData();

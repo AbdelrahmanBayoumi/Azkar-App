@@ -325,7 +325,7 @@ public class HomeController implements Initializable {
                 240,
                 settings.getNotificationSettings().getPosition(),
                 null,
-                new NotificationAudio(finalAdhanFileName, 100)));
+                new NotificationAudio(finalAdhanFileName, settings.getAzkarSettings().getPrayerVolume())));
     }
 
 }

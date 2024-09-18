@@ -19,7 +19,7 @@ public class AzkarSettings extends Observable {
     private boolean isStopped;
     private int volume;
     private int timedAzkarFontSize;
-
+    private int prayerVolume;
 
     protected AzkarSettings() {
         loadSettings();
@@ -37,6 +37,7 @@ public class AzkarSettings extends Observable {
         this.isStopped = Preferences.getInstance().getBoolean(PreferencesType.IS_AZKAR_STOPPED);
         this.selectedPeriod = Preferences.getInstance().get(PreferencesType.SELECTED_PERIOD);
         this.volume = Preferences.getInstance().getInt(PreferencesType.VOLUME);
+        this.prayerVolume=Preferences.getInstance().getInt(PreferencesType.PRAYER_VOLUME);
         this.timedAzkarFontSize = Preferences.getInstance().getInt(PreferencesType.TIMED_AZKAR_FONT_SIZE);
     }
 
@@ -182,7 +183,17 @@ public class AzkarSettings extends Observable {
         // 2. save value to DB
         Preferences.getInstance().set(PreferencesType.VOLUME, volume + "");
     }
+    public int getPrayerVolume() {
+        return prayerVolume;
+    }
 
+    public void setPrayerVolume(int volume) {
+        setChanged();
+        // 1. set value to local variable
+        this.prayerVolume = volume;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.PRAYER_VOLUME, volume + "");
+    }
     @Override
     public String toString() {
         return "AzkarSettings{" +
@@ -196,6 +207,7 @@ public class AzkarSettings extends Observable {
                 ", rearPeriod=" + rearPeriod +
                 ", isStopped=" + isStopped +
                 ", volume=" + volume +
+                ", prayerVolume=" + prayerVolume +
                 '}';
     }
 
