@@ -27,6 +27,8 @@ public enum PreferencesType {
     REAR_PERIOD("rear_period", "30"),
     IS_AZKAR_STOPPED("is_stopped", "false"),
     VOLUME("volume", "100"),
+    PRAYER_VOLUME("prayer_volume", "100"),
+
     TIMED_AZKAR_FONT_SIZE("timed_azkar_font_size", "23"),
     TIMED_AZKAR_DATA_VERSION("timed_azkar_data_version", "0.0.0"),
     // ======= Other Settings =======
