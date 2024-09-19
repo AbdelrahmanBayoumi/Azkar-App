@@ -50,7 +50,7 @@ public class AzkarService {
                     -> Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
                             new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
                             null),
-                    30,
+                    Settings.getInstance().getAzkarSettings().getAzkarDuration(),
                     Settings.getInstance().getNotificationSettings().getPosition(),
                     null,
                     new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume())));

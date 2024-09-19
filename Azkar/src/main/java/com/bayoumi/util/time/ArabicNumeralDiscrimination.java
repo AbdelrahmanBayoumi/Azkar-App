@@ -8,6 +8,17 @@ import java.util.ResourceBundle;
  * Helper Methods
  */
 public class ArabicNumeralDiscrimination {
+
+    /**
+     * @param seconds value
+     * @return Arabic String for the numerical discrimination
+     * for seconds
+     */
+    public static String secondsArabicPlurality(ResourceBundle bundle) {
+            return Utility.toUTF(bundle.getString("seconds"));
+    }
+
+
     /**
      * @param minute value
      * @return Arabic String for the numerical discrimination
