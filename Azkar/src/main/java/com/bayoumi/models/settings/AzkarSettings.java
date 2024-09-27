@@ -41,6 +41,7 @@ public class AzkarSettings extends Observable {
         this.prayerVolume=Preferences.getInstance().getInt(PreferencesType.PRAYER_VOLUME);
         this.timedAzkarFontSize = Preferences.getInstance().getInt(PreferencesType.TIMED_AZKAR_FONT_SIZE);
         this.azkarDuration=Preferences.getInstance().getInt(PreferencesType.AZKARDURATION);
+
     }
 
     public int getTimedAzkarFontSize() {
@@ -207,6 +208,9 @@ public class AzkarSettings extends Observable {
         // 2. save value to DB
         Preferences.getInstance().set(PreferencesType.PRAYER_VOLUME, volume + "");
     }
+
+
+
     @Override
     public String toString() {
         return "AzkarSettings{" +
@@ -221,7 +225,7 @@ public class AzkarSettings extends Observable {
                 ", isStopped=" + isStopped +
                 ", volume=" + volume +
                 ", prayerVolume=" + prayerVolume +
-                ", azkarDuration=" + azkarDuration +
+
                 '}';
     }
 

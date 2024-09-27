@@ -29,6 +29,12 @@ public enum PreferencesType {
     VOLUME("volume", "100"),
     PRAYER_VOLUME("prayer_volume", "100"),
     AZKARDURATION("azkarDuration","10"),
+    FAJRADJUSMENT("fajrAdjusment","0"),
+    SUNRISEADJUSMENT("sunriseAdjusment","0"),
+    DHUHRADJUSMENT("dhuhrAdjusment","0"),
+    ASRADJUSMENT("asrAdjusment","0"),
+    MAGHRIBADJUSMENT("maghribAdjusment","0"),
+    ISHAADJUSMENT("ishaAdjusment","0"),
     TIMED_AZKAR_FONT_SIZE("timed_azkar_font_size", "23"),
     TIMED_AZKAR_DATA_VERSION("timed_azkar_data_version", "0.0.0"),
     // ======= Other Settings =======

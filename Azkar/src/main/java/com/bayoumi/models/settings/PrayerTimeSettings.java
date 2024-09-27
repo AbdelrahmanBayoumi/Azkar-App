@@ -22,6 +22,13 @@ public class PrayerTimeSettings extends Observable {
     private double longitude;
     private String adhanAudio;
     private boolean isManualLocationSelected;
+    private int fajrAdjusment;
+    private int sunriseAdjusment;
+    private int dhuhrAdjusment;
+    private int asrAdjusment;
+    private int maghribAdjusment;
+    private int ishaAdjusment;
+
 
     protected PrayerTimeSettings() {
         loadSettings();
@@ -37,6 +44,12 @@ public class PrayerTimeSettings extends Observable {
         this.longitude = Preferences.getInstance().getDouble(PreferencesType.LONGITUDE);
         this.adhanAudio = Preferences.getInstance().get(PreferencesType.ADHAN_AUDIO);
         this.isManualLocationSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+        this.fajrAdjusment=Preferences.getInstance().getInt(PreferencesType.FAJRADJUSMENT);
+        this.sunriseAdjusment=Preferences.getInstance().getInt(PreferencesType.SUNRISEADJUSMENT);
+        this.dhuhrAdjusment=Preferences.getInstance().getInt(PreferencesType.DHUHRADJUSMENT);
+        this.asrAdjusment=Preferences.getInstance().getInt(PreferencesType.ASRADJUSMENT);
+        this.maghribAdjusment=Preferences.getInstance().getInt(PreferencesType.MAGHRIBADJUSMENT);
+        this.ishaAdjusment=Preferences.getInstance().getInt(PreferencesType.ISHAADJUSMENT);
     }
 
     public void handleNotifyObservers() {
@@ -146,7 +159,65 @@ public class PrayerTimeSettings extends Observable {
         // 2. save value to DB
         Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, manualLocationSelected + "");
     }
+    public int getFajrAdjusment() {
+        return fajrAdjusment;
+    }
 
+    public void setFajrAdjusment(int fajrAdjusment) {
+
+        this.fajrAdjusment = fajrAdjusment;
+        Preferences.getInstance().set(PreferencesType.FAJRADJUSMENT, fajrAdjusment + "");
+    }
+
+    public int getSunriseAdjusment() {
+        return sunriseAdjusment;
+    }
+
+    public void setSunriseAdjusment(int sunriseAdjusment) {
+
+        this.sunriseAdjusment = sunriseAdjusment;
+        Preferences.getInstance().set(PreferencesType.SUNRISEADJUSMENT, sunriseAdjusment + "");
+    }
+
+    public int getDhuhrAdjusment() {
+        return dhuhrAdjusment;
+    }
+
+    public void setDhuhrAdjusment(int dhuhrAdjusment) {
+
+        this.dhuhrAdjusment = dhuhrAdjusment;
+        Preferences.getInstance().set(PreferencesType.DHUHRADJUSMENT, dhuhrAdjusment + "");
+    }
+
+    public int getAsrAdjusment() {
+        return asrAdjusment;
+    }
+
+    public void setAsrAdjusment(int asrAdjusment) {
+
+        this.asrAdjusment = asrAdjusment;
+        Preferences.getInstance().set(PreferencesType.ASRADJUSMENT, asrAdjusment + "");
+    }
+
+    public int getMaghribAdjusment() {
+        return maghribAdjusment;
+    }
+
+    public void setMaghribAdjusment(int maghribAdjusment) {
+
+        this.maghribAdjusment = maghribAdjusment;
+        Preferences.getInstance().set(PreferencesType.MAGHRIBADJUSMENT, maghribAdjusment + "");
+    }
+
+    public int getIshaAdjusment() {
+        return ishaAdjusment;
+    }
+
+    public void setIshaAdjusment(int ishaAdjusment) {
+
+        this.ishaAdjusment = ishaAdjusment;
+        Preferences.getInstance().set(PreferencesType.ISHAADJUSMENT, ishaAdjusment + "");
+    }
     @Override
     public String toString() {
         return "PrayerTimeSettings{" +
@@ -159,6 +230,11 @@ public class PrayerTimeSettings extends Observable {
                 ", longitude=" + longitude +
                 ", adhanAudio='" + adhanAudio + '\'' +
                 ", isManualLocationSelected=" + isManualLocationSelected +
+                ", fajrAdjusment=" + fajrAdjusment +
+                ", sunriseAdjusment=" + sunriseAdjusment +
+                ", asrAdjusment=" + asrAdjusment +
+                ", maghribAdjusment=" + maghribAdjusment +
+                ", ishaAdjusment=" + ishaAdjusment +
                 '}';
     }
 

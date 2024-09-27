@@ -9,11 +9,16 @@ import java.util.Date;
 public class PrayerTimesUtil {
 
     public static PrayerTimes getPrayerTimesToday(PrayerTimeSettings prayerTimeSettings, Date nowDate) {
+        // those 2 integers added to help to create accurate adjustment
+        int LibraryAdd=3;
+        int LibraryAdd2=4;
+        //
         final Coordinates coordinates = new Coordinates(prayerTimeSettings.getLatitude(), prayerTimeSettings.getLongitude());
         final DateComponents dateComponents = DateComponents.from(nowDate);
         final CalculationParameters parameters = CalculationMethod.valueOf(prayerTimeSettings.getMethod().getValue()).getParameters();
         parameters.madhab = prayerTimeSettings.getAsrJuristic() == 0 ? Madhab.SHAFI : Madhab.HANAFI;
-
+        parameters.adjustments=new PrayerAdjustments(LibraryAdd+prayerTimeSettings.getFajrAdjusment(),LibraryAdd2+prayerTimeSettings.getDhuhrAdjusment(),LibraryAdd+prayerTimeSettings.getDhuhrAdjusment(),LibraryAdd+prayerTimeSettings.getAsrAdjusment(),LibraryAdd+prayerTimeSettings.getMaghribAdjusment(),LibraryAdd2+prayerTimeSettings.getIshaAdjusment());
+        parameters.methodAdjustments=new PrayerAdjustments(LibraryAdd,LibraryAdd,LibraryAdd,LibraryAdd,LibraryAdd,LibraryAdd);
         PrayerTimes prayerTimes = new PrayerTimes(coordinates, dateComponents, parameters);
         if (prayerTimeSettings.isSummerTiming()) {
             prayerTimes.fajr.setTime(prayerTimes.fajr.getTime() + 60 * 60 * 1000);
@@ -23,6 +28,8 @@ public class PrayerTimesUtil {
             prayerTimes.maghrib.setTime(prayerTimes.maghrib.getTime() + 60 * 60 * 1000);
             prayerTimes.isha.setTime(prayerTimes.isha.getTime() + 60 * 60 * 1000);
         }
+
+
         return prayerTimes;
     }
 /*

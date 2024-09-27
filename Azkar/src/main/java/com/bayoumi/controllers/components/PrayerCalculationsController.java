@@ -10,9 +10,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +28,8 @@ public class PrayerCalculationsController implements Initializable {
     private ToggleGroup asrJuristic;
     @FXML
     public JFXCheckBox summerTiming;
+    @FXML
+    private Spinner<Integer> fajrAdjusment, dhuhrAdjusment, sunriseAdjusment, asrAdjusment,maghribAdjusment,ishaAdjusment;
 
     private void updateBundle(ResourceBundle bundle) {
         calculationMethodText.setText(Utility.toUTF(bundle.getString("calculationMethod")));
@@ -59,6 +59,24 @@ public class PrayerCalculationsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         methodComboBox.setItems(FXCollections.observableArrayList(PrayerTimeSettings.Method.getListOfMethods()));
         LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
+
+        fajrAdjusment.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 1));
+        fajrAdjusment.editableProperty().setValue(false);
+
+        dhuhrAdjusment.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 1));
+        dhuhrAdjusment.editableProperty().setValue(false);
+
+        sunriseAdjusment.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 1));
+        sunriseAdjusment.editableProperty().setValue(false);
+
+        asrAdjusment.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 1));
+        asrAdjusment.editableProperty().setValue(false);
+
+        maghribAdjusment.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 1));
+        maghribAdjusment.editableProperty().setValue(false);
+
+        ishaAdjusment.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 10, 1));
+        ishaAdjusment.editableProperty().setValue(false);
     }
 
     @FXML
