@@ -80,7 +80,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private Label minPlurality, hourPlurality, choosePeriod, zakrAppearEvery, theSoundAndLocationOfTheAlertForAzkar,
             morningAndNightAzkarTitle, reminderOfMorningAzkarLabel, afterFajrPrayerLabel, reminderOfNightAzkarLabel,
-            afterAsrPrayerLabel, minuteLabelForMorningAzkar, minuteLabelForNightAzkar,secondPlurality;
+            afterAsrPrayerLabel, minuteLabelForMorningAzkar, minuteLabelForNightAzkar,secondPlurality,zakrDurationEvery;
 
 
     public void updateBundle(ResourceBundle bundle) {
@@ -94,6 +94,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
         rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
         zakrAppearEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrAppearEvery")) + ":");
+        zakrDurationEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrDurationEvery")) + ":");
         stopAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.stopTheAutomaticAppearanceOfAzkar")));
         goToAzkarDBButton.setText(Utility.toUTF(bundle.getString("settings.azkar.azkarDatabase")));
         showZekrButton.setText(Utility.toUTF(bundle.getString("settings.azkar.showZekr")));

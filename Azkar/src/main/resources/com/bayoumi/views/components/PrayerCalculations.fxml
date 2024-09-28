@@ -83,9 +83,19 @@
       </Separator>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
          <children>
+            <HBox alignment="TOP_CENTER" spacing="20.0">
+               <children>
+                  <Label fx:id="prayerAdjutment" text="تعديل ميعاد ميقات الصلاه (بالدقيقه):" textAlignment="JUSTIFY" wrapText="true">
+                     <styleClass>
+                        <String fx:value="_18" />
+                        <String fx:value="font-text-bold" />
+                     </styleClass>
+                  </Label>
+               </children>
+            </HBox>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Label fx:id="zakrDurationEvery" text="تعديل ميعاد ميقات صلاه الفجر ب(الدقيقه):" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="fajrText" text=" صلاة الفجر:" textAlignment="CENTER" wrapText="true">
                      <styleClass>
                         <String fx:value="_18" />
                         <String fx:value="font-text-bold" />
@@ -95,7 +105,7 @@
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Spinner fx:id="fajrAdjusment" focusTraversable="false" prefWidth="90.0" />
-                        <Label fx:id="secondPlurality" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="minPluralityFajr" text="الدقيقه" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -107,7 +117,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Label fx:id="zakrDurationEvery4" text="تعديل ميعاد ميقات  الشروق ب(الدقيقه):" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="sunriseText" text=" الشروق:" textAlignment="CENTER" wrapText="true">
                      <styleClass>
                         <String fx:value="_18" />
                         <String fx:value="font-text-bold" />
@@ -117,7 +127,7 @@
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Spinner fx:id="sunriseAdjusment" focusTraversable="false" prefWidth="90.0" />
-                        <Label fx:id="secondPlurality4" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="minPluralitySunrise" text="الدقيقه" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -129,7 +139,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Label fx:id="zakrDurationEvery1" text="تعديل ميعاد ميقات صلاه الظهر ب(الدقيقه):" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="dhuhrText" text="صلاة الظهر:" textAlignment="CENTER" wrapText="true">
                      <styleClass>
                         <String fx:value="_18" />
                         <String fx:value="font-text-bold" />
@@ -139,7 +149,7 @@
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Spinner fx:id="dhuhrAdjusment" focusTraversable="false" prefWidth="90.0" />
-                        <Label fx:id="secondPlurality1" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="minPluralityDhuhr" text="الدقيقه" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -151,7 +161,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Label fx:id="zakrDurationEvery2" text="تعديل ميعاد ميقات صلاه العصر ب(الدقيقه):" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="asrText" text="صلاة العصر:" textAlignment="CENTER" wrapText="true">
                      <styleClass>
                         <String fx:value="_18" />
                         <String fx:value="font-text-bold" />
@@ -161,7 +171,7 @@
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Spinner fx:id="asrAdjusment" focusTraversable="false" prefWidth="90.0" />
-                        <Label fx:id="secondPlurality2" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="minPluralityAsr" text="الدقيقه" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -173,7 +183,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Label fx:id="zakrDurationEvery3" text="تعديل ميعاد ميقات صلاه المغرب ب(الدقيقه):" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="maghribText" text=" صلاة المغرب:" textAlignment="CENTER" wrapText="true">
                      <styleClass>
                         <String fx:value="_18" />
                         <String fx:value="font-text-bold" />
@@ -183,7 +193,7 @@
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Spinner fx:id="maghribAdjusment" focusTraversable="false" prefWidth="90.0" />
-                        <Label fx:id="secondPlurality3" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="minPluralityMaghrib" text="الدقيقه" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -195,7 +205,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Label fx:id="zakrDurationEvery5" text="تعديل ميعاد ميقات صلاه العشاء ب(الدقيقه):" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="ishaText" text="صلاة العشاء:" textAlignment="CENTER" wrapText="true">
                      <styleClass>
                         <String fx:value="_18" />
                         <String fx:value="font-text-bold" />
@@ -205,7 +215,7 @@
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Spinner fx:id="ishaAdjusment" focusTraversable="false" prefWidth="90.0" />
-                        <Label fx:id="secondPlurality5" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="minPluralityIsha" text="الدقيقه" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
