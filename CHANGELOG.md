@@ -3,17 +3,28 @@
 
 ## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.8...HEAD)
 
+### Add
+
+- 🔊 Ability to change Adhan Volume [#39](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/39)
+- ⏳ Ability to configure the duration for which the notification stays on the screen. [#57](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/57)
+- 🕰️ Added the ability to adjust prayer times by specifying an adjustment value (in minutes), allowing users to add or subtract minutes from the calculated prayer times before displaying the final result [#30](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/30)
+
+### Fix
+
+- 🔄 Fix repeated Azkar notifications that were shown in a random order by implementing a sequential tracking mechanism, ensuring notifications display in the correct order and loop back after the last item [#70](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/70)
+- 🌍 Fix wrong selection of Cities like in Damascus, Syria [#72](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/72)
+
 ## [1.2.8](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.8) - 2024-07-06
 
 ### Add
 
-- 📅 Display elapsed time since the current prayer for up to 30 minutes from the Adhan. 
+- 📅 Display elapsed time since the current prayer for up to 30 minutes from the Adhan.
 - 📜 Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration. [#33](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/33)
 
 ### Enhancement
 
-- 🛠️ Enhanced code structure and performance. 
-- 🔄 Timed Adhkar settings now save and reflect font size changes instantly.  [#51](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/51)
+- 🛠️ Enhanced code structure and performance.
+- 🔄 Timed Adhkar settings now save and reflect font size changes instantly. [#51](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/51)
 - 📌 Notification now is shown above the taskbar in Windows. [#56](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/56)
 
 ### Fix
