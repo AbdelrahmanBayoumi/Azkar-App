@@ -51,11 +51,9 @@ public class City {
         )
         * */
     public static ArrayList<City> getCitiesInCountry(String code) {
-        ArrayList<City> cities = new ArrayList<>();
+        final ArrayList<City> cities = new ArrayList<>();
         try {
-            ResultSet res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * from (SELECT * from (SELECT * from cityd WHERE country='" + code + "' GROUP BY city) " +
-                    "WHERE country='" + code + "' GROUP BY longitude)  " +
-                    "WHERE country='" + code + "' GROUP BY latitude ORDER BY city ASC;").executeQuery();
+            final ResultSet res = LocationsDBManager.getInstance().con.prepareStatement("SELECT * from cityd WHERE country='" + code + "' GROUP BY city;").executeQuery();
             while (res.next()) {
                 cities.add(new City(
                         res.getString("country"), res.getString("city"),
@@ -71,10 +69,10 @@ public class City {
 
     public static City getCityFromEngName(String englishName, String countryCode) {
         try {
-            PreparedStatement statement = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM cityd WHERE city = ? AND country = ?");
+            final PreparedStatement statement = LocationsDBManager.getInstance().con.prepareStatement("SELECT * FROM cityd WHERE city = ? AND country = ?");
             statement.setString(1, englishName);
             statement.setString(2, countryCode);
-            ResultSet res = statement.executeQuery();
+            final ResultSet res = statement.executeQuery();
             if (res.next()) {
                 return new City(
                         res.getString("country"), res.getString("city"),
