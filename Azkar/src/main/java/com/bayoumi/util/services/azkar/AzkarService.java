@@ -11,12 +11,11 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.Random;
-
 public class AzkarService {
 
     private static EditablePeriodTimerTask absoluteAzkarTask;
     public static Stage FAKE_STAGE;
+    private static int currentZekrIndex = 0;
 
     public static void stopService() {
         if (AzkarService.absoluteAzkarTask != null) {
@@ -46,14 +45,21 @@ public class AzkarService {
             if (AbsoluteZekr.absoluteZekrObservableList.isEmpty()) {
                 return;
             }
+
+            AbsoluteZekr currentZekr;
+            if (currentZekrIndex >= 0 && currentZekrIndex < AbsoluteZekr.absoluteZekrObservableList.size()) {
+                currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
+            } else {
+                currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(0); // Fallback to the first item
+            }
+
             Platform.runLater(()
-                    -> Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
-                            new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),
-                            null),
+                    -> Notification.create(new NotificationContent(currentZekr.getText(), null),
                     Settings.getInstance().getAzkarSettings().getAzkarDuration(),
                     Settings.getInstance().getNotificationSettings().getPosition(),
                     null,
                     new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume())));
+            currentZekrIndex = (currentZekrIndex + 1) % AbsoluteZekr.absoluteZekrObservableList.size();
         },
                 azkarPeriodsController::getPeriod);
         absoluteAzkarTask.updateTimer();

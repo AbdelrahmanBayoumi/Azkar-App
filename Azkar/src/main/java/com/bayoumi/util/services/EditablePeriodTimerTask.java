@@ -36,8 +36,6 @@ public class EditablePeriodTimerTask extends TimerTask {
     public final void updateTimer() {
         Long p = period.get();
         Objects.requireNonNull(p);
-//        System.out.println("updateTimer():- " + Thread.currentThread().getName());
-//        System.out.println("updateTimer():- " + "new : " + p);
         Logger.debug(String.format("Period set to: %d s", p / 1000));
         stopTask();
         timer = new Timer();
@@ -46,7 +44,6 @@ public class EditablePeriodTimerTask extends TimerTask {
 
     public void stopTask() {
         if (timer != null) {
-//            this.cancel();
             timer.cancel();
             timer.purge();
         }
@@ -57,7 +54,6 @@ public class EditablePeriodTimerTask extends TimerTask {
     public void run() {
         task.run();
         Logger.debug("run():- " + Thread.currentThread().getName());
-//        updateTimer("run()");
     }
 
 }
