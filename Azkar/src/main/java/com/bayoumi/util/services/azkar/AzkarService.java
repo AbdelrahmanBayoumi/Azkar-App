@@ -46,7 +46,12 @@ public class AzkarService {
                 return;
             }
 
-            final AbsoluteZekr currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
+            AbsoluteZekr currentZekr;
+            if (currentZekrIndex >= 0 && currentZekrIndex < AbsoluteZekr.absoluteZekrObservableList.size()) {
+                currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
+            } else {
+                currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(0); // Fallback to the first item
+            }
 
             Platform.runLater(()
                     -> Notification.create(new NotificationContent(currentZekr.getText(), null),
