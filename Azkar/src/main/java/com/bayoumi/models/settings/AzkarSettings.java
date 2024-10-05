@@ -38,9 +38,9 @@ public class AzkarSettings extends Observable {
         this.isStopped = Preferences.getInstance().getBoolean(PreferencesType.IS_AZKAR_STOPPED);
         this.selectedPeriod = Preferences.getInstance().get(PreferencesType.SELECTED_PERIOD);
         this.volume = Preferences.getInstance().getInt(PreferencesType.VOLUME);
-        this.prayerVolume=Preferences.getInstance().getInt(PreferencesType.PRAYER_VOLUME);
+        this.prayerVolume = Preferences.getInstance().getInt(PreferencesType.PRAYER_VOLUME);
         this.timedAzkarFontSize = Preferences.getInstance().getInt(PreferencesType.TIMED_AZKAR_FONT_SIZE);
-        this.azkarDuration=Preferences.getInstance().getInt(PreferencesType.AZKARDURATION);
+        this.azkarDuration = Preferences.getInstance().getInt(PreferencesType.AZKAR_DURATION);
 
     }
 
@@ -174,6 +174,7 @@ public class AzkarSettings extends Observable {
         // 2. save value to DB
         Preferences.getInstance().set(PreferencesType.SELECTED_PERIOD, selectedPeriod);
     }
+
     public int getAzkarDuration() {
         return azkarDuration;
     }
@@ -183,7 +184,7 @@ public class AzkarSettings extends Observable {
         // 1. set value to local variable
         this.azkarDuration = azkarDuration;
         // 2. save value to DB
-        Preferences.getInstance().set(PreferencesType.AZKARDURATION, azkarDuration+"");
+        Preferences.getInstance().set(PreferencesType.AZKAR_DURATION, azkarDuration + "");
     }
 
     public int getVolume() {
@@ -197,6 +198,7 @@ public class AzkarSettings extends Observable {
         // 2. save value to DB
         Preferences.getInstance().set(PreferencesType.VOLUME, volume + "");
     }
+
     public int getPrayerVolume() {
         return prayerVolume;
     }
@@ -208,7 +210,6 @@ public class AzkarSettings extends Observable {
         // 2. save value to DB
         Preferences.getInstance().set(PreferencesType.PRAYER_VOLUME, volume + "");
     }
-
 
 
     @Override

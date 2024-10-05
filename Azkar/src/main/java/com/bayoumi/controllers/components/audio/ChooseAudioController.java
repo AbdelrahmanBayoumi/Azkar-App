@@ -43,6 +43,7 @@ public class ChooseAudioController implements Initializable {
     private JFXButton playButton;
     private double previousValue = 50;
     private boolean isMuted = false;
+
     public static void stopIfPlaying() {
         if (isMediaPlaying()) {
             MEDIA_PLAYER.stop();
@@ -78,6 +79,7 @@ public class ChooseAudioController implements Initializable {
             return;
         }
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
+        Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
     }
 
@@ -135,8 +137,8 @@ public class ChooseAudioController implements Initializable {
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
                     return;
                 }
-               double cc= PrayerVolumeSlider.getValue();
-                MEDIA_PLAYER.setVolume(PrayerVolumeSlider.getValue()/100.0);
+                double cc = PrayerVolumeSlider.getValue();
+                MEDIA_PLAYER.setVolume(PrayerVolumeSlider.getValue() / 100.0);
                 MEDIA_PLAYER.play();
                 // playing
                 playButton.setGraphic(pauseIcon);
@@ -145,6 +147,7 @@ public class ChooseAudioController implements Initializable {
             }
         }
     }
+
     @FXML
     private void muteUnmute() {
         if (isMuted) {

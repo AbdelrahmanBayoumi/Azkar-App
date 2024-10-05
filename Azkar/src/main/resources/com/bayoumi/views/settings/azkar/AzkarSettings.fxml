@@ -101,9 +101,9 @@
                             </HBox>
                         </VBox>
                         <Separator />
-                  <HBox alignment="CENTER" spacing="20.0">
+                  <HBox alignment="CENTER" spacing="5.0">
                      <children>
-                        <Label fx:id="zakrDurationEvery" text="وقت ظهور الذكر ب(الثانيه):" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="zekrDurationEvery" text="وقت ظهور الذكر ب(الثانيه):" textAlignment="CENTER" wrapText="true">
                            <styleClass>
                               <String fx:value="_18" />
                               <String fx:value="font-text-bold" />
@@ -112,7 +112,7 @@
                         <HBox alignment="CENTER" spacing="5.0" />
                         <HBox alignment="CENTER" spacing="5.0">
                            <children>
-                              <Spinner fx:id="azkarDuration" focusTraversable="false" prefWidth="90.0" />
+                              <Spinner fx:id="azkarDuration" focusTraversable="false" prefWidth="90.0" onMouseClicked="#onAzkarDurationChange" />
                               <Label fx:id="secondPlurality" text="الثانيه" textAlignment="CENTER" wrapText="true">
                                  <styleClass>
                                     <String fx:value="_18" />

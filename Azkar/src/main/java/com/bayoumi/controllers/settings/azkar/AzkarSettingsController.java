@@ -62,7 +62,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private JFXButton highFrequency, midFrequency, lowFrequency, rearFrequency;
     @FXML
-    private Spinner<Integer> azkarPeriod, azkarPeriod_hour, morningAzkarTimeSpinner, nightAzkarTimeSpinner,azkarDuration;
+    private Spinner<Integer> azkarPeriod, azkarPeriod_hour, morningAzkarTimeSpinner, nightAzkarTimeSpinner, azkarDuration;
     @FXML
     private JFXCheckBox stopAzkar;
     @FXML
@@ -80,7 +80,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private Label minPlurality, hourPlurality, choosePeriod, zakrAppearEvery, theSoundAndLocationOfTheAlertForAzkar,
             morningAndNightAzkarTitle, reminderOfMorningAzkarLabel, afterFajrPrayerLabel, reminderOfNightAzkarLabel,
-            afterAsrPrayerLabel, minuteLabelForMorningAzkar, minuteLabelForNightAzkar,secondPlurality,zakrDurationEvery;
+            afterAsrPrayerLabel, minuteLabelForMorningAzkar, minuteLabelForNightAzkar, secondPlurality, zekrDurationEvery;
 
 
     public void updateBundle(ResourceBundle bundle) {
@@ -94,7 +94,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
         rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
         zakrAppearEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrAppearEvery")) + ":");
-        zakrDurationEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrDurationEvery")) + ":");
+        zekrDurationEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zekrDurationEvery")) + ":");
         stopAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.stopTheAutomaticAppearanceOfAzkar")));
         goToAzkarDBButton.setText(Utility.toUTF(bundle.getString("settings.azkar.azkarDatabase")));
         showZekrButton.setText(Utility.toUTF(bundle.getString("settings.azkar.showZekr")));
@@ -129,23 +129,13 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         // init Spinner Values
         IntegerSpinner.init(azkarPeriod);
         IntegerSpinner.init(azkarPeriod_hour);
-        IntegerSpinner.init(azkarDuration);
         azkarPeriod.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 1));
         azkarPeriod_hour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
-        azkarDuration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 60, 10,5));
-        azkarDuration.editableProperty().setValue(false);
+        azkarDuration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 60, 10, 5));
         azkarPeriod.valueProperty().addListener((observable, oldValue, newValue) -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, Integer.parseInt(azkarPeriod.getEditor().getText()))));
         azkarPeriod_hour.valueProperty().addListener((observable, oldValue, newValue) -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(bundle, Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
-        azkarDuration.valueProperty().addListener((observable, oldValue, newValue) ->{
-            secondPlurality.setText(ArabicNumeralDiscrimination.secondsArabicPlurality(bundle));
-            if(!newValue.equals(oldValue)){
-                azkarSettings.setAzkarDuration(newValue);
-            }
-
-        });
         azkarPeriod.setOnKeyReleased(event -> minPlurality.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, Integer.parseInt(azkarPeriod.getEditor().getText()))));
         azkarPeriod_hour.setOnKeyReleased(event -> hourPlurality.setText(ArabicNumeralDiscrimination.hoursArabicPlurality(bundle, Integer.parseInt(azkarPeriod_hour.getEditor().getText()))));
-        azkarDuration.setOnKeyReleased(event -> secondPlurality.setText(ArabicNumeralDiscrimination.secondsArabicPlurality(bundle)));
         morningAzkarTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 120, 30, 10));
         nightAzkarTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 120, 30, 10));
 
@@ -445,6 +435,12 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         } else {
             toggleButton.setText(Utility.toUTF(bundle.getString("settings.azkar.noReminder")));
         }
+    }
+
+    @FXML
+    private void onAzkarDurationChange() {
+        secondPlurality.setText(ArabicNumeralDiscrimination.secondsArabicPlurality(bundle));
+        azkarSettings.setAzkarDuration(azkarDuration.getValueFactory().getValue());
     }
 
 }

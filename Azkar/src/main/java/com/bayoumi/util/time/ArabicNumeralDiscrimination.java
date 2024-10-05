@@ -15,7 +15,7 @@ public class ArabicNumeralDiscrimination {
      * for seconds
      */
     public static String secondsArabicPlurality(ResourceBundle bundle) {
-            return Utility.toUTF(bundle.getString("seconds"));
+        return Utility.toUTF(bundle.getString("seconds"));
     }
 
 
