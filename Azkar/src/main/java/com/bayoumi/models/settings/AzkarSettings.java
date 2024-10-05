@@ -211,7 +211,6 @@ public class AzkarSettings extends Observable {
         Preferences.getInstance().set(PreferencesType.PRAYER_VOLUME, volume + "");
     }
 
-
     @Override
     public String toString() {
         return "AzkarSettings{" +

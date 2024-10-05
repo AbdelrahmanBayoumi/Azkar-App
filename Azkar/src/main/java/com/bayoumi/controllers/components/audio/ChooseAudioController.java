@@ -31,18 +31,23 @@ import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
     public static MediaPlayer MEDIA_PLAYER;
-    public HBox PrayervolumeBox;
     private AzkarSettings azkarSettings;
-    public JFXSlider PrayerVolumeSlider;
-    public OctIconView volume;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
+    private double previousValue = 50;
+    private boolean isMuted = false;
+
+    // ======= FXML =======
+    @FXML
+    private HBox prayerVolumeBox;
+    @FXML
+    private JFXSlider prayerVolumeSlider;
+    @FXML
+    private OctIconView volume;
     @FXML
     public JFXComboBox<Muezzin> audioBox;
     @FXML
     private JFXButton playButton;
-    private double previousValue = 50;
-    private boolean isMuted = false;
 
     public static void stopIfPlaying() {
         if (isMediaPlaying()) {
@@ -72,6 +77,14 @@ public class ChooseAudioController implements Initializable {
         } else {
             audioBox.setConverter(Muezzin.englishConverter());
         }
+
+        prayerVolumeSlider.setValue(azkarSettings.getPrayerVolume());
+        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        if (azkarSettings.getPrayerVolume() == 0) {
+            volume.setIcon(OctIcon.MUTE);
+        } else {
+            volume.setIcon(OctIcon.UNMUTE);
+        }
     }
 
     public void initFromFirstValue() {
@@ -81,6 +94,7 @@ public class ChooseAudioController implements Initializable {
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
         Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
     }
 
     @Override
@@ -92,26 +106,27 @@ public class ChooseAudioController implements Initializable {
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-secondary;");
-        PrayerVolumeSlider.setValue(azkarSettings.getPrayerVolume());
         audioBox.setOnAction(event -> {
             playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+            prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
             if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
                 MEDIA_PLAYER.stop();
                 playButton.setGraphic(playIcon);
                 playButton.setPadding(new Insets(5, 14, 5, 8));
-
             }
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
-        PrayerVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            azkarSettings.setPrayerVolume((int) PrayerVolumeSlider.getValue());
+
+
+        prayerVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            azkarSettings.setPrayerVolume((int) prayerVolumeSlider.getValue());
             playButton.requestFocus();
             previousValue = (double) oldValue;
             // multiply duration by percentage calculated by
             // slider position
-            if (PrayerVolumeSlider.getValue() > 0) {
+            if (prayerVolumeSlider.getValue() > 0) {
                 volume.setIcon(OctIcon.UNMUTE);
-            } else if (PrayerVolumeSlider.getValue() == 0) {
+            } else if (prayerVolumeSlider.getValue() == 0) {
                 volume.setIcon(OctIcon.MUTE);
             }
             if (null != MEDIA_PLAYER) {
@@ -133,12 +148,11 @@ public class ChooseAudioController implements Initializable {
                     MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
-                    ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+                    final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
                     return;
                 }
-                double cc = PrayerVolumeSlider.getValue();
-                MEDIA_PLAYER.setVolume(PrayerVolumeSlider.getValue() / 100.0);
+                MEDIA_PLAYER.setVolume(prayerVolumeSlider.getValue() / 100.0);
                 MEDIA_PLAYER.play();
                 // playing
                 playButton.setGraphic(pauseIcon);
@@ -153,12 +167,12 @@ public class ChooseAudioController implements Initializable {
         if (isMuted) {
             // umMute
             isMuted = false;
-            PrayerVolumeSlider.setValue(previousValue);
+            prayerVolumeSlider.setValue(previousValue);
         } else {
             // mute
             isMuted = true;
-            previousValue = PrayerVolumeSlider.getValue();
-            PrayerVolumeSlider.setValue(0);
+            previousValue = prayerVolumeSlider.getValue();
+            prayerVolumeSlider.setValue(0);
         }
     }
 }
