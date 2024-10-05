@@ -11,8 +11,6 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.Random;
-
 public class AzkarService {
 
     private static EditablePeriodTimerTask absoluteAzkarTask;
@@ -48,11 +46,11 @@ public class AzkarService {
                 return;
             }
 
-           final AbsoluteZekr currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
+            final AbsoluteZekr currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
 
             Platform.runLater(()
                     -> Notification.create(new NotificationContent(currentZekr.getText(), null),
-                        Settings.getInstance().getAzkarSettings().getAzkarDuration(),
+                    Settings.getInstance().getAzkarSettings().getAzkarDuration(),
                     Settings.getInstance().getNotificationSettings().getPosition(),
                     null,
                     new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume())));
