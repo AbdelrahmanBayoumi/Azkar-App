@@ -42,6 +42,14 @@ public class Utilities {
         return cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
     }
 
+    public static boolean isFriday() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(
+                new Date()
+        );
+        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+    }
+
     public static String findDifference(Date d1, Date d2) {
         try {
             // Calculate time difference
