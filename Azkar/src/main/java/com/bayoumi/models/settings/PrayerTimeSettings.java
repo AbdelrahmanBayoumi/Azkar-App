@@ -304,7 +304,6 @@ public class PrayerTimeSettings extends Observable {
             } catch (Exception ex) {
                 Logger.error(null, ex, Method.class.getName() + ".getListOfMethods()");
             }
-            Logger.debug("[Method] getListOfMethods: " + methods);
             return methods;
         }
 
