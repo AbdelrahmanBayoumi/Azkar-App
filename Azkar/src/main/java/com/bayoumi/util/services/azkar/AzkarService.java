@@ -48,11 +48,11 @@ public class AzkarService {
                 return;
             }
 
-            AbsoluteZekr currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
+           final AbsoluteZekr currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(currentZekrIndex);
 
             Platform.runLater(()
                     -> Notification.create(new NotificationContent(currentZekr.getText(), null),
-                    30,
+                        Settings.getInstance().getAzkarSettings().getAzkarDuration(),
                     Settings.getInstance().getNotificationSettings().getPosition(),
                     null,
                     new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume())));

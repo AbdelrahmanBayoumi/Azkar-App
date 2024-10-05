@@ -8,95 +8,242 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.PrayerCalculationsController">
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-   <children>
-      <HBox alignment="CENTER" spacing="15.0">
-         <children>
-            <Label fx:id="calculationMethodText" minWidth="285.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
-               <styleClass>
-                  <String fx:value="font-text-bold" />
-                  <String fx:value="_18" />
-               </styleClass>
-            </Label>
-            <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+<VBox alignment="CENTER" prefHeight="376.0" prefWidth="564.0" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.PrayerCalculationsController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <HBox alignment="CENTER" prefHeight="24.0" prefWidth="524.0" spacing="15.0">
+            <children>
+                <Label fx:id="calculationMethodText" minWidth="285.0" text="طرق الحساب لصلاة الفجر والعشاء" textAlignment="CENTER" wrapText="true">
+                    <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_18" />
+                    </styleClass>
+                </Label>
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <children>
+                        <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" onAction="#onMethodSelect" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <styleClass>
+                                <String fx:value="text-field-normal" />
+                                <String fx:value="font-text-bold" />
+                                <String fx:value="_17" />
+                            </styleClass>
+                        </ComboBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="15.0">
+            <children>
+                <Label fx:id="asrMadhabText" minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
+                    <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_18" />
+                    </styleClass>
+                </Label>
+                <HBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" onAction="#onAsrJuristicSelect" selected="true" text="شافعي، مالكي، حنبلي">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="asrJuristic" />
+                            </toggleGroup>
+                            <styleClass>
+                                <String fx:value="radio-button-normal" />
+                                <String fx:value="font-text-bold" />
+                                <String fx:value="_15" />
+                            </styleClass>
+                        </JFXRadioButton>
+                        <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" onAction="#onAsrJuristicSelect" text="حنفي" toggleGroup="$asrJuristic">
+                            <styleClass>
+                                <String fx:value="radio-button-normal" />
+                                <String fx:value="font-text-bold" />
+                                <String fx:value="_15" />
+                            </styleClass>
+                        </JFXRadioButton>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+        <Separator prefWidth="200.0">
+            <VBox.margin>
+                <Insets left="40.0" right="40.0" />
+            </VBox.margin>
+        </Separator>
+        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+            <children>
+                <HBox alignment="TOP_CENTER" spacing="20.0">
+                    <children>
+                        <Label fx:id="prayerAdjustment" text="تعديل مواقيت الصلاة يدوياً" textAlignment="JUSTIFY" wrapText="true">
+                            <styleClass>
+                                <String fx:value="_19" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                    </children>
+                </HBox>
+            <GridPane hgap="10.0" vgap="20.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" prefWidth="167.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+                <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+                <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+              </rowConstraints>
                <children>
-                  <ComboBox fx:id="methodComboBox" maxWidth="1.7976931348623157E308" onAction="#onMethodSelect" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <styleClass>
-                        <String fx:value="text-field-normal" />
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_17" />
-                     </styleClass>
-                  </ComboBox>
+                        <Label fx:id="fajrText" minWidth="100.0" text=" صلاة الفجر:" textAlignment="CENTER" wrapText="true">
+                            <styleClass>
+                                <String fx:value="_18" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                        <Label fx:id="sunriseText" minWidth="100.0" text=" الشروق:" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
+                            <styleClass>
+                                <String fx:value="_18" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                        <Label fx:id="dhuhrText" minWidth="100.0" text="صلاة الظهر:" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2">
+                            <styleClass>
+                                <String fx:value="_18" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                        <Label fx:id="asrText" minWidth="100.0" text="صلاة العصر:" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3">
+                            <styleClass>
+                                <String fx:value="_18" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                        <Label fx:id="maghribText" minWidth="100.0" text=" صلاة المغرب:" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
+                            <styleClass>
+                                <String fx:value="_18" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                        <Label fx:id="ishaText" minWidth="100.0" text="صلاة العشاء:" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="5">
+                            <styleClass>
+                                <String fx:value="_18" />
+                                <String fx:value="font-text-bold" />
+                            </styleClass>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1">
+                            <children>
+                                <Spinner fx:id="fajrAdjustment" onMouseClicked="#onFajrAdjustmentChange" prefWidth="90.0" />
+                                <Label fx:id="minPluralityFajr" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="_18" />
+                                        <String fx:value="font-text-bold" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <Spinner fx:id="sunriseAdjustment" onMouseClicked="#onSunriseAdjustmentChange" prefWidth="90.0" />
+                                <Label fx:id="minPluralitySunrise" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="_18" />
+                                        <String fx:value="font-text-bold" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <children>
+                                <Spinner fx:id="dhuhrAdjustment" onMouseClicked="#onDhuhrAdjustmentChange" prefWidth="90.0" />
+                                <Label fx:id="minPluralityDhuhr" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="_18" />
+                                        <String fx:value="font-text-bold" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <children>
+                                <Spinner fx:id="asrAdjustment" onMouseClicked="#onAsrAdjustmentChange" prefWidth="90.0" />
+                                <Label fx:id="minPluralityAsr" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="_18" />
+                                        <String fx:value="font-text-bold" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <children>
+                                <Spinner fx:id="maghribAdjustment" onMouseClicked="#onMaghribAdjustmentChange" prefWidth="90.0" />
+                                <Label fx:id="minPluralityMaghrib" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="_18" />
+                                        <String fx:value="font-text-bold" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                            <children>
+                                <Spinner fx:id="ishaAdjustment" onMouseClicked="#onIshaAdjustmentChange" prefWidth="90.0" />
+                                <Label fx:id="minPluralityIsha" text="الدقيقه" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="_18" />
+                                        <String fx:value="font-text-bold" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                        </HBox>
                </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" spacing="15.0">
-         <children>
-            <Label fx:id="asrMadhabText" minWidth="252.0" text="المذهب الفقهي لصلاة العصر" textAlignment="CENTER" wrapText="true">
-               <styleClass>
-                  <String fx:value="font-text-bold" />
-                  <String fx:value="_18" />
-               </styleClass>
-            </Label>
-            <HBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <JFXRadioButton fx:id="standardJuristic" nodeOrientation="LEFT_TO_RIGHT" onAction="#onAsrJuristicSelect" selected="true" text="شافعي، مالكي، حنبلي">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="asrJuristic" />
-                     </toggleGroup>
-                     <styleClass>
-                        <String fx:value="radio-button-normal" />
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_15" />
-                     </styleClass>
-                  </JFXRadioButton>
-                  <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" onAction="#onAsrJuristicSelect" text="حنفي" toggleGroup="$asrJuristic">
-                     <styleClass>
-                        <String fx:value="radio-button-normal" />
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_15" />
-                     </styleClass>
-                  </JFXRadioButton>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <Separator prefWidth="200.0">
-         <VBox.margin>
-            <Insets left="40.0" right="40.0" />
-         </VBox.margin>
-      </Separator>
-      <Label fx:id="daylightSavingNote" text="يتم مراعاة التوقيت الصيفي تلقائيا حسب الدولة" textAlignment="CENTER" wrapText="true">
-         <styleClass>
-            <String fx:value="_15" />
-            <String fx:value="font-text-bold" />
-         </styleClass>
-      </Label>
-      <JFXCheckBox fx:id="summerTiming" nodeOrientation="LEFT_TO_RIGHT" onAction="#onSummerTimingSelect" text="زيادة (+1 ساعة) على أي حال" wrapText="true">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-         <styleClass>
-            <String fx:value="_15" />
-            <String fx:value="font-text-medium" />
-         </styleClass>
-      </JFXCheckBox>
-   </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </GridPane>
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </VBox>
+        <Separator prefWidth="200.0">
+            <VBox.margin>
+                <Insets left="40.0" right="40.0" />
+            </VBox.margin>
+        </Separator>
+        <Label fx:id="daylightSavingNote" text="يتم مراعاة التوقيت الصيفي تلقائيا حسب الدولة" textAlignment="CENTER" wrapText="true">
+            <styleClass>
+                <String fx:value="_15" />
+                <String fx:value="font-text-bold" />
+            </styleClass>
+        </Label>
+        <JFXCheckBox fx:id="summerTiming" nodeOrientation="LEFT_TO_RIGHT" onAction="#onSummerTimingSelect" text="زيادة (+1 ساعة) على أي حال" wrapText="true">
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+            <styleClass>
+                <String fx:value="_15" />
+                <String fx:value="font-text-medium" />
+            </styleClass>
+        </JFXCheckBox>
+    </children>
 </VBox>

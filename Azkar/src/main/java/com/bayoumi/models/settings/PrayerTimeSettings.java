@@ -22,6 +22,13 @@ public class PrayerTimeSettings extends Observable {
     private double longitude;
     private String adhanAudio;
     private boolean isManualLocationSelected;
+    private int fajrAdjustment;
+    private int sunriseAdjustment;
+    private int dhuhrAdjustment;
+    private int asrAdjustment;
+    private int maghribAdjustment;
+    private int ishaAdjustment;
+
 
     protected PrayerTimeSettings() {
         loadSettings();
@@ -37,6 +44,12 @@ public class PrayerTimeSettings extends Observable {
         this.longitude = Preferences.getInstance().getDouble(PreferencesType.LONGITUDE);
         this.adhanAudio = Preferences.getInstance().get(PreferencesType.ADHAN_AUDIO);
         this.isManualLocationSelected = Preferences.getInstance().getBoolean(PreferencesType.IS_MANUAL_LOCATION_SELECTED);
+        this.fajrAdjustment = Preferences.getInstance().getInt(PreferencesType.FAJR_ADJUSTMENT);
+        this.sunriseAdjustment = Preferences.getInstance().getInt(PreferencesType.SUNRISE_ADJUSTMENT);
+        this.dhuhrAdjustment = Preferences.getInstance().getInt(PreferencesType.DHUHR_ADJUSTMENT);
+        this.asrAdjustment = Preferences.getInstance().getInt(PreferencesType.ASR_ADJUSTMENT);
+        this.maghribAdjustment = Preferences.getInstance().getInt(PreferencesType.MAGHRIB_ADJUSTMENT);
+        this.ishaAdjustment = Preferences.getInstance().getInt(PreferencesType.ISHAA_ADJUSTMENT);
     }
 
     public void handleNotifyObservers() {
@@ -147,6 +160,66 @@ public class PrayerTimeSettings extends Observable {
         Preferences.getInstance().set(PreferencesType.IS_MANUAL_LOCATION_SELECTED, manualLocationSelected + "");
     }
 
+    public int getFajrAdjustment() {
+        return fajrAdjustment;
+    }
+
+    public void setFajrAdjustment(int fajrAdjustment) {
+
+        this.fajrAdjustment = fajrAdjustment;
+        Preferences.getInstance().set(PreferencesType.FAJR_ADJUSTMENT, fajrAdjustment + "");
+    }
+
+    public int getSunriseAdjustment() {
+        return sunriseAdjustment;
+    }
+
+    public void setSunriseAdjustment(int sunriseAdjustment) {
+
+        this.sunriseAdjustment = sunriseAdjustment;
+        Preferences.getInstance().set(PreferencesType.SUNRISE_ADJUSTMENT, sunriseAdjustment + "");
+    }
+
+    public int getDhuhrAdjustment() {
+        return dhuhrAdjustment;
+    }
+
+    public void setDhuhrAdjustment(int dhuhrAdjustment) {
+
+        this.dhuhrAdjustment = dhuhrAdjustment;
+        Preferences.getInstance().set(PreferencesType.DHUHR_ADJUSTMENT, dhuhrAdjustment + "");
+    }
+
+    public int getAsrAdjustment() {
+        return asrAdjustment;
+    }
+
+    public void setAsrAdjustment(int asrAdjustment) {
+
+        this.asrAdjustment = asrAdjustment;
+        Preferences.getInstance().set(PreferencesType.ASR_ADJUSTMENT, asrAdjustment + "");
+    }
+
+    public int getMaghribAdjustment() {
+        return maghribAdjustment;
+    }
+
+    public void setMaghribAdjustment(int maghribAdjustment) {
+
+        this.maghribAdjustment = maghribAdjustment;
+        Preferences.getInstance().set(PreferencesType.MAGHRIB_ADJUSTMENT, maghribAdjustment + "");
+    }
+
+    public int getIshaAdjustment() {
+        return ishaAdjustment;
+    }
+
+    public void setIshaAdjustment(int ishaAdjustment) {
+
+        this.ishaAdjustment = ishaAdjustment;
+        Preferences.getInstance().set(PreferencesType.ISHAA_ADJUSTMENT, ishaAdjustment + "");
+    }
+
     @Override
     public String toString() {
         return "PrayerTimeSettings{" +
@@ -159,6 +232,11 @@ public class PrayerTimeSettings extends Observable {
                 ", longitude=" + longitude +
                 ", adhanAudio='" + adhanAudio + '\'' +
                 ", isManualLocationSelected=" + isManualLocationSelected +
+                ", fajrAdjustment=" + fajrAdjustment +
+                ", sunriseAdjustment=" + sunriseAdjustment +
+                ", asrAdjustment=" + asrAdjustment +
+                ", maghribAdjustment=" + maghribAdjustment +
+                ", ishaAdjustment=" + ishaAdjustment +
                 '}';
     }
 
@@ -175,16 +253,19 @@ public class PrayerTimeSettings extends Observable {
             this.value = value;
         }
 
-        public static StringConverter<Method> getStringConverter(boolean isArabic) {
+        public static StringConverter<Method> getStringConverter() {
             return new StringConverter<Method>() {
                 @Override
                 public String toString(Method object) {
-                    return isArabic ? object.getArabicName() : object.getEnglishName();
+                    if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
+                        return object.getArabicName();
+                    }
+                    return object.getEnglishName();
                 }
 
                 @Override
                 public Method fromString(String string) {
-                    return null;
+                    return Method.getMethodByValue(string);
                 }
             };
         }

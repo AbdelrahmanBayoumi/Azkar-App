@@ -92,6 +92,7 @@ public class ChooseAudioController implements Initializable {
             return;
         }
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
+        Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
         prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
     }
