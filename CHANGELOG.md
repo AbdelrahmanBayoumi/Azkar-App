@@ -3,6 +3,8 @@
 
 ## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.8...HEAD)
 
+## [1.2.9](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.9) - 2024-10-## (Unreleased yet)
+
 ### Add
 
 - 🔊 Ability to change Adhan Volume [#39](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/39)
@@ -13,6 +15,8 @@
 
 - 🔄 Fix repeated Azkar notifications that were shown in a random order by implementing a sequential tracking mechanism, ensuring notifications display in the correct order and loop back after the last item [#70](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/70)
 - 🌍 Fix wrong selection of Cities like in Damascus, Syria [#72](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/72)
+
+[Full Changelog](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.8...1.2.9)
 
 ## [1.2.8](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.2.8) - 2024-07-06
 

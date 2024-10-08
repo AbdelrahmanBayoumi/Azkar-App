@@ -1,0 +1,23 @@
+■ New Features:
+
+- Ability to change Adhan Volume
+- Ability to configure the duration for which the notification stays on the screen.
+- Added the ability to adjust prayer times by specifying an adjustment value (in minutes), allowing users to add or subtract minutes from the calculated prayer times before displaying the final result
+
+■ Fixes:
+
+- Fixed repeated Azkar notifications that were shown in a random order by implementing a sequential tracking mechanism, ensuring notifications display in the correct order and loop back after the last item
+- Fixed wrong selection of cities like in Damascus, Syria
+
+------------------
+
+■ الميزات الجديدة:
+
+- إمكانية تغيير مستوى صوت الأذان
+- إمكانية ضبط مدة بقاء الإشعار على الشاشة
+- إضافة إمكانية تعديل أوقات الصلاة بتحديد قيمة التعديل (بالدقائق)، مما يسمح للمستخدمين بإضافة أو طرح دقائق من أوقات الصلاة المحسوبة قبل عرض النتيجة النهائية
+
+■ الإصلاحات:
+
+- إصلاح تكرار إشعارات الأذكار التي كانت تظهر بترتيب عشوائي من خلال تنفيذ آلية تتبع تسلسلية، لضمان عرض الإشعارات بالترتيب الصحيح والعودة إلى البداية بعد العنصر الأخير
+- إصلاح الاختيار الخاطئ للمدن مثل دمشق، سوريا
