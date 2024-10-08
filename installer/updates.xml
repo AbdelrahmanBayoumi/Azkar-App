@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updateDescriptor baseUrl="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/1.2.8/">
+  <entry targetMediaFileId="60" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x64.exe" newVersion="1.2.8" newMediaFileId="60" fileSize="83204608" md5Sum="811d698d5fd1e3927502bfd7d41316f4" sha256Sum="9059c77aa60a3f3b84cafec07de3c511f9d6e4bd4b8dfdf7fb5f61e92ada5bac" bundledJre="windows-amd64-1.8.0_271.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">■ New Features:&#xD;
+    - Display elapsed time since the current prayer for up to 30 minutes from the Adhan.&#xD;
+    - Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration.&#xD;
+&#xD;
+■ Fixes:&#xD;
+    - Resolved notification color change errors.&#xD;
+    - Improved automatic location detection accuracy in some countries.&#xD;
+    - Fixed playing notification even if sound driver is not available.&#xD;
+&#xD;
+■ Enhancements:&#xD;
+    - Enhanced code structure and performance.&#xD;
+    - Timed Adhkar settings now save and reflect font size changes instantly.&#xD;
+    - Notification now is shown above the taskbar in Windows.&#xD;
+------------------&#xD;
+■ الميزات الجديدة:&#xD;
+	- عرض الوقت المنقضي منذ الصلاة الحالية لمدة تصل إلى 30 دقيقة من الأذان.&#xD;
+	- إضافة أذكار الصباح والمساء باللغتين الإنجليزية والعربية، مع الصوت، والفضل، والتكرار، والترجمة، والنقل الصوتي.&#xD;
+&#xD;
+■ الإصلاحات:&#xD;
+	- حل مشكلة تغيير لون الإشعارات.&#xD;
+	- تحسين دقة الكشف التلقائي عن الموقع في بعض البلدان.&#xD;
+    - إصلاح تشغيل الإشعار حتى إذا لم يكن برنامج التشغيل الصوتي متاحًا.&#xD;
+&#xD;
+■ التحسينات:&#xD;
+	- تحسين هيكلية الكود والأداء.&#xD;
+	- إعدادات الأذكار المؤقتة تحفظ وتعرض تغييرات حجم الخط فوراً.&#xD;
+    - يتم عرض الإشعار الآن فوق شريط المهام في الويندوز.</comment>
+  </entry>
+  <entry targetMediaFileId="792" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x32.exe" newVersion="1.2.8" newMediaFileId="792" fileSize="79639552" md5Sum="7492bbf5f9f2d88e6f8772e005565702" sha256Sum="ecff5a00f156e03780da12eae483eb4ebbcb6c9a164c05185813763bbad9e966" bundledJre="windows-x86-1.8.0_271.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">■ New Features:&#xD;
+    - Display elapsed time since the current prayer for up to 30 minutes from the Adhan.&#xD;
+    - Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration.&#xD;
+&#xD;
+■ Fixes:&#xD;
+    - Resolved notification color change errors.&#xD;
+    - Improved automatic location detection accuracy in some countries.&#xD;
+    - Fixed playing notification even if sound driver is not available.&#xD;
+&#xD;
+■ Enhancements:&#xD;
+    - Enhanced code structure and performance.&#xD;
+    - Timed Adhkar settings now save and reflect font size changes instantly.&#xD;
+    - Notification now is shown above the taskbar in Windows.&#xD;
+------------------&#xD;
+■ الميزات الجديدة:&#xD;
+	- عرض الوقت المنقضي منذ الصلاة الحالية لمدة تصل إلى 30 دقيقة من الأذان.&#xD;
+	- إضافة أذكار الصباح والمساء باللغتين الإنجليزية والعربية، مع الصوت، والفضل، والتكرار، والترجمة، والنقل الصوتي.&#xD;
+&#xD;
+■ الإصلاحات:&#xD;
+	- حل مشكلة تغيير لون الإشعارات.&#xD;
+	- تحسين دقة الكشف التلقائي عن الموقع في بعض البلدان.&#xD;
+    - إصلاح تشغيل الإشعار حتى إذا لم يكن برنامج التشغيل الصوتي متاحًا.&#xD;
+&#xD;
+■ التحسينات:&#xD;
+	- تحسين هيكلية الكود والأداء.&#xD;
+	- إعدادات الأذكار المؤقتة تحفظ وتعرض تغييرات حجم الخط فوراً.&#xD;
+    - يتم عرض الإشعار الآن فوق شريط المهام في الويندوز.</comment>
+  </entry>
+</updateDescriptor>

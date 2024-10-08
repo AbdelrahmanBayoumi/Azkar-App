@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="8.0.11" transformSequenceNumber="8">
   <directoryPresets config="${compiler:PARENT_DIR}/Azkar-App/Azkar/target/jfx/app/Azkar-jfx.jar" />
-  <application name="${compiler:APP_FULL_NAME}" applicationId="6460-1129-3694-1642" mediaDir="${compiler:PARENT_DIR}/exe_output" pack200Compression="true" shortName="${compiler:APP_SHORT_NAME}" publisher="${compiler:Publisher}" publisherWeb="${compiler:Publisher}" version="${compiler:APP_VERSION}" macVolumeId="46e77254d484fdd2" javaMinVersion="1.8" javaMaxVersion="1.8" jdkMode="jdk" jdkName="JDK 1.8">
+  <application name="${compiler:APP_FULL_NAME}" applicationId="6460-1129-3694-1642" mediaDir="${compiler:PARENT_DIR}/installer" pack200Compression="true" shortName="${compiler:APP_SHORT_NAME}" publisher="${compiler:Publisher}" publisherWeb="${compiler:Publisher}" version="${compiler:APP_VERSION}" macVolumeId="46e77254d484fdd2" javaMinVersion="1.8" javaMaxVersion="1.8" jdkMode="jdk" jdkName="JDK 1.8">
     <variables>
       <variable name="PARENT_DIR" value="." />
       <variable name="APP_FULL_NAME" value="Azkar" />
@@ -12,10 +12,9 @@
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
       <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.png" />
       <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.ico" />
-      <variable name="BASE_RELEASE_URL" value="https://azkar-server.herokuapp.com/release" />
-      <variable name="RELEASE_URL_64" value="${compiler:BASE_RELEASE_URL}/" />
-      <variable name="RELEASE_URL_32" value="${compiler:BASE_RELEASE_URL}/win_exe32/" />
       <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
+      <variable name="UPDATES_XML_URL" value="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/installer/updates.xml" />
+      <variable name="BASE_RELEASE_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/${compiler:APP_VERSION}/" />
     </variables>
     <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk8/jdk8u272-b10" />
   </application>
@@ -45,7 +44,7 @@
       </iconImageFiles>
     </launcher>
   </launchers>
-  <installerGui autoUpdateDescriptorUrl="${compiler:RELEASE_URL_64}updates.xml" useAutoUpdateBaseUrl="true" autoUpdateBaseUrl="${compiler:RELEASE_URL_64}">
+  <installerGui autoUpdateDescriptorUrl="${compiler:UPDATES_XML_URL}" useAutoUpdateBaseUrl="true" autoUpdateBaseUrl="${compiler:BASE_RELEASE_URL}">
     <autoUpdate>
       <commentFiles>
         <file location="${compiler:CHANGELOG_FILE}" languageId="en" />
@@ -1095,14 +1094,14 @@ return true;</property>
     </styles>
   </installerGui>
   <mediaSets>
-    <windows name="Windows 64" id="60">
+    <windows name="Windows 64" id="60" mediaFileName="${compiler:sys.shortName}_${compiler:sys.platform}">
       <jreBundle jreBundleSource="preCreated" includedJre="windows-amd64-1.8.0_271" />
     </windows>
-    <windows name="Windows 32" id="792" jreBitType="32">
+    <windows name="Windows 32" id="792" mediaFileName="${compiler:sys.shortName}_${compiler:sys.platform}" jreBitType="32">
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_271" />
     </windows>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds>
     <mediaSet refId="60" />
   </buildIds>
   <buildOptions verbose="true" />
