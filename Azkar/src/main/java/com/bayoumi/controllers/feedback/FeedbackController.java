@@ -1,7 +1,7 @@
 package com.bayoumi.controllers.feedback;
 
 import com.bayoumi.models.settings.LanguageBundle;
-import com.bayoumi.util.Constants;
+import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.forms.Feedback;
@@ -26,7 +26,6 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.control.Notifications;
 
 import java.net.URL;
-import java.nio.file.FileSystems;
 import java.util.ResourceBundle;
 
 public class FeedbackController implements Initializable {
@@ -143,13 +142,14 @@ public class FeedbackController implements Initializable {
                     progress.setVisible(false);
                     return;
                 }
-                Feedback feedback = new Feedback(
+                final Feedback feedback = new Feedback(
                         getType(),
                         subject.getText(),
                         email.getText(),
                         details.getText(),
                         System.getProperty("os.name"),
-                        getAbsolutePath(Constants.assetsPath + "/logs/debug.txt"));
+                        AppPropertiesUtil.getAllAppPropsAsJsonString()
+                );
                 feedback.submitFeedback();
                 Platform.runLater(() -> {
                     VBox vBox = new VBox(10);
@@ -170,9 +170,6 @@ public class FeedbackController implements Initializable {
         }).start();
     }
 
-    private String getAbsolutePath(String relativePath) {
-        return FileSystems.getDefault().getPath(relativePath).normalize().toAbsolutePath().toString();
-    }
 
     @FXML
     private void toggleButton(ActionEvent event) {

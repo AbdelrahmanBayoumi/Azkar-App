@@ -16,7 +16,7 @@ public class Feedback {
         EMAIL(1620011711),
         OS(1968101612),
         DETAILS(1071993344),
-        LOG_PATH(788346873);
+        META_DATA(788346873);
 
         private final long id;
 
@@ -35,15 +35,15 @@ public class Feedback {
     private final String email;
     private final String details;
     private final String os;
-    private final String logPath;
+    private final String metaData;
 
-    public Feedback(String type, String subject, String email, String details, String os, String logPath) {
+    public Feedback(String type, String subject, String email, String details, String os, String metaData) {
         this.type = type;
         this.subject = subject;
         this.email = email;
         this.details = details;
         this.os = os;
-        this.logPath = logPath;
+        this.metaData = metaData;
     }
 
     public String getType() {
@@ -66,8 +66,8 @@ public class Feedback {
         return os;
     }
 
-    public String getLogPath() {
-        return logPath;
+    public String getMetaData() {
+        return metaData;
     }
 
     private URL buildFeedbackURL() throws MalformedURLException {
@@ -87,8 +87,8 @@ public class Feedback {
         if (this.getDetails() != null && !this.getDetails().isEmpty()) {
             builder.put(FeedbackForm.DETAILS, this.getDetails());
         }
-        if (this.getLogPath() != null && !this.getLogPath().isEmpty()) {
-            builder.put(FeedbackForm.LOG_PATH, this.getLogPath());
+        if (this.getMetaData() != null && !this.getMetaData().isEmpty()) {
+            builder.put(FeedbackForm.META_DATA, this.getMetaData());
         }
         return builder.toUrl();
     }
