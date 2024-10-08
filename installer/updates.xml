@@ -1,61 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/1.2.8/">
-  <entry targetMediaFileId="60" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x64.exe" newVersion="1.2.8" newMediaFileId="60" fileSize="83204608" md5Sum="811d698d5fd1e3927502bfd7d41316f4" sha256Sum="9059c77aa60a3f3b84cafec07de3c511f9d6e4bd4b8dfdf7fb5f61e92ada5bac" bundledJre="windows-amd64-1.8.0_271.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">■ New Features:&#xD;
-    - Display elapsed time since the current prayer for up to 30 minutes from the Adhan.&#xD;
-    - Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration.&#xD;
+<updateDescriptor baseUrl="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/1.2.9/">
+  <entry targetMediaFileId="60" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x64.exe" newVersion="1.2.9" newMediaFileId="60" fileSize="83189248" md5Sum="56a4b9171e2afe336d0d09a2149eb913" sha256Sum="7414b3975f6e688014180b0aeb2028634bb45a37aa4b77501c39a4f5a5fbd367" bundledJre="windows-amd64-1.8.0_271.tar.gz" archive="false" singleBundle="false">
+    <comment language="en"># هذا الاصدار مهم وضروري #&#xD;
 &#xD;
-■ Fixes:&#xD;
-    - Resolved notification color change errors.&#xD;
-    - Improved automatic location detection accuracy in some countries.&#xD;
-    - Fixed playing notification even if sound driver is not available.&#xD;
+من الضروري تحميل هذا الاصدار&#xD;
+لأن السيرفر الحالي الخاص بعمل التحديثات سيتم استبداله&#xD;
+ببديل مجاني وسيتم اغلاق السيرفر الحالي&#xD;
+بنهاية شهر أكتوبر 2024. لذلك من الضروري تحميل هذا التحديث&#xD;
+لتتمكن من تلقي التحديثات القادمة مستقبلاً من السيرفر الجديد&#xD;
 &#xD;
-■ Enhancements:&#xD;
-    - Enhanced code structure and performance.&#xD;
-    - Timed Adhkar settings now save and reflect font size changes instantly.&#xD;
-    - Notification now is shown above the taskbar in Windows.&#xD;
 ------------------&#xD;
+&#xD;
 ■ الميزات الجديدة:&#xD;
-	- عرض الوقت المنقضي منذ الصلاة الحالية لمدة تصل إلى 30 دقيقة من الأذان.&#xD;
-	- إضافة أذكار الصباح والمساء باللغتين الإنجليزية والعربية، مع الصوت، والفضل، والتكرار، والترجمة، والنقل الصوتي.&#xD;
+&#xD;
+- إمكانية تغيير مستوى صوت الأذان&#xD;
+- إمكانية ضبط مدة بقاء الإشعار على الشاشة&#xD;
+- إضافة إمكانية تعديل أوقات الصلاة بتحديد قيمة التعديل (بالدقائق)، مما يسمح للمستخدمين بإضافة أو طرح دقائق من أوقات الصلاة المحسوبة قبل عرض النتيجة النهائية&#xD;
 &#xD;
 ■ الإصلاحات:&#xD;
-	- حل مشكلة تغيير لون الإشعارات.&#xD;
-	- تحسين دقة الكشف التلقائي عن الموقع في بعض البلدان.&#xD;
-    - إصلاح تشغيل الإشعار حتى إذا لم يكن برنامج التشغيل الصوتي متاحًا.&#xD;
 &#xD;
-■ التحسينات:&#xD;
-	- تحسين هيكلية الكود والأداء.&#xD;
-	- إعدادات الأذكار المؤقتة تحفظ وتعرض تغييرات حجم الخط فوراً.&#xD;
-    - يتم عرض الإشعار الآن فوق شريط المهام في الويندوز.</comment>
+- إصلاح تكرار إشعارات الأذكار التي كانت تظهر بترتيب عشوائي من خلال تنفيذ آلية تتبع تسلسلية، لضمان عرض الإشعارات بالترتيب الصحيح والعودة إلى البداية بعد العنصر الأخير&#xD;
+- إصلاح الاختيار الخاطئ للمدن مثل دمشق، سوريا&#xD;
+&#xD;
+------------------&#xD;
+&#xD;
+# This update is important and necessary #&#xD;
+&#xD;
+It's important to downloading this update lies in the fact that the server used for updates will be replaced with a free alternative,&#xD;
+and the current server will be shut down by the end of October 2024.&#xD;
+Therefore, it is essential to download this update to ensure you receive future updates from the new server.&#xD;
+&#xD;
+&#xD;
+Here's the translation:&#xD;
+&#xD;
+It is essential to download this version because the current server used for updates will be replaced with a free alternative,&#xD;
+and the current server will be shut down by the end of October 2024.&#xD;
+Therefore, it is necessary to download this update to ensure you receive future updates from the new server.&#xD;
+&#xD;
+------------------&#xD;
+&#xD;
+■ New Features:&#xD;
+&#xD;
+- Ability to adjust the Adhan volume level&#xD;
+- Option to set the duration for which the notification stays on the screen&#xD;
+- Added the ability to modify prayer times by specifying an adjustment value (in minutes), allowing users to add or subtract minutes from the calculated prayer times before displaying the final result&#xD;
+&#xD;
+■ Fixes:&#xD;
+&#xD;
+- Fixed the repetition of Azkar notifications that appeared in a random order by implementing a sequential tracking mechanism to ensure notifications are displayed in the correct order and return to the beginning after the last item&#xD;
+- Fixed incorrect city selections such as Damascus, Syria</comment>
   </entry>
-  <entry targetMediaFileId="792" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x32.exe" newVersion="1.2.8" newMediaFileId="792" fileSize="79639552" md5Sum="7492bbf5f9f2d88e6f8772e005565702" sha256Sum="ecff5a00f156e03780da12eae483eb4ebbcb6c9a164c05185813763bbad9e966" bundledJre="windows-x86-1.8.0_271.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">■ New Features:&#xD;
-    - Display elapsed time since the current prayer for up to 30 minutes from the Adhan.&#xD;
-    - Added Morning and Evening Adhkar in English and Arabic, with audio, Fadl, frequency, translation, and transliteration.&#xD;
+  <entry targetMediaFileId="792" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x32.exe" newVersion="1.2.9" newMediaFileId="792" fileSize="79623680" md5Sum="57ac3023bcdbda6498912d83d48c1e4d" sha256Sum="4c12fd99714be2ab136101eca175b5597115bfc202e719612933e42e84307e4c" bundledJre="windows-x86-1.8.0_271.tar.gz" archive="false" singleBundle="false">
+    <comment language="en"># هذا الاصدار مهم وضروري #&#xD;
 &#xD;
-■ Fixes:&#xD;
-    - Resolved notification color change errors.&#xD;
-    - Improved automatic location detection accuracy in some countries.&#xD;
-    - Fixed playing notification even if sound driver is not available.&#xD;
+من الضروري تحميل هذا الاصدار&#xD;
+لأن السيرفر الحالي الخاص بعمل التحديثات سيتم استبداله&#xD;
+ببديل مجاني وسيتم اغلاق السيرفر الحالي&#xD;
+بنهاية شهر أكتوبر 2024. لذلك من الضروري تحميل هذا التحديث&#xD;
+لتتمكن من تلقي التحديثات القادمة مستقبلاً من السيرفر الجديد&#xD;
 &#xD;
-■ Enhancements:&#xD;
-    - Enhanced code structure and performance.&#xD;
-    - Timed Adhkar settings now save and reflect font size changes instantly.&#xD;
-    - Notification now is shown above the taskbar in Windows.&#xD;
 ------------------&#xD;
+&#xD;
 ■ الميزات الجديدة:&#xD;
-	- عرض الوقت المنقضي منذ الصلاة الحالية لمدة تصل إلى 30 دقيقة من الأذان.&#xD;
-	- إضافة أذكار الصباح والمساء باللغتين الإنجليزية والعربية، مع الصوت، والفضل، والتكرار، والترجمة، والنقل الصوتي.&#xD;
+&#xD;
+- إمكانية تغيير مستوى صوت الأذان&#xD;
+- إمكانية ضبط مدة بقاء الإشعار على الشاشة&#xD;
+- إضافة إمكانية تعديل أوقات الصلاة بتحديد قيمة التعديل (بالدقائق)، مما يسمح للمستخدمين بإضافة أو طرح دقائق من أوقات الصلاة المحسوبة قبل عرض النتيجة النهائية&#xD;
 &#xD;
 ■ الإصلاحات:&#xD;
-	- حل مشكلة تغيير لون الإشعارات.&#xD;
-	- تحسين دقة الكشف التلقائي عن الموقع في بعض البلدان.&#xD;
-    - إصلاح تشغيل الإشعار حتى إذا لم يكن برنامج التشغيل الصوتي متاحًا.&#xD;
 &#xD;
-■ التحسينات:&#xD;
-	- تحسين هيكلية الكود والأداء.&#xD;
-	- إعدادات الأذكار المؤقتة تحفظ وتعرض تغييرات حجم الخط فوراً.&#xD;
-    - يتم عرض الإشعار الآن فوق شريط المهام في الويندوز.</comment>
+- إصلاح تكرار إشعارات الأذكار التي كانت تظهر بترتيب عشوائي من خلال تنفيذ آلية تتبع تسلسلية، لضمان عرض الإشعارات بالترتيب الصحيح والعودة إلى البداية بعد العنصر الأخير&#xD;
+- إصلاح الاختيار الخاطئ للمدن مثل دمشق، سوريا&#xD;
+&#xD;
+------------------&#xD;
+&#xD;
+# This update is important and necessary #&#xD;
+&#xD;
+It's important to downloading this update lies in the fact that the server used for updates will be replaced with a free alternative,&#xD;
+and the current server will be shut down by the end of October 2024.&#xD;
+Therefore, it is essential to download this update to ensure you receive future updates from the new server.&#xD;
+&#xD;
+&#xD;
+Here's the translation:&#xD;
+&#xD;
+It is essential to download this version because the current server used for updates will be replaced with a free alternative,&#xD;
+and the current server will be shut down by the end of October 2024.&#xD;
+Therefore, it is necessary to download this update to ensure you receive future updates from the new server.&#xD;
+&#xD;
+------------------&#xD;
+&#xD;
+■ New Features:&#xD;
+&#xD;
+- Ability to adjust the Adhan volume level&#xD;
+- Option to set the duration for which the notification stays on the screen&#xD;
+- Added the ability to modify prayer times by specifying an adjustment value (in minutes), allowing users to add or subtract minutes from the calculated prayer times before displaying the final result&#xD;
+&#xD;
+■ Fixes:&#xD;
+&#xD;
+- Fixed the repetition of Azkar notifications that appeared in a random order by implementing a sequential tracking mechanism to ensure notifications are displayed in the correct order and return to the beginning after the last item&#xD;
+- Fixed incorrect city selections such as Damascus, Syria</comment>
   </entry>
 </updateDescriptor>
