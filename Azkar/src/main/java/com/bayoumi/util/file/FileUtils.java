@@ -59,11 +59,19 @@ public class FileUtils {
 
     public static List<Muezzin> getAdhanList() {
         List<Muezzin> muezzinList = new ArrayList<>();
+        Muezzin tempMuezzin;
         for (String s : getAdhanFilesNames()) {
+            tempMuezzin=null;
             for (Muezzin muezzin : Muezzin.values()) {
                 if (s.equals(muezzin.getFileName())) {
-                    muezzinList.add(muezzin);
+                    tempMuezzin = muezzin;
+
                 }
+            }
+            if(tempMuezzin!=null){
+                muezzinList.add(tempMuezzin);
+            }else if(!s.equals("sharawy_doaa.mp3")){
+                muezzinList.add(new Muezzin(s,s,s));
             }
         }
         return muezzinList;
@@ -72,6 +80,25 @@ public class FileUtils {
     public static List<String> getAdhanFilesNames() {
         List<String> audioFiles = new ArrayList<>();
         addFilesNameToList(new File(Muezzin.PARENT_PATH), audioFiles);
+        addFilesNameToList(new File(Muezzin.PARENT_PATH_UPLOAD),audioFiles);
         return audioFiles;
     }
+    public static String getMuezzinPath(Muezzin muezzin){
+        File local =new File(muezzin.getLocalPath());
+        if(local.isFile()&&local.isFile()){
+            return muezzin.getLocalPath();
+        }else{
+            return muezzin.getUploadedPath();
+        }
+    }
+    public static File getMuezzinPath(String muezzin){
+        File local =new File(Muezzin.PARENT_PATH+muezzin);
+        if(local.isFile()&&local.isFile()){
+            return local;
+        }else{
+            File upload =new File(Muezzin.PARENT_PATH_UPLOAD+muezzin);
+            return upload;
+        }
+    }
+
 }

@@ -31,6 +31,14 @@
                     <Insets bottom="5.0" left="8.0" right="14.0" top="5.0" />
                 </padding>
             </JFXButton>
+         <JFXButton fx:id="uploadButton" contentDisplay="GRAPHIC_ONLY" layoutX="320.0" layoutY="11.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#uploadAudio" style="-fx-background-color: transparent; -fx-border-color: -fx-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
+            <graphic>
+               <FontAwesomeIconView glyphName="PLAY" size="30" style="-fx-fill: -fx-secondary;" />
+            </graphic>
+            <padding>
+               <Insets bottom="5.0" left="8.0" right="14.0" top="5.0" />
+            </padding>
+         </JFXButton>
         </children>
     </HBox>
     <HBox fx:id="prayerVolumeBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">

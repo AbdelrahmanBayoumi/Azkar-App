@@ -5,8 +5,10 @@ import com.bayoumi.models.settings.AzkarSettings;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.BuilderUI;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -16,6 +18,8 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -23,9 +27,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,6 +44,7 @@ public class ChooseAudioController implements Initializable {
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
+    private FontAwesomeIconView uploadIcon;
     private double previousValue = 50;
     private boolean isMuted = false;
 
@@ -48,6 +59,8 @@ public class ChooseAudioController implements Initializable {
     public JFXComboBox<Muezzin> audioBox;
     @FXML
     private JFXButton playButton;
+    @FXML
+    private JFXButton uploadButton;
 
     public static void stopIfPlaying() {
         if (isMediaPlaying()) {
@@ -65,8 +78,10 @@ public class ChooseAudioController implements Initializable {
         }
         return audioBox.getValue();
     }
-
-    public void setData(String promptText, Muezzin initialValue, List<Muezzin> items) {
+    private void setMuezzins(){
+        audioBox.setItems(FXCollections.observableArrayList(FileUtils.getAdhanList()));
+    }
+    public void setData(String promptText, Muezzin initialValue, List<Muezzin> items ) {
         audioBox.setPromptText(promptText);
         audioBox.setValue(initialValue);
         audioBox.setItems(FXCollections.observableArrayList(items));
@@ -106,6 +121,11 @@ public class ChooseAudioController implements Initializable {
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-secondary;");
+        uploadIcon = new FontAwesomeIconView(FontAwesomeIcon.FILE);
+        uploadIcon.setStyle("-fx-fill: -fx-secondary;");
+        uploadIcon.setGlyphSize(30);
+        uploadButton.setGraphic(uploadIcon);
+        uploadButton.setPadding(new Insets(5, 14, 5, 8));
         audioBox.setOnAction(event -> {
             playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
             prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
@@ -136,6 +156,30 @@ public class ChooseAudioController implements Initializable {
     }
 
     @FXML
+    private void uploadAudio(){
+       FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.mp4")
+        );
+        File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
+        if(selectedFile!=null&&selectedFile.isFile()){
+            Path audioSourcePath=selectedFile.toPath();
+            String audioTargetPath=Constants.assetsPath+"/audio/"+selectedFile.getName();
+            Path path=Paths.get(audioTargetPath);
+
+            try {
+                Files.copy(audioSourcePath,path , StandardCopyOption.REPLACE_EXISTING);
+                setMuezzins();
+            } catch (IOException e) {
+                Logger.error(null, e, getClass().getName() + ".uploadAudio()");
+                final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("erroruploadAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                return;
+            }
+        }
+    }
+    @FXML
     private void play() {
         if (isMediaPlaying()) {
             MEDIA_PLAYER.stop();
@@ -145,7 +189,7 @@ public class ChooseAudioController implements Initializable {
             Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
+                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(FileUtils.getMuezzinPath(muezzin)).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
