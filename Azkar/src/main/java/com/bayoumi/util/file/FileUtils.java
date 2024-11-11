@@ -85,7 +85,7 @@ public class FileUtils {
     }
     public static String getMuezzinPath(Muezzin muezzin){
         File local =new File(muezzin.getLocalPath());
-        if(local.isFile()&&local.isFile()){
+        if(local.isFile()&&local.exists()){
             return muezzin.getLocalPath();
         }else{
             return muezzin.getUploadedPath();
