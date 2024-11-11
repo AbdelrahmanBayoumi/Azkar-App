@@ -93,7 +93,7 @@ public class FileUtils {
     }
     public static File getMuezzinPath(String muezzin){
         File local =new File(Muezzin.PARENT_PATH+muezzin);
-        if(local.isFile()&&local.isFile()){
+        if(local.isFile()&&local.exists()){
             return local;
         }else{
             File upload =new File(Muezzin.PARENT_PATH_UPLOAD+muezzin);
