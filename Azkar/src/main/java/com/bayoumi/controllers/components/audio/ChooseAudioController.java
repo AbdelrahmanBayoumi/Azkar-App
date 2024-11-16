@@ -42,7 +42,6 @@ public class ChooseAudioController implements Initializable {
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
-    private FontAwesomeIconView uploadIcon;
     private double previousValue = 50;
     private boolean isMuted = false;
 
@@ -121,14 +120,9 @@ public class ChooseAudioController implements Initializable {
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-secondary;");
-        uploadIcon = new FontAwesomeIconView(FontAwesomeIcon.FILE);
-        uploadIcon.setStyle("-fx-fill: -fx-secondary;");
-        uploadIcon.setGlyphSize(30);
-        uploadButton.setGraphic(uploadIcon);
-        uploadButton.setPadding(new Insets(5, 14, 5, 8));
         audioBox.setOnAction(event -> {
-            playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
-            prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+            playButton.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
+            prayerVolumeBox.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
             if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
                 MEDIA_PLAYER.stop();
                 playButton.setGraphic(playIcon);
@@ -157,12 +151,12 @@ public class ChooseAudioController implements Initializable {
 
     @FXML
     private void uploadAudio() {
-        FileChooser fileChooser = new FileChooser();
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.mp4")
         );
-        File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
+        final File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
         if (selectedFile != null && selectedFile.isFile()) {
             Path audioSourcePath = selectedFile.toPath();
             String audioTargetPath = Constants.assetsPath + "/audio/" + selectedFile.getName();
@@ -175,7 +169,6 @@ public class ChooseAudioController implements Initializable {
                 Logger.error(null, e, getClass().getName() + ".uploadAudio()");
                 final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
                 BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("erroruploadAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
-                return;
             }
         }
     }
