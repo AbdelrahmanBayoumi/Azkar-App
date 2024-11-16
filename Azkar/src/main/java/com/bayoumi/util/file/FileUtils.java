@@ -42,7 +42,6 @@ public class FileUtils {
     public static ObservableList<String> getAudioList() {
         ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
         addFilesNameToList(new File("jarFiles/audio"), audioFiles);
-        addFilesNameToList(new File(Muezzin.PARENT_PATH_UPLOAD), audioFiles);
         return audioFiles;
     }
 
