@@ -16,12 +16,12 @@ public class ChooseAudioUtil {
 
     public static ChooseAudioController adhan(ResourceBundle bundle, Pane container) {
         try {
-            List<Muezzin> muezzinList=FileUtils.getAdhanList();
+            List<Muezzin> muezzinList = FileUtils.getAdhanList();
             FXMLLoader loader = new FXMLLoader(ChooseAudioUtil.class.getResource("/com/bayoumi/views/components/ChooseAudio.fxml"));
             container.getChildren().add(loader.load());
             ChooseAudioController chooseAudioController = loader.getController();
             chooseAudioController.setData(Utility.toUTF(bundle.getString("muezzin")),
-                    Muezzin.getFromFileName(muezzinList,Settings.getInstance().getPrayerTimeSettings().getAdhanAudio()),
+                    Muezzin.getFromFileName(muezzinList, Settings.getInstance().getPrayerTimeSettings().getAdhanAudio()),
                     muezzinList);
 
             return chooseAudioController;

@@ -18,8 +18,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -78,10 +76,12 @@ public class ChooseAudioController implements Initializable {
         }
         return audioBox.getValue();
     }
-    private void setMuezzins(){
+
+    private void setMuezzins() {
         audioBox.setItems(FXCollections.observableArrayList(FileUtils.getAdhanList()));
     }
-    public void setData(String promptText, Muezzin initialValue, List<Muezzin> items ) {
+
+    public void setData(String promptText, Muezzin initialValue, List<Muezzin> items) {
         audioBox.setPromptText(promptText);
         audioBox.setValue(initialValue);
         audioBox.setItems(FXCollections.observableArrayList(items));
@@ -156,20 +156,20 @@ public class ChooseAudioController implements Initializable {
     }
 
     @FXML
-    private void uploadAudio(){
-       FileChooser fileChooser = new FileChooser();
+    private void uploadAudio() {
+        FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.mp4")
         );
         File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
-        if(selectedFile!=null&&selectedFile.isFile()){
-            Path audioSourcePath=selectedFile.toPath();
-            String audioTargetPath=Constants.assetsPath+"/audio/"+selectedFile.getName();
-            Path path=Paths.get(audioTargetPath);
+        if (selectedFile != null && selectedFile.isFile()) {
+            Path audioSourcePath = selectedFile.toPath();
+            String audioTargetPath = Constants.assetsPath + "/audio/" + selectedFile.getName();
+            Path path = Paths.get(audioTargetPath);
 
             try {
-                Files.copy(audioSourcePath,path , StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(audioSourcePath, path, StandardCopyOption.REPLACE_EXISTING);
                 setMuezzins();
             } catch (IOException e) {
                 Logger.error(null, e, getClass().getName() + ".uploadAudio()");
@@ -179,6 +179,7 @@ public class ChooseAudioController implements Initializable {
             }
         }
     }
+
     @FXML
     private void play() {
         if (isMediaPlaying()) {

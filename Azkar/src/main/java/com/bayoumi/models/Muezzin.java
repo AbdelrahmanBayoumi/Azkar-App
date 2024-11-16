@@ -1,16 +1,15 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Constants;
-import com.bayoumi.util.file.FileUtils;
 import javafx.util.StringConverter;
-import javafx.util.StringConverter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Muezzin {
     public final static String PARENT_PATH = "jarFiles/audio/adhan/";
-    public final static String PARENT_PATH_UPLOAD= System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles"+"/audio/";
+    public final static String PARENT_PATH_UPLOAD = System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles" + "/audio/";
 
     private final String fileName;
     private final String EnglishName;
@@ -28,6 +27,7 @@ public class Muezzin {
 
     // List of all instances
     private static final List<Muezzin> VALUES;
+
     static {
         List<Muezzin> values = new ArrayList<>();
         values.add(ABDULBASIT_ABDUSAMAD);
@@ -50,9 +50,11 @@ public class Muezzin {
     public String getLocalPath() {
         return PARENT_PATH + getFileName();
     }
-    public String getUploadedPath(){
-        return  PARENT_PATH_UPLOAD + getFileName();
+
+    public String getUploadedPath() {
+        return PARENT_PATH_UPLOAD + getFileName();
     }
+
     public String getFileName() {
         return fileName;
     }
@@ -69,13 +71,13 @@ public class Muezzin {
         return VALUES;
     }
 
-    public static Muezzin getFromFileName(List<Muezzin> seatchList,String fileName) {
+    public static Muezzin getFromFileName(List<Muezzin> seatchList, String fileName) {
         for (Muezzin muezzin : seatchList) {
             if (fileName.equals(muezzin.getFileName())) {
                 return muezzin;
             }
         }
-        if(!fileName.isEmpty())return new Muezzin(fileName,fileName,fileName);
+        if (!fileName.isEmpty()) return new Muezzin(fileName, fileName, fileName);
         return NO_SOUND;
     }
 

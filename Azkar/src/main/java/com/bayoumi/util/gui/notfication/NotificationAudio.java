@@ -5,8 +5,6 @@ import com.bayoumi.util.file.FileUtils;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
-
 public class NotificationAudio {
     private final String fileName;
     private final int volume;

@@ -121,7 +121,6 @@ public class Preferences {
     }
 
 
-
     public String get(PreferencesType key) {
         return get(key, key.getDefaultValue());
     }
