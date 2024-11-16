@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Muezzin {
     public final static String PARENT_PATH = "jarFiles/audio/adhan/";
+    public final static String PARENT_PATH_ZEKR = "jarFiles/audio/";
     public final static String PARENT_PATH_UPLOAD = System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles" + "/audio/";
 
     private final String fileName;

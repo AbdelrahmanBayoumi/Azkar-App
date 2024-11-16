@@ -42,6 +42,7 @@ public class FileUtils {
     public static ObservableList<String> getAudioList() {
         ObservableList<String> audioFiles = FXCollections.observableArrayList("بدون صوت");
         addFilesNameToList(new File("jarFiles/audio"), audioFiles);
+        addFilesNameToList(new File(Muezzin.PARENT_PATH_UPLOAD), audioFiles);
         return audioFiles;
     }
 
@@ -95,9 +96,15 @@ public class FileUtils {
 
     public static File getMuezzinPath(String muezzin) {
         File local = new File(Muezzin.PARENT_PATH + muezzin);
+        File localZekr = new File(Muezzin.PARENT_PATH_ZEKR + muezzin);
+
         if (local.isFile() && local.exists()) {
             return local;
-        } else {
+        } else if(localZekr.isFile()&&localZekr.exists()) {
+            return localZekr;
+        }
+        else {
+
             File upload = new File(Muezzin.PARENT_PATH_UPLOAD + muezzin);
             return upload;
         }
