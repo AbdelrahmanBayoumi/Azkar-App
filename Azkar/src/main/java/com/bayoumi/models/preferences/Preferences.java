@@ -98,21 +98,28 @@ public class Preferences {
 
     public String get(PreferencesType key, String defaultValue) {
         try {
-            // if exist => return found value
+            // Check if key exists and return its value if found
             ResultSet result = DatabaseManager.getInstance().con.prepareStatement("SELECT value FROM preferences WHERE key='" + key + "'").executeQuery();
             if (result.next()) {
-                if (result.getString("value") != null) {
-                    return result.getString("value");
+                String value = result.getString("value");
+
+                // If the value is an empty string and the default value is not empty, update to the default (because empty is not accepted)
+                if (value != null && value.isEmpty() && !defaultValue.isEmpty()) {
+                    update(key, defaultValue);
+                    return defaultValue;
                 }
-                return defaultValue;
+
+                // Return the existing value or default if value is null
+                return value != null ? value : defaultValue;
             }
-            // not exist => insert & return default value
+            // If key doesn't exist, insert the default value
             save(key, defaultValue);
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".get()");
         }
         return defaultValue;
     }
+
 
     public String get(PreferencesType key) {
         return get(key, key.getDefaultValue());

@@ -150,6 +150,8 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             volumeBox.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
             if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
                 MEDIA_PLAYER.stop();
+                MEDIA_PLAYER.dispose(); // Release the resources
+                MEDIA_PLAYER = null;   // Remove reference
                 playButton.setGraphic(playIcon);
                 playButton.setPadding(new Insets(5, 14, 5, 8));
             }
@@ -210,6 +212,8 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private void play() {
         if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
             MEDIA_PLAYER.stop();
+            MEDIA_PLAYER.dispose(); // Release the resources
+            MEDIA_PLAYER = null;   // Remove reference
             playButton.setGraphic(playIcon);
         } else {
             String fileName = azkarAlarmComboBox.getValue();
