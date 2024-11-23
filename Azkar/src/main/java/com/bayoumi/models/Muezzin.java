@@ -8,13 +8,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Muezzin {
-    public final static String PARENT_PATH = "jarFiles/audio/adhan/";
-    public final static String PARENT_PATH_ZEKR = "jarFiles/audio/";
-    public final static String PARENT_PATH_UPLOAD = System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles" + "/audio/";
+    public final static String PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
 
     private final String fileName;
-    private final String EnglishName;
-    private final String ArabicName;
+    private final String englishName;
+    private final String arabicName;
 
     // Static instances (replacing enum constants)
     public static final Muezzin ABDULBASIT_ABDUSAMAD = new Muezzin("Abdulbasit Abdusamad", "عبد الباسط عبد الصمد", "adhan-abdulbasit-abdusamad.mp3");
@@ -44,16 +42,8 @@ public class Muezzin {
 
     public Muezzin(String englishName, String arabicName, String fileName) {
         this.fileName = fileName;
-        EnglishName = englishName;
-        ArabicName = arabicName;
-    }
-
-    public String getLocalPath() {
-        return PARENT_PATH + getFileName();
-    }
-
-    public String getUploadedPath() {
-        return PARENT_PATH_UPLOAD + getFileName();
+        this.englishName = englishName;
+        this.arabicName = arabicName;
     }
 
     public String getFileName() {
@@ -61,11 +51,15 @@ public class Muezzin {
     }
 
     public String getEnglishName() {
-        return EnglishName;
+        return englishName;
     }
 
     public String getArabicName() {
-        return ArabicName;
+        return arabicName;
+    }
+
+    public String getPath() {
+        return PARENT_PATH + getFileName();
     }
 
     public static List<Muezzin> values() {
@@ -114,8 +108,8 @@ public class Muezzin {
     public String toString() {
         return "Muezzin{" +
                 "fileName='" + fileName + '\'' +
-                ", EnglishName='" + EnglishName + '\'' +
-                ", ArabicName='" + ArabicName + '\'' +
+                ", englishName='" + englishName + '\'' +
+                ", arabicName='" + arabicName + '\'' +
                 '}';
     }
 }

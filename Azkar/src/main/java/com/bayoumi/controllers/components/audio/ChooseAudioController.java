@@ -10,6 +10,7 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.BuilderUI;
+import com.bayoumi.util.gui.PopOverUtil;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
@@ -59,10 +60,14 @@ public class ChooseAudioController implements Initializable {
     @FXML
     private JFXButton uploadButton;
 
-    public static void stopIfPlaying() {
-        if (isMediaPlaying()) {
+    public static boolean stopIfPlaying() {
+        final boolean isMediaPlaying = isMediaPlaying();
+        if (isMediaPlaying) {
             MEDIA_PLAYER.stop();
+            MEDIA_PLAYER.dispose(); // Release the resources
+            MEDIA_PLAYER = null;   // Remove reference
         }
+        return isMediaPlaying;
     }
 
     private static boolean isMediaPlaying() {
@@ -78,6 +83,7 @@ public class ChooseAudioController implements Initializable {
 
     private void setMuezzins() {
         audioBox.setItems(FXCollections.observableArrayList(FileUtils.getAdhanList()));
+        audioBox.getItems().add(Muezzin.NO_SOUND);
     }
 
     public void setData(String promptText, Muezzin initialValue, List<Muezzin> items) {
@@ -123,14 +129,13 @@ public class ChooseAudioController implements Initializable {
         audioBox.setOnAction(event -> {
             playButton.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
             prayerVolumeBox.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
-            if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-                MEDIA_PLAYER.stop();
-                playButton.setGraphic(playIcon);
-                playButton.setPadding(new Insets(5, 14, 5, 8));
+            if (stopIfPlaying()) {
+                setPlayIcon();
             }
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
 
+        PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
         prayerVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             azkarSettings.setPrayerVolume((int) prayerVolumeSlider.getValue());
@@ -153,37 +158,44 @@ public class ChooseAudioController implements Initializable {
     private void uploadAudio() {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        // TODO: support & test other audio formats
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.mp4")
+                new FileChooser.ExtensionFilter("Audio Files", "*.mp3")
         );
         final File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
         if (selectedFile != null && selectedFile.isFile()) {
             Path audioSourcePath = selectedFile.toPath();
-            String audioTargetPath = Constants.assetsPath + "/audio/" + selectedFile.getName();
+            System.out.println("Path:" + audioSourcePath);
+            String audioTargetPath = Constants.assetsPath + "/audio/adhan/" + selectedFile.getName();
+            System.out.println("audioTargetPath:" + audioTargetPath);
             Path path = Paths.get(audioTargetPath);
+            System.out.println("audioTargetPath path:" + path);
 
             try {
                 Files.copy(audioSourcePath, path, StandardCopyOption.REPLACE_EXISTING);
                 setMuezzins();
+                Muezzin newMuezzin = audioBox.getItems().stream()
+                        .filter(muezzin -> muezzin.getFileName().equals(selectedFile.getName())).findAny()
+                        .orElse(Muezzin.NO_SOUND);
+                audioBox.setValue(newMuezzin);
             } catch (IOException e) {
                 Logger.error(null, e, getClass().getName() + ".uploadAudio()");
                 final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
-                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("erroruploadAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorUploadAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
             }
         }
     }
 
     @FXML
     private void play() {
-        if (isMediaPlaying()) {
-            MEDIA_PLAYER.stop();
-            playButton.setGraphic(playIcon);
+        if (stopIfPlaying()) {
+            setPlayIcon();
         } else {
-            Muezzin muezzin = audioBox.getValue();
+            final Muezzin muezzin = audioBox.getValue();
             Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(FileUtils.getMuezzinPath(muezzin)).toURI().toString()));
+                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
@@ -191,13 +203,22 @@ public class ChooseAudioController implements Initializable {
                     return;
                 }
                 MEDIA_PLAYER.setVolume(prayerVolumeSlider.getValue() / 100.0);
-                MEDIA_PLAYER.play();
-                // playing
-                playButton.setGraphic(pauseIcon);
-                playButton.setPadding(new Insets(5, 11, 5, 11));
                 MEDIA_PLAYER.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
+                MEDIA_PLAYER.setOnStopped(() -> playButton.setGraphic(playIcon));
+                MEDIA_PLAYER.play();
+                setPauseIcon();
             }
         }
+    }
+
+    private void setPlayIcon() {
+        playButton.setGraphic(playIcon);
+        playButton.setPadding(new Insets(5, 14, 5, 8));
+    }
+
+    private void setPauseIcon() {
+        playButton.setGraphic(pauseIcon);
+        playButton.setPadding(new Insets(5, 11, 5, 11));
     }
 
     @FXML

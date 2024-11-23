@@ -316,6 +316,8 @@ public class HomeController implements Initializable {
         String adhanFileName = Settings.getInstance().getPrayerTimeSettings().getAdhanAudio();
         if (adhanFileName == null || adhanFileName.isEmpty()) {
             adhanFileName = "";
+        } else {
+            adhanFileName = "adhan/" + adhanFileName;
         }
         String finalAdhanFileName = adhanFileName;
         Platform.runLater(() -> Notification.create(new NotificationContent(prayerName,
