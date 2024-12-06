@@ -154,6 +154,27 @@
     -fx-background-color: derive(-fx-secondary, -50%);
 }
 
+.secondary-button-outline {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-secondary;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-text-fill: -fx-secondary;
+}
+
+.secondary-button-outline:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.secondary-button-outline .glyph-icon {
+    -fx-fill: -fx-secondary;
+}
+
+.secondary-button-outline:hover .glyph-icon {
+    -fx-fill: -fx-secondary-text;
+}
+
 .gray-button {
     -fx-background-color: linear-gradient(-fx-gray, lightgray);
     -fx-text-fill: -fx-secondary;
@@ -172,34 +193,6 @@
     -fx-fill: -fx-primary-button-text;
 }
 
-.button-normal {
-    -fx-background-color: -fx-secondary-text;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);
-    -fx-background-radius: 30;
-    -fx-text-fill: -fx-secondary;
-}
-
-.secondary-border-button {
-    -fx-background-color: transparent;
-    -fx-border-color: -fx-secondary;
-    -fx-border-width: 2;
-    -fx-border-radius: 15;
-    -fx-text-fill: -fx-secondary;
-}
-
-.secondary-border-button:hover {
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-secondary-text;
-}
-
-.secondary-border-button .glyph-icon {
-    -fx-fill: -fx-secondary;
-}
-
-.secondary-border-button:hover .glyph-icon {
-    -fx-fill: -fx-secondary-text;
-}
-
 .next-zekr-button {
     -fx-background-color: -fx-secondary;
     -fx-text-fill: -fx-secondary-text;
@@ -209,36 +202,25 @@
     -fx-background-color: -fx-secondary-hover;
 }
 
-.box-normal-noshadow {
-    -fx-background-color: -fx-secondary-text;
-    -fx-text-fill: -fx-primary-text;
-    -fx-background-radius: 30;
-}
-
-.box-normal-noshadow:hover {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: -fx-secondary-text;
-}
-
-.box-noraml {
+.box-normal {
     -fx-background-color: -fx-secondary-text;
     -fx-text-fill: -fx-primary-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
 
-.box-noraml .glyph-icon {
+.box-normal .glyph-icon {
     -fx-fill: -fx-primary-text;
 }
 
-.box-noraml:hover {
+.box-normal:hover {
     -fx-background-color: -fx-primary-light;
     -fx-text-fill: -fx-secondary-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
 
-.box-noraml:hover .glyph-icon {
+.box-normal:hover .glyph-icon {
     -fx-fill: -fx-secondary-text;
 }
 
@@ -246,12 +228,6 @@
 .check-box {
     -jfx-checked-color: -fx-secondary;
     -jfx-unchecked-color: -fx-secondary;
-    -fx-text-fill: -fx-primary-text;
-}
-
-.check-box-noraml {
-    -jfx-checked-color: -fx-primary;
-    -jfx-unselected-color: -fx-primary-text;
     -fx-text-fill: -fx-primary-text;
 }
 
@@ -304,80 +280,6 @@
     -fx-prompt-text-fill: derive(-fx-primary-text, 90%);
     -fx-text-fill: -fx-primary-text;
     -fx-font-size: 17;
-}
-
-.text-field-search {
-    -fx-background-radius: 30;
-    -fx-focus-color: white;
-}
-
-/* ============ Hamburger ============ */
-.jfx-hamburger-icon {
-    -fx-spacing: 5;
-    -fx-cursor: hand;
-}
-
-.separator-toolbar *.line {
-    -fx-border-style: solid;
-    -fx-border-width: 0 0 1 0;
-    /* its make really one-pixel-border */
-    -fx-border-color: -fx-secondary-light;
-}
-
-.jfx-hamburger-icon StackPane {
-    -fx-background-color: -fx-secondary;
-    -fx-background-radius: 5px;
-    -fx-pref-width: 40px;
-    -fx-pref-height: 7px;
-}
-
-.jfx-hamburger-icon-normal {
-    -fx-spacing: 5;
-    -fx-cursor: hand;
-}
-
-.jfx-hamburger-icon-normal StackPane {
-    -fx-background-color: -fx-secondary-text;
-    -fx-background-radius: 5px;
-    -fx-pref-width: 40px;
-    -fx-pref-height: 7px;
-}
-
-/* ============ top-pane ============ */
-.top-pane {
-    -fx-background-color: white;
-}
-
-.top-pane .label {
-    -fx-text-fill: -fx-secondary;
-}
-
-.top-pane .label {
-    -fx-text-fill: -fx-secondary;
-}
-
-.top-pane-icon {
-    -fx-fill: -fx-secondary;
-    -fx-cursor: hand;
-}
-
-/* ============ NavBar ============ */
-.NavBar {
-    -fx-background-color: -fx-secondary;
-}
-
-.NavBar .label {
-    -fx-text-fill: -fx-secondary-text;
-}
-
-.NavBTN {
-    -fx-background-radius: 0;
-    -fx-background-color: -fx-secondary;
-}
-
-.NavBTN:hover {
-    -fx-background-color: -fx-primary;
-    -fx-background-radius: 0 30 30 0;
 }
 
 /* ============ Table ============ */
@@ -494,7 +396,7 @@
     -fx-background-radius: 2em;
 }
 
-/* == Prayer Times == */
+/* ============ Prayer Times ============ */
 .prayer-view .box-prayer {
     -fx-border-color: gray;
     -fx-border-width: 0 0 1 0;

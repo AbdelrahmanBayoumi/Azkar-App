@@ -119,7 +119,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                            <styleClass>
-                              <String fx:value="box-noraml" />
+                              <String fx:value="box-normal" />
                               <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
@@ -139,7 +139,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                            <styleClass>
-                              <String fx:value="box-noraml" />
+                              <String fx:value="box-normal" />
                               <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
@@ -155,7 +155,7 @@
                               <FontAwesomeIconView glyphName="GEAR" size="45" />
                            </graphic>
                            <styleClass>
-                              <String fx:value="box-noraml" />
+                              <String fx:value="box-normal" />
                               <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
