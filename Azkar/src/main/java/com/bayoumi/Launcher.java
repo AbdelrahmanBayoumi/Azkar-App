@@ -106,7 +106,7 @@ public class Launcher extends Application {
             // --- load Homepage FXML ---
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.Home.toString()));
             scene = new Scene(loader.load());
-            scene.getStylesheets().add("/com/bayoumi/css/style.css");
+            scene.getStylesheets().add("/com/bayoumi/css/base.css");
             homeController = loader.getController();
             incrementPreloader();
             // --- initialize Sentry for error tracking ---

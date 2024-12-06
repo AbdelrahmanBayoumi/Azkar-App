@@ -11,7 +11,7 @@
 
 <VBox alignment="TOP_CENTER" prefWidth="600.0" spacing="40.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.dialog.DownloadResourcesController">
    <stylesheets>
-      <URL value="@../../css/style.css" />
+      <URL value="@../../css/base.css" />
    </stylesheets>
    <padding>
       <Insets bottom="30.0" left="20.0" right="20.0" top="20.0" />

@@ -50,7 +50,7 @@ public class BuilderUI {
         alert.setHeaderText(null);
         alert.setContentText(text);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(Objects.requireNonNull(BuilderUI.class.getResource("/com/bayoumi/css/style.css")).toExternalForm());
+        dialogPane.getStylesheets().add(Objects.requireNonNull(BuilderUI.class.getResource("/com/bayoumi/css/base.css")).toExternalForm());
         if (Utility.toUTF(resourceBundle.getString("dir")).equals("rtl")) {
             (dialogPane.getChildren().get(1)).setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         }

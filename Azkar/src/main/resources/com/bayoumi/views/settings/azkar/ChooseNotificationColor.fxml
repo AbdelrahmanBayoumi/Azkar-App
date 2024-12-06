@@ -120,7 +120,7 @@
       </Button>
    </children>
    <stylesheets>
-      <URL value="@../../../css/style.css" />
+      <URL value="@../../../css/base.css" />
       <URL value="@../../../css/controlsfx-notification.css" />
    </stylesheets>
    <padding>

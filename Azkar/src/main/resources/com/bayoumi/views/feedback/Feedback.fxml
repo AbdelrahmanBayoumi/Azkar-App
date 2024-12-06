@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="800.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.feedback.FeedbackController">
+<StackPane fx:id="root" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="800.0" stylesheets="@../../css/base.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.feedback.FeedbackController">
     <children>
         <VBox alignment="TOP_CENTER" spacing="10.0">
             <children>
