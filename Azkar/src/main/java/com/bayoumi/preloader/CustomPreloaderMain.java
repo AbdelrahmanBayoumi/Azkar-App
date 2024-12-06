@@ -1,6 +1,7 @@
 package com.bayoumi.preloader;
 
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.validation.SingleInstance;
 import com.jfoenix.controls.JFXProgressBar;
 import javafx.application.Preloader;
@@ -23,7 +24,7 @@ public class CustomPreloaderMain extends Preloader {
 
     @Override
     public void init() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bayoumi/views/preloader/SplashScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.SplashScreen.getName()));
         Parent root = loader.load();
         splashScreenController = loader.getController();
         scene = new Scene(root);
