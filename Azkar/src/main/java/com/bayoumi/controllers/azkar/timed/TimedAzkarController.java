@@ -316,7 +316,7 @@ public class TimedAzkarController implements Initializable {
                 if (FileDownloader.downloadFile(audioPath, audioFile)) {
                     Platform.runLater(() -> playMedia(audioFile));
                 } else {
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl")));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), bundle));
                 }
                 Platform.runLater(() -> progressBox.setVisible(false));
             }).start();
@@ -342,7 +342,7 @@ public class TimedAzkarController implements Initializable {
             mediaPlayer = new MediaPlayer(new Media(audioFile.toURI().toString()));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".playMedia()");
-            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
             return;
         }
         mediaPlayer.setVolume(100);

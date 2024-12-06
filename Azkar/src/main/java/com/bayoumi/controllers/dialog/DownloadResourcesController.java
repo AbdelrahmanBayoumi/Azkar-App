@@ -52,8 +52,7 @@ public class DownloadResourcesController {
                         }));
                 Platform.runLater(stage::close);
             } catch (Exception e) {
-                Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString(errorMsgKey))
-                        , Utility.toUTF(bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
+                Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString(errorMsgKey)), bundle));
                 Platform.runLater(stage::close);
             }
         }).start();

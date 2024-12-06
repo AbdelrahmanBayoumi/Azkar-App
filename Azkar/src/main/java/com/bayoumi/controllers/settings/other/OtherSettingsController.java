@@ -136,14 +136,14 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             switch (UpdateHandler.getInstance().checkUpdate()) {
                 case 0:
                     Logger.info(getClass().getName() + ".checkForUpdate(): " + "No Update Found");
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, Utility.toUTF(this.bundle.getString("thereAreNoNewUpdates")), Utility.toUTF(this.bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, Utility.toUTF(this.bundle.getString("thereAreNoNewUpdates")), bundle));
                     break;
                 case 1:
                     UpdateHandler.getInstance().showInstallPrompt();
                     break;
                 case -1:
                     Logger.info(getClass().getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(this.bundle.getString("problemInSearchingForUpdates")), Utility.toUTF(this.bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(this.bundle.getString("problemInSearchingForUpdates")), bundle));
                     break;
             }
             Platform.runLater(() -> loadingBox.setVisible(false));

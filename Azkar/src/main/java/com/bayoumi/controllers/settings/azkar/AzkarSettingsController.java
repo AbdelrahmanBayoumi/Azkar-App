@@ -223,7 +223,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
                     MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
-                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
                 MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);

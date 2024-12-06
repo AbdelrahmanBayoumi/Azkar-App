@@ -181,7 +181,7 @@ public class ChooseAudioController implements Initializable {
             } catch (IOException e) {
                 Logger.error(null, e, getClass().getName() + ".uploadAudio()");
                 final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
-                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorUploadAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorUploadAudio")), bundle);
             }
         }
     }
@@ -199,7 +199,7 @@ public class ChooseAudioController implements Initializable {
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
-                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
                 MEDIA_PLAYER.setVolume(prayerVolumeSlider.getValue() / 100.0);

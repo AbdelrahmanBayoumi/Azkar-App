@@ -38,14 +38,14 @@ public class Notification {
             Platform.runLater(() -> {
                 try {
                     Notifications.create()
-                        .graphic(notificationView)
-                        .hideAfter(Duration.seconds(duration))
-                        .onAction(finalOnClickHandler)
-                        .closeHandler(closeCallback)
-                        .position(position)
-                        .borderColor(Settings.getInstance().getNotificationSettings().getColor())
-                        .hideCloseButton()
-                        .show(((NotificationsControlsFXController) loader.getController()).closeButton);
+                            .graphic(notificationView)
+                            .hideAfter(Duration.seconds(duration))
+                            .onAction(finalOnClickHandler)
+                            .closeHandler(closeCallback)
+                            .position(position)
+                            .borderColor(Settings.getInstance().getNotificationSettings().getColor())
+                            .hideCloseButton()
+                            .show(((NotificationsControlsFXController) loader.getController()).closeButton);
                 } catch (Exception e) {
                     Logger.error(null, e, Notification.class.getName() + ".create()");
                 }

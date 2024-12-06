@@ -461,6 +461,18 @@
     -fx-text-fill: -fx-primary-text;
 }
 
+/* == Alert == */
+.dialog-pane > .content.label {
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-font-family: "Tajawal-Bold";
+    -fx-font-size: 16;
+}
+
+.dialog-pane .button {
+    -fx-font-size: 15;
+}
+
 .pop-over-label {
     -fx-padding: 10;
     -fx-background-color: -fx-third-light;
