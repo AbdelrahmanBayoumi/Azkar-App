@@ -37,7 +37,7 @@
                <FontAwesomeIconView glyphName="REPEAT" size="25" />
             </graphic>
             <styleClass>
-               <String fx:value="back-button" />
+               <String fx:value="gray-button" />
                <String fx:value="font-text-bold" />
                <String fx:value="_18" />
             </styleClass>

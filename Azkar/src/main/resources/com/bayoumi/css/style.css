@@ -1,58 +1,57 @@
 @font-face {
-    font-family: 'Tajawal-Medium';
-    src: url('../fonts/Tajawal/Tajawal-Medium.ttf');
+    font-family: "Tajawal-Medium";
+    src: url("../fonts/Tajawal/Tajawal-Medium.ttf");
 }
 
 @font-face {
-    font-family: 'Tajawal-Bold';
-    src: url('../fonts/Tajawal/Tajawal-Bold.ttf');
+    font-family: "Tajawal-Bold";
+    src: url("../fonts/Tajawal/Tajawal-Bold.ttf");
 }
 
 @font-face {
-    font-family: 'Tajawal-Regular';
-    src: url('../fonts/Tajawal/Tajawal-Regular.ttf');
+    font-family: "Tajawal-Regular";
+    src: url("../fonts/Tajawal/Tajawal-Regular.ttf");
 }
 
 @font-face {
     font-family: "Noto Naskh Arabic";
-    src: url('../fonts/NotoNaskhArabic-Bold.ttf');
+    src: url("../fonts/NotoNaskhArabic-Bold.ttf");
 }
 
 * {
     /* ====== Colors ====== */
-    -fx-primary: #2A9D8F;
-    -fx-primary-dark: derive(#2A9D8F, -40%);
-    -fx-primary-light: derive(#2A9D8F, 40%);
+    -fx-primary: #2a9d8f;
+    -fx-primary-dark: derive(#2a9d8f, -40%);
+    -fx-primary-light: derive(#2a9d8f, 40%);
+
     -fx-secondary: #33485d;
     -fx-secondary-hover: derive(#264653, -40%);
     -fx-secondary-light: derive(#264653, 40%);
 
-    -fx-third: #F4A261;
-    -fx-third-dark: #E76F51;
-    -fx-third-light: #E9C46A;
-    -fx-red: #C91A29;
+    -fx-third: #f4a261;
+    -fx-third-dark: #e76f51;
+    -fx-third-light: #e9c46a;
+
+    -fx-red: #c91a29;
     -fx-error: #ff8c00;
-    -fx-gray: #E0E0E0;
-    -fx-bg: #F5F7FE;
+    -fx-gray: #e0e0e0;
+    -fx-bg: #f5f7fe;
     /* ====== Text ====== */
     -fx-primary-text: #000000;
     -fx-secondary-text: #ffffff;
     /* ====== Button ====== */
     -fx-primary-button: linear-gradient(-fx-primary-light, -fx-primary);
-    /**/
     -fx-primary-button-text: -fx-secondary-text;
     -fx-primary-button-hover: -fx-primary-dark;
     /* ====== Table ====== */
-    -fx-even-table: #E5F1F4;
+    -fx-even-table: #e5f1f4;
     -fx-odd-table: #fbf9fa;
     -fx-hover-table: white;
     -fx-bold-font-family: Tajawal-Bold;
     -fx-medium-font-family: "Tajawal-Medium";
-}
-
-.spp {
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
+    /* ====== Scroll ====== */
+    -fx-thumb-bg: derive(black, 90%);
+    -fx-thumb-bg-hover: derive(#4d4c4f, 10%);
 }
 
 .root {
@@ -62,10 +61,6 @@
 /* ============ label ============ */
 .label {
     -fx-text-fill: -fx-primary-text;
-}
-
-.error-label {
-    -fx-text-fill: -fx-error;
 }
 
 /* ============ button ============ */
@@ -104,40 +99,6 @@
     -fx-background-color: -fx-third-light;
 }
 
-.close-button-stage {
-    -fx-background-color: transparent;
-    -fx-background-radius: 10 0 0 0;
-}
-
-.close-button-stage:hover {
-    -fx-background-color: -fx-red;
-}
-
-.close-button-stage .glyph-icon {
-    -fx-fill: white;
-    -fx-font-family: "FontAwesome";
-    -fx-font-size: 1.5em;
-}
-
-.close-button-stage:hover .glyph-icon {
-    -fx-fill: white;
-}
-
-.min-button-stage {
-    -fx-background-radius: 0;
-    -fx-background-color: transparent;
-}
-
-.min-button-stage:hover {
-    -fx-background-color: derive(gray, -30%);
-}
-
-.min-button-stage .glyph-icon {
-    -fx-fill: white;
-    -fx-font-family: "FontAwesome";
-    -fx-font-size: 1.5em;
-}
-
 .transparent-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
@@ -152,18 +113,8 @@
     -fx-background-color: transparent;
 }
 
-/* ====  L O G I N  ==== */
-.login-root {
-    -fx-background-color: transparent;
-}
-
-.title-login {
-    -fx-background-color: -fx-secondary;
-    -fx-background-radius: 20 20 0 0;
-}
-
 .close-button {
-    -fx-background-color: linear-gradient(red, -fx-red);;
+    -fx-background-color: linear-gradient(red, -fx-red);
 }
 
 .close-button:hover {
@@ -204,11 +155,21 @@
 }
 
 .gray-button {
-    -fx-background-color: linear-gradient(darkgrey, gray);
+    -fx-background-color: linear-gradient(-fx-gray, lightgray);
+    -fx-text-fill: -fx-secondary;
 }
 
 .gray-button:hover {
     -fx-background-color: gray;
+    -fx-text-fill: -fx-primary-button-text;
+}
+
+.gray-button .glyph-icon {
+    -fx-fill: -fx-secondary;
+}
+
+.gray-button:hover .glyph-icon {
+    -fx-fill: -fx-primary-button-text;
 }
 
 .button-normal {
@@ -216,24 +177,6 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);
     -fx-background-radius: 30;
     -fx-text-fill: -fx-secondary;
-}
-
-.back-button {
-    -fx-background-color: linear-gradient(-fx-gray, lightgray);
-    -fx-text-fill: -fx-secondary;
-}
-
-.back-button:hover {
-    -fx-background-color: darkgray;
-    -fx-text-fill: -fx-primary-button-text;
-}
-
-.back-button .glyph-icon {
-    -fx-fill: -fx-secondary;
-}
-
-.back-button:hover .glyph-icon {
-    -fx-fill: -fx-primary-button-text;
 }
 
 .secondary-border-button {
@@ -326,7 +269,6 @@
     -fx-text-fill: -fx-primary-text;
 }
 
-
 .radio-button:selected {
     -fx-font-size: 16;
 }
@@ -377,7 +319,8 @@
 
 .separator-toolbar *.line {
     -fx-border-style: solid;
-    -fx-border-width: 0 0 1 0; /* its make really one-pixel-border */
+    -fx-border-width: 0 0 1 0;
+    /* its make really one-pixel-border */
     -fx-border-color: -fx-secondary-light;
 }
 
@@ -459,7 +402,7 @@
     -fx-border-color: black;
     -fx-border-style: solid;
     -fx-border-width: 0.25;
-    -fx-font: normal 20px 'Tajawal-Medium';
+    -fx-font: normal 20px "Tajawal-Medium";
 }
 
 .tree-table-row-cell:even {
@@ -507,71 +450,55 @@
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-border-radius: 2.0em;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
 }
-
 
 .scroll-bar:horizontal .increment-button,
 .scroll-bar:horizontal .decrement-button {
     -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-padding: 0.0 0.0 10.0 0.0;
-
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
 }
 
 .scroll-bar:vertical .increment-button,
 .scroll-bar:vertical .decrement-button {
     -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-padding: 0.0 10.0 0.0 0.0;
-
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
 }
 
 .scroll-bar .increment-arrow,
 .scroll-bar .decrement-arrow {
     -fx-shape: " ";
-    -fx-padding: 0.15em 0.0;
+    -fx-padding: 0.15em 0;
 }
 
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow {
     -fx-shape: " ";
-    -fx-padding: 0.0 0.15em;
+    -fx-padding: 0 0.15em;
 }
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: derive(black, 90.0%);
-    -fx-background-insets: 2.0, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
+    -fx-background-color: -fx-thumb-bg;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
 }
 
 .scroll-bar:horizontal .thumb:hover,
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: derive(#4D4C4F, 10.0%);
-    -fx-background-insets: 2.0, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
+    -fx-background-color: -fx-thumb-bg-hover;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
 }
-
 
 /* == Prayer Times == */
 .prayer-view .box-prayer {
     -fx-border-color: gray;
     -fx-border-width: 0 0 1 0;
 }
-
-/*.box-prayer .label {*/
-/*    -fx-font-size: 25;*/
-/*}*/
-
-/*.box-prayer:hover {*/
-/*    -fx-background-color: -fx-secondary;*/
-/*}*/
-
-/*.box-prayer:hover .label {*/
-/*    -fx-text-fill: -fx-secondary-text;*/
-/*}*/
 
 .box-prayer-selected {
     -fx-background-color: -fx-secondary;
@@ -585,21 +512,23 @@
 
 /*==== SLIDER ====*/
 .progress-slider .track {
-    -fx-background-color: null; /* Hide the track */
+    -fx-background-color: null;
+    /* Hide the track */
 }
 
 .slider .track {
-    -fx-background-color: null; /* Hide the track */
+    -fx-background-color: null;
+    /* Hide the track */
     -fx-background-insets: 1 0 -1 0, 0, 1;
     -fx-background-radius: 2.5, 2.5, 1.5;
-    -fx-padding: 0.208333em; /* 2.5 */
+    -fx-padding: 0.208333em;
+    /* 2.5 */
 }
 
 .progress-bar .bar {
     -fx-padding: 4px;
     -fx-background-insets: 0;
 }
-
 
 .jfx-slider > .track {
     -fx-background-color: -fx-primary;
@@ -618,10 +547,6 @@
 /* Styling the animated thumb */
 .jfx-slider > .animated-thumb {
     -fx-background-color: -fx-secondary;
-}
-
-.error-label {
-    -fx-text-fill: red;
 }
 
 .white-box {
@@ -648,8 +573,8 @@
 
 .pop-over-label {
     -fx-padding: 10;
-    -fx-background-color: #E9C46A;
-    -fx-text-fill: #000000;
+    -fx-background-color: -fx-third-light;
+    -fx-text-fill: -fx-primary-text;
     -fx-font-family: "Tajawal-Bold";
     -fx-text-alignment: center;
     -fx-alignment: center;
@@ -659,10 +584,11 @@
 
 /* ==== Zekr ==== */
 .zekr-text {
-    -fx-font-family: 'Noto Naskh Arabic';
+    -fx-font-family: "Noto Naskh Arabic";
     -fx-font-weight: BOLD;
     -fx-text-alignment: center;
 }
+
 .zekr-progress > .track {
     -fx-background-color: white;
 }
@@ -672,17 +598,12 @@
     -fx-background-color: -fx-primary-light;
 }
 
-
 /* === fonts === */
 .font-text-bold {
     -fx-font-family: "Tajawal-Bold";
 }
 
 .font-text-medium {
-    -fx-font-family: "Tajawal-Medium";
-}
-
-.font-button-medium {
     -fx-font-family: "Tajawal-Medium";
 }
 

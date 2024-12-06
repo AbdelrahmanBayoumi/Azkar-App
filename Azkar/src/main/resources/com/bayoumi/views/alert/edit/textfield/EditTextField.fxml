@@ -22,7 +22,7 @@
             <Insets left="30.0" right="30.0" />
          </padding>
          <children>
-            <JFXButton fx:id="discardButton" cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" styleClass="back-button" text="إلغاء">
+            <JFXButton fx:id="discardButton" cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" styleClass="gray-button" text="إلغاء">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

@@ -120,7 +120,7 @@
                            </font>
                            <styleClass>
                               <String fx:value="box-noraml" />
-                              <String fx:value="font-button-medium" />
+                              <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
                            <padding>
@@ -140,7 +140,7 @@
                            </font>
                            <styleClass>
                               <String fx:value="box-noraml" />
-                              <String fx:value="font-button-medium" />
+                              <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
                            <padding>
@@ -156,7 +156,7 @@
                            </graphic>
                            <styleClass>
                               <String fx:value="box-noraml" />
-                              <String fx:value="font-button-medium" />
+                              <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
                            <padding>
