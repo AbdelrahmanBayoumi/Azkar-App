@@ -310,8 +310,10 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private void goToAzkar() {
         try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString())))));
+            final Stage stage = new Stage();
+            final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString()))));
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            stage.setScene(scene);
             HelperMethods.SetIcon(stage);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();

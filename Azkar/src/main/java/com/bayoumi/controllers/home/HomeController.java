@@ -228,7 +228,9 @@ public class HomeController implements Initializable {
             }
 
             final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar.toString()));
-            final Stage stage = BuilderUI.initStageDecorated(new Scene(fxmlLoader.load()), Utility.toUTF(bundle.getString(type + "Azkar")));
+            final Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            final Stage stage = BuilderUI.initStageDecorated(scene, Utility.toUTF(bundle.getString(type + "Azkar")));
             ((TimedAzkarController) fxmlLoader.getController()).setData(timedZekrDTOList, type, stage);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();

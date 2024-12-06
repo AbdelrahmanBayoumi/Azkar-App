@@ -119,6 +119,14 @@ public class Settings extends PreferencesObservable {
         notifyObservers(nightMode.getKey(), value);
     }
 
+    public String[] getThemeFilesCSS() {
+        return new String[]{
+                "/com/bayoumi/css/base.css",
+                getNightMode() ? "/com/bayoumi/css/dark-theme.css" : "/com/bayoumi/css/light-theme.css"
+        };
+    }
+
+
     public boolean getAutomaticCheckForUpdates() {
         return automaticCheckForUpdates.getValue();
     }

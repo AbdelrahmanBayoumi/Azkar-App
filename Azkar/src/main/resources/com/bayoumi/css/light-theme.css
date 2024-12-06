@@ -1,0 +1,35 @@
+* {
+    /* ====== Colors ====== */
+    -fx-primary: #2a9d8f;
+    -fx-primary-dark: derive(#2a9d8f, -40%);
+    -fx-primary-light: derive(#2a9d8f, 40%);
+
+    -fx-secondary: #33485d;
+    -fx-secondary-hover: derive(#264653, -40%);
+    -fx-secondary-light: derive(#264653, 40%);
+
+    -fx-third: #f4a261;
+    -fx-third-dark: #e76f51;
+    -fx-third-light: #e9c46a;
+
+    -fx-red: #c91a29;
+    -fx-error: #ff8c00;
+    -fx-gray: #e0e0e0;
+    -fx-bg: #f5f7fe;
+    /* ====== Text ====== */
+    -fx-primary-text: #000000;
+    -fx-secondary-text: #ffffff;
+    /* ====== Button ====== */
+    -fx-primary-button: linear-gradient(-fx-primary-light, -fx-primary);
+    -fx-primary-button-text: -fx-secondary-text;
+    -fx-primary-button-hover: -fx-primary-dark;
+    /* ====== Table ====== */
+    -fx-even-table: #e5f1f4;
+    -fx-odd-table: #fbf9fa;
+    -fx-hover-table: white;
+    -fx-bold-font-family: Tajawal-Bold;
+    -fx-medium-font-family: "Tajawal-Medium";
+    /* ====== Scroll ====== */
+    -fx-thumb-bg: derive(black, 90%);
+    -fx-thumb-bg-hover: derive(#4d4c4f, 10%);
+}

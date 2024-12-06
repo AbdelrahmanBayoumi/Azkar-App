@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<StackPane fx:id="sp" stylesheets="@../../../css/base.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.TimedAzkarController">
+<StackPane fx:id="sp" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.TimedAzkarController">
    <AnchorPane>
       <VBox alignment="TOP_CENTER" layoutX="40.0" layoutY="110.0" onKeyReleased="#keyEventAction" prefHeight="520.0" prefWidth="760.0" style="-fx-background-color: #fff; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);;" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
          <children>

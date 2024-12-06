@@ -106,7 +106,7 @@ public class Launcher extends Application {
             // --- load Homepage FXML ---
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.Home.toString()));
             scene = new Scene(loader.load());
-            scene.getStylesheets().add("/com/bayoumi/css/base.css");
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
             homeController = loader.getController();
             incrementPreloader();
             // --- initialize Sentry for error tracking ---
@@ -151,8 +151,10 @@ public class Launcher extends Application {
     private void showOnboardingIfFirstTimeOpened() {
         if (Onboarding.isFirstTimeOpened()) {
             try {
-                Stage onboardingStage = new Stage();
-                onboardingStage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Onboarding.toString())))));
+                final Scene onboardingScene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Onboarding.toString()))));
+                onboardingScene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+                final Stage onboardingStage = new Stage();
+                onboardingStage.setScene(onboardingScene);
                 onboardingStage.initModality(Modality.APPLICATION_MODAL);
                 HelperMethods.SetIcon(onboardingStage);
                 onboardingStage.setTitle("Onboarding - " + Constants.APP_NAME);

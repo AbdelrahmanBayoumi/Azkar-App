@@ -4,6 +4,7 @@ import com.bayoumi.controllers.alert.confirm.ConfirmAlertController;
 import com.bayoumi.controllers.alert.edit.textfield.EditTextFieldController;
 import com.bayoumi.controllers.dialog.UpdateConfirmController;
 import com.bayoumi.models.UpdateInfo;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.load.Locations;
@@ -30,7 +31,10 @@ public class BuilderUI {
         try {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.UpdateConfirm.toString()));
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            // TODO: test theme on this view
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            stage.setScene(scene);
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
@@ -50,7 +54,7 @@ public class BuilderUI {
         alert.setHeaderText(null);
         alert.setContentText(text);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(Objects.requireNonNull(BuilderUI.class.getResource("/com/bayoumi/css/base.css")).toExternalForm());
+        dialogPane.getStylesheets().addAll(Settings.getInstance().getThemeFilesCSS());
         if (Utility.toUTF(resourceBundle.getString("dir")).equals("rtl")) {
             (dialogPane.getChildren().get(1)).setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         }
@@ -68,7 +72,9 @@ public class BuilderUI {
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
             FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.ConfirmAlert.toString()));
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            stage.setScene(scene);
             ConfirmAlertController controller = loader.getController();
             controller.setData(isDanger, text);
             stage.showAndWait();
@@ -86,7 +92,9 @@ public class BuilderUI {
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
             FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.EditTextField.toString()));
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            stage.setScene(scene);
             EditTextFieldController controller = loader.getController();
             controller.setData(prompt, value);
             stage.showAndWait();

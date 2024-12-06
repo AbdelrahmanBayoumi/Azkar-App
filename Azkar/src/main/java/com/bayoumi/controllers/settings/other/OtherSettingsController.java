@@ -120,7 +120,9 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void openFeedback() {
         try {
-            final Stage stage = BuilderUI.initStageDecorated(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Feedback.toString())))), "");
+            final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Feedback.toString()))));
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            final Stage stage = BuilderUI.initStageDecorated(scene, "");
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.show();
             ((Stage) version.getScene().getWindow()).close();
