@@ -330,4 +330,7 @@ public class HomeController implements Initializable {
                 new NotificationAudio(finalAdhanFileName, settings.getAzkarSettings().getPrayerVolume())));
     }
 
+    public void changeTheme() {
+        mainContainer.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+    }
 }

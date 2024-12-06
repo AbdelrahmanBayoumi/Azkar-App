@@ -19,7 +19,6 @@ import javafx.scene.control.DialogPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**

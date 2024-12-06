@@ -1,5 +1,6 @@
 package com.bayoumi.util.gui.load;
 
+import com.bayoumi.models.settings.Settings;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
@@ -55,6 +56,7 @@ public class LoaderComponent {
     }
 
     public void showAndWait() {
+        view.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
         stage.centerOnScreen();
         stage.showAndWait();
     }

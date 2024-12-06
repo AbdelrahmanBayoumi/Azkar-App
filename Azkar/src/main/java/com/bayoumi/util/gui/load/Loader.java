@@ -1,6 +1,5 @@
 package com.bayoumi.util.gui.load;
 
-import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.gui.BuilderUI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -48,12 +47,10 @@ public class Loader {
     }
 
     private LoaderComponent loadPopUp(Locations location) throws Exception {
-        FXMLLoader loader = new FXMLLoader(Loader.class.getResource(location.toString()));
+        final FXMLLoader loader = new FXMLLoader(Loader.class.getResource(location.toString()));
         final Parent view = loader.load();
         final Object controller = loader.getController();
-        Scene scene = new Scene(view);
-        scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
-        return new LoaderComponent(location, view, controller, BuilderUI.initStageDecorated(scene, ""));
+        return new LoaderComponent(location, view, controller, BuilderUI.initStageDecorated(new Scene(view), ""));
     }
 
     private LoaderComponent load(Locations location) throws Exception {

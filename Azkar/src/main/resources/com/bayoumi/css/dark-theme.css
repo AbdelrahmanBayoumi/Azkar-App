@@ -1,0 +1,40 @@
+* {
+    /* ====== Colors ====== */
+    -fx-primary: #1f6e65;
+    -fx-primary-dark: derive(#1f6e65, -40%);
+    -fx-primary-light: derive(#1f6e65, 40%);
+
+    -fx-secondary: #1c2b3a;
+    -fx-secondary-hover: derive(#1c2b3a, -40%);
+    -fx-secondary-light: derive(#1c2b3a, 40%);
+
+    -fx-third: #b37242;
+    -fx-third-dark: #8f4e30;
+    -fx-third-light: #cea16c;
+
+    -fx-red: #c91a29;
+    -fx-error: #ff8c00;
+    -fx-gray: #666666; /* Darker gray suitable for dark backgrounds */
+    -fx-bg: #2f2f2f; /* Dark background */
+
+    /* ====== Text ====== */
+    -fx-primary-text: #ffffff; /* Main text color on dark background */
+    -fx-secondary-text: #000000; /* Secondary text, used sparingly. If needed, pick a light color too */
+
+    /* ====== Button ====== */
+    -fx-primary-button: linear-gradient(-fx-primary-light, -fx-primary);
+    -fx-primary-button-text: -fx-secondary-text;
+    -fx-primary-button-hover: -fx-primary-dark;
+
+    /* ====== Table ====== */
+    -fx-even-table: #333333;
+    -fx-odd-table: #3a3a3a;
+    -fx-hover-table: #444444;
+
+    -fx-bold-font-family: Tajawal-Bold;
+    -fx-medium-font-family: "Tajawal-Medium";
+
+    /* ====== Scroll ====== */
+    -fx-thumb-bg: derive(black, 90%);
+    -fx-thumb-bg-hover: derive(#4d4c4f, 10%);
+}

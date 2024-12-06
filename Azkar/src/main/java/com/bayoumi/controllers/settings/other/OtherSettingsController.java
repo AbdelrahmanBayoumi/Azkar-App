@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.settings.other;
 
+import com.bayoumi.Launcher;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
@@ -170,6 +171,8 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void darkThemeSelect() {
         Settings.getInstance().setNightMode(darkTheme.isSelected());
+        darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+        Launcher.homeController.changeTheme();
     }
 
     @FXML

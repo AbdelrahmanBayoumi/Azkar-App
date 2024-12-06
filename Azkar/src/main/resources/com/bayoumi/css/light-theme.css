@@ -1,8 +1,8 @@
 * {
     /* ====== Colors ====== */
     -fx-primary: #2a9d8f;
-    -fx-primary-dark: derive(#2a9d8f, -40%);
-    -fx-primary-light: derive(#2a9d8f, 40%);
+    -fx-primary-dark: derive(-fx-primary, -40%);
+    -fx-primary-light: derive(-fx-primary, 40%);
 
     -fx-secondary: #33485d;
     -fx-secondary-hover: derive(#264653, -40%);
