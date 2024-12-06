@@ -6,23 +6,29 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane onMouseDragged="#RootMouseDragged" onMousePressed="#RootMousePressed" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.preloader.SplashScreenController">
-   <ImageView fitHeight="412.0" fitWidth="352.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Image url="@../../images/muslim-prayer.png" />
-   </ImageView>
-   <JFXProgressBar fx:id="progressBarInstance" layoutX="51.0" layoutY="263.0" prefHeight="30.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
-   <Label fx:id="progressLabel" layoutX="10.0" layoutY="451.0" text="Loading 0%" textFill="WHITE" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
-      <font>
-         <Font name="Comic Sans MS Bold" size="15.0" />
-      </font>
-      <effect>
-         <DropShadow height="10.0" radius="4.5" spread="0.95" width="10.0" />
-      </effect>
-   </Label>
-   <padding>
-      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-   </padding>
+<AnchorPane onMouseDragged="#RootMouseDragged" onMousePressed="#RootMousePressed"
+            style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.preloader.SplashScreenController">
+    <ImageView fitHeight="412.0" fitWidth="352.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true"
+               AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="0.0">
+        <Image url="@../../images/muslim-prayer.png"/>
+    </ImageView>
+    <JFXProgressBar fx:id="progressBarInstance" styleClass="splash-screen-progress-bar" layoutX="51.0" layoutY="263.0"
+                    prefHeight="30.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0"
+                    AnchorPane.rightAnchor="30.0"/>
+    <Label fx:id="progressLabel" layoutX="10.0" layoutY="451.0" text="Loading 0%" textFill="WHITE"
+           AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+        <font>
+            <Font name="Comic Sans MS Bold" size="15.0"/>
+        </font>
+        <effect>
+            <DropShadow height="10.0" radius="4.5" spread="0.95" width="10.0"/>
+        </effect>
+    </Label>
+    <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+    </padding>
 </AnchorPane>

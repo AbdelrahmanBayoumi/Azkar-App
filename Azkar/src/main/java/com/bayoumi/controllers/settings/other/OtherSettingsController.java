@@ -9,6 +9,7 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.update.UpdateHandler;
@@ -93,8 +94,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             minimizeAtStart.setSelected(settings.getMinimized());
 
             darkTheme.setSelected(settings.getNightMode());
-
-            darkTheme.setDisable(true);
+            PopOverUtil.setPopOverAndDisable(darkTheme, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("underDevelopment")));
 
             version.setText(Constants.VERSION);
 

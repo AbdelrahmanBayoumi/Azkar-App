@@ -47,7 +47,7 @@ public class PrayerTimesController implements Initializable {
     @FXML
     private HBox fajrBox, sunriseBox, dhuhrBox, asrBox, maghribBox, ishaBox, currentPrayerBox;
     @FXML
-    private Label fajrText, sunriseText, dhuhrText, asrText, maghribText, ishaText, lastThirdOfTheNightTimeText, middleOfTheNightTimeText, otherTimings;
+    private Label fajrText, sunriseText, dhuhrText, asrText, maghribText, ishaText, lastThirdOfTheNightTimeText, middleOfTheNightTimeText, nightTimings;
     @FXML
     private Label fajrTime, sunriseTime, dhuhrTime, asrTime, maghribTime, ishaTime;
 
@@ -110,7 +110,7 @@ public class PrayerTimesController implements Initializable {
         asrText.setText(Utility.toUTF(bundle.getString("asr")));
         maghribText.setText(Utility.toUTF(bundle.getString("maghrib")));
         ishaText.setText(Utility.toUTF(bundle.getString("isha")));
-        otherTimings.setText(Utility.toUTF(bundle.getString("otherTimings")));
+        nightTimings.setText(Utility.toUTF(bundle.getString("nightTimings")));
         lastThirdOfTheNightTimeText.setText(Utility.toUTF(bundle.getString("lastThirdOfTheNightTime")));
         middleOfTheNightTimeText.setText(Utility.toUTF(bundle.getString("middleOfTheNightTime")));
     }
