@@ -498,7 +498,35 @@ Text {
     -fx-wrap-text: true;
     -fx-max-width: 400;
 }
+/* ============ Spinner ============ */
+.spinner {
+    -fx-background-color: -fx-secondary-light;
+    -fx-padding: 1;
+    -fx-background-radius: 3 5 5 3;
+}
 
+/* Style the text field within the spinner */
+.spinner .text-field {
+    -fx-background-color: derive(-fx-secondary-text, 20%);
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-radius: 2;
+}
+
+.spinner .increment-arrow-button {
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 0 4 0 0;
+}
+
+.spinner .decrement-arrow-button {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-primary-light;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-radius: 0 0 4 0;
+}
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: #ffffff;
+}
 /* ==== Zekr ==== */
 .zekr-text {
     -fx-font-family: "Noto Naskh Arabic";
