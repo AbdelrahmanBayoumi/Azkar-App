@@ -104,6 +104,7 @@
 
 .primary-button {
     -fx-background-color: linear-gradient(-fx-primary-light, -fx-primary);
+    -fx-text-fill: -fx-light-text;
 }
 
 .primary-button .glyph-icon {
@@ -206,16 +207,10 @@
 
 /* ============ radio-button ============ */
 .radio-button {
-    -jfx-selected-color: -fx-primary;
+    -fx-text-fill: -fx-primary-text;
+    -jfx-selected-color: -fx-primary-text;
     -jfx-unselected-color: -fx-primary-text;
-    -fx-text-fill: -fx-primary-text;
     -fx-font-size: 20;
-}
-
-.radio-button-normal {
-    -jfx-selected-color: -fx-secondary;
-    -jfx-unselected-color: -fx-secondary;
-    -fx-text-fill: -fx-primary-text;
 }
 
 .radio-button:selected {
@@ -261,6 +256,10 @@
     -fx-prompt-text-fill: derive(-fx-primary-text, 90%);
     -fx-text-fill: -fx-primary-text;
     -fx-font-size: 17;
+}
+
+.jfx-text-field .error-label {
+    -fx-text-fill: -fx-red;
 }
 
 /* ============ Table ============ */
@@ -508,6 +507,9 @@
     -fx-font-weight: bold;
 }
 
+._13 {
+    -fx-font-size: 13;
+}
 ._15 {
     -fx-font-size: 15;
 }

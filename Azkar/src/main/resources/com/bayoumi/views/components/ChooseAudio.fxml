@@ -23,17 +23,17 @@
                     <String fx:value="_17" />
                 </styleClass>
             </JFXComboBox>
-            <JFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" nodeOrientation="RIGHT_TO_LEFT" onAction="#play" style="-fx-background-color: transparent; -fx-border-color: -fx-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
+            <JFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" nodeOrientation="RIGHT_TO_LEFT" onAction="#play" style="-fx-background-color: transparent; -fx-border-color: -fx-reverse-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
                 <graphic>
-                    <FontAwesomeIconView glyphName="PLAY" size="30" style="-fx-fill: -fx-secondary;" />
+                    <FontAwesomeIconView glyphName="PLAY" size="30" style="-fx-fill: -fx-reverse-secondary;" />
                 </graphic>
                 <padding>
                     <Insets bottom="5.0" left="8.0" right="14.0" top="5.0" />
                 </padding>
             </JFXButton>
-         <JFXButton fx:id="uploadButton" contentDisplay="GRAPHIC_ONLY" layoutX="320.0" layoutY="11.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#uploadAudio" style="-fx-background-color: transparent; -fx-border-color: -fx-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
+         <JFXButton fx:id="uploadButton" contentDisplay="GRAPHIC_ONLY" layoutX="320.0" layoutY="11.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#uploadAudio" style="-fx-background-color: transparent; -fx-border-color: -fx-reverse-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
             <graphic>
-               <FontAwesomeIconView glyphName="UPLOAD" size="30" style="-fx-fill: -fx-secondary;" />
+               <FontAwesomeIconView glyphName="UPLOAD" size="30" style="-fx-fill: -fx-reverse-secondary;" />
             </graphic>
             <padding>
                <Insets bottom="5.0" left="8.0" right="8.0" top="5.0" />
@@ -44,9 +44,9 @@
     <HBox fx:id="prayerVolumeBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
         <children>
             <JFXSlider fx:id="prayerVolumeSlider" blockIncrement="0.0" focusTraversable="false" prefWidth="300.0" value="50.0" HBox.hgrow="ALWAYS" />
-            <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#muteUnmute" style="-fx-background-color: transparent; -fx-border-color: -fx-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
+            <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#muteUnmute" style="-fx-background-color: transparent; -fx-border-color: -fx-reverse-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
                 <graphic>
-                    <OctIconView fx:id="volume" glyphName="UNMUTE" size="30" style="-fx-fill: -fx-secondary;" />
+                    <OctIconView fx:id="volume" glyphName="UNMUTE" size="30" style="-fx-fill: -fx-reverse-secondary;" />
                 </graphic>
                 <padding>
                     <Insets bottom="6.0" left="8.0" right="8.0" top="6.0" />

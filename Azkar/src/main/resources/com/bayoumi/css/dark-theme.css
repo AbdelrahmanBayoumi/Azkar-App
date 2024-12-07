@@ -17,6 +17,7 @@
     -fx-error: #ff8c00;
     -fx-gray: #bdbdbd;
     -fx-green: derive(#2a9d8f, 60%);
+    -fx-blue: #1976d2;
     /* ===== Background ===== */
     -fx-bg: linear-gradient(to top, -fx-secondary-hover, -fx-secondary);
     -fx-secondary-bg: transparent;

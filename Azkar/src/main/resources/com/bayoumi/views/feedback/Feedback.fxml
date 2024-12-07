@@ -17,19 +17,17 @@
     <children>
         <VBox alignment="TOP_CENTER" spacing="10.0">
             <children>
-                <HBox alignment="CENTER" spacing="20.0" style="-fx-background-color: -fx-secondary;">
-                    <children>
-                        <FontAwesomeIconView glyphName="FILE_TEXT" size="30" style="-fx-fill: -fx-secondary-text;" />
-                        <Label fx:id="title" style="-fx-text-fill: -fx-secondary-text;" text="ملاحظات">
-                            <font>
-                                <Font name="System Bold" size="25.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                    </padding>
-                </HBox>
+                  <Label fx:id="title" alignment="CENTER" graphicTextGap="20.0" maxWidth="1.7976931348623157E308" style="-fx-text-fill: -fx-light-text; -fx-background-color: -fx-secondary-bg;" text="ملاحظات">
+                      <font>
+                          <Font name="System Bold" size="25.0" />
+                      </font>
+               <graphic>
+                        <FontAwesomeIconView glyphName="FILE_TEXT" size="30" style="-fx-fill: -fx-light-text;" />
+               </graphic>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+                  </Label>
                 <VBox spacing="50.0" style="-fx-background-color: -fx-secondary-text; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="10.0" left="30.0" right="30.0" />
@@ -52,39 +50,71 @@
                                     </graphic>
                                     <styleClass>
                                         <String fx:value="transparent-button" />
-                                        <String fx:value="secondary-button" />
+                                        <String fx:value="primary-button" />
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_19" />
                                     </styleClass>
                                 </JFXButton>
-                                <JFXButton fx:id="problem" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="17.0" minHeight="45.0" onAction="#toggleButton" prefWidth="9000.0" styleClass="transparent-button" text="الإبلاغ عن مشكلة">
+                                <JFXButton fx:id="problem" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="17.0" minHeight="45.0" onAction="#toggleButton" prefWidth="9000.0" text="الإبلاغ عن مشكلة">
                                     <font>
                                         <Font name="System Bold" size="19.0" />
                                     </font>
                                     <graphic>
                                         <FontAwesomeIconView glyphName="BUG" size="24" />
                                     </graphic>
+                           <styleClass>
+                              <String fx:value="transparent-button" />
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_19" />
+                           </styleClass>
                                 </JFXButton>
-                                <JFXButton fx:id="other" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="17.0" minHeight="45.0" onAction="#toggleButton" prefWidth="9000.0" style="-fx-background-radius: 0 30 0 0;" styleClass="transparent-button" text="اخرى">
+                                <JFXButton fx:id="other" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="17.0" minHeight="45.0" onAction="#toggleButton" prefWidth="9000.0" style="-fx-background-radius: 0 30 0 0;" text="اخرى">
                                     <font>
                                         <Font name="System Bold" size="19.0" />
                                     </font>
                                     <graphic>
                                         <FontAwesomeIconView glyphName="ELLIPSIS_H" size="24" />
                                     </graphic>
+                           <styleClass>
+                              <String fx:value="transparent-button" />
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_19" />
+                           </styleClass>
                                 </JFXButton>
                             </children>
                         </HBox>
-                        <JFXTextField fx:id="email" labelFloat="true" promptText="عنوان البريد الإلكتروني" styleClass="text-field-normal" />
-                        <JFXTextField fx:id="subject" labelFloat="true" promptText="الملاحظة" styleClass="text-field-normal" />
-                        <JFXTextArea fx:id="details" labelFloat="true" promptText="المزيد من التفاصيل" styleClass="text-field-normal" wrapText="true" VBox.vgrow="ALWAYS" />
+                        <JFXTextField fx:id="email" labelFloat="true" promptText="عنوان البريد الإلكتروني">
+                     <styleClass>
+                        <String fx:value="text-field-normal" />
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_17" />
+                     </styleClass></JFXTextField>
+                        <JFXTextField fx:id="subject" labelFloat="true" promptText="الملاحظة">
+                     <styleClass>
+                        <String fx:value="text-field-normal" />
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_17" />
+                     </styleClass></JFXTextField>
+                        <JFXTextArea fx:id="details" labelFloat="true" promptText="المزيد من التفاصيل" wrapText="true" VBox.vgrow="ALWAYS">
+                     <styleClass>
+                        <String fx:value="text-field-normal" />
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_17" />
+                     </styleClass></JFXTextArea>
                         <HBox>
                             <children>
-                                <JFXButton fx:id="sendBtn" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="160.0" onAction="#send" styleClass="primary-button" text="إرسال">
+                                <JFXButton fx:id="sendBtn" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="160.0" onAction="#send" text="إرسال">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="SEND" size="24" />
                                     </graphic>
                                     <font>
                                         <Font name="System Bold" size="17.0" />
                                     </font>
+                           <styleClass>
+                              <String fx:value="primary-button" />
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_17" />
+                           </styleClass>
                                 </JFXButton>
                                 <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                                     <children>

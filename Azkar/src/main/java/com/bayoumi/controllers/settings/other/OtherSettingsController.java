@@ -45,11 +45,9 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText;
+    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote;
     @FXML
     private VBox loadingBox;
-    @FXML
-    private Text adjustingTheHijriDateNote;
     @FXML
     private Button checkForUpdateButton, forProblemsAndSuggestionsButton;
     @FXML
@@ -95,7 +93,6 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             minimizeAtStart.setSelected(settings.getMinimized());
 
             darkTheme.setSelected(settings.getNightMode());
-//            PopOverUtil.setPopOverAndDisable(darkTheme, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("underDevelopment")));
 
             version.setText(Constants.VERSION);
 

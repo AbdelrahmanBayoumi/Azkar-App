@@ -63,14 +63,12 @@
                                 <ToggleGroup fx:id="asrJuristic" />
                             </toggleGroup>
                             <styleClass>
-                                <String fx:value="radio-button-normal" />
                                 <String fx:value="font-text-bold" />
                                 <String fx:value="_15" />
                             </styleClass>
                         </JFXRadioButton>
                         <JFXRadioButton fx:id="hanafiRadioButton" nodeOrientation="LEFT_TO_RIGHT" onAction="#onAsrJuristicSelect" text="حنفي" toggleGroup="$asrJuristic">
                             <styleClass>
-                                <String fx:value="radio-button-normal" />
                                 <String fx:value="font-text-bold" />
                                 <String fx:value="_15" />
                             </styleClass>

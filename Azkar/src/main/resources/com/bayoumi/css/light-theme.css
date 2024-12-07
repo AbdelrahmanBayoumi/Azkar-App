@@ -17,6 +17,7 @@
     -fx-error: #ff8c00;
     -fx-gray: #e0e0e0;
     -fx-green: #2a9d8f;
+    -fx-blue: blue;
     /* ===== Background ===== */
     -fx-bg: #f5f7fe;
     -fx-secondary-bg: -fx-secondary;
