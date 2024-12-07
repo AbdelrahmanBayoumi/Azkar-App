@@ -14,8 +14,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
 
 <StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.other.OtherSettingsController">
    <children>
@@ -105,11 +103,12 @@
                         <Spinner fx:id="hijriDateOffset" focusTraversable="false" onMouseClicked="#hijriDateOffsetUpdate" prefWidth="90.0" />
                      </children>
                   </HBox>
-                  <TextFlow>
-                     <children>
-                        <Text fx:id="adjustingTheHijriDateNote" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="font-text-medium" text="التاريخ الهجري لا يستخدم كمرجع للعبادة على سبيل المثال بداية الصوم ، وعيد الفطر ، وعيد الأضحى." textAlignment="JUSTIFY" />
-                     </children>
-                  </TextFlow>
+                  <Label fx:id="adjustingTheHijriDateNote" maxWidth="1.7976931348623157E308" text="التاريخ الهجري لا يستخدم كمرجع للعبادة على سبيل المثال بداية الصوم ، وعيد الفطر ، وعيد الأضحى.">
+                     <styleClass>
+                        <String fx:value="font-text-medium" />
+                        <String fx:value="_13" />
+                     </styleClass>
+                  </Label>
                </children>
                <padding>
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
@@ -166,7 +165,7 @@
                               <Font size="17.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: blue;" styleClass="font-text-medium" text="azkar-site.web.app/" textFill="#1d0968" underline="true">
+                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: -fx-blue;" styleClass="font-text-medium" text="azkar-site.web.app/" textFill="#1d0968" underline="true">
                            <font>
                               <Font size="17.0" />
                            </font>

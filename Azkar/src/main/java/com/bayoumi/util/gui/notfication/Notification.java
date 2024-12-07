@@ -43,7 +43,8 @@ public class Notification {
                             .onAction(finalOnClickHandler)
                             .closeHandler(closeCallback)
                             .position(position)
-                            .borderColor(Settings.getInstance().getNotificationSettings().getColor())
+                            .backgroundColor(Settings.getInstance().getNotificationSettings().getBackgroundColor())
+                            .borderColor(Settings.getInstance().getNotificationSettings().getBorderColor())
                             .hideCloseButton()
                             .show(((NotificationsControlsFXController) loader.getController()).closeButton);
                 } catch (Exception e) {

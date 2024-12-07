@@ -2,12 +2,10 @@
 
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import java.lang.String?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox alignment="TOP_CENTER" prefWidth="600.0" spacing="40.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.dialog.DownloadResourcesController">
    <padding>

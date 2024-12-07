@@ -119,11 +119,11 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
 
         playIcon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
-        playIcon.setStyle("-fx-fill: -fx-secondary;");
+        playIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
         playIcon.setGlyphSize(30);
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
-        pauseIcon.setStyle("-fx-fill: -fx-secondary;");
+        pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
 
         periodBox.disableProperty().bind(stopAzkar.selectedProperty());
         // init Spinner Values

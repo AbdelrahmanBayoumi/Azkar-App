@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.notification;
 
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import com.bayoumi.util.gui.Draggable;
 import javafx.fxml.FXML;
@@ -51,12 +52,14 @@ public class NotificationsControlsFXController implements Initializable {
 
     public void setData(String msg, Image image) {
         this.text.setText(msg);
+        this.text.setStyle("-fx-text-fill: " + Settings.getInstance().getNotificationSettings().getTextColor() + ";");
         if (image != null) {
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(50);
             imageView.setFitWidth(50);
             notificationBox.getChildren().add(0, imageView);
         }
+
     }
 
 }

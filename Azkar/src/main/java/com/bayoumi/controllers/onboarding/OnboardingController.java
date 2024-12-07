@@ -1,5 +1,6 @@
 package com.bayoumi.controllers.onboarding;
 
+import com.bayoumi.Launcher;
 import com.bayoumi.controllers.components.PrayerCalculationsController;
 import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
@@ -29,25 +30,24 @@ import java.util.ResourceBundle;
 
 public class OnboardingController implements Initializable {
     private ResourceBundle bundle;
-    private ChooseAudioController chooseAudioController;
+    private PrayerTimeSettings prayerTimeSettings;
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
     private VBox container, adhanContainer, languageChooseBox;
     @FXML
-    private JFXCheckBox format24;
+    private JFXCheckBox format24, minimizeAtStart, darkTheme;
     @FXML
     private Button saveAndFinish;
     @FXML
     private Label configureTheProgramSettings, adhanLabel, settingsCanBeChangedFromWithinTheProgramAsWell;
-    @FXML
-    private JFXCheckBox minimizeAtStart;
-    private PrayerTimeSettings prayerTimeSettings;
 
     public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         adhanLabel.setText(Utility.toUTF(bundle.getString("adhan")));
         format24.setText(Utility.toUTF(bundle.getString("hour24System")));
+        darkTheme.setText(Utility.toUTF(bundle.getString("darkTheme")));
         minimizeAtStart.setText(Utility.toUTF(bundle.getString("minimizeAtStart")));
         saveAndFinish.setText(Utility.toUTF(bundle.getString("saveAndFinish")));
         configureTheProgramSettings.setText(Utility.toUTF(bundle.getString("configureTheProgramSettings")));
@@ -73,7 +73,7 @@ public class OnboardingController implements Initializable {
         languageChooseBox.setVisible(false);
         Settings.getInstance().setLanguage(language.getLocale());
 
-        chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
+        final ChooseAudioController chooseAudioController = ChooseAudioUtil.adhan(bundle, adhanContainer);
         if (chooseAudioController != null) {
             chooseAudioController.initFromFirstValue();
         }
@@ -96,6 +96,13 @@ public class OnboardingController implements Initializable {
     @FXML
     private void chooseEnLanguage() throws Exception {
         chooseLanguage(Language.English);
+    }
+
+    @FXML
+    private void onDarkThemeChange() {
+        Settings.getInstance().setNightMode(darkTheme.isSelected());
+        darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+        Launcher.homeController.changeTheme();
     }
 
     @FXML
@@ -129,6 +136,7 @@ public class OnboardingController implements Initializable {
         // save other settings
         Settings.getInstance().setEnable24Format(format24.isSelected());
         Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
+        Settings.getInstance().setNightMode(darkTheme.isSelected());
 
         Onboarding.setFirstTimeOpened(0);
 

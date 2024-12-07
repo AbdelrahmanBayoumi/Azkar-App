@@ -107,6 +107,7 @@ public class Notifications {
     private String title;
     private String text;
     private String borderColor = "#E9C46A";
+    private String backgroundColor = "#FFFFFF";
     private Node graphic;
     private ObservableList<Action> actions = FXCollections.observableArrayList();
     private Pos position = Pos.BOTTOM_RIGHT;
@@ -157,6 +158,15 @@ public class Notifications {
         this.borderColor = borderColor;
         return this;
     }
+
+    /**
+     * Specify the background color of the notification.
+     */
+    public Notifications backgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
 
     /**
      * Specify the title to show in the notification.
@@ -619,7 +629,7 @@ public class Notifications {
 
             isShowing = true;
             if (notificationBar.getGraphic() != null && notificationBar.getGraphic().getParent() != null && notificationBar.getGraphic().getParent().getParent() != null) {
-                notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";");
+                notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";-fx-background-color:" + notificationToShow.backgroundColor + ";");
             }
             notificationBar.doShow();
 

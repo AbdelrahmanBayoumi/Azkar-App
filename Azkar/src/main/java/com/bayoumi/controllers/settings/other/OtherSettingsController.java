@@ -10,7 +10,6 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
-import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.update.UpdateHandler;
@@ -26,7 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -45,11 +43,9 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText;
+    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote;
     @FXML
     private VBox loadingBox;
-    @FXML
-    private Text adjustingTheHijriDateNote;
     @FXML
     private Button checkForUpdateButton, forProblemsAndSuggestionsButton;
     @FXML
@@ -95,7 +91,6 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             minimizeAtStart.setSelected(settings.getMinimized());
 
             darkTheme.setSelected(settings.getNightMode());
-            PopOverUtil.setPopOverAndDisable(darkTheme, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("underDevelopment")));
 
             version.setText(Constants.VERSION);
 

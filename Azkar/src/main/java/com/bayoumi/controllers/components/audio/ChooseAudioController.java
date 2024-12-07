@@ -121,11 +121,11 @@ public class ChooseAudioController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         azkarSettings = Settings.getInstance().getAzkarSettings();
         playIcon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
-        playIcon.setStyle("-fx-fill: -fx-secondary;");
+        playIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
         playIcon.setGlyphSize(30);
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
-        pauseIcon.setStyle("-fx-fill: -fx-secondary;");
+        pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
         audioBox.setOnAction(event -> {
             playButton.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
             prayerVolumeBox.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));

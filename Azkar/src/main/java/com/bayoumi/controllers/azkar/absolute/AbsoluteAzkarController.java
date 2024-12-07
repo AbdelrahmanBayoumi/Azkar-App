@@ -14,17 +14,16 @@ import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AbsoluteAzkarController implements Initializable {
     @FXML
-    private AnchorPane root;
+    private VBox root;
     @FXML
     private Label absoluteAzkar;
     @FXML
@@ -63,13 +62,9 @@ public class AbsoluteAzkarController implements Initializable {
 
     private void tableConfiguration() {
         zekrCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("text"));
-        zekrCol.setStyle("-fx-alignment: center;");
         editCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("edit"));
-        editCol.setStyle("-fx-alignment: center;");
         deleteCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("delete"));
-        deleteCol.setStyle("-fx-alignment: center;");
-        TreeItem<AbsoluteZekr> root = new RecursiveTreeItem<>(AbsoluteZekr.absoluteZekrObservableList, RecursiveTreeObject::getChildren);
-        azkarTable.setRoot(root);
+        azkarTable.setRoot(new RecursiveTreeItem<>(AbsoluteZekr.absoluteZekrObservableList, RecursiveTreeObject::getChildren));
         azkarTable.setShowRoot(false);
     }
 

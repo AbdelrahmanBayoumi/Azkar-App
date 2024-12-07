@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXColorPicker?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import java.lang.String?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -12,117 +11,234 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox alignment="TOP_CENTER" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.azkar.ChooseNotificationColorController">
-   <children>
-      <Label fx:id="title" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-background-color: -fx-secondary; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 20, 0, 0, 0);" text="لون الإشعار">
-         <styleClass>
+    <padding>
+        <Insets bottom="20.0" />
+    </padding>
+    <Label fx:id="title" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-background-color: -fx-secondary-bg; -fx-text-fill: -fx-light-text; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 20, 0, 0, 0);" text="لون الإشعار">
+        <styleClass>
             <String fx:value="font-text-bold" />
             <String fx:value="_25" />
-         </styleClass>
-         <padding>
+        </styleClass>
+        <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-         <VBox.margin>
+        </padding>
+        <VBox.margin>
             <Insets bottom="20.0" />
-         </VBox.margin>
-      </Label>
-      <HBox alignment="CENTER">
-         <children>
-            <AnchorPane fx:id="notificationParent" maxWidth="500.0" minWidth="330.0" style="-fx-border-color: #E9C46A; -fx-border-width: 5; -fx-border-radius: 15;" styleClass="message-box">
-               <children>
-                  <HBox fx:id="notificationBox" alignment="CENTER" layoutY="7.0" maxWidth="500.0" minWidth="330.0" spacing="20.0" stylesheets="@../../../css/controlsfx-notification.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <children>
-                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label fx:id="text" alignment="CENTER_RIGHT" contentDisplay="TEXT_ONLY" maxWidth="330.0" text="اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى سَيِّدِنَا مُحَمَّدٍ" textAlignment="RIGHT" wrapText="true">
-                                 <styleClass>
-                                    <String fx:value="message" />
-                                    <String fx:value="font-text-bold" />
-                                    <String fx:value="_17" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <Button fx:id="closeButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" layoutX="347.0" layoutY="3.0" mnemonicParsing="false" styleClass="notification-close-button" text="X" visible="false" AnchorPane.leftAnchor="3.0" AnchorPane.topAnchor="3.0">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                     <padding>
-                        <Insets left="5.0" right="5.0" />
-                     </padding>
-                     <graphic>
-                        <FontAwesomeIconView glyphName="CLOSE" />
-                     </graphic>
-                  </Button>
-               </children>
-            </AnchorPane>
-         </children>
-         <padding>
+        </VBox.margin>
+    </Label>
+    <HBox alignment="CENTER">
+        <padding>
             <Insets bottom="40.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </HBox>
-      <Separator prefWidth="200.0" />
-      <HBox alignment="CENTER" spacing="5.0">
-         <children>
-            <JFXColorPicker fx:id="colorPicker" onAction="#chooseColorPicker" promptText="Choose" style="-fx-font-size: 12; -fx-min-height: 47; -fx-border-color: gray; -fx-border-width: 0; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1), 3, 0, 0, 0); -fx-border-radius: 0; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXColorPicker>
-            <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A" style="-fx-background-color: #E9C46A; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button layoutX="285.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color018AFF" style="-fx-background-color: #018AFF; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color9AD712" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button layoutX="340.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorA168CE" style="-fx-background-color: #A168CE; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button layoutX="368.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE67999" style="-fx-background-color: #E67999; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button layoutX="395.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color000000" style="-fx-background-color: #000000; -fx-background-radius: 0;">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-         </children>
-      </HBox>
-      <Separator layoutX="10.0" layoutY="217.0" prefWidth="200.0" />
-      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" prefWidth="200.0" text="حفظ">
-         <styleClass>
+        </padding>
+        <AnchorPane fx:id="notificationParent" maxWidth="500.0" minWidth="330.0" style="-fx-border-color: #E9C46A; -fx-background-color: transparent; -fx-border-width: 5; -fx-border-radius: 15; -fx-background-radius: 18;">
+            <HBox alignment="CENTER" layoutY="7.0" maxWidth="500.0" minWidth="330.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <Label fx:id="text" alignment="CENTER_RIGHT" contentDisplay="TEXT_ONLY" maxWidth="330.0" text="اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى سَيِّدِنَا مُحَمَّدٍ" textAlignment="RIGHT" wrapText="true">
+                        <styleClass>
+                            <String fx:value="font-text-bold" />
+                            <String fx:value="_17" />
+                        </styleClass>
+                    </Label>
+                </VBox>
+            </HBox>
+        </AnchorPane>
+    </HBox>
+    <Separator prefWidth="200.0">
+        <VBox.margin>
+            <Insets bottom="20.0" left="30.0" right="30.0" />
+        </VBox.margin>
+    </Separator>
+    <VBox spacing="20.0">
+        <VBox layoutX="10.0" layoutY="134.0">
+            <Label fx:id="textColorLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" text="لون النص">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_17" />
+                </styleClass>
+                <graphic>
+                    <MaterialDesignIconView glyphName="PALETTE" size="24" />
+                </graphic>
+            </Label>
+            <HBox alignment="CENTER" spacing="5.0">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+                <JFXColorPicker fx:id="textColorPicker" onAction="#chooseTextColorPick" promptText="Choose" style="-fx-font-size: 12; -fx-min-height: 47; -fx-border-color: gray; -fx-border-width: 0; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1), 3, 0, 0, 0); -fx-border-radius: 0; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXColorPicker>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorFFFFFF_Text" style="-fx-background-color: #FFFFFF; -fx-background-radius: 0; -fx-border-color: lightgray;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_Text" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="285.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color018AFF_Text" style="-fx-background-color: #018AFF; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color9AD712_Text" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="340.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorA168CE_Text" style="-fx-background-color: #A168CE; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="368.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE67999_Text" style="-fx-background-color: #E67999; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="395.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color000000_Text" style="-fx-background-color: #000000; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            </HBox>
+        </VBox>
+        <VBox>
+            <Label fx:id="backgroundColorLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" text="لون الخلفية">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_17" />
+                </styleClass>
+                <graphic>
+                    <MaterialDesignIconView glyphName="PALETTE" size="24" />
+                </graphic>
+            </Label>
+            <HBox alignment="CENTER" spacing="5.0">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+                <JFXColorPicker fx:id="backgroundColorPicker" onAction="#chooseBackgroundColorPick" promptText="Choose" style="-fx-font-size: 12; -fx-min-height: 47; -fx-border-color: gray; -fx-border-width: 0; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1), 3, 0, 0, 0); -fx-border-radius: 0; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXColorPicker>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorFFFFFF_BG" style="-fx-background-color: #FFFFFF; -fx-background-radius: 0; -fx-border-color: lightgray;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_BG" style="-fx-background-color: #E9C46A; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="285.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color018AFF_BG" style="-fx-background-color: #018AFF; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color9AD712_BG" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="340.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorA168CE_BG" style="-fx-background-color: #A168CE; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="368.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE67999_BG" style="-fx-background-color: #E67999; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="395.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color000000_BG" style="-fx-background-color: #000000; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            </HBox>
+        </VBox>
+        <VBox>
+            <Label fx:id="borderColorLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" text="لون الإطار">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_17" />
+                </styleClass>
+                <graphic>
+                    <MaterialDesignIconView glyphName="PALETTE" size="24" />
+                </graphic>
+            </Label>
+            <HBox alignment="CENTER" spacing="5.0">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+                <JFXColorPicker fx:id="borderColorPicker" onAction="#chooseBorderColorPick" promptText="Choose" style="-fx-font-size: 12; -fx-min-height: 47; -fx-border-color: gray; -fx-border-width: 0; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1), 3, 0, 0, 0); -fx-border-radius: 0; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXColorPicker>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorFFFFFF_Border" style="-fx-background-color: #FFFFFF; -fx-background-radius: 0; -fx-border-color: lightgray;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_Border" style="-fx-background-color: #E9C46A; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="285.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color018AFF_Border" style="-fx-background-color: #018AFF; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color9AD712_Border" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="340.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorA168CE_Border" style="-fx-background-color: #A168CE; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="368.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE67999_Border" style="-fx-background-color: #E67999; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button layoutX="395.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color000000_Border" style="-fx-background-color: #000000; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            </HBox>
+        </VBox>
+    </VBox>
+    <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" prefWidth="200.0" text="حفظ">
+        <styleClass>
             <String fx:value="font-text-bold" />
             <String fx:value="_21" />
-         </styleClass>
-         <VBox.margin>
+        </styleClass>
+        <VBox.margin>
             <Insets top="30.0" />
-         </VBox.margin>
-      </Button>
-   </children>
-   <stylesheets>
-      <URL value="@../../../css/controlsfx-notification.css" />
-   </stylesheets>
-   <padding>
-      <Insets bottom="20.0" />
-   </padding>
+        </VBox.margin>
+    </Button>
 </VBox>

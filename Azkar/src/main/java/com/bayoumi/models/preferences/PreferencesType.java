@@ -2,7 +2,9 @@ package com.bayoumi.models.preferences;
 
 public enum PreferencesType {
     // ======= Notification Settings =======
+    NOTIFICATION_BACKGROUND_COLOR("notification_background_color", "#FFFFFF"),
     NOTIFICATION_BORDER_COLOR("notification_border_color", "#E9C46A"),
+    NOTIFICATION_TEXT_COLOR("notification_text_color", "#000000"),
     NOTIFICATION_POS("notification_pos", "BOTTOM_LEFT"),
 
     // ======= Prayer Times Settings =======

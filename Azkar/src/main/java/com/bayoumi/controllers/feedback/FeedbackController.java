@@ -173,8 +173,8 @@ public class FeedbackController implements Initializable {
 
     @FXML
     private void toggleButton(ActionEvent event) {
-        focusedButton.getStyleClass().remove("secondary-button");
+        focusedButton.getStyleClass().remove("primary-button");
         focusedButton = (JFXButton) event.getSource();
-        focusedButton.getStyleClass().add("secondary-button");
+        focusedButton.getStyleClass().add("primary-button");
     }
 }

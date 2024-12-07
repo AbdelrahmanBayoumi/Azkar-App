@@ -18,13 +18,25 @@
     src: url("../fonts/NotoNaskhArabic-Bold.ttf");
 }
 
+* {
+    -fx-bold-font-family: Tajawal-Bold;
+    -fx-medium-font-family: "Tajawal-Medium";
+}
 .root {
     -fx-background-color: -fx-bg;
 }
 
-/* ============ label ============ */
+/* ============ text ============ */
+Text {
+    -fx-fill: -fx-primary-text;
+}
 .label {
     -fx-text-fill: -fx-primary-text;
+}
+
+/* ============ icons ============ */
+.glyph-icon {
+    -fx-fill: -fx-primary-text;
 }
 
 /* ============ button ============ */
@@ -49,17 +61,21 @@
 }
 
 .frequency-btn:hover {
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-background-color: -fx-third-light;
 }
 
+.frequency-btn:hover .glyph-icon {
+    -fx-fill: -fx-dark-text;
+}
+
 .frequency-btn-selected {
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-background-color: -fx-third-light;
 }
 
 .frequency-btn-selected:hover {
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-background-color: -fx-third-light;
 }
 
@@ -95,10 +111,11 @@
 
 .primary-button {
     -fx-background-color: linear-gradient(-fx-primary-light, -fx-primary);
+    -fx-text-fill: -fx-light-text;
 }
 
 .primary-button .glyph-icon {
-    -fx-fill: -fx-secondary-text;
+    -fx-fill: -fx-light-text;
 }
 
 .primary-button:hover {
@@ -107,11 +124,11 @@
 
 .secondary-button {
     -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
-    -fx-text-fill: -fx-secondary-text;
+    -fx-text-fill: -fx-light-text;
 }
 
 .secondary-button .glyph-icon {
-    -fx-fill: -fx-secondary-text;
+    -fx-fill: -fx-light-text;
 }
 
 .secondary-button:hover {
@@ -140,8 +157,8 @@
 }
 
 .gray-button {
-    -fx-background-color: linear-gradient(-fx-gray, lightgray);
-    -fx-text-fill: -fx-secondary;
+    -fx-background-color: linear-gradient(-fx-gray, gray);
+    -fx-text-fill: -fx-secondary-text;
 }
 
 .gray-button:hover {
@@ -150,7 +167,7 @@
 }
 
 .gray-button .glyph-icon {
-    -fx-fill: -fx-secondary;
+    -fx-fill: -fx-secondary-text;
 }
 
 .gray-button:hover .glyph-icon {
@@ -179,34 +196,28 @@
 
 .box-normal:hover {
     -fx-background-color: -fx-primary-light;
-    -fx-text-fill: -fx-secondary-text;
+    -fx-text-fill: -fx-light-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
 
 .box-normal:hover .glyph-icon {
-    -fx-fill: -fx-secondary-text;
+    -fx-fill: -fx-light-text;
 }
 
 /* ============ check-box ============ */
 .check-box {
     -jfx-checked-color: -fx-secondary;
-    -jfx-unchecked-color: -fx-secondary;
+    -jfx-unchecked-color: -fx-reverse-secondary;
     -fx-text-fill: -fx-primary-text;
 }
 
 /* ============ radio-button ============ */
 .radio-button {
-    -jfx-selected-color: -fx-primary;
+    -fx-text-fill: -fx-primary-text;
+    -jfx-selected-color: -fx-primary-text;
     -jfx-unselected-color: -fx-primary-text;
-    -fx-text-fill: -fx-primary-text;
     -fx-font-size: 20;
-}
-
-.radio-button-normal {
-    -jfx-selected-color: -fx-secondary;
-    -jfx-unselected-color: -fx-secondary;
-    -fx-text-fill: -fx-primary-text;
 }
 
 .radio-button:selected {
@@ -231,10 +242,18 @@
     -fx-alignment: CENTER;
 }
 
+.combo-box .list-cell:selected {
+    -fx-alignment: CENTER;
+}
+.combo-box > .list-cell {
+    -fx-text-fill: -fx-primary-text;
+}
 .combo-box-normal {
     -fx-text-fill: -fx-primary-text;
     -jfx-focus-color: -fx-primary-text;
     -jfx-unfocus-color: -fx-primary-text;
+    -fx-text-inner-color: -fx-primary-text;
+    -fx-prompt-text-fill: -fx-primary-text;
 }
 
 /* ============ TextField ============ */
@@ -245,11 +264,38 @@
     -fx-text-fill: -fx-primary-text;
     -fx-font-size: 17;
 }
+.jfx-text-field .error-label {
+    -fx-text-fill: -fx-red;
+}
+
+/* ============ TextArea ============ */
+.text-area {
+    -fx-background-insets: 0;
+    -fx-background-color: -fx-secondary-text;
+}
+
+.text-area .viewport {
+    -fx-background-color: -fx-secondary-text;
+}
+.text-area .content {
+    -fx-background-color: -fx-secondary-text;
+}
 
 /* ============ Table ============ */
+.table {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+    -fx-font-size: 17px;
+}
+
+.table .column-header-background {
+    -fx-border-width: 1;
+}
+
 .table .column-header,
 .table .column-header-background .filler {
-    -fx-size: 14px;
+    -fx-border-width: 1;
 }
 
 .table .table-column {
@@ -264,11 +310,13 @@
 }
 
 .tree-table-row-cell {
-    -fx-text-fill: darkcyan;
-    -fx-border-color: black;
     -fx-border-style: solid;
     -fx-border-width: 0.25;
     -fx-font: normal 20px "Tajawal-Medium";
+}
+
+.tree-table-row-cell .tree-table-cell {
+    -fx-text-fill: -fx-primary-text;
 }
 
 .tree-table-row-cell:even {
@@ -286,19 +334,13 @@
     -fx-border-width: 1;
 }
 
-.table {
-    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);*/
-    /*-fx-border-radius: 30;*/
-    /*-fx-background-radius: 30;*/
-}
-
 .table-btn {
     -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
 .table-btn .glyph-icon {
-    -fx-fill: -fx-secondary;
+    -fx-fill: -fx-reverse-secondary;
     -fx-font-family: "FontAwesome";
     -fx-font-size: 20px;
 }
@@ -310,6 +352,11 @@
 /* ============ Scroll Pane ============ */
 .scroll-pane {
     -fx-background-color: -fx-bg;
+}
+
+.scroll-bar:vertical > .track-background,
+.scroll-bar:horizontal > .track-background {
+    -fx-background-insets: 0;
 }
 
 .scroll-bar:horizontal .track,
@@ -372,23 +419,23 @@
 }
 
 .box-prayer-selected .label {
-    -fx-text-fill: -fx-secondary-text;
+    -fx-text-fill: -fx-light-text;
     -fx-font-size: 27;
 }
 
 /*==== SLIDER ====*/
 .progress-slider .track {
-    -fx-background-color: null;
     /* Hide the track */
+    -fx-background-color: null;
 }
 
 .slider .track {
-    -fx-background-color: null;
     /* Hide the track */
-    -fx-background-insets: 1 0 -1 0, 0, 1;
+    -fx-background-color: null;
+    -fx-background-insets: 0;
     -fx-background-radius: 2.5, 2.5, 1.5;
     -fx-padding: 0.208333em;
-    /* 2.5 */
+    -fx-background-insets: 0;
 }
 
 .progress-bar .bar {
@@ -397,22 +444,26 @@
 }
 
 .jfx-slider > .track {
-    -fx-background-color: -fx-primary;
+    /* -fx-background-color: -fx-primary; */
+    -fx-background-color: -fx-secondary;
 }
 
 /* Styling the slider thumb */
 .jfx-slider > .thumb {
     -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
 }
 
 /* Styling the filled track */
 .jfx-slider > .colored-track {
     -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
 }
 
 /* Styling the animated thumb */
 .jfx-slider > .animated-thumb {
     -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
 }
 
 .white-box {
@@ -440,14 +491,42 @@
 .pop-over-label {
     -fx-padding: 10;
     -fx-background-color: -fx-third-light;
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-font-family: "Tajawal-Bold";
     -fx-text-alignment: center;
     -fx-alignment: center;
     -fx-wrap-text: true;
     -fx-max-width: 400;
 }
+/* ============ Spinner ============ */
+.spinner {
+    -fx-background-color: -fx-secondary-light;
+    -fx-padding: 1;
+    -fx-background-radius: 3 5 5 3;
+}
 
+/* Style the text field within the spinner */
+.spinner .text-field {
+    -fx-background-color: derive(-fx-secondary-text, 20%);
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-radius: 2;
+}
+
+.spinner .increment-arrow-button {
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 0 4 0 0;
+}
+
+.spinner .decrement-arrow-button {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-primary-light;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-radius: 0 0 4 0;
+}
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: #ffffff;
+}
 /* ==== Zekr ==== */
 .zekr-text {
     -fx-font-family: "Noto Naskh Arabic";
@@ -482,6 +561,9 @@
     -fx-font-weight: bold;
 }
 
+._13 {
+    -fx-font-size: 13;
+}
 ._15 {
     -fx-font-size: 15;
 }

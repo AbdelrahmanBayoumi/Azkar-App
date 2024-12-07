@@ -17,7 +17,7 @@
          <String fx:value="font-text-bold" />
       </styleClass>
     </Label>
-    <Label fx:id="frequencyLabel" style="-fx-text-fill: #2A9D8F;" text="ظهور كل 5 دقائق">
+    <Label fx:id="frequencyLabel" style="-fx-text-fill: -fx-green;" text="ظهور كل 5 دقائق">
       <styleClass>
          <String fx:value="font-text-bold" />
          <String fx:value="_15" />

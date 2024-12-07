@@ -1,40 +1,95 @@
 * {
-    /* ====== Colors ====== */
     -fx-primary: #1f6e65;
-    -fx-primary-dark: derive(#1f6e65, -40%);
-    -fx-primary-light: derive(#1f6e65, 40%);
+    -fx-primary-dark: derive(-fx-primary, -40%);
+    -fx-primary-light: derive(-fx-primary, 40%);
 
     -fx-secondary: #1c2b3a;
-    -fx-secondary-hover: derive(#1c2b3a, -40%);
-    -fx-secondary-light: derive(#1c2b3a, 40%);
+    -fx-secondary-hover: derive(-fx-secondary, -40%);
+    -fx-secondary-light: derive(-fx-secondary, 40%);
 
     -fx-third: #b37242;
-    -fx-third-dark: #8f4e30;
     -fx-third-light: #cea16c;
 
     -fx-red: #c91a29;
-    -fx-error: #ff8c00;
-    -fx-gray: #666666; /* Darker gray suitable for dark backgrounds */
-    -fx-bg: #2f2f2f; /* Dark background */
-
+    -fx-gray: #bdbdbd;
+    -fx-green: derive(#2a9d8f, 60%);
+    -fx-blue: #1976d2;
+    /* ===== Background ===== */
+    -fx-bg: linear-gradient(to top, -fx-secondary-hover, -fx-secondary);
+    -fx-secondary-bg: transparent;
     /* ====== Text ====== */
-    -fx-primary-text: #ffffff; /* Main text color on dark background */
-    -fx-secondary-text: #000000; /* Secondary text, used sparingly. If needed, pick a light color too */
-
+    -fx-primary-text: #e3e8fa;
+    -fx-secondary-text: derive(-fx-secondary, 20%);
+    -fx-light-text: -fx-primary-text;
+    -fx-dark-text: -fx-secondary-hover;
+    -fx-reverse-secondary: -fx-primary-text;
     /* ====== Button ====== */
     -fx-primary-button: linear-gradient(-fx-primary-light, -fx-primary);
-    -fx-primary-button-text: -fx-secondary-text;
+    -fx-primary-button-text: -fx-light-text;
     -fx-primary-button-hover: -fx-primary-dark;
 
     /* ====== Table ====== */
-    -fx-even-table: #333333;
-    -fx-odd-table: #3a3a3a;
-    -fx-hover-table: #444444;
-
-    -fx-bold-font-family: Tajawal-Bold;
-    -fx-medium-font-family: "Tajawal-Medium";
-
+    -fx-even-table: derive(#26304a, 10%);
+    -fx-odd-table: #26304a;
+    -fx-hover-table: #455a64;
     /* ====== Scroll ====== */
-    -fx-thumb-bg: derive(black, 90%);
-    -fx-thumb-bg-hover: derive(#4d4c4f, 10%);
+    -fx-thumb-bg: -fx-secondary-light;
+    -fx-thumb-bg-hover: derive(-fx-secondary-light, 10%);
+}
+
+/* ======= Button ======= */
+.secondary-button {
+    -fx-background-color: linear-gradient(-fx-secondary-light, -fx-secondary);
+    -fx-text-fill: -fx-light-text;
+}
+
+.secondary-button-outline {
+    -fx-text-fill: -fx-light-text;
+    -fx-border-color: derive(-fx-light-text, -30%);
+}
+
+.secondary-button-outline:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-light-text;
+}
+
+.secondary-button-outline .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+.secondary-button-outline:hover .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+/* ======= Table ======= */
+.table {
+    -fx-background-color: derive(#26304a, 10%);
+    -fx-border-color: derive(-fx-secondary, -60%);
+    -fx-border-width: 1;
+}
+
+.table .column-header-background {
+    -fx-border-width: 0;
+    -fx-background-color: -fx-secondary;
+}
+
+.table .column-header .label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+.table .column-header,
+.table .column-header-background .filler {
+    -fx-border-width: 0;
+}
+
+/* ======= Separator =======  */
+.separator:horizontal .line,
+.separator:vertical .line {
+    -fx-border-color: -fx-gray;
+}
+
+/* ======= Scroll =======  */
+.scroll-bar:vertical > .track-background,
+.scroll-bar:horizontal > .track-background {
+    -fx-background-color: -fx-secondary-hover;
 }
