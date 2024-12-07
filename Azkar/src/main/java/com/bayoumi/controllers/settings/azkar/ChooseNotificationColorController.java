@@ -12,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -131,6 +130,11 @@ public class ChooseNotificationColorController implements Initializable {
     }
 
     @FXML
+    private void colorFFFFFF_BG() {
+        setColor(chosenBorderColorHex, "#FFFFFF", chosenTextColorHex);
+    }
+
+    @FXML
     private void color000000_Border() {
         setColor("#000000", chosenBackgroundColorHex, chosenTextColorHex);
     }
@@ -161,6 +165,11 @@ public class ChooseNotificationColorController implements Initializable {
     }
 
     @FXML
+    private void colorFFFFFF_Border() {
+        setColor("#FFFFFF", chosenBackgroundColorHex, chosenTextColorHex);
+    }
+
+    @FXML
     private void color000000_Text() {
         setColor(chosenBorderColorHex, chosenBackgroundColorHex, "#000000");
     }
@@ -183,6 +192,11 @@ public class ChooseNotificationColorController implements Initializable {
     @FXML
     private void colorE67999_Text() {
         setColor(chosenBorderColorHex, chosenBackgroundColorHex, "#E67999");
+    }
+
+    @FXML
+    private void colorE9C46A_Text() {
+        setColor(chosenBorderColorHex, chosenBackgroundColorHex, "#E9C46A");
     }
 
     @FXML

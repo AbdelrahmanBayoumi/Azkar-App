@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="500.0" spacing="10.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.dialog.UpdateConfirmController">
+<VBox fx:id="root" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="500.0" prefWidth="500.0" spacing="10.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.dialog.UpdateConfirmController">
    <children>
-      <HBox alignment="CENTER" style="-fx-background-color: -fx-secondary;">
+      <HBox alignment="CENTER" style="-fx-background-color: -fx-secondary-hover;">
          <VBox.margin>
             <Insets bottom="30.0" left="-20.0" right="-20.0" />
          </VBox.margin>
@@ -65,7 +65,12 @@
                   <String fx:value="_20" />
                </styleClass>
             </Label>
-            <TextArea fx:id="comment" editable="false" focusTraversable="false" prefHeight="100.0" promptText="لا توجد ملاحظات" styleClass="text-field-normal" VBox.vgrow="ALWAYS" />
+            <TextArea fx:id="comment" editable="false" focusTraversable="false" prefHeight="100.0" promptText="لا توجد ملاحظات" VBox.vgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="text-field-normal" />
+                  <String fx:value="_17" />
+                  <String fx:value="font-text-medium" />
+               </styleClass></TextArea>
          </children>
       </VBox>
       <Label fx:id="doYouWantToUpdateTheSoftware" layoutX="156.0" layoutY="30.0" text="هل تريد تحديث البرنامج ؟">

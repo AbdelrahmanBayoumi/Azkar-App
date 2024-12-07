@@ -264,9 +264,21 @@ Text {
     -fx-text-fill: -fx-primary-text;
     -fx-font-size: 17;
 }
-
 .jfx-text-field .error-label {
     -fx-text-fill: -fx-red;
+}
+
+/* ============ TextArea ============ */
+.text-area {
+    -fx-background-insets: 0;
+    -fx-background-color: -fx-secondary-text;
+}
+
+.text-area .viewport {
+    -fx-background-color: -fx-secondary-text;
+}
+.text-area .content {
+    -fx-background-color: -fx-secondary-text;
 }
 
 /* ============ Table ============ */

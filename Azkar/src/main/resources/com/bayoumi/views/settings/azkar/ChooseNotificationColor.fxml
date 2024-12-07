@@ -81,6 +81,11 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
+                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_Text" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
                 <Button layoutX="285.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#color018AFF_Text" style="-fx-background-color: #018AFF; -fx-background-radius: 0;">
                     <cursor>
                         <Cursor fx:constant="HAND" />
@@ -130,6 +135,11 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </JFXColorPicker>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorFFFFFF_BG" style="-fx-background-color: #FFFFFF; -fx-background-radius: 0; -fx-border-color: lightgray;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
                 <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_BG" style="-fx-background-color: #E9C46A; -fx-background-radius: 0;">
                     <cursor>
                         <Cursor fx:constant="HAND" />
@@ -184,6 +194,11 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </JFXColorPicker>
+                <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorFFFFFF_Border" style="-fx-background-color: #FFFFFF; -fx-background-radius: 0; -fx-border-color: lightgray;">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
                 <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_Border" style="-fx-background-color: #E9C46A; -fx-background-radius: 0;">
                     <cursor>
                         <Cursor fx:constant="HAND" />
