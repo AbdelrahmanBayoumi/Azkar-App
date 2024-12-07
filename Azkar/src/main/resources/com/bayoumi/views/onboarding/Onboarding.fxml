@@ -43,7 +43,7 @@
                </VBox>
                <Separator prefWidth="200.0" />
                <HBox alignment="CENTER" spacing="60.0">
-                  <JFXCheckBox fx:id="format24" nodeOrientation="LEFT_TO_RIGHT" text="نظام 24 ساعة">
+                  <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" selected="true" text="دائما تصغير البرنامج عند البدء">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -52,7 +52,16 @@
                         <String fx:value="_15" />
                      </styleClass>
                   </JFXCheckBox>
-                  <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" selected="true" text="دائما تصغير البرنامج عند البدء">
+                  <JFXCheckBox fx:id="darkTheme" layoutX="170.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#onDarkThemeChange" text="الوضع الليلي">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <styleClass>
+                        <String fx:value="font-text-bold" />
+                        <String fx:value="_15" />
+                     </styleClass>
+                  </JFXCheckBox>
+                  <JFXCheckBox fx:id="format24" nodeOrientation="LEFT_TO_RIGHT" text="نظام 24 ساعة">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -66,7 +75,7 @@
          </content>
       </ScrollPane>
       <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: -fx-secondary; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <Label fx:id="settingsCanBeChangedFromWithinTheProgramAsWell" maxWidth="1.7976931348623157E308" style="-fx-text-fill: -fx-secondary-text;" text="يمكن تغيير الإعدادت من داخل البرنامج أيضًا" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
+         <Label fx:id="settingsCanBeChangedFromWithinTheProgramAsWell" maxWidth="1.7976931348623157E308" style="-fx-text-fill: -fx-light-text;" text="يمكن تغيير الإعدادت من داخل البرنامج أيضًا" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
             <styleClass>
                <String fx:value="font-text-bold" />
                <String fx:value="_15" />
