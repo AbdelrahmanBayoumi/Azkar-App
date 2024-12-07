@@ -27,6 +27,11 @@
     -fx-text-fill: -fx-primary-text;
 }
 
+/* ============ icons ============ */
+.glyph-icon {
+    -fx-fill: -fx-primary-text;
+}
+
 /* ============ button ============ */
 .button {
     -fx-background-color: -fx-primary-button;
@@ -49,17 +54,21 @@
 }
 
 .frequency-btn:hover {
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-background-color: -fx-third-light;
 }
 
+.frequency-btn:hover .glyph-icon {
+    -fx-fill: -fx-dark-text;
+}
+
 .frequency-btn-selected {
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-background-color: -fx-third-light;
 }
 
 .frequency-btn-selected:hover {
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-background-color: -fx-third-light;
 }
 
@@ -98,7 +107,7 @@
 }
 
 .primary-button .glyph-icon {
-    -fx-fill: -fx-secondary-text;
+    -fx-fill: -fx-light-text;
 }
 
 .primary-button:hover {
@@ -107,11 +116,11 @@
 
 .secondary-button {
     -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
-    -fx-text-fill: -fx-secondary-text;
+    -fx-text-fill: -fx-light-text;
 }
 
 .secondary-button .glyph-icon {
-    -fx-fill: -fx-secondary-text;
+    -fx-fill: -fx-light-text;
 }
 
 .secondary-button:hover {
@@ -179,19 +188,19 @@
 
 .box-normal:hover {
     -fx-background-color: -fx-primary-light;
-    -fx-text-fill: -fx-secondary-text;
+    -fx-text-fill: -fx-light-text;
     -fx-background-radius: 30;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
 }
 
 .box-normal:hover .glyph-icon {
-    -fx-fill: -fx-secondary-text;
+    -fx-fill: -fx-light-text;
 }
 
 /* ============ check-box ============ */
 .check-box {
     -jfx-checked-color: -fx-secondary;
-    -jfx-unchecked-color: -fx-secondary;
+    -jfx-unchecked-color: -fx-reverse-secondary;
     -fx-text-fill: -fx-primary-text;
 }
 
@@ -231,10 +240,18 @@
     -fx-alignment: CENTER;
 }
 
+.combo-box .list-cell:selected {
+    -fx-alignment: CENTER;
+}
+.combo-box > .list-cell {
+    -fx-text-fill: -fx-primary-text;
+}
 .combo-box-normal {
     -fx-text-fill: -fx-primary-text;
     -jfx-focus-color: -fx-primary-text;
     -jfx-unfocus-color: -fx-primary-text;
+    -fx-text-inner-color: -fx-primary-text;
+    -fx-prompt-text-fill: -fx-primary-text;
 }
 
 /* ============ TextField ============ */
@@ -312,6 +329,11 @@
     -fx-background-color: -fx-bg;
 }
 
+.scroll-bar:vertical > .track-background,
+.scroll-bar:horizontal > .track-background {
+    -fx-background-insets: 0;
+}
+
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;
@@ -372,23 +394,23 @@
 }
 
 .box-prayer-selected .label {
-    -fx-text-fill: -fx-secondary-text;
+    -fx-text-fill: -fx-light-text;
     -fx-font-size: 27;
 }
 
 /*==== SLIDER ====*/
 .progress-slider .track {
-    -fx-background-color: null;
     /* Hide the track */
+    -fx-background-color: null;
 }
 
 .slider .track {
-    -fx-background-color: null;
     /* Hide the track */
-    -fx-background-insets: 1 0 -1 0, 0, 1;
+    -fx-background-color: null;
+    -fx-background-insets: 0;
     -fx-background-radius: 2.5, 2.5, 1.5;
     -fx-padding: 0.208333em;
-    /* 2.5 */
+    -fx-background-insets: 0;
 }
 
 .progress-bar .bar {
@@ -397,22 +419,26 @@
 }
 
 .jfx-slider > .track {
-    -fx-background-color: -fx-primary;
+    /* -fx-background-color: -fx-primary; */
+    -fx-background-color: -fx-secondary;
 }
 
 /* Styling the slider thumb */
 .jfx-slider > .thumb {
     -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
 }
 
 /* Styling the filled track */
 .jfx-slider > .colored-track {
     -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
 }
 
 /* Styling the animated thumb */
 .jfx-slider > .animated-thumb {
     -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
 }
 
 .white-box {
@@ -440,7 +466,7 @@
 .pop-over-label {
     -fx-padding: 10;
     -fx-background-color: -fx-third-light;
-    -fx-text-fill: -fx-primary-text;
+    -fx-text-fill: -fx-dark-text;
     -fx-font-family: "Tajawal-Bold";
     -fx-text-alignment: center;
     -fx-alignment: center;

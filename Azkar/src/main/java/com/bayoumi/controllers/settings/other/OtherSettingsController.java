@@ -95,7 +95,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             minimizeAtStart.setSelected(settings.getMinimized());
 
             darkTheme.setSelected(settings.getNightMode());
-            PopOverUtil.setPopOverAndDisable(darkTheme, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("underDevelopment")));
+//            PopOverUtil.setPopOverAndDisable(darkTheme, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("underDevelopment")));
 
             version.setText(Constants.VERSION);
 
