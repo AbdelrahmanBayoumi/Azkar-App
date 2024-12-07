@@ -1,7 +1,4 @@
 * {
-    -fx-bold-font-family: Tajawal-Bold;
-    -fx-medium-font-family: "Tajawal-Medium";
-    /* ====== Colors ====== */
     -fx-primary: #1f6e65;
     -fx-primary-dark: derive(-fx-primary, -40%);
     -fx-primary-light: derive(-fx-primary, 40%);
@@ -14,7 +11,6 @@
     -fx-third-light: #cea16c;
 
     -fx-red: #c91a29;
-    -fx-error: #ff8c00;
     -fx-gray: #bdbdbd;
     -fx-green: derive(#2a9d8f, 60%);
     -fx-blue: #1976d2;
@@ -41,16 +37,58 @@
     -fx-thumb-bg-hover: derive(-fx-secondary-light, 10%);
 }
 
-.separator:horizontal .line,
-.separator:vertical .line {
-    -fx-border-color: -fx-gray;
-}
-
+/* ======= Button ======= */
 .secondary-button {
     -fx-background-color: linear-gradient(-fx-secondary-light, -fx-secondary);
     -fx-text-fill: -fx-light-text;
 }
 
+.secondary-button-outline {
+    -fx-text-fill: -fx-light-text;
+    -fx-border-color: derive(-fx-light-text, -30%);
+}
+
+.secondary-button-outline:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-light-text;
+}
+
+.secondary-button-outline .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+.secondary-button-outline:hover .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+/* ======= Table ======= */
+.table {
+    -fx-background-color: derive(#26304a, 10%);
+    -fx-border-color: derive(-fx-secondary, -60%);
+    -fx-border-width: 1;
+}
+
+.table .column-header-background {
+    -fx-border-width: 0;
+    -fx-background-color: -fx-secondary;
+}
+
+.table .column-header .label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+.table .column-header,
+.table .column-header-background .filler {
+    -fx-border-width: 0;
+}
+
+/* ======= Separator =======  */
+.separator:horizontal .line,
+.separator:vertical .line {
+    -fx-border-color: -fx-gray;
+}
+
+/* ======= Scroll =======  */
 .scroll-bar:vertical > .track-background,
 .scroll-bar:horizontal > .track-background {
     -fx-background-color: -fx-secondary-hover;

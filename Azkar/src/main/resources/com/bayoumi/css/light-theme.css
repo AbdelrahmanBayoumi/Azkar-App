@@ -1,7 +1,4 @@
 * {
-    -fx-bold-font-family: Tajawal-Bold;
-    -fx-medium-font-family: "Tajawal-Medium";
-    /* ====== Colors ====== */
     -fx-primary: #2a9d8f;
     -fx-primary-dark: derive(-fx-primary, -40%);
     -fx-primary-light: derive(-fx-primary, 40%);
@@ -14,8 +11,7 @@
     -fx-third-light: #e9c46a;
 
     -fx-red: #c91a29;
-    -fx-error: #ff8c00;
-    -fx-gray: #e0e0e0;
+    -fx-gray: #bdbdbd;
     -fx-green: #2a9d8f;
     -fx-blue: blue;
     /* ===== Background ===== */

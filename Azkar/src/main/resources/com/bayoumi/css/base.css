@@ -18,11 +18,18 @@
     src: url("../fonts/NotoNaskhArabic-Bold.ttf");
 }
 
+* {
+    -fx-bold-font-family: Tajawal-Bold;
+    -fx-medium-font-family: "Tajawal-Medium";
+}
 .root {
     -fx-background-color: -fx-bg;
 }
 
-/* ============ label ============ */
+/* ============ text ============ */
+Text {
+    -fx-fill: -fx-primary-text;
+}
 .label {
     -fx-text-fill: -fx-primary-text;
 }
@@ -150,8 +157,8 @@
 }
 
 .gray-button {
-    -fx-background-color: linear-gradient(-fx-gray, lightgray);
-    -fx-text-fill: -fx-secondary;
+    -fx-background-color: linear-gradient(-fx-gray, gray);
+    -fx-text-fill: -fx-secondary-text;
 }
 
 .gray-button:hover {
@@ -160,7 +167,7 @@
 }
 
 .gray-button .glyph-icon {
-    -fx-fill: -fx-secondary;
+    -fx-fill: -fx-secondary-text;
 }
 
 .gray-button:hover .glyph-icon {
@@ -263,9 +270,20 @@
 }
 
 /* ============ Table ============ */
+.table {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+    -fx-font-size: 17px;
+}
+
+.table .column-header-background {
+    -fx-border-width: 1;
+}
+
 .table .column-header,
 .table .column-header-background .filler {
-    -fx-size: 14px;
+    -fx-border-width: 1;
 }
 
 .table .table-column {
@@ -280,11 +298,13 @@
 }
 
 .tree-table-row-cell {
-    -fx-text-fill: darkcyan;
-    -fx-border-color: black;
     -fx-border-style: solid;
     -fx-border-width: 0.25;
     -fx-font: normal 20px "Tajawal-Medium";
+}
+
+.tree-table-row-cell .tree-table-cell {
+    -fx-text-fill: -fx-primary-text;
 }
 
 .tree-table-row-cell:even {
@@ -302,19 +322,13 @@
     -fx-border-width: 1;
 }
 
-.table {
-    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);*/
-    /*-fx-border-radius: 30;*/
-    /*-fx-background-radius: 30;*/
-}
-
 .table-btn {
     -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
 .table-btn .glyph-icon {
-    -fx-fill: -fx-secondary;
+    -fx-fill: -fx-reverse-secondary;
     -fx-font-family: "FontAwesome";
     -fx-font-size: 20px;
 }

@@ -10,76 +10,70 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefWidth="594.0" spacing="10.0" style="-fx-border-color: -fx-secondary; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.SettingsController">
-   <children>
-      <HBox alignment="CENTER" onKeyReleased="#keyEventAction" spacing="20.0">
-         <padding>
+<VBox prefWidth="594.0" spacing="10.0" style="-fx-border-color: -fx-secondary-hover; -fx-border-width: 5; -fx-background-color: -fx-bg;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.azkar.timed.SettingsController">
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="5.0" />
+    </padding>
+    <HBox alignment="CENTER" onKeyReleased="#keyEventAction" spacing="20.0">
+        <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-         <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#minimizeFont" fx:id="minimizeFontButton">
+        </padding>
+        <JFXButton fx:id="minimizeFontButton" contentDisplay="GRAPHIC_ONLY" onAction="#minimizeFont">
             <graphic>
-               <FontAwesomeIconView glyphName="MINUS" size="30" style="-fx-fill: -fx-secondary-text;" />
+                <FontAwesomeIconView glyphName="MINUS" size="30" style="-fx-fill: -fx-secondary-text;" />
             </graphic>
             <padding>
-               <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
+                <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
             </padding>
-         </JFXButton>
-         <HBox alignment="CENTER" minWidth="210.0">
-            <children>
-               <Label text="(">
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
-                  <styleClass>
-                     <String fx:value="font-text-bold" />
-                     <String fx:value="_22" />
-                  </styleClass>
-               </Label>
-               <Label fx:id="fontSizeLabel" text="##">
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
-                  <styleClass>
-                     <String fx:value="font-text-bold" />
-                     <String fx:value="_22" />
-                  </styleClass>
-               </Label>
-               <Label layoutX="29.0" layoutY="18.0" text=") ">
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
-                  <styleClass>
-                     <String fx:value="font-text-bold" />
-                     <String fx:value="_22" />
-                  </styleClass>
-               </Label>
-               <Label fx:id="changeFontSizeLabel" text="تغيير حجم الخط">
-                  <font>
-                     <Font name="System Bold" size="20.0" />
-                  </font>
-                  <styleClass>
-                     <String fx:value="font-text-bold" />
-                     <String fx:value="_22" />
-                  </styleClass>
-               </Label>
-            </children>
-         </HBox>
-         <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#maximizeFont">
+        </JFXButton>
+        <HBox alignment="CENTER" minWidth="210.0">
+            <Label text="(">
+                <font>
+                    <Font name="System Bold" size="20.0" />
+                </font>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_22" />
+                </styleClass>
+            </Label>
+            <Label fx:id="fontSizeLabel" text="##">
+                <font>
+                    <Font name="System Bold" size="20.0" />
+                </font>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_22" />
+                </styleClass>
+            </Label>
+            <Label layoutX="29.0" layoutY="18.0" text=") ">
+                <font>
+                    <Font name="System Bold" size="20.0" />
+                </font>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_22" />
+                </styleClass>
+            </Label>
+            <Label fx:id="changeFontSizeLabel" text="تغيير حجم الخط">
+                <font>
+                    <Font name="System Bold" size="20.0" />
+                </font>
+                <styleClass>
+                    <String fx:value="font-text-bold" />
+                    <String fx:value="_22" />
+                </styleClass>
+            </Label>
+        </HBox>
+        <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#maximizeFont">
             <graphic>
-               <FontAwesomeIconView glyphName="PLUS" size="30" style="-fx-fill: -fx-secondary-text;" />
+                <FontAwesomeIconView glyphName="PLUS" size="30" style="-fx-fill: -fx-secondary-text;" />
             </graphic>
             <padding>
-               <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
+                <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
             </padding>
-         </JFXButton>
-      </HBox>
-      <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
-         <children>
-            <Text fx:id="textPreview" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="zekr-text" text="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ" />
-         </children>
-      </HBox>
-   </children>
-   <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="5.0" />
-   </padding>
+        </JFXButton>
+    </HBox>
+    <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+        <Text fx:id="textPreview" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="zekr-text" text="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ" />
+    </HBox>
 </VBox>
