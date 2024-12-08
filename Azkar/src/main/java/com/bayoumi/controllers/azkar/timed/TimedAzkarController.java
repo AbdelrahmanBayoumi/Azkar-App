@@ -348,7 +348,12 @@ public class TimedAzkarController implements Initializable {
         mediaPlayer.setVolume(100);
         mediaPlayer.play();
         mediaPlayer.setOnReady(() -> Logger.debug("Media is ready to play."));
-        mediaPlayer.setOnPlaying(() -> Logger.debug("Media is playing."));
+        mediaPlayer.setOnPlaying(() -> {
+            Logger.debug("Media is playing.");
+            if (isWindowClosed()) {
+                pauseOrStopMedia(audioFile);
+            }
+        });
         mediaPlayer.setOnPaused(() -> pauseOrStopMedia(audioFile));
         mediaPlayer.setOnStopped(() -> pauseOrStopMedia(audioFile));
         mediaPlayer.setOnEndOfMedia(() -> pauseOrStopMedia(audioFile));
@@ -368,4 +373,7 @@ public class TimedAzkarController implements Initializable {
         return mediaPlayer != null && mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
     }
 
+    private boolean isWindowClosed() {
+        return !progressBox.getScene().getWindow().isShowing();
+    }
 }
