@@ -35,7 +35,7 @@
                   <String fx:value="_20" />
                </styleClass>
             </Label>
-            <Label fx:id="oldVersion" style="-fx-text-fill: darkred;" text="0.0.0">
+            <Label fx:id="oldVersion" style="-fx-text-fill: -fx-red;" text="0.0.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
