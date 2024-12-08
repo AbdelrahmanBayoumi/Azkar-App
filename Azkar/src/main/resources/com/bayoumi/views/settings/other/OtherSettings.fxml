@@ -199,7 +199,7 @@
       <VBox fx:id="loadingBox" alignment="CENTER" spacing="20.0" style="-fx-background-color: rgba(0, 0, 0, 0.7);" visible="false">
          <children>
             <ProgressIndicator />
-            <Label style="-fx-text-fill: -fx-secondary-text;" text="جاري البحث.." textFill="WHITE">
+            <Label style="-fx-text-fill: derive(-fx-light-text, 30%);" text="جاري البحث.." textFill="WHITE">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>

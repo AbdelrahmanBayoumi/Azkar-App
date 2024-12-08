@@ -528,6 +528,11 @@ Text {
 .spinner .decrement-arrow {
     -fx-background-color: #ffffff;
 }
+/* ==== Progress Indicator ==== */
+ProgressIndicator .spinner {
+    -fx-background-color: transparent;
+}
+
 /* ==== Zekr ==== */
 .zekr-text {
     -fx-font-family: "Noto Naskh Arabic";
