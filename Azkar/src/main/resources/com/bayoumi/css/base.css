@@ -423,6 +423,12 @@ Text {
     -fx-font-size: 27;
 }
 
+/* ============ Progress Bar ============ */
+.progress-bar .bar {
+    -fx-padding: 4px;
+    -fx-background-insets: 0;
+}
+
 /*==== SLIDER ====*/
 .progress-slider .track {
     /* Hide the track */
@@ -435,11 +441,6 @@ Text {
     -fx-background-insets: 0;
     -fx-background-radius: 2.5, 2.5, 1.5;
     -fx-padding: 0.208333em;
-    -fx-background-insets: 0;
-}
-
-.progress-bar .bar {
-    -fx-padding: 4px;
     -fx-background-insets: 0;
 }
 

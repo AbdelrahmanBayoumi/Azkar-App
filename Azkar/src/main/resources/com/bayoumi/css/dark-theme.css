@@ -93,3 +93,8 @@
 .scroll-bar:horizontal > .track-background {
     -fx-background-color: -fx-secondary-hover;
 }
+
+/* ======= Progress Bar ======= */
+.zekr-progress > .track {
+    -fx-background-color: derive(-fx-light-text, -30%);
+}
