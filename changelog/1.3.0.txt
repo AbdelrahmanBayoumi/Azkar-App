@@ -1,0 +1,19 @@
+■ الميزات الجديدة:
+
+- إمكانية التبديل بين الوضع الفاتح والوضع الداكن.
+- إضافة إمكانية رفع ملفات صوتية مخصصة للأذان (أذان)، مما يسمح للمستخدمين برفع أي ملف صوتي يرغبون به للأذان.
+
+■ التحسينات:
+
+- تغيير تسمية "مواقيت أخرى" إلى "مواقيت الليل" لتوضيح الغرض.
+
+------------------
+
+■ New Features:
+
+- Ability to switch between light and dark modes.
+- Added the ability to upload custom Adhan audio files, allowing users to upload any desired Adhan audio file.
+
+■ Enhancements:
+
+- Renamed "Other Timings" to "Night Timings" for better clarity.
