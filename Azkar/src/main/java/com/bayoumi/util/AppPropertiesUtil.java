@@ -16,12 +16,6 @@ import java.util.TimeZone;
 
 public class AppPropertiesUtil {
 
-    public static void main(String[] args) {
-        Launcher.startTime = System.currentTimeMillis();
-        getProps().forEach((k, v) -> System.out.println(k + " : " + v));
-    }
-
-
     public static Map<String, String> getProps() {
         final Map<String, String> props = new HashMap<>();
 

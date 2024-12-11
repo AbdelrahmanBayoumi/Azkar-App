@@ -189,23 +189,5 @@ public class Utilities {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         return calendar.getTime();
     }
-
-//    public static void main(String[] args) {
-//        Date date = Utilities.getCurrentDate();
-//        System.out.println("==================");
-//        System.out.println(getGregorianDate("ar", date));
-//        System.out.println(getGregorianDate("en", date));
-//        System.out.println("==================");
-//        System.out.println(getDay("ar", date));
-//        System.out.println(getDay("en", date));
-//        System.out.println("==================");
-//        System.out.println(getTime("en", date));
-//        System.out.println(getTime("ar", date));
-//        System.out.println("==================");
-//        HijriDate dateToday = new HijriDate();
-//        HijriDate dateRandom = new HijriDate(1442, 6, 1);
-//        System.out.println(daysBetween(dateToday.getCalendar(), dateRandom.getCalendar()));
-//        System.out.println("==================");
-//    }
 }
 

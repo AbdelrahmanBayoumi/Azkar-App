@@ -93,9 +93,4 @@ public class ArabicNumeralDiscrimination {
     private static boolean isOneOrTwo(int n) {
         return n == 1 || n == 2;
     }
-
-//    public static void main(String[] args) {
-//        System.out.println(hoursArabicPlurality(3));
-//        System.out.println(minutesArabicPlurality(155));
-//    }
 }
