@@ -337,6 +337,18 @@ return console.askYesNo(message, true);
           <screen id="27" beanClass="com.install4j.runtime.beans.screens.UninstallationScreen" rollbackBarrierExitCode="0">
             <actions>
               <action id="29" beanClass="com.install4j.runtime.beans.actions.UninstallFilesAction" actionElevationType="elevated" rollbackBarrierExitCode="0" />
+              <action id="793" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" commentSet="true" comment="This is to ensure that the DB and any files added in runtime (not by installer) to be deleted when uninstalled" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="files" type="array" class="java.io.File" length="1">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>jarFiles</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="recursive" type="boolean" value="true" />
+                </serializedBean>
+              </action>
             </actions>
             <formComponents>
               <formComponent id="28" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
@@ -351,7 +363,22 @@ return console.askYesNo(message, true);
             <formComponents>
               <formComponent id="31" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
                 <serializedBean>
-                  <property name="labelText" type="string">${form:successMessage}</property>
+                  <property name="labelText" type="string">${form:successMessage}
+
+Thank you for using Azkar!
+
+If you have any feedback or suggestions for improvement, feel free to contact us through our website:</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="794" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
+                <serializedBean>
+                  <property name="hyperlinkText" type="string">azkar-site.web.app</property>
+                  <property name="url" type="string">https://azkar-site.web.app/</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="795" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
+                <serializedBean>
+                  <property name="labelText" type="string">We hope to see you again soon! &#x1f31f;</property>
                 </serializedBean>
               </formComponent>
             </formComponents>
