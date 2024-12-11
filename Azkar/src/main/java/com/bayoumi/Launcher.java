@@ -72,7 +72,7 @@ public class Launcher extends Application {
             // --- Create Needed Folder if not exist ---
             Utility.createDirectory(Constants.assetsPath + "/logs");
             Utility.createDirectory(Constants.assetsPath + "/db");
-            Utility.createDirectory(Constants.assetsPath + "/audio");
+            Utility.createDirectory(Constants.assetsPath + "/audio/adhan");
             Utility.createDirectory(Constants.assetsPath + "/azkar");
 
             // To save the audio file in the temp directory to be able to play it
