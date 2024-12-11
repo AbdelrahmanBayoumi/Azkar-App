@@ -224,6 +224,20 @@ return console.askOkCancel(message, true);
                   <property name="itemName" type="string">${compiler:sys.fullName} ${compiler:sys.version}</property>
                 </serializedBean>
               </action>
+              <action name="Remove unused sharawy_doaa.mp3" id="797" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">File file = new File(context.getInstallationDirectory(), "jarFiles/audio/adhan/sharawy_doaa.mp3");
+if (!file.exists() || file.delete()) {
+      return true;
+}
+return false;
+</property>
+                    </object>
+                  </property>
+                </serializedBean>
+              </action>
             </actions>
             <formComponents>
               <formComponent id="16" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
@@ -343,6 +357,18 @@ return console.askYesNo(message, true);
                     <element index="0">
                       <object class="java.io.File">
                         <string>jarFiles</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="recursive" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="798" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="files" type="array" class="java.io.File" length="1">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>${compiler:env.LOCALAPPDATA}/${compiler:APP_SHORT_NAME}</string>
                       </object>
                     </element>
                   </property>
