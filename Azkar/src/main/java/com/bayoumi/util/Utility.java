@@ -5,13 +5,7 @@ import com.bayoumi.Launcher;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Set;
 
 /**
@@ -55,33 +49,6 @@ public class Utility {
     public static void copyToClipboard(String text) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(text), null);
-    }
-
-    /**
-     * @param path where directory needed to be created
-     */
-    public static void createDirectory(String path) {
-        try {
-            Files.createDirectories(Paths.get(path));
-        } catch (Exception e) {
-            Logger.error(null, e, Utility.class.getName() + ".createDirectory()");
-        }
-    }
-
-    /**
-     * Copy file from source to destination if the destination file is not exist or not a directory
-     * if the destination file is exist and not a directory the file will not be copied
-     *
-     * @param from source path to copy from
-     * @param to   destination path to copy to
-     * @throws IOException if the file is not found or can't be read
-     */
-    public static void copyIfNotExist(Path from, Path to) throws IOException {
-        File f = new File(to.toString());
-        if (f.exists() && !f.isDirectory()) {
-            return;
-        }
-        Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
     }
 
     /**

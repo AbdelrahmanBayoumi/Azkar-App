@@ -2,7 +2,7 @@ package com.bayoumi.models.settings;
 
 import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.preferences.PreferencesType;
-import com.bayoumi.util.file.FileUtils;
+import com.bayoumi.util.gui.notfication.NotificationAudio;
 
 import java.util.Observable;
 
@@ -89,7 +89,7 @@ public class AzkarSettings extends Observable {
     }
 
     public String getAudioName() {
-        if (FileUtils.getAudioList().contains(audioName)) {
+        if (NotificationAudio.getAudioList().contains(audioName)) {
             return audioName;
         }
         return "بدون صوت";

@@ -3,9 +3,9 @@ package com.bayoumi.controllers.settings.azkar;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.settings.*;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.*;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
@@ -143,7 +143,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         // init Saved data form DB
         azkarSettings = Settings.getInstance().getAzkarSettings();
         azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
-        azkarAlarmComboBox.setItems(FileUtils.getAudioList());
+        azkarAlarmComboBox.setItems(NotificationAudio.getAudioList());
         playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
         azkarAlarmComboBox.setOnAction(event -> {
             playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
@@ -220,7 +220,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             Logger.debug(fileName);
             if (!fileName.equals("بدون صوت")) {
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
+                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(Constants.assetsPath + "/audio/" + fileName).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);

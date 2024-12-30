@@ -1,10 +1,10 @@
 package com.bayoumi.models.settings;
 
+import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
-import com.bayoumi.util.file.FileUtils;
 import javafx.util.StringConverter;
 
 import java.sql.ResultSet;
@@ -136,7 +136,7 @@ public class PrayerTimeSettings extends Observable {
     }
 
     public String getAdhanAudio() {
-        if (FileUtils.getAdhanFilesNames().contains(adhanAudio)) {
+        if (Muezzin.getAdhanFilesNames().contains(adhanAudio)) {
             return adhanAudio;
         }
         return "";

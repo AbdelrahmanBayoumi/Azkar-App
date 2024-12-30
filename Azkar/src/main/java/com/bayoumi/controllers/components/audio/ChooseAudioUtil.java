@@ -5,7 +5,6 @@ import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.load.Locations;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
@@ -17,7 +16,7 @@ public class ChooseAudioUtil {
 
     public static ChooseAudioController adhan(ResourceBundle bundle, Pane container) {
         try {
-            List<Muezzin> muezzinList = FileUtils.getAdhanList();
+            List<Muezzin> muezzinList = Muezzin.getAdhanList();
             FXMLLoader loader = new FXMLLoader(ChooseAudioUtil.class.getResource(Locations.ChooseAudio.getName()));
             container.getChildren().add(loader.load());
             ChooseAudioController chooseAudioController = loader.getController();

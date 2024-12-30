@@ -7,8 +7,8 @@ import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utility;
 import com.bayoumi.util.VersionComparator;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
@@ -112,7 +112,7 @@ public class TimedAzkarService {
                 break;
             }
             Logger.debug("[TimedAzkarService] Copying from: " + from + " to: " + to);
-            Utility.copyIfNotExist(from, to);
+            FileUtils.copyIfNotExist(from, to);
         }
     }
 

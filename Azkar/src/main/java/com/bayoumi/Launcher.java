@@ -14,6 +14,7 @@ import com.bayoumi.util.SentryUtil;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.db.LocationsDBManager;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.load.Loader;
@@ -70,13 +71,13 @@ public class Launcher extends Application {
 
         try {
             // --- Create Needed Folder if not exist ---
-            Utility.createDirectory(Constants.assetsPath + "/logs");
-            Utility.createDirectory(Constants.assetsPath + "/db");
-            Utility.createDirectory(Constants.assetsPath + "/audio/adhan");
-            Utility.createDirectory(Constants.assetsPath + "/azkar");
+            FileUtils.createDirectory(Constants.assetsPath + "/logs");
+            FileUtils.createDirectory(Constants.assetsPath + "/db");
+            FileUtils.createDirectory(Constants.assetsPath + "/audio/adhan");
+            FileUtils.createDirectory(Constants.assetsPath + "/azkar");
 
             // To save the audio file in the temp directory to be able to play it
-            Utility.createDirectory(System.getProperty("java.io.tmpdir") + "/" + Constants.APP_NAME);
+            FileUtils.createDirectory(System.getProperty("java.io.tmpdir") + "/" + Constants.APP_NAME);
             incrementPreloader();
 
             // --- initialize Logger ---

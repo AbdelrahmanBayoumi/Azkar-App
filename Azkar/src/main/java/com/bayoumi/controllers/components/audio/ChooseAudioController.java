@@ -8,7 +8,6 @@ import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.PopOverUtil;
 import com.jfoenix.controls.JFXButton;
@@ -82,7 +81,7 @@ public class ChooseAudioController implements Initializable {
     }
 
     private void setMuezzins() {
-        audioBox.setItems(FXCollections.observableArrayList(FileUtils.getAdhanList()));
+        audioBox.setItems(FXCollections.observableArrayList(Muezzin.getAdhanList()));
         audioBox.getItems().add(Muezzin.NO_SOUND);
     }
 
@@ -165,11 +164,8 @@ public class ChooseAudioController implements Initializable {
         final File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
         if (selectedFile != null && selectedFile.isFile()) {
             Path audioSourcePath = selectedFile.toPath();
-            System.out.println("Path:" + audioSourcePath);
             String audioTargetPath = Constants.assetsPath + "/audio/adhan/" + selectedFile.getName();
-            System.out.println("audioTargetPath:" + audioTargetPath);
             Path path = Paths.get(audioTargetPath);
-            System.out.println("audioTargetPath path:" + path);
 
             try {
                 Files.copy(audioSourcePath, path, StandardCopyOption.REPLACE_EXISTING);
