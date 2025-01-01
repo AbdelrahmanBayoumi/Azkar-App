@@ -54,7 +54,7 @@ public class NotificationSettings {
             @Override
             public String toString(Pos object) {
                 if (object.equals(Pos.TOP_RIGHT)) {
-                    return "فوق على اليمين";
+                    return "أعلى اليمين";
                 }
                 if (object.equals(Pos.BOTTOM_RIGHT)) {
                     return "أسفل اليمين";
@@ -66,7 +66,7 @@ public class NotificationSettings {
                     return "أسفل اليسار";
                 }
                 if (object.equals(Pos.CENTER)) {
-                    return "المنتصف";
+                    return "في المنتصف";
                 }
                 return object.toString();
             }
