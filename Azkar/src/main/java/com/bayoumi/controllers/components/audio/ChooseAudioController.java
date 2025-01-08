@@ -47,7 +47,7 @@ public class ChooseAudioController implements Initializable {
 
     // ======= FXML =======
     @FXML
-    private HBox prayerVolumeBox;
+    private HBox prayerVolumeBox, root;
     @FXML
     private JFXSlider prayerVolumeSlider;
     @FXML
@@ -151,6 +151,10 @@ public class ChooseAudioController implements Initializable {
                 MEDIA_PLAYER.setVolume(azkarSettings.getPrayerVolume() / 100.0);
             }
         });
+
+        root.setDisable(Settings.getInstance().getPrayerTimeSettings().isPrayersReminderStopped());
+        Settings.getInstance().getPrayerTimeSettings().addObserver((o, arg) ->
+                root.setDisable(Settings.getInstance().getPrayerTimeSettings().isPrayersReminderStopped()));
     }
 
     @FXML

@@ -26,6 +26,10 @@ public class ReminderUtil {
         reminderList.add(reminder);
     }
 
+    public void addAll(List<Reminder> reminders) {
+        reminderList.addAll(reminders);
+    }
+
     public void validate(Date date) {
         reminderList.forEach(reminder -> {
             if (isEqualIgnoreMillis(date, reminder.getDate())) {

@@ -47,6 +47,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -280,11 +281,11 @@ public class HomeController implements Initializable {
 
     private void initReminders() {
         ReminderUtil.getInstance().clear();
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.fajr, () -> playAdhan("صلاة الفجر")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.dhuhr, () -> playAdhan("صلاة الظهر")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.asr, () -> playAdhan("صلاة العصر")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.maghrib, () -> playAdhan("صلاة المغرب")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
+
+        if(!settings.getPrayerTimeSettings().isPrayersReminderStopped()){
+            ReminderUtil.getInstance().addAll(getPrayersReminders());
+        }
+
         if (settings.getAzkarSettings().getMorningAzkarOffset() != 0) {
             Date morningAzkarDate = ((Date) prayerTimesToday.fajr.clone());
             morningAzkarDate.setTime(prayerTimesToday.fajr.getTime() + (settings.getAzkarSettings().getMorningAzkarOffset() * 60000L));
@@ -307,6 +308,16 @@ public class HomeController implements Initializable {
                             () -> Launcher.homeController.goToNightAzkar(),
                             new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume())))));
         }
+    }
+
+    private List<Reminder> getPrayersReminders() {
+        final List<Reminder> reminders = new ArrayList<>();
+        reminders.add(new Reminder(prayerTimesToday.fajr, () -> playAdhan("صلاة الفجر")));
+        reminders.add(new Reminder(prayerTimesToday.dhuhr, () -> playAdhan("صلاة الظهر")));
+        reminders.add(new Reminder(prayerTimesToday.asr, () -> playAdhan("صلاة العصر")));
+        reminders.add(new Reminder(prayerTimesToday.maghrib, () -> playAdhan("صلاة المغرب")));
+        reminders.add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
+        return reminders;
     }
 
     private void checkForReminders(Date date) {

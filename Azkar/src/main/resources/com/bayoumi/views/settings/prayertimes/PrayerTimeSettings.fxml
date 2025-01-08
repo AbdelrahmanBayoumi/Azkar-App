@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefWidth="660.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.prayertimes.PrayerTimeSettingsController">
     <VBox fx:id="container" alignment="CENTER" spacing="20.0" styleClass="root">
@@ -26,6 +30,23 @@
                 </Label>
                 <FontAwesomeIconView glyphName="VOLUME_UP" size="25" />
             </HBox>
+         <Separator prefWidth="200.0">
+            <VBox.margin>
+               <Insets left="20.0" right="20.0" />
+            </VBox.margin>
+         </Separator>
+         <JFXCheckBox fx:id="stopPrayersReminder" focusTraversable="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#onStopPrayersChange" text="تعطيل التذكير بالصلاة">
+            <font>
+               <Font size="16.0" />
+            </font>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <styleClass>
+               <String fx:value="font-text-medium" />
+               <String fx:value="_16" />
+            </styleClass>
+         </JFXCheckBox>
         </VBox>
     </VBox>
 </ScrollPane>

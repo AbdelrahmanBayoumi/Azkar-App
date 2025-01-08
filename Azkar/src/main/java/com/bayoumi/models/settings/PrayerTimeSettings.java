@@ -28,6 +28,7 @@ public class PrayerTimeSettings extends Observable {
     private int asrAdjustment;
     private int maghribAdjustment;
     private int ishaAdjustment;
+    private boolean isPrayersReminderStopped;
 
 
     protected PrayerTimeSettings() {
@@ -50,6 +51,7 @@ public class PrayerTimeSettings extends Observable {
         this.asrAdjustment = Preferences.getInstance().getInt(PreferencesType.ASR_ADJUSTMENT);
         this.maghribAdjustment = Preferences.getInstance().getInt(PreferencesType.MAGHRIB_ADJUSTMENT);
         this.ishaAdjustment = Preferences.getInstance().getInt(PreferencesType.ISHAA_ADJUSTMENT);
+        this.isPrayersReminderStopped = Preferences.getInstance().getBoolean(PreferencesType.IS_PRAYERS_REMINDER_STOPPED);
     }
 
     public void handleNotifyObservers() {
@@ -149,6 +151,18 @@ public class PrayerTimeSettings extends Observable {
         Preferences.getInstance().set(PreferencesType.ADHAN_AUDIO, adhanAudio);
     }
 
+    public boolean isPrayersReminderStopped() {
+        return isPrayersReminderStopped;
+    }
+
+    public void setPrayersReminderStopped(boolean prayersReminderStopped) {
+        // 1. set value to local variable
+        isPrayersReminderStopped = prayersReminderStopped;
+        // 2. save value to DB
+        Preferences.getInstance().set(PreferencesType.IS_PRAYERS_REMINDER_STOPPED, prayersReminderStopped + "");
+        handleNotifyObservers();
+    }
+
     public boolean isManualLocationSelected() {
         return isManualLocationSelected;
     }
@@ -237,6 +251,7 @@ public class PrayerTimeSettings extends Observable {
                 ", asrAdjustment=" + asrAdjustment +
                 ", maghribAdjustment=" + maghribAdjustment +
                 ", ishaAdjustment=" + ishaAdjustment +
+                ", isPrayersReminderStopped=" + isPrayersReminderStopped +
                 '}';
     }
 

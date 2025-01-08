@@ -18,7 +18,7 @@ public class ChooseAudioUtil {
         try {
             List<Muezzin> muezzinList = Muezzin.getAdhanList();
             FXMLLoader loader = new FXMLLoader(ChooseAudioUtil.class.getResource(Locations.ChooseAudio.getName()));
-            container.getChildren().add(loader.load());
+            container.getChildren().add(1, loader.load());
             ChooseAudioController chooseAudioController = loader.getController();
             chooseAudioController.setData(Utility.toUTF(bundle.getString("muezzin")),
                     Muezzin.getFromFileName(muezzinList, Settings.getInstance().getPrayerTimeSettings().getAdhanAudio()),
