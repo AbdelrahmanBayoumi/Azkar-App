@@ -74,7 +74,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private JFXSlider volumeSlider;
     @FXML
-    private HBox volumeBox;
+    private HBox volumeBox, azkarDurationBox;
     @FXML
     private JFXToggleButton morningAzkarTimeToggle, nightAzkarTimeToggle;
     @FXML
@@ -126,6 +126,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
 
         periodBox.disableProperty().bind(stopAzkar.selectedProperty());
+        azkarDurationBox.disableProperty().bind(stopAzkar.selectedProperty());
         // init Spinner Values
         IntegerSpinner.init(azkarPeriod);
         IntegerSpinner.init(azkarPeriod_hour);

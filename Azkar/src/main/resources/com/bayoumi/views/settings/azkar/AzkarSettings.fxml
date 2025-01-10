@@ -101,7 +101,7 @@
                             </HBox>
                         </VBox>
                         <Separator />
-                  <HBox alignment="CENTER" spacing="5.0">
+                  <HBox alignment="CENTER" spacing="5.0" fx:id="azkarDurationBox">
                      <children>
                         <Label fx:id="zekrDurationEvery" text="وقت ظهور الذكر ب(الثانيه):" textAlignment="CENTER" wrapText="true">
                            <styleClass>
