@@ -282,7 +282,7 @@ public class HomeController implements Initializable {
     private void initReminders() {
         ReminderUtil.getInstance().clear();
 
-        if(!settings.getPrayerTimeSettings().isPrayersReminderStopped()){
+        if (!settings.getPrayerTimeSettings().isPrayersReminderStopped()) {
             ReminderUtil.getInstance().addAll(getPrayersReminders());
         }
 
