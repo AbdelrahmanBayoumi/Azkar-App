@@ -10,11 +10,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="parent" maxWidth="500.0" minWidth="330.0" styleClass="message-box" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.notification.NotificationsControlsFXController">
-    <HBox fx:id="notificationBox" alignment="CENTER" layoutY="7.0" maxWidth="500.0" minWidth="330.0" spacing="20.0" stylesheets="@../../css/controlsfx-notification.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-        </padding>
+<AnchorPane fx:id="parent" maxWidth="500.0" minWidth="75.0" styleClass="message-box" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.notification.NotificationsControlsFXController">
+    <HBox fx:id="notificationBox" alignment="CENTER" layoutY="7.0" maxWidth="500.0" spacing="20.0" stylesheets="@../../css/controlsfx-notification.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
             <Label fx:id="text" alignment="CENTER_RIGHT" contentDisplay="TEXT_ONLY" maxWidth="330.0" text="الحمدلله" textAlignment="RIGHT" wrapText="true">
                 <styleClass>

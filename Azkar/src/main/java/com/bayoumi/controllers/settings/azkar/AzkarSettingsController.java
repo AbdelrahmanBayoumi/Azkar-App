@@ -356,9 +356,9 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         Platform.runLater(()
                 -> {
             Image image = null;
-            if (new Random().nextInt(999) % 2 == 0) {
+//            if (new Random().nextInt(999) % 2 == 0) {
                 image = new Image("/com/bayoumi/images/Kaaba.png");
-            }
+//            }
             try {
                 Notification.create(new NotificationContent(AbsoluteZekr.absoluteZekrObservableList.get(
                                 new Random().nextInt(AbsoluteZekr.absoluteZekrObservableList.size())).getText(),

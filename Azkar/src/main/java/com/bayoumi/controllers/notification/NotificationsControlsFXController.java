@@ -52,11 +52,11 @@ public class NotificationsControlsFXController implements Initializable {
 
     public void setData(String msg, Image image) {
         this.text.setText(msg);
-        this.text.setStyle("-fx-text-fill: " + Settings.getInstance().getNotificationSettings().getTextColor() + ";");
+        this.text.setStyle("-fx-text-fill: " + Settings.getInstance().getNotificationSettings().getTextColor() + ";-fx-font-size:5px;");
         if (image != null) {
             ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(50);
-            imageView.setFitWidth(50);
+            imageView.setFitHeight(10);
+            imageView.setFitWidth(10);
             notificationBox.getChildren().add(0, imageView);
         }
 
