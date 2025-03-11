@@ -31,7 +31,6 @@ public class BuilderUI {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader(BuilderUI.class.getResource(Locations.UpdateConfirm.toString()));
             Scene scene = new Scene(loader.load());
-            // TODO: test theme on this view
             scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
             stage.setScene(scene);
             stage.initOwner(SingleInstance.getInstance().getCurrentStage());
