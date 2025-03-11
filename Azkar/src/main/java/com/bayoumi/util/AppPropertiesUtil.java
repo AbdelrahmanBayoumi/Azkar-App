@@ -19,16 +19,7 @@ public class AppPropertiesUtil {
     public static Map<String, String> getProps() {
         final Map<String, String> props = new HashMap<>();
 
-        // Application Information
-        props.put("app.running_mode", Constants.RUNNING_MODE.toString());
-        props.put("app.timestamp", String.valueOf(System.currentTimeMillis()));
-        props.put("app.startup_local_datetime", Launcher.startTime == null ? "N/A" : LocalDateTime.ofInstant(Instant.ofEpochMilli(Launcher.startTime), ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        props.put("app.thread_count", String.valueOf(Thread.activeCount()));
-
         // User Information
-        props.put("user.name", System.getProperty("user.name"));
-        props.put("user.dir", System.getProperty("user.dir"));
-        props.put("user.home", System.getProperty("user.home"));
         props.put("assets_path", Constants.assetsPath);
 
         // OS Information
@@ -38,7 +29,6 @@ public class AppPropertiesUtil {
 
         // Java Information
         props.put("java.version", System.getProperty("java.version"));
-        props.put("java.tmpdir", System.getProperty("java.io.tmpdir"));
 
         // Timezone Information
         props.put("timezone.id", TimeZone.getDefault().getID());
@@ -48,13 +38,6 @@ public class AppPropertiesUtil {
 
         // Locale Information
         props.put("locale.default", Locale.getDefault().toString());
-
-        // Current Date and Time
-        props.put("current.local_datetime", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        props.put("current.utc_datetime", ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_INSTANT));
-
-        // Hardware Information
-        props.put("hardware.available_processors", String.valueOf(Runtime.getRuntime().availableProcessors()));
 
         return props;
     }

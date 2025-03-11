@@ -20,7 +20,7 @@ public class Muezzin {
     private final String englishName;
     private final String arabicName;
 
-    // Static instances (replacing enum constants)
+    // Static instances
     public static final Muezzin ABDULBASIT_ABDUSAMAD = new Muezzin("Abdulbasit Abdusamad", "عبد الباسط عبد الصمد", "adhan-abdulbasit-abdusamad.mp3");
     public static final Muezzin ABUL_AINAIN_SHUAISHA = new Muezzin("Abul Ainain Shuaisha", "أبو العنين شعيشع", "adhan-abul-ainain-shuaisha.mp3");
     public static final Muezzin ALI_IBN_AHMAD_MALA = new Muezzin("Ali Ibn Ahmad Mala", "علي بن أحمد ملا", "adhan-ali-ibn-ahmad-mala.mp3");
@@ -118,8 +118,8 @@ public class Muezzin {
         return VALUES;
     }
 
-    public static Muezzin getFromFileName(List<Muezzin> seatchList, String fileName) {
-        for (Muezzin muezzin : seatchList) {
+    public static Muezzin getFromFileName(List<Muezzin> muezzinList, String fileName) {
+        for (Muezzin muezzin : muezzinList) {
             if (fileName.equals(muezzin.getFileName())) {
                 return muezzin;
             }

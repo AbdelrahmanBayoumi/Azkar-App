@@ -6,6 +6,7 @@ import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.update.UpdateHandler;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Timer;
 
@@ -103,8 +104,9 @@ public class Preferences {
             if (result.next()) {
                 String value = result.getString("value");
 
-                // If the value is an empty string and the default value is not empty, update to the default (because empty is not accepted)
-                if (value != null && value.isEmpty() && !defaultValue.isEmpty()) {
+                // If the retrieved value is empty, and the key is not allowed to have an empty value,
+                // update the stored value to the default since empty strings are not permitted.
+                if (value != null && value.isEmpty() && !Arrays.asList(PreferencesType.ADHAN_AUDIO, PreferencesType.AUDIO_NAME).contains(key)) {
                     update(key, defaultValue);
                     return defaultValue;
                 }
