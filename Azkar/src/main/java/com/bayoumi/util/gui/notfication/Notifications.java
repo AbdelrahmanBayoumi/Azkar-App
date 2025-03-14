@@ -26,6 +26,7 @@
  */
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import com.bayoumi.util.services.azkar.AzkarService;
@@ -106,8 +107,8 @@ public class Notifications {
 
     private String title;
     private String text;
-    private String borderColor = "#E9C46A";
-    private String backgroundColor = "#FFFFFF";
+    private String borderColor = NotificationColor.LIGHT_THEME.getBorderColor();
+    private String backgroundColor = NotificationColor.LIGHT_THEME.getBackgroundColor();
     private Node graphic;
     private ObservableList<Action> actions = FXCollections.observableArrayList();
     private Pos position = Pos.BOTTOM_RIGHT;

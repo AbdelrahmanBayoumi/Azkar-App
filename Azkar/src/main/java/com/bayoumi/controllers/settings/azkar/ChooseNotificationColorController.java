@@ -2,6 +2,7 @@ package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.NotificationSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
@@ -9,9 +10,11 @@ import com.bayoumi.util.gui.ColorUtil;
 import com.jfoenix.controls.JFXColorPicker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -40,9 +43,11 @@ public class ChooseNotificationColorController implements Initializable {
     @FXML
     private AnchorPane notificationParent;
     @FXML
-    private Label text, title, backgroundColorLabel, borderColorLabel, textColorLabel;
+    private HBox restoreDefaultColorBox;
     @FXML
-    private Button saveButton;
+    private Label text, title, backgroundColorLabel, borderColorLabel, textColorLabel, defaultThemeLabel;
+    @FXML
+    private Button saveButton, defaultLightThemeButton, defaultDarkThemeButton;
     @FXML
     private JFXColorPicker backgroundColorPicker, borderColorPicker, textColorPicker;
 
@@ -61,6 +66,10 @@ public class ChooseNotificationColorController implements Initializable {
         backgroundColorLabel.setText(Utility.toUTF(bundle.getString("backgroundColor")));
         borderColorLabel.setText(Utility.toUTF(bundle.getString("borderColor")));
         textColorLabel.setText(Utility.toUTF(bundle.getString("textColor")));
+        restoreDefaultColorBox.setNodeOrientation(NodeOrientation.valueOf(Utility.toUTF(bundle.getString("dir"))));
+        defaultThemeLabel.setText(Utility.toUTF(bundle.getString("restoreDefaultColor")));
+        defaultLightThemeButton.setText(Utility.toUTF(bundle.getString("lightTheme")));
+        defaultDarkThemeButton.setText(Utility.toUTF(bundle.getString("darkTheme")));
     }
 
 
@@ -91,13 +100,22 @@ public class ChooseNotificationColorController implements Initializable {
     }
 
     @FXML
+    private void selectDarkTheme() {
+        setColor(NotificationColor.DARK_THEME.getBorderColor(), NotificationColor.DARK_THEME.getBackgroundColor(), NotificationColor.DARK_THEME.getTextColor());
+    }
+
+    @FXML
+    private void selectLightTheme() {
+        setColor(NotificationColor.LIGHT_THEME.getBorderColor(), NotificationColor.LIGHT_THEME.getBackgroundColor(), NotificationColor.LIGHT_THEME.getTextColor());
+    }
+
+    @FXML
     private void save() {
         Settings.getInstance().getNotificationSettings().setBorderColor(chosenBorderColorHex);
         Settings.getInstance().getNotificationSettings().setBackgroundColor(chosenBackgroundColorHex);
         Settings.getInstance().getNotificationSettings().setTextColor(chosenTextColorHex);
         ((Stage) backgroundColorPicker.getScene().getWindow()).close();
     }
-
 
     @FXML
     private void color000000_BG() {

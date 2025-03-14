@@ -8,15 +8,11 @@ import javafx.util.StringConverter;
 
 public class NotificationSettings {
     private Pos position;
-    private String borderColor;
-    private String backgroundColor;
-    private String textColor;
+    private final NotificationColor notificationColor;
 
     protected NotificationSettings() {
         this.position = Pos.BOTTOM_RIGHT;
-        this.borderColor = PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue();
-        this.backgroundColor = PreferencesType.NOTIFICATION_BACKGROUND_COLOR.getDefaultValue();
-        this.textColor = PreferencesType.NOTIFICATION_TEXT_COLOR.getDefaultValue();
+        this.notificationColor = new NotificationColor(NotificationColor.LIGHT_THEME.getBorderColor(), NotificationColor.LIGHT_THEME.getBackgroundColor(), NotificationColor.LIGHT_THEME.getTextColor());
         loadSettings();
     }
 
@@ -81,9 +77,6 @@ public class NotificationSettings {
     private void loadSettings() {
         try {
             this.position = Pos.valueOf(Preferences.getInstance().get(PreferencesType.NOTIFICATION_POS, PreferencesType.NOTIFICATION_POS.getDefaultValue()));
-            this.borderColor = Preferences.getInstance().get(PreferencesType.NOTIFICATION_BORDER_COLOR, PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue());
-            this.backgroundColor = Preferences.getInstance().get(PreferencesType.NOTIFICATION_BACKGROUND_COLOR, PreferencesType.NOTIFICATION_BACKGROUND_COLOR.getDefaultValue());
-            this.textColor = Preferences.getInstance().get(PreferencesType.NOTIFICATION_TEXT_COLOR, PreferencesType.NOTIFICATION_TEXT_COLOR.getDefaultValue());
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".loadSettings()");
         }
@@ -101,45 +94,34 @@ public class NotificationSettings {
     }
 
     public String getBorderColor() {
-        if (borderColor == null || borderColor.isEmpty())
-            return PreferencesType.NOTIFICATION_BORDER_COLOR.getDefaultValue();
-        return borderColor;
+        return this.notificationColor.getBorderColor();
     }
 
     public void setBorderColor(String borderColor) {
-        this.borderColor = borderColor;
-        Preferences.getInstance().set(PreferencesType.NOTIFICATION_BORDER_COLOR, this.borderColor);
+        this.notificationColor.setBorderColor(borderColor);
     }
 
     public String getBackgroundColor() {
-        if (backgroundColor == null || backgroundColor.isEmpty())
-            return PreferencesType.NOTIFICATION_BACKGROUND_COLOR.getDefaultValue();
-        return backgroundColor;
+        return this.notificationColor.getBackgroundColor();
     }
 
     public void setBackgroundColor(String backgroundColor) {
-        this.backgroundColor = backgroundColor;
-        Preferences.getInstance().set(PreferencesType.NOTIFICATION_BACKGROUND_COLOR, this.backgroundColor);
+        this.notificationColor.setBackgroundColor(backgroundColor);
     }
 
     public String getTextColor() {
-        if (textColor == null || textColor.isEmpty())
-            return PreferencesType.NOTIFICATION_TEXT_COLOR.getDefaultValue();
-        return textColor;
+        return this.notificationColor.getTextColor();
     }
 
     public void setTextColor(String textColor) {
-        this.textColor = textColor;
-        Preferences.getInstance().set(PreferencesType.NOTIFICATION_TEXT_COLOR, this.textColor);
+        this.notificationColor.setTextColor(textColor);
     }
 
     @Override
     public String toString() {
         return "NotificationSettings{" +
                 "position=" + position +
-                ", borderColor='" + borderColor + '\'' +
-                ", backgroundColor='" + backgroundColor + '\'' +
-                ", textColor='" + textColor + '\'' +
+                ", notificationColor=" + notificationColor +
                 '}';
     }
 }

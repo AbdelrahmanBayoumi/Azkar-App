@@ -6,10 +6,7 @@ import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
 import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.settings.Language;
-import com.bayoumi.models.settings.LanguageBundle;
-import com.bayoumi.models.settings.PrayerTimeSettings;
-import com.bayoumi.models.settings.Settings;
+import com.bayoumi.models.settings.*;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ScrollHandler;
@@ -103,6 +100,11 @@ public class OnboardingController implements Initializable {
         Settings.getInstance().setNightMode(darkTheme.isSelected());
         darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
         Launcher.homeController.changeTheme();
+        if (darkTheme.isSelected()) {
+            NotificationColor.setDarkTheme();
+        } else {
+            NotificationColor.setLightTheme();
+        }
     }
 
     @FXML

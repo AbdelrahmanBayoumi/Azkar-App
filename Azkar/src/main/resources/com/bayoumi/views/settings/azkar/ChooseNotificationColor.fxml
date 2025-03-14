@@ -7,7 +7,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -30,7 +29,7 @@
     </Label>
     <HBox alignment="CENTER">
         <padding>
-            <Insets bottom="40.0" left="20.0" right="20.0" top="20.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
         </padding>
         <AnchorPane fx:id="notificationParent" maxWidth="500.0" minWidth="330.0" style="-fx-border-color: #E9C46A; -fx-background-color: transparent; -fx-border-width: 5; -fx-border-radius: 15; -fx-background-radius: 18;">
             <HBox alignment="CENTER" layoutY="7.0" maxWidth="500.0" minWidth="330.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -48,11 +47,39 @@
             </HBox>
         </AnchorPane>
     </HBox>
-    <Separator prefWidth="200.0">
-        <VBox.margin>
-            <Insets bottom="20.0" left="30.0" right="30.0" />
-        </VBox.margin>
-    </Separator>
+   <HBox fx:id="restoreDefaultColorBox" alignment="CENTER" spacing="20.0" style="-fx-border-color: -fx-gray; -fx-border-radius: 20;">
+      <children>
+         <Label fx:id="defaultThemeLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" text="استرجاع اللون الافتراضي">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+            <styleClass>
+               <String fx:value="font-text-bold" />
+               <String fx:value="_17" />
+            </styleClass>
+            <graphic>
+               <MaterialDesignIconView glyphName="PALETTE" size="24" />
+            </graphic>
+         </Label>
+         <Button fx:id="defaultLightThemeButton" mnemonicParsing="false" onAction="#selectLightTheme" text="النمط الفاتح" HBox.hgrow="ALWAYS">
+            <styleClass>
+               <String fx:value="font-text-bold" />
+               <String fx:value="_16" />
+               <String fx:value="gray-button" />
+            </styleClass>
+         </Button>
+         <Button fx:id="defaultDarkThemeButton" mnemonicParsing="false" onAction="#selectDarkTheme" text="النمط الداكن" HBox.hgrow="ALWAYS">
+            <styleClass>
+               <String fx:value="font-text-bold" />
+               <String fx:value="_16" />
+               <String fx:value="secondary-button" />
+            </styleClass>
+         </Button>
+      </children>
+      <VBox.margin>
+         <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+      </VBox.margin>
+   </HBox>
     <VBox spacing="20.0">
         <VBox layoutX="10.0" layoutY="134.0">
             <Label fx:id="textColorLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" text="لون النص">

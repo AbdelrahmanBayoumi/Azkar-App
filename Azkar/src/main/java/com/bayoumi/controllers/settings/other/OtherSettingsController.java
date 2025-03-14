@@ -4,6 +4,7 @@ import com.bayoumi.Launcher;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
@@ -168,6 +169,11 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         Settings.getInstance().setNightMode(darkTheme.isSelected());
         darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
         Launcher.homeController.changeTheme();
+        if (darkTheme.isSelected()) {
+            NotificationColor.setDarkTheme();
+        } else {
+            NotificationColor.setLightTheme();
+        }
     }
 
     @FXML
