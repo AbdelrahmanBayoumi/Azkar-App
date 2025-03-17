@@ -18,7 +18,7 @@
     </variables>
     <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk8/jdk8u272-b10" />
   </application>
-  <files defaultOverwriteMode="1">
+  <files defaultOverwriteMode="1" defaultUninstallMode="2">
     <mountPoints>
       <mountPoint id="58" />
     </mountPoints>
