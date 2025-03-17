@@ -108,7 +108,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_Text" style="-fx-background-color: #9AD712; -fx-background-radius: 0;">
+                <Button layoutX="313.0" layoutY="10.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#colorE9C46A_Text" style="-fx-background-color: #E9C46A; -fx-background-radius: 0;">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
