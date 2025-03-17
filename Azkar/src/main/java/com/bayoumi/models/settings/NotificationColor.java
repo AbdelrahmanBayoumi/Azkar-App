@@ -4,6 +4,8 @@ import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
 
+import java.util.Objects;
+
 public class NotificationColor {
     public static final NotificationColor LIGHT_THEME = new NotificationColor("#E9C46A", "#FFFFFF", "#000000");
     public static final NotificationColor DARK_THEME = new NotificationColor("#2C3F51", "#192735", "#FFFFFF");
@@ -19,6 +21,7 @@ public class NotificationColor {
         Settings.getInstance().getNotificationSettings().setBackgroundColor(DARK_THEME.backgroundColor);
         Settings.getInstance().getNotificationSettings().setTextColor(DARK_THEME.textColor);
     }
+
 
     private String borderColor;
     private String backgroundColor;
@@ -53,6 +56,7 @@ public class NotificationColor {
     }
 
     public void setBorderColor(String borderColor) {
+        if (Objects.equals(borderColor, this.borderColor)) return;
         this.borderColor = borderColor;
         Preferences.getInstance().set(PreferencesType.NOTIFICATION_BORDER_COLOR, this.borderColor);
     }
@@ -64,6 +68,7 @@ public class NotificationColor {
     }
 
     public void setBackgroundColor(String backgroundColor) {
+        if (Objects.equals(backgroundColor, this.backgroundColor)) return;
         this.backgroundColor = backgroundColor;
         Preferences.getInstance().set(PreferencesType.NOTIFICATION_BACKGROUND_COLOR, this.backgroundColor);
     }
@@ -75,6 +80,7 @@ public class NotificationColor {
     }
 
     public void setTextColor(String textColor) {
+        if (Objects.equals(textColor, this.textColor)) return;
         this.textColor = textColor;
         Preferences.getInstance().set(PreferencesType.NOTIFICATION_TEXT_COLOR, this.textColor);
     }

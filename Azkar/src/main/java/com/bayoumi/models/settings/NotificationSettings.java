@@ -6,13 +6,15 @@ import com.bayoumi.util.Logger;
 import javafx.geometry.Pos;
 import javafx.util.StringConverter;
 
+import java.util.Objects;
+
 public class NotificationSettings {
     private Pos position;
     private final NotificationColor notificationColor;
 
     protected NotificationSettings() {
         this.position = Pos.BOTTOM_RIGHT;
-        this.notificationColor = new NotificationColor(NotificationColor.LIGHT_THEME.getBorderColor(), NotificationColor.LIGHT_THEME.getBackgroundColor(), NotificationColor.LIGHT_THEME.getTextColor());
+        this.notificationColor = new NotificationColor();
         loadSettings();
     }
 
@@ -89,6 +91,7 @@ public class NotificationSettings {
     }
 
     public void setPosition(Pos position) {
+        if (Objects.equals(this.position, position)) return;
         this.position = position;
         Preferences.getInstance().set(PreferencesType.NOTIFICATION_POS, this.position.toString());
     }
