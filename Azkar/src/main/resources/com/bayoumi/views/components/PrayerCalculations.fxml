@@ -16,6 +16,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.components.PrayerCalculationsController">
     <padding>
@@ -247,5 +249,25 @@
                 <String fx:value="font-text-medium" />
             </styleClass>
         </JFXCheckBox>
+      <VBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="prayerTimeDiffNoteHeader" text="اختلاف المواقيت بدقيقة أو اثنتين" textAlignment="CENTER" wrapText="true">
+               <styleClass>
+                  <String fx:value="_15" />
+                  <String fx:value="font-text-bold" />
+               </styleClass>
+            </Label>
+            <TextFlow textAlignment="JUSTIFY" VBox.vgrow="ALWAYS">
+               <children>
+                  <Text fx:id="prayerTimeDiffNoteText" strokeType="OUTSIDE" strokeWidth="0.0" text="قد تظهر بعض الاختلافات الطفيفة بين مواقيت الصلاة التي يظهرها برنامج الأذكار والمواقيت في التقويم المطبوع؛ فالتقويم يحسب مواقيت الصلاة حسب وسط المدينة، أما برنامج الأذكار فيحسبها بناءً على موقعك الجغرافي الذي تم اختياره معتمدًا على خطي الطول والعرض. لذا ستجد اختلافًا طفيفًا يتراوح ما بين دقيقة أو اثنتين في المدن الكبيرة.">
+                     <styleClass>
+                        <String fx:value="_15" />
+                        <String fx:value="font-text-medium" />
+                     </styleClass>
+                  </Text>
+               </children>
+            </TextFlow>
+         </children>
+      </VBox>
     </children>
 </VBox>
