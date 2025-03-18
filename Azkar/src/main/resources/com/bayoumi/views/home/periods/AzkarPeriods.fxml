@@ -17,11 +17,14 @@
          <String fx:value="font-text-bold" />
       </styleClass>
     </Label>
-    <Label fx:id="frequencyLabel" style="-fx-text-fill: -fx-green;" text="ظهور كل 5 دقائق">
+    <Label fx:id="frequencyLabel" alignment="CENTER" style="-fx-text-fill: -fx-green;" text="ظهور كل 5 دقائق">
       <styleClass>
          <String fx:value="font-text-bold" />
          <String fx:value="_15" />
       </styleClass>
+      <padding>
+         <Insets left="20.0" right="20.0" />
+      </padding>
     </Label>
     <HBox alignment="CENTER" style="-fx-background-radius: 20; -fx-background-color: derive( -fx-secondary-text,-5%);">
         <JFXButton fx:id="highFrequency" focusTraversable="false" minWidth="76.0" onAction="#highFrequencyAction" text="عالي">

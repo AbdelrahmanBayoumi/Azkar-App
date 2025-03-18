@@ -4,6 +4,7 @@ import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.time.Utilities;
 import com.jfoenix.controls.JFXCheckBox;
@@ -85,6 +86,8 @@ public class PrayerCalculationsController implements Initializable {
         asrAdjustment.getValueFactory().setValue(prayerTimeSettings.getAsrAdjustment());
         maghribAdjustment.getValueFactory().setValue(prayerTimeSettings.getMaghribAdjustment());
         ishaAdjustment.getValueFactory().setValue(prayerTimeSettings.getIshaAdjustment());
+
+        PopOverUtil.init(asrMadhabText, Utility.toUTF(bundle.getString("asrMadhabInfo")));
     }
 
     @Override
