@@ -32,6 +32,7 @@ import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
 import com.bayoumi.util.services.azkar.AzkarService;
 import impl.org.controlsfx.skin.NotificationBar;
 import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -381,7 +382,8 @@ public class Notifications {
                 if (window == null) {
                     window = AzkarService.FAKE_STAGE;
                     if (window == null) {
-                        Sentry.captureException(new IllegalStateException("Could not find a valid owner window for the notification"));
+                        // TODO: Fix usage of FAKE_STAGE
+                        Sentry.captureMessage("Could not find a valid owner window for the notification", SentryLevel.WARNING);
                         AzkarService.FAKE_STAGE = new Stage(StageStyle.UTILITY);
                         AzkarService.FAKE_STAGE.setOpacity(0);
                         AzkarService.FAKE_STAGE.show();
