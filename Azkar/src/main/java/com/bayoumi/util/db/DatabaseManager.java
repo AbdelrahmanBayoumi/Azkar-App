@@ -6,6 +6,7 @@ import com.bayoumi.util.Logger;
 import org.flywaydb.core.Flyway;
 
 import java.sql.*;
+import java.util.UUID;
 
 public class DatabaseManager {
 
@@ -91,12 +92,25 @@ public class DatabaseManager {
         return false;
     }
 
+
+    /**
+     * Retrieves the ID from the database. If the ID is null or empty, a new one is generated and saved to the database.
+     *
+     * @return the ID as a string
+     */
     public String getID() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT ID FROM program_characteristics").executeQuery();
+            String id;
             if (res.next()) {
-                return res.getString("ID");
+                id = res.getString("ID");
+                if (id != null && !id.isEmpty()) return id;
             }
+            // if ID is null or empty, generate new one
+            id = UUID.randomUUID().toString();
+            // save generated ID to DB
+            DatabaseManager.getInstance().setID(id);
+            return id;
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".getID()");
         }
