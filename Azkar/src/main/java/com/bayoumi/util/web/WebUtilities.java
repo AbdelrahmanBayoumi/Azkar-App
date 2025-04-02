@@ -35,12 +35,15 @@ public class WebUtilities {
                 .header("Accept", "application/vnd.github.v3+json")
                 .asString();
 
-        final JSONArray releases = new JSONArray(response.getBody());
-        if (!releases.isEmpty()) {
-            Logger.debug("[WebUtilities] getLatestVersion: " + releases.getJSONObject(0).getString("tag_name"));
-            return releases.getJSONObject(0).getString("tag_name");
+        try {
+            final JSONArray releases = new JSONArray(response.getBody());
+            if (!releases.isEmpty()) {
+                Logger.debug("[WebUtilities] getLatestVersion: " + releases.getJSONObject(0).getString("tag_name"));
+                return releases.getJSONObject(0).getString("tag_name");
+            }
+        } catch (Exception e) {
+            Logger.error("Failed to parse releases res.body:" + response.getBody(), e, WebUtilities.class.getName() + ".getLatestVersion()");
         }
         throw new UnirestException("No releases found for the repository.");
     }
-
 }
