@@ -8,11 +8,15 @@
 ### Add
 
 - 🌙 Ability to switch between light and dark modes [#4](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/4)
+  - 🎨 Add options to restore default notification colors
 - 🔊 Ability to upload custom Adhan (أذان) audio files [#41](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/41) and this also closes [#49](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/49) because the user now able to upload any Adhan (أذان) audio file he want.
+- 🕌 Add Toggle to Enable/Disable Prayer Reminders [#79](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/79)
 
 ### Enhancement
 
 - 🛠️ Enhanced code structure and performance.
+- 🛠️ Refactor Sentry integration
+- 🛠️ Update install4j: delete `jarFiles` when uninstall
 - 🛠️ Change Other Timings `مواقيت اخرى` to Night Timings `مواقيت الليل`
 
 [Full Changelog](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.9...1.3.0)
