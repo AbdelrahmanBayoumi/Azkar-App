@@ -59,10 +59,7 @@ public class Logger {
                 if (Constants.RUNNING_MODE.equals(Constants.Mode.DEVELOPMENT)) {
                     throwable.printStackTrace();
                 } else {
-                    Sentry.setExtra("upTime", AppPropertiesUtil.getUptime());
-                    Preferences.getInstance().getAll().forEach(Sentry::setTag);
-
-                    Sentry.captureException(throwable);
+                      Sentry.captureException(throwable);
                 }
                 String DataAndTime = DATE_TIME_FORMAT.format(new Date());
                 String m = DataAndTime + " => "
