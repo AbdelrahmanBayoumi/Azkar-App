@@ -23,6 +23,7 @@ public enum Locations {
     ChooseNotificationColor("/com/bayoumi/views/settings/azkar/ChooseNotificationColor.fxml"),
     DownloadResources("/com/bayoumi/views/dialog/DownloadResources.fxml"),
     Onboarding("/com/bayoumi/views/onboarding/Onboarding.fxml"),
+    VersionInstalled("/com/bayoumi/views/onboarding/VersionInstalled.fxml"),
     Feedback("/com/bayoumi/views/feedback/Feedback.fxml");
 
     private final String name;

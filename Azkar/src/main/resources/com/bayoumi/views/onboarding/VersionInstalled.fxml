@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+
+<VBox fx:id="root" alignment="TOP_CENTER" prefHeight="580.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.onboarding.VersionInstalledController">
+   <Label fx:id="mainTitleLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: -fx-secondary; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0); -fx-text-fill: -fx-light-text;" text="التغييرات في الإصدار الجديد">
+      <graphic>
+         <FontAwesomeIconView glyphName="FILE" size="29" style="-fx-fill: -fx-light-text;" />
+      </graphic>
+      <padding>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      </padding>
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <styleClass>
+         <String fx:value="font-text-bold" />
+         <String fx:value="_25" />
+      </styleClass>
+   </Label>
+   <VBox alignment="CENTER" spacing="10.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);" styleClass="white-box" VBox.vgrow="ALWAYS">
+      <padding>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+      </padding>
+      <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      <HBox alignment="CENTER" spacing="35.0">
+         <children>
+            <JFXCheckBox fx:id="darkTheme" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" onAction="#darkThemeSelect" text="تفعيل النمط الداكن">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <styleClass>
+                  <String fx:value="font-text-bold" />
+                  <String fx:value="_15" />
+               </styleClass>
+               <graphic>
+                  <MaterialDesignIconView glyphName="PALETTE" size="22" />
+               </graphic>
+            </JFXCheckBox>
+         </children>
+      </HBox>
+      <VBox.margin>
+         <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
+      </VBox.margin>
+   </VBox>
+   <JFXButton fx:id="closeButton" graphicTextGap="15.0" onAction="#close" prefWidth="160.0" style="-fx-background-radius: 10;" text="إغلاق">
+      <styleClass>
+         <String fx:value="gray-button" />
+         <String fx:value="font-text-bold" />
+         <String fx:value="_16" />
+      </styleClass>
+   </JFXButton>
+   <padding>
+      <Insets bottom="20.0" />
+   </padding>
+</VBox>
