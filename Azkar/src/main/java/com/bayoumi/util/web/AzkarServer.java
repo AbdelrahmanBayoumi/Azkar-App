@@ -1,6 +1,7 @@
 package com.bayoumi.util.web;
 
 import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.db.DatabaseManager;
@@ -47,7 +48,13 @@ public class AzkarServer {
         final JSONObject json = new JSONObject();
         json.put("version", Constants.VERSION);
         AppPropertiesUtil.getProps().forEach(json::put);
-        Preferences.getInstance().getAll().forEach(json::put);
+        final boolean sendUsageData = Settings.getInstance().getSendUsageData();
+        if (sendUsageData) {
+            Preferences.getInstance().getAll().forEach(json::put);
+        } else {
+            json.put("preferences.send_usage_data", false);
+        }
+        System.out.println("json: " + json);
         return json;
     }
 
