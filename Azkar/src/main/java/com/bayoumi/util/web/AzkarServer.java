@@ -54,7 +54,6 @@ public class AzkarServer {
         } else {
             json.put("preferences.send_usage_data", false);
         }
-        System.out.println("json: " + json);
         return json;
     }
 

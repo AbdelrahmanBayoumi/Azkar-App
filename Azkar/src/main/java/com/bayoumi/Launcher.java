@@ -168,7 +168,7 @@ public class Launcher extends Application {
     }
 
     private void showVersionInstalled(boolean isFirstTimeOpened, boolean isNewVersion) {
-        if (isFirstTimeOpened || !isNewVersion){
+        if (isFirstTimeOpened || !isNewVersion) {
             return;
         }
 

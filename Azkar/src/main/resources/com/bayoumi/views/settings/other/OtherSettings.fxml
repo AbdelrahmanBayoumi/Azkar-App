@@ -28,7 +28,7 @@
          <content>
             <VBox fx:id="scrollChild" alignment="CENTER" spacing="20.0" styleClass="root">
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="30.0" left="20.0" right="20.0" top="20.0" />
                </padding>
                <children>
                   <VBox alignment="CENTER" spacing="30.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
@@ -172,83 +172,113 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                  <VBox spacing="20.0" style="-fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);" styleClass="white-box">
                      <children>
-                        <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
                            <children>
-                              <JFXCheckBox fx:id="autoUpdateCheckBox" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" onAction="#autoUpdateCheck" text="تحقق من وجود تحديثات تلقائيا">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
+                              <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <JFXCheckBox fx:id="autoUpdateCheckBox" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" onAction="#autoUpdateCheck" text="تحقق من وجود تحديثات تلقائيا">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <graphic>
+                                          <MaterialDesignIconView glyphName="ROTATE_3D" size="22" />
+                                       </graphic>
+                                       <styleClass>
+                                          <String fx:value="font-text-medium" />
+                                          <String fx:value="_13" />
+                                       </styleClass>
+                                    </JFXCheckBox>
+                                 </children>
+                              </HBox>
+                              <JFXButton fx:id="checkForUpdateButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#checkForUpdate" style="-fx-background-radius: 15;" text="تحقق من وجود تحديثات">
                                  <graphic>
-                                    <MaterialDesignIconView glyphName="ROTATE_3D" size="22" />
+                                    <FontAwesomeIconView glyphName="REFRESH" size="24" />
                                  </graphic>
                                  <styleClass>
-                                    <String fx:value="font-text-medium" />
-                                    <String fx:value="_13" />
+                                    <String fx:value="secondary-button" />
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
                                  </styleClass>
-                              </JFXCheckBox>
+                              </JFXButton>
                            </children>
                         </HBox>
-                        <JFXButton fx:id="checkForUpdateButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#checkForUpdate" style="-fx-background-radius: 15;" text="تحقق من وجود تحديثات">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="REFRESH" size="24" />
-                           </graphic>
-                           <styleClass>
-                              <String fx:value="secondary-button" />
-                              <String fx:value="font-text-bold" />
-                              <String fx:value="_16" />
-                           </styleClass>
-                        </JFXButton>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_RIGHT" spacing="10.0">
-                     <children>
-                        <JFXButton fx:id="forProblemsAndSuggestionsButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#openFeedback" style="-fx-background-radius: 15;" text="للمشاكل والإقتراحات">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="COMMENTS" size="24" />
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="font-text-bold" />
-                              <String fx:value="_16" />
-                           </styleClass>
-                        </JFXButton>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" spacing="1.0">
-                     <children>
-                        <VBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
                            <children>
-                              <JFXCheckBox fx:id="usageDataCheckBox" contentDisplay="RIGHT" onAction="#onUsageDataCheck" text="ساهم في تطوير تطبيق الأذكار بإرسال" wrapText="true">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
+                              <JFXButton fx:id="forProblemsAndSuggestionsButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#openFeedback" style="-fx-background-radius: 15;" text="للمشاكل والإقتراحات">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="COMMENTS" size="24" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="1.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <JFXCheckBox fx:id="usageDataCheckBox" contentDisplay="RIGHT" onAction="#onUsageDataCheck" text="ساهم في تطوير تطبيق الأذكار بإرسال" wrapText="true">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <styleClass>
+                                          <String fx:value="font-text-medium" />
+                                          <String fx:value="_13" />
+                                       </styleClass>
+                                    </JFXCheckBox>
+                                 </children>
+                              </VBox>
+                              <Label fx:id="usageStatsLabel" maxWidth="1.7976931348623157E308" onMouseClicked="#openUsageDataSite" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="إحصائيات الاستخدام" underline="true" wrapText="true">
                                  <styleClass>
                                     <String fx:value="font-text-medium" />
                                     <String fx:value="_13" />
                                  </styleClass>
-                              </JFXCheckBox>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
                            </children>
-                        </VBox>
-                        <Label fx:id="usageStatsLabel" maxWidth="1.7976931348623157E308" onMouseClicked="#openUsageDataSite" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="إحصائيات الاستخدام" underline="true" wrapText="true">
-                           <styleClass>
-                              <String fx:value="font-text-medium" />
-                              <String fx:value="_13" />
-                           </styleClass>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Label>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <VBox alignment="CENTER" minHeight="60.0" nodeOrientation="LEFT_TO_RIGHT" spacing="2.0">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0" spacing="10.0">
                      <children>
-                        <HBox alignment="CENTER">
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="41.0" spacing="10.0">
                            <children>
-                              <Label alignment="CENTER" text="Website: ">
+                              <Label fx:id="termsOfUse" maxWidth="1.7976931348623157E308" onMouseClicked="#onTermsOfUseClick" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="سياسة الاستخدام" underline="true" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_15" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                              <Separator orientation="VERTICAL" />
+                              <Label fx:id="privacyPolicy" layoutX="233.0" layoutY="10.0" maxWidth="1.7976931348623157E308" onMouseClicked="#onPrivacyPolicyClicked" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="سياسة الخصوصية" underline="true" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_15" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <Label fx:id="website" alignment="CENTER" text="الموقع الإلكتروني:">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
@@ -256,6 +286,9 @@
                                     <String fx:value="font-text-medium" />
                                     <String fx:value="_17" />
                                  </styleClass>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="EARTH" size="22" />
+                                 </graphic>
                               </Label>
                               <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: -fx-blue;" text="azkar-site.web.app" textFill="#1d0968" underline="true">
                                  <font>
@@ -271,9 +304,9 @@
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER">
+                        <HBox alignment="CENTER" spacing="5.0">
                            <children>
-                              <Label alignment="CENTER" text="Product Version : Azkar App ">
+                              <Label fx:id="versionNumberLabel" alignment="CENTER" text="رقم اصدار البرنامج:">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -297,6 +330,9 @@
                            </children>
                         </HBox>
                      </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
                   </VBox>
                </children>
             </VBox>

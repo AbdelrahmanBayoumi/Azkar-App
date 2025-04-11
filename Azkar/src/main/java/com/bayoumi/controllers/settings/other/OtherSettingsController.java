@@ -27,7 +27,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -47,7 +46,8 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private Label minimizeAtStart, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel;
+    private Label minimizeAtStart, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel,
+            versionNumberLabel, website, termsOfUse, privacyPolicy;
     @FXML
     private VBox scrollChild, loadingBox;
     @FXML
@@ -71,6 +71,10 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         autoUpdateCheckBox.setText(Utility.toUTF(bundle.getString("checkForUpdatesAutomatically")));
         usageDataCheckBox.setText(Utility.toUTF(bundle.getString("usageDataCheckBox")));
         usageStatsLabel.setText(Utility.toUTF(bundle.getString("usageStats")));
+        versionNumberLabel.setText(Utility.toUTF(bundle.getString("versionNumber")));
+        website.setText(Utility.toUTF(bundle.getString("website")));
+        termsOfUse.setText(Utility.toUTF(bundle.getString("termsOfUse")));
+        privacyPolicy.setText(Utility.toUTF(bundle.getString("privacyPolicy")));
 
         if (hijriDateOffset.getValue() != null) {
             hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(this.bundle.getLocale().toString()));
@@ -86,6 +90,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         try {
             ScrollHandler.init(scrollChild, scrollPane, 4);
             final Settings settings = Settings.getInstance();
+
 
             hijriDateLabel.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale()));
             hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
@@ -126,9 +131,27 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void openUsageDataSite() {
         try {
-            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/usage-data"));
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/desktop/usage-data/"));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openUsageDataSite()");
+        }
+    }
+
+    @FXML
+    private void onTermsOfUseClick() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/policies/terms-of-use/"));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".onTermsOfUseClick()");
+        }
+    }
+
+    @FXML
+    private void onPrivacyPolicyClicked() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/policies/privacy-policy/"));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".onPrivacyPolicyClicked()");
         }
     }
 
