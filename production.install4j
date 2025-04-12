@@ -1154,8 +1154,5 @@ return true;</property>
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_271" />
     </windows>
   </mediaSets>
-  <buildIds>
-    <mediaSet refId="60" />
-  </buildIds>
   <buildOptions verbose="true" />
 </install4j>
