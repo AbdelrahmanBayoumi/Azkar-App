@@ -6,29 +6,18 @@ import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.file.FileUtils;
 import io.sentry.Sentry;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Properties;
 
 public class AzkarServer {
 
     private static final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
-
-    private static Properties getConfig() throws Exception {
-        final Properties properties = new Properties();
-        try (InputStream input = Files.newInputStream(Paths.get(Objects.requireNonNull(LocationService.class.getResource("/config.properties")).toURI()))) {
-            properties.load(input);
-            return properties;
-        }
-    }
 
     private static String getBaseUrl(Properties fallbackConfig) {
         try {
@@ -54,7 +43,7 @@ public class AzkarServer {
     public static void init() {
         new Thread(() -> {
             try {
-                Properties config = getConfig();
+                Properties config = FileUtils.getConfig();
                 final JSONObject bodyJSON = new JSONObject();
                 bodyJSON.put("id", DatabaseManager.getInstance().getID());
                 bodyJSON.put("API_KEY", config.getProperty("collectorServer.apiKey"));

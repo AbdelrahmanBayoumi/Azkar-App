@@ -5,11 +5,13 @@ import com.bayoumi.util.Utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Properties;
 
 public class FileUtils {
 
@@ -62,5 +64,16 @@ public class FileUtils {
             return;
         }
         Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public static Properties getConfig() throws Exception {
+        final Properties properties = new Properties();
+        try (InputStream input = FileUtils.class.getResourceAsStream("/config.properties")) {
+            if (input == null) {
+                throw new Exception("Could not find config.properties");
+            }
+            properties.load(input);
+            return properties;
+        }
     }
 }

@@ -2,26 +2,18 @@ package com.bayoumi.util.web;
 
 import com.bayoumi.models.location.City;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.FileUtils;
 import kong.unirest.UnirestException;
 import kong.unirest.json.JSONObject;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Objects;
-import java.util.Properties;
 import java.util.TimeZone;
 
 public class LocationService {
 
     private static String getIp2locationAPIKEY() throws Exception {
-        final Properties properties = new Properties();
-        try (InputStream input = Files.newInputStream(Paths.get(Objects.requireNonNull(LocationService.class.getResource("/config.properties")).toURI()))) {
-            properties.load(input);
-            return properties.getProperty("ip2location.apiKey");
-        }
+        return FileUtils.getConfig().getProperty("ip2location.apiKey");
     }
 
     public static City getCityWithIP_API(final String IP) throws Exception {
