@@ -224,7 +224,7 @@ return console.askOkCancel(message, true);
                   <property name="itemName" type="string">${compiler:sys.fullName} ${compiler:sys.version}</property>
                 </serializedBean>
               </action>
-              <action name="Remove unused sharawy_doaa.mp3" id="797" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrierExitCode="0">
+              <action name="Remove unused sharawy_doaa.mp3" id="797" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
                 <serializedBean>
                   <property name="script">
                     <object class="com.install4j.api.beans.ScriptProperty">
