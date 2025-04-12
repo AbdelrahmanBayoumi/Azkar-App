@@ -34,7 +34,5 @@ public class SentryUtil {
         final User user = new User();
         user.setId(id);
         Sentry.configureScope(scope -> scope.setUser(user));
-
-        Sentry.captureMessage("Application started");
     }
 }

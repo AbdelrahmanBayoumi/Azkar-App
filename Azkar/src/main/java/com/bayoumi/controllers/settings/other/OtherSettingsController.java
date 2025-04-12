@@ -11,10 +11,12 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.update.UpdateHandler;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXToggleButton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -24,7 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -40,17 +42,21 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private ComboBox<Language> languageComboBox;
     @FXML
-    private JFXCheckBox minimizeAtStart, format24, darkTheme, autoUpdateCheckBox;
+    private JFXCheckBox autoUpdateCheckBox, usageDataCheckBox;
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote;
+    private Label minimizeAtStart, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel,
+            versionNumberLabel, website, termsOfUse, privacyPolicy;
     @FXML
-    private VBox loadingBox;
+    private VBox scrollChild, loadingBox;
     @FXML
     private Button checkForUpdateButton, forProblemsAndSuggestionsButton;
     @FXML
-    private StackPane root;
+    private ScrollPane scrollPane;
+    @FXML
+    private JFXToggleButton minimizeAtStartToggle, format24Toggle, darkThemeToggle;
+
 
     public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
@@ -63,18 +69,28 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         checkForUpdateButton.setText(Utility.toUTF(bundle.getString("checkForUpdate")));
         forProblemsAndSuggestionsButton.setText(Utility.toUTF(bundle.getString("forProblemsAndSuggestions")));
         autoUpdateCheckBox.setText(Utility.toUTF(bundle.getString("checkForUpdatesAutomatically")));
+        usageDataCheckBox.setText(Utility.toUTF(bundle.getString("usageDataCheckBox")));
+        usageStatsLabel.setText(Utility.toUTF(bundle.getString("usageStats")));
+        versionNumberLabel.setText(Utility.toUTF(bundle.getString("versionNumber")));
+        website.setText(Utility.toUTF(bundle.getString("website")));
+        termsOfUse.setText(Utility.toUTF(bundle.getString("termsOfUse")));
+        privacyPolicy.setText(Utility.toUTF(bundle.getString("privacyPolicy")));
+
         if (hijriDateOffset.getValue() != null) {
             hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(this.bundle.getLocale().toString()));
         }
+
+        toggleAction(format24Toggle);
+        toggleAction(minimizeAtStartToggle);
+        toggleAction(darkThemeToggle);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            updateBundle(LanguageBundle.getInstance().getResourceBundle());
-            LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
-
+            ScrollHandler.init(scrollChild, scrollPane, 4);
             final Settings settings = Settings.getInstance();
+
 
             hijriDateLabel.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale()));
             hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
@@ -87,15 +103,17 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             languageComboBox.setItems(FXCollections.observableArrayList(Language.values()));
             languageComboBox.setValue(settings.getLanguage());
 
-            format24.setSelected(settings.getEnable24Format());
-
-            minimizeAtStart.setSelected(settings.getMinimized());
-
-            darkTheme.setSelected(settings.getNightMode());
+            format24Toggle.setSelected(settings.getEnable24Format());
+            minimizeAtStartToggle.setSelected(settings.getMinimized());
+            darkThemeToggle.setSelected(settings.getNightMode());
 
             version.setText(Constants.VERSION);
 
             autoUpdateCheckBox.setSelected(settings.getAutomaticCheckForUpdates());
+            usageDataCheckBox.setSelected(settings.getSendUsageData());
+
+            updateBundle(LanguageBundle.getInstance().getResourceBundle());
+            LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".initialize()");
         }
@@ -107,6 +125,33 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/"));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openWebsite()");
+        }
+    }
+
+    @FXML
+    private void openUsageDataSite() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/desktop/usage-data/"));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".openUsageDataSite()");
+        }
+    }
+
+    @FXML
+    private void onTermsOfUseClick() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/policies/terms-of-use/"));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".onTermsOfUseClick()");
+        }
+    }
+
+    @FXML
+    private void onPrivacyPolicyClicked() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/policies/privacy-policy/"));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + ".onPrivacyPolicyClicked()");
         }
     }
 
@@ -160,16 +205,22 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     }
 
     @FXML
+    private void onUsageDataCheck() {
+        Settings.getInstance().setSendUsageData(usageDataCheckBox.isSelected());
+    }
+
+    @FXML
     private void hijriDateOffsetUpdate() {
         Settings.getInstance().setHijriOffset(hijriDateOffset.getValue());
     }
 
     @FXML
     private void darkThemeSelect() {
-        Settings.getInstance().setNightMode(darkTheme.isSelected());
+        toggleAction(darkThemeToggle);
+        Settings.getInstance().setNightMode(darkThemeToggle.isSelected());
         darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
         Launcher.homeController.changeTheme();
-        if (darkTheme.isSelected()) {
+        if (darkThemeToggle.isSelected()) {
             NotificationColor.setDarkTheme();
         } else {
             NotificationColor.setLightTheme();
@@ -178,11 +229,21 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
     @FXML
     private void format24Select() {
-        Settings.getInstance().setEnable24Format(format24.isSelected());
+        toggleAction(format24Toggle);
+        Settings.getInstance().setEnable24Format(format24Toggle.isSelected());
     }
 
     @FXML
     private void minimizeAtStartSelect() {
-        Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
+        toggleAction(minimizeAtStartToggle);
+        Settings.getInstance().setMinimized(minimizeAtStartToggle.isSelected());
+    }
+
+    private void toggleAction(JFXToggleButton toggleButton) {
+        if (toggleButton.isSelected()) {
+            toggleButton.setText(Utility.toUTF(bundle.getString("enabled")));
+        } else {
+            toggleButton.setText(Utility.toUTF(bundle.getString("disabled")));
+        }
     }
 }

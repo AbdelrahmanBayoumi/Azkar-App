@@ -61,7 +61,7 @@ public class LoaderComponent {
         stage.showAndWait();
     }
 
-    public void show(){
+    public void show() {
         view.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
         stage.centerOnScreen();
         stage.show();

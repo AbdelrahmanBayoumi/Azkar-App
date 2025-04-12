@@ -47,6 +47,8 @@ public enum PreferencesType {
     ENABLE_24_FORMAT("enable_24_format", "false"),
     MINIMIZED("minimized", "false"),
     AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true"),
+    SEND_USAGE_DATA("send_usage_data", "true"),
+    APP_VERSION("app_version", "0"),
     DB_VERSION("db_version", "0");
 
     private final String name;
