@@ -8,6 +8,7 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.file.FileUtils;
 import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -79,8 +80,8 @@ public class AzkarServer {
         if (response != null && response.isSuccess()) {
             System.out.println("OK");
         } else {
-            System.out.println("S-ERROR");
-            Sentry.captureMessage("AzkarServer API Error");
+            String errMsg = "AzkarServer API Error: " + (response != null && response.getBody() != null ? response.getBody().toString() : "");
+            Sentry.captureMessage(errMsg, SentryLevel.ERROR);
         }
     }
 }
