@@ -17,6 +17,7 @@
         <mainClass>com.bayoumi.Launcher</mainClass>
     </properties>
 
+    <packaging>jar</packaging>
 
     <repositories>
         <repository>
@@ -26,64 +27,63 @@
     </repositories>
 
     <dependencies>
-
-        <!-- Adhan High precision prayer time library (No internet needed) -->
+        <!-- Adhan High precision prayer time library -->
         <dependency>
             <groupId>com.batoulapps.adhan</groupId>
             <artifactId>adhan</artifactId>
             <version>1.2.1</version>
         </dependency>
 
-        <!-- Install4J Runtime for scripting installers and uninstallers, developing extensions and for accessing runtime services. -->
+        <!-- Install4J Runtime for scripting installers and uninstallers -->
         <dependency>
             <groupId>com.install4j</groupId>
             <artifactId>install4j-runtime</artifactId>
             <version>9.0.2</version>
         </dependency>
 
-        <!-- JFoenix is an open source Java library, that implements Google Material Design using Java components. -->
+        <!-- JFoenix (Google Material Design for JavaFX) -->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
             <version>8.0.10</version>
         </dependency>
 
-        <!-- FontawesomeFX for font Icons. -->
+        <!-- FontawesomeFX for font Icons -->
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx</artifactId>
             <version>8.9</version>
         </dependency>
 
-        <!-- ControlsFX High quality UI controls to complement the core JavaFX distribution. -->
+        <!-- ControlsFX High quality UI controls -->
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>8.40.18</version>
         </dependency>
 
-        <!-- sqlite SQL database engine. -->
+        <!-- SQLite JDBC database engine -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.42.0.0</version>
         </dependency>
 
-        <!-- Sentry.io Open-source error tracking with full stackTraces & asynchronous context. -->
+        <!-- Sentry for error tracking -->
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
             <version>6.21.0</version>
         </dependency>
 
-        <!-- Unirest in Java: Simplified, lightweight HTTP client library. -->
+        <!-- Unirest lightweight HTTP client -->
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
             <version>3.14.2</version>
         </dependency>
 
-        <!-- jgforms Support submitting Google Forms through Java API. For submitting feedback and bugs. -->
+        <!-- jgforms for submitting Google Forms -->
         <dependency>
             <groupId>io.github.stepio.jgforms</groupId>
             <artifactId>jgforms</artifactId>
@@ -97,22 +97,21 @@
             <version>9.22.3</version>
         </dependency>
 
-        <!-- Ummalqura-Calendar for Hijri Calendar. -->
+        <!-- Ummalqura-Calendar for Hijri Calendar -->
         <dependency>
             <groupId>com.github.msarhan</groupId>
             <artifactId>ummalqura-calendar</artifactId>
             <version>2.0.2</version>
         </dependency>
 
-        <!-- For JSON parsing -->
+        <!-- Jackson for JSON parsing -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.17.0</version>
         </dependency>
-
-
     </dependencies>
+
     <build>
         <finalName>${app.name}</finalName>
 
