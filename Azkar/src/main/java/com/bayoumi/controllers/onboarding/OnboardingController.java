@@ -60,6 +60,7 @@ public class OnboardingController implements Initializable {
             LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
             prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
 
+            minimizeAtStart.setSelected(true);
             ScrollHandler.init(container, scrollPane, 4);
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".initialize()");
