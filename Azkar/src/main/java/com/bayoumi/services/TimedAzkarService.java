@@ -26,7 +26,6 @@ public class TimedAzkarService {
 
     private static final String FOLDER_NAME = "azkar";
     private static final String USER_AND_REPO = "Seen-Arabic/Morning-And-Evening-Adhkar-DB";
-    private static final int SCHEDULE_DELAY_MS = 1000 * 60 * 15; // 15 minutes
 
     /**
      * Initialize the TimedAzkarService by copying the files to the assets path and checking for updates
@@ -162,7 +161,7 @@ public class TimedAzkarService {
                         }
                     }
                 },
-                SCHEDULE_DELAY_MS
+                1000 * 60 * 15 // 15 minutes
         );
     }
 }

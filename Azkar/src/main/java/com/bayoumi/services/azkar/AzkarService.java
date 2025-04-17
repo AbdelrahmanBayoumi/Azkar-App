@@ -1,4 +1,4 @@
-package com.bayoumi.util.services.azkar;
+package com.bayoumi.services.azkar;
 
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.models.azkar.AbsoluteZekr;
@@ -6,7 +6,7 @@ import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
-import com.bayoumi.util.services.EditablePeriodTimerTask;
+import com.bayoumi.services.EditablePeriodTimerTask;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;

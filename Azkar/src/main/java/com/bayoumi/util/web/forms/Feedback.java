@@ -1,4 +1,4 @@
-package com.bayoumi.util.forms;
+package com.bayoumi.util.web.forms;
 
 import io.github.stepio.jgforms.Configuration;
 import io.github.stepio.jgforms.Submitter;

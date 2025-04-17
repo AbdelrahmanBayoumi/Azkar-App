@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class DatabaseManager {
 
-    private static DatabaseManager databaseManager = null;  // static
+    private static DatabaseManager databaseManager = null;
     public PreparedStatement stat = null;
     public Connection con = null;
 
@@ -39,41 +39,6 @@ public class DatabaseManager {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
         }
         return false;
-    }
-
-    private boolean insertDefault(String tableName) {
-        try {
-            if (getCount(tableName) >= 1) {
-                return true;
-            }
-            con.prepareStatement("INSERT INTO " + tableName + " DEFAULT VALUES;").execute();
-            return true;
-        } catch (Exception ex) {
-            Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".insertDefault()");
-            return false;
-        }
-    }
-
-    private boolean createTable(String sqlString) {
-        try {
-            con.prepareStatement(sqlString).execute();
-            return true;
-        } catch (Exception ex) {
-            Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".createTable()");
-            return false;
-        }
-    }
-
-    private int getCount(String tableName) {
-        try {
-            ResultSet res = con.prepareStatement("SELECT COUNT(*) FROM " + tableName).executeQuery();
-            if (res.next()) {
-                return res.getInt(1);
-            }
-        } catch (Exception ex) {
-            Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".getCount()");
-        }
-        return 0;
     }
 
     private boolean connectToDatabase() {
