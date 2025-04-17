@@ -1,11 +1,10 @@
-package com.bayoumi.util.web;
+package com.bayoumi.util.web.server;
 
 import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.file.FileUtils;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
@@ -16,12 +15,26 @@ import kong.unirest.json.JSONObject;
 
 import java.util.Properties;
 
-public class AzkarServer {
-
-    private static final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
+public class ServerService {
+    public static void init() {
+        new Thread(() -> {
+            try {
+                Logger.debug("[ServerService] Starting...");
+                final Properties config = FileUtils.getConfig();
+                Logger.debug("[ServerService] Config: " + config);
+                final String baseUrl = getBaseUrl(config);
+                Logger.debug("[ServerService] Base URL: " + baseUrl);
+                sendRequest(baseUrl, ServerUtil.preparePayload(getPreferencesJSON(), config));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 
     private static String getBaseUrl(Properties fallbackConfig) {
+        Logger.debug("[ServerUtil] Loading remote config...");
         try {
+            final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
             final HttpResponse<JsonNode> response = Unirest.get(REMOTE_CONFIG_URL)
                     .header("Accept", "application/json")
                     .asJson();
@@ -34,28 +47,11 @@ public class AzkarServer {
                 }
             }
         } catch (Exception e) {
-            Logger.error("Failed to load remote config, falling back to local.", e, AzkarServer.class.getName() + ".getBaseUrl()");
+            Logger.error("Failed to load remote config, falling back to local.", e, ServerUtil.class.getName() + ".getBaseUrl()");
         }
 
         // fallback to local property
         return fallbackConfig.getProperty("collectorServer.baseUrl");
-    }
-
-    public static void init() {
-        new Thread(() -> {
-            try {
-                Properties config = FileUtils.getConfig();
-                final JSONObject bodyJSON = new JSONObject();
-                bodyJSON.put("id", DatabaseManager.getInstance().getID());
-                bodyJSON.put("API_KEY", config.getProperty("collectorServer.apiKey"));
-                bodyJSON.put("preferences", getPreferencesJSON());
-
-                String baseUrl = getBaseUrl(config);
-                sendRequest(bodyJSON, baseUrl);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 
     private static JSONObject getPreferencesJSON() {
@@ -71,16 +67,18 @@ public class AzkarServer {
         return json;
     }
 
-    private static void sendRequest(JSONObject bodyJSON, String baseUrl) {
-        final HttpResponse<JsonNode> response = Unirest.post(baseUrl + "/client")
+    private static void sendRequest(String baseUrl, JSONObject bodyJSON) {
+        Logger.debug("[ServerService] Sending request...");
+        final HttpResponse<JsonNode> response = Unirest.post(baseUrl + "/client/usage")
                 .header("Content-Type", "application/json")
                 .body(bodyJSON)
                 .asJson();
 
         if (response != null && response.isSuccess()) {
-            System.out.println("OK");
+            Logger.debug("[ServerService] Response: " + response.getBody().toString());
         } else {
-            String errMsg = "AzkarServer API Error: " + (response != null && response.getBody() != null ? response.getBody().toString() : "");
+            String errMsg = "[ServerService] API Error: " + (response != null && response.getBody() != null ? response.getBody().toString() : "");
+            Logger.debug("[ServerService] " + errMsg);
             Sentry.captureMessage(errMsg, SentryLevel.ERROR);
         }
     }

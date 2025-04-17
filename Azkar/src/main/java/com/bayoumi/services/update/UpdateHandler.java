@@ -1,4 +1,4 @@
-package com.bayoumi.util.update;
+package com.bayoumi.services.update;
 
 import com.bayoumi.models.UpdateInfo;
 import com.bayoumi.util.Constants;

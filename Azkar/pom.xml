@@ -10,8 +10,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
         <jdk.version>1.8</jdk.version>
         <app.name>Azkar</app.name>
         <mainClass>com.bayoumi.Launcher</mainClass>
@@ -121,17 +119,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.8.3</version>
                 <configuration>
-                    <vendor>${app.name}</vendor>
-                    <appName>${app.name}</appName>
-                    <title>${app.name}</title>
-                    <description>${app.name}</description>
-                    <needMenu>true</needMenu>
-                    <needShortcut>true</needShortcut>
                     <mainClass>${mainClass}</mainClass>
-                    <additionalAppResources>jarFiles</additionalAppResources>
-                    <bundleArguments>
-                        <icon>${project.basedir}/src/main/deploy/package/windows/Azkar.ico</icon>
-                    </bundleArguments>
                 </configuration>
             </plugin>
         </plugins>
