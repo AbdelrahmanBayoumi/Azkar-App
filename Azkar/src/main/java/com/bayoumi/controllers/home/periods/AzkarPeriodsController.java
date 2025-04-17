@@ -5,7 +5,7 @@ import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.PopOverUtil;
-import com.bayoumi.util.services.azkar.AzkarService;
+import com.bayoumi.services.azkar.AzkarService;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;

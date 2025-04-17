@@ -14,7 +14,7 @@ import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
-import com.bayoumi.util.update.UpdateHandler;
+import com.bayoumi.services.update.UpdateHandler;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.application.Platform;
