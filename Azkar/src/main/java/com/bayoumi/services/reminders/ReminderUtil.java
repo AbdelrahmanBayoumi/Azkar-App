@@ -1,4 +1,4 @@
-package com.bayoumi.util.services.reminders;
+package com.bayoumi.services.reminders;
 
 import com.bayoumi.util.Logger;
 

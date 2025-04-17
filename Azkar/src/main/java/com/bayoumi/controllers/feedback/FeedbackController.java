@@ -4,7 +4,7 @@ import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.forms.Feedback;
+import com.bayoumi.util.web.forms.Feedback;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
