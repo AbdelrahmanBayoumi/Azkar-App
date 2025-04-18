@@ -1,9 +1,9 @@
 package com.bayoumi.models.preferences;
 
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.update.UpdateHandler;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
-import com.bayoumi.services.update.UpdateHandler;
 
 import java.sql.ResultSet;
 import java.util.Arrays;

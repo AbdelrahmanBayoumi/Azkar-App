@@ -1,9 +1,11 @@
 package com.bayoumi.controllers.azkar.timed;
 
 import com.bayoumi.models.azkar.TimedZekrDTO;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.statistics.StatisticsService;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -267,6 +269,7 @@ public class TimedAzkarController implements Initializable {
     @FXML
     private void openSettings() {
         try {
+            StatisticsService.getInstance().increment(PreferencesType.TIMED_AZKAR_SETTINGS_STATISTICS);
             final FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar_Settings.toString()));
             final JFXDialog dialog = new JFXDialog(sp, loader.load(), JFXDialog.DialogTransition.TOP);
             ((SettingsController) loader.getController()).setData(dialog, this::updateFontSize);

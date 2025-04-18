@@ -2,7 +2,9 @@ package com.bayoumi.controllers.settings.azkar;
 
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.azkar.AbsoluteZekr;
+import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.*;
+import com.bayoumi.services.statistics.StatisticsService;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -300,6 +302,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private void goToNotificationColor() {
         try {
+            StatisticsService.getInstance().increment(PreferencesType.SETTINGS_COLORS_STATISTICS);
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.ChooseNotificationColor);
             ((ChooseNotificationColorController) popUp.getController()).setData();
             popUp.showAndWait();
@@ -311,6 +314,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private void goToAzkar() {
         try {
+            StatisticsService.getInstance().increment(PreferencesType.SETTINGS_AZKAR_DB_STATISTICS);
             final Stage stage = new Stage();
             final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString()))));
             scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
