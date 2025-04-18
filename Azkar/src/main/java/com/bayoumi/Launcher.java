@@ -24,7 +24,7 @@ import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.tray.TrayUtil;
 import com.bayoumi.util.validation.SingleInstance;
-import com.bayoumi.util.web.AzkarServer;
+import com.bayoumi.util.web.server.ServerService;
 import com.install4j.api.launcher.StartupNotification;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
@@ -119,7 +119,7 @@ public class Launcher extends Application {
                 Logger.debug(ex.getLocalizedMessage());
             }
             incrementPreloader();
-            AzkarServer.init();
+            ServerService.init();
             incrementPreloader();
 
             TimedAzkarService.init();
