@@ -27,9 +27,9 @@
 package com.bayoumi.util.gui.notfication;
 
 import com.bayoumi.models.settings.NotificationColor;
+import com.bayoumi.services.azkar.AzkarService;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
-import com.bayoumi.services.azkar.AzkarService;
 import impl.org.controlsfx.skin.NotificationBar;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;

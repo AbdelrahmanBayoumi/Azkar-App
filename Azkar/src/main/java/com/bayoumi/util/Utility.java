@@ -64,4 +64,13 @@ public class Utility {
         return Math.abs(returnedVal) == 0 ? 0 : returnedVal;
     }
 
+    public static int parseIntOrZero(String s) {
+        if (s == null) return 0;
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
 }
