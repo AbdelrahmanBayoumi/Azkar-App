@@ -2,14 +2,37 @@ package com.bayoumi.services.statistics;
 
 import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.util.Utility;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Immutable snapshot of all statistic counts, loaded once from the database.
  */
 public final class StatisticsSnapshot {
+    private static final Set<PreferencesType> STATISTICS_KEYS = Collections.unmodifiableSet(EnumSet.of(
+            PreferencesType.SETTINGS_OPEN_STATISTICS,
+            PreferencesType.SETTINGS_AZKAR_STATISTICS,
+            PreferencesType.SETTINGS_PRAYERS_STATISTICS,
+            PreferencesType.SETTINGS_OTHER_STATISTICS,
+            PreferencesType.SETTINGS_COLORS_STATISTICS,
+            PreferencesType.SETTINGS_AZKAR_DB_STATISTICS,
+            PreferencesType.TIMED_AZKAR_SETTINGS_STATISTICS,
+            PreferencesType.MORNING_AZKAR_OPEN_STATISTICS,
+            PreferencesType.NIGHT_AZKAR_OPEN_STATISTICS,
+            PreferencesType.MORNING_AZKAR_NOTIFICATION_STATISTICS,
+            PreferencesType.MORNING_AZKAR_NOTIFICATION_CLICK_STATISTICS,
+            PreferencesType.NIGHT_AZKAR_NOTIFICATION_STATISTICS,
+            PreferencesType.NIGHT_AZKAR_NOTIFICATION_CLICK_STATISTICS,
+            PreferencesType.OTHER_PRAYER_TIMES_OPEN_STATISTICS,
+            PreferencesType.AZKAR_NOTIFICATION_STATISTICS,
+            PreferencesType.AZKAR_NOTIFICATION_CLICK_STATISTICS
+    ));
+
     private final Map<PreferencesType, Integer> stats;
 
     private StatisticsSnapshot(Map<PreferencesType, Integer> stats) {
@@ -17,32 +40,12 @@ public final class StatisticsSnapshot {
     }
 
     /**
-     * Loads all preference entries whose keys end with _COUNT in a single DB hit,
+     * Loads all preference entries for statistics in a single DB hit,
      * and returns an immutable snapshot.
      */
     public static StatisticsSnapshot load() {
-        Preferences prefs = Preferences.getInstance();
-        Map<String, String> allPrefs = prefs.getAll();
-
-        // Filter only statistics-based statistics
-        Set<PreferencesType> statisticsKeys = Arrays.stream(PreferencesType.values())
-                .filter(pt -> pt.name().endsWith("_STATISTICS"))
-                .collect(Collectors.toSet());
-
-        final Map<PreferencesType, Integer> map = new EnumMap<>(PreferencesType.class);
-        for (PreferencesType key : statisticsKeys) {
-            String raw = allPrefs.get("preferences." + key.getName());
-            int value = 0;
-            if (raw != null) {
-                try {
-                    value = Integer.parseInt(raw);
-                } catch (NumberFormatException ignored) {
-                }
-            }
-            map.put(key, value);
-        }
-
-        return new StatisticsSnapshot(Collections.unmodifiableMap(map));
+        return new StatisticsSnapshot(Collections.unmodifiableMap(Preferences.getInstance()
+                .getValues(STATISTICS_KEYS, Utility::parseIntOrZero)));
     }
 
     /**
@@ -57,6 +60,13 @@ public final class StatisticsSnapshot {
      */
     public Map<PreferencesType, Integer> asMap() {
         return stats;
+    }
+
+    @Override
+    public String toString() {
+        return stats.entrySet().stream()
+                .map(e -> e.getKey().getName() + "=" + e.getValue())
+                .collect(Collectors.joining(", ", "StatisticsSnapshot[", "]"));
     }
 
 }

@@ -89,6 +89,18 @@ public enum PreferencesType {
         return name;
     }
 
+    /**
+     * Find the enum whose getName() equals the given key.
+     * Throws IllegalArgumentException if none found.
+     */
+    public static PreferencesType fromKey(String key) {
+        for (PreferencesType pt : values()) {
+            if (pt.getName().equals(key)) {
+                return pt;
+            }
+        }
+        throw new IllegalArgumentException("Unknown PreferencesType key: " + key);
+    }
 }
 
 
