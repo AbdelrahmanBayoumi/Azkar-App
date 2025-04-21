@@ -190,7 +190,7 @@ public class PrayerTimesController implements Initializable {
 
     @FXML
     private void openSunnahBox() {
-        StatisticsService.getInstance().increment(StatisticsType.OTHER_PRAYER_TIMES_OPENED);
+        StatisticsService.getInstance().increment(StatisticsType.PRAYER_TIMES_OTHER_OPENED);
         sunnahBox.setVisible(true);
     }
 
