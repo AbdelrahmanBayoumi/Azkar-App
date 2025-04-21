@@ -57,17 +57,8 @@ public class Preferences extends KeyValueStore<PreferencesType> {
     }
 
 
-    public Map<String, String> getAll() {
-        // TODO remove this
-        final Map<String, String> preferences = new java.util.HashMap<>();
-        try {
-            final ResultSet result = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM preferences;").executeQuery();
-            while (result.next()) {
-                preferences.put("preferences." + result.getString("key"), result.getString("value"));
-            }
-        } catch (Exception ignored) {
-        }
-        return preferences;
+    public Map<String, String> getAllWithPrefix() {
+        return super.getAll("preferences.");
     }
 
 

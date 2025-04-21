@@ -1,7 +1,8 @@
 package com.bayoumi.services.statistics;
 
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.storage.statistics.StatisticsStore;
-import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Logger;
 import kong.unirest.json.JSONObject;
 
@@ -12,7 +13,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
-import java.util.EnumSet;
 
 public class WeeklyStatsManager {
 
@@ -28,9 +28,8 @@ public class WeeklyStatsManager {
         if (weeksBetween >= 1) {
             Logger.debug("[WeeklyStatsManager] Rolling over stats. Old week start: " + storedWeekStart);
             try {
-                final StatisticsStore store = StatisticsStore.getInstance();
-                EnumSet.complementOf(EnumSet.of(StatisticsType.WEEK_START)).forEach(store::reset);
-                store.set(StatisticsType.WEEK_START, computedWeekStart.toString());
+                StatisticsStore.getInstance().resetAll();
+                Preferences.getInstance().set(PreferencesType.WEEK_START, computedWeekStart.toString());
                 Logger.debug("[WeeklyStatsManager] New week start set to: " + computedWeekStart);
             } catch (Exception ex) {
                 Logger.error(null, ex, WeeklyStatsManager.class.getName());
@@ -47,9 +46,9 @@ public class WeeklyStatsManager {
 
     private static Instant loadOrInitWeekStart(Instant defaultStart) {
         try {
-            return Instant.parse(StatisticsStore.getInstance().get(StatisticsType.WEEK_START, defaultStart.toString()));
+            return Instant.parse(Preferences.getInstance().get(PreferencesType.WEEK_START, defaultStart.toString()));
         } catch (DateTimeParseException ex) {
-            StatisticsStore.getInstance().set(StatisticsType.WEEK_START, defaultStart.toString());
+            Preferences.getInstance().set(PreferencesType.WEEK_START, defaultStart.toString());
             return defaultStart;
         }
     }

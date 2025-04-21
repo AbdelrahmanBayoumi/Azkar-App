@@ -134,12 +134,16 @@ public abstract class KeyValueStore<K extends Enum<K> & KeyValueDefault> {
     }
 
     public Map<String, String> getAll() {
+        return getAll("");
+    }
+
+    protected Map<String, String> getAll(String keyPrefix) {
         final Map<String, String> map = new HashMap<>();
         try {
             final String sql = "SELECT key,value FROM " + tableName;
             final ResultSet rs = DatabaseManager.getInstance().con.prepareStatement(sql).executeQuery();
             while (rs.next()) {
-                map.put(rs.getString("key"), rs.getString("value"));
+                map.put(keyPrefix + rs.getString("key"), rs.getString("value"));
             }
         } catch (Exception ex) {
             Logger.error("getAll failed on " + tableName, ex, getClass().getName() + ".getAll()");

@@ -2,6 +2,7 @@ package com.bayoumi.util;
 
 import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.statistics.StatisticsStore;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import io.sentry.protocol.User;
@@ -20,7 +21,8 @@ public class SentryUtil {
 
                 options.setBeforeSend((event, hint) -> {
                     event.setExtra("upTime", AppPropertiesUtil.getUptime());
-                    Preferences.getInstance().getAll().forEach(event::setTag);
+                    Preferences.getInstance().getAllWithPrefix().forEach(event::setTag);
+                    StatisticsStore.getInstance().getAllWithPrefix().forEach(event::setTag);
                     return event;
                 });
             });

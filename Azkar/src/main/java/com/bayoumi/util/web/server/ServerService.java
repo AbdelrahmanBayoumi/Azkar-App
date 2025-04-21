@@ -63,7 +63,7 @@ public class ServerService {
         json.put("version", Constants.VERSION);
         AppPropertiesUtil.getProps().forEach(json::put);
         if (sendUsageData) {
-            Preferences.getInstance().getAll().forEach(json::put);
+            Preferences.getInstance().getAllWithPrefix().forEach(json::put);
         } else {
             json.put("preferences.send_usage_data", false);
         }

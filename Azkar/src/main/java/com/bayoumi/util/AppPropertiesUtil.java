@@ -2,6 +2,7 @@ package com.bayoumi.util;
 
 import com.bayoumi.Launcher;
 import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.statistics.StatisticsStore;
 import kong.unirest.json.JSONObject;
 
 import java.util.HashMap;
@@ -40,7 +41,8 @@ public class AppPropertiesUtil {
     public static String getAllAppPropsAsJsonString() {
         final JSONObject jsonObject = new JSONObject(getProps());
         jsonObject.put("uptime", getUptime());
-        Preferences.getInstance().getAll().forEach(jsonObject::put);
+        Preferences.getInstance().getAllWithPrefix().forEach(jsonObject::put);
+        StatisticsStore.getInstance().getAllWithPrefix().forEach(jsonObject::put);
         return jsonObject.toString();
     }
 

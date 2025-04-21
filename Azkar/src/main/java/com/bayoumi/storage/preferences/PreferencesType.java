@@ -2,6 +2,8 @@ package com.bayoumi.storage.preferences;
 
 import com.bayoumi.storage.KeyValueDefault;
 
+import java.time.Instant;
+
 public enum PreferencesType implements KeyValueDefault {
     // ======= Notification Settings =======
     NOTIFICATION_BACKGROUND_COLOR("notification_background_color", "#FFFFFF"),
@@ -52,7 +54,7 @@ public enum PreferencesType implements KeyValueDefault {
     AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true"),
     SEND_USAGE_DATA("send_usage_data", "true"),
     APP_VERSION("app_version", "0"),
-    DB_VERSION("db_version", "0");
+    WEEK_START("week_start", Instant.EPOCH.toString());
 
     private final String name;
     private final String defaultValue;

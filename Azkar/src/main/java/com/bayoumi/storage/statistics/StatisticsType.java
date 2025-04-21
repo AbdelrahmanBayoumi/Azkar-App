@@ -2,8 +2,6 @@ package com.bayoumi.storage.statistics;
 
 import com.bayoumi.storage.KeyValueDefault;
 
-import java.time.Instant;
-
 public enum StatisticsType implements KeyValueDefault {
     // ======= Settings Statistics =======
     SETTINGS_OPENED("settings_opened", "0"),
@@ -25,11 +23,7 @@ public enum StatisticsType implements KeyValueDefault {
     AZKAR_NOTIFICATION_CLICKED("azkar_notification_clicked", "0"),
 
     // ======= Prayer Times Statistics =======
-    PRAYER_TIMES_OTHER_OPENED("prayer_times_other_opened", "0"),
-
-    // ======= Meta Data =======
-    // TODO: move it to a meta data store
-    WEEK_START("week_start", Instant.EPOCH.toString());
+    PRAYER_TIMES_OTHER_OPENED("prayer_times_other_opened", "0");
 
     private final String name;
     private final String defaultValue;
