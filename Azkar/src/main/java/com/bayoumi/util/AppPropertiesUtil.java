@@ -1,7 +1,7 @@
 package com.bayoumi.util;
 
 import com.bayoumi.Launcher;
-import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.storage.preferences.Preferences;
 import kong.unirest.json.JSONObject;
 
 import java.util.HashMap;

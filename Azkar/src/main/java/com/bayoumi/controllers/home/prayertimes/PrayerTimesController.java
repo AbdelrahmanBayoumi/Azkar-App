@@ -4,7 +4,7 @@ import com.batoulapps.adhan.Prayer;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.statistics.StatisticsService;

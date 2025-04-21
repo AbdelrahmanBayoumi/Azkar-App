@@ -1,4 +1,4 @@
-package com.bayoumi.models.preferences;
+package com.bayoumi.storage.preferences;
 
 import com.bayoumi.util.db.KeyValueDefault;
 

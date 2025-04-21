@@ -1,6 +1,6 @@
 package com.bayoumi.controllers.settings.azkar;
 
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.NotificationSettings;

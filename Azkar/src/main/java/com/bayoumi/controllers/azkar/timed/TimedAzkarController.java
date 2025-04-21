@@ -1,7 +1,7 @@
 package com.bayoumi.controllers.azkar.timed;
 
 import com.bayoumi.models.azkar.TimedZekrDTO;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;

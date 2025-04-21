@@ -2,7 +2,7 @@ package com.bayoumi.services.azkar;
 
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.models.azkar.AbsoluteZekr;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.EditablePeriodTimerTask;
 import com.bayoumi.services.statistics.StatisticsService;

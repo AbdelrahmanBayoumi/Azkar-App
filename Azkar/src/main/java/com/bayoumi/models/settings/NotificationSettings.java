@@ -1,7 +1,7 @@
 package com.bayoumi.models.settings;
 
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
 import javafx.geometry.Pos;
 import javafx.util.StringConverter;

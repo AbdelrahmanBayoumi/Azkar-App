@@ -1,6 +1,6 @@
 package com.bayoumi.controllers.settings;
 
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.services.statistics.StatisticsService;
 import com.bayoumi.util.Logger;

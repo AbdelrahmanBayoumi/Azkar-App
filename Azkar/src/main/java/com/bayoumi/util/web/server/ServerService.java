@@ -1,6 +1,6 @@
 package com.bayoumi.util.web.server;
 
-import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Constants;

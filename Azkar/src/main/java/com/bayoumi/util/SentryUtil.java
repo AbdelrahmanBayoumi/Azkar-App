@@ -1,6 +1,6 @@
 package com.bayoumi.util;
 
-import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.util.db.DatabaseManager;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
