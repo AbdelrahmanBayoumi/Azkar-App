@@ -1,10 +1,10 @@
 package com.bayoumi.controllers.settings.azkar;
 
-import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.NotificationSettings;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ColorUtil;
 import com.jfoenix.controls.JFXColorPicker;

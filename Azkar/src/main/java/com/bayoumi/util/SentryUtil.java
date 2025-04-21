@@ -1,7 +1,7 @@
 package com.bayoumi.util;
 
-import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.storage.DatabaseManager;
+import com.bayoumi.storage.preferences.Preferences;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import io.sentry.protocol.User;

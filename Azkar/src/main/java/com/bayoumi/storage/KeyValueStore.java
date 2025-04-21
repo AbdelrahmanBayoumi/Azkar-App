@@ -5,6 +5,7 @@ import com.bayoumi.util.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +129,20 @@ public abstract class KeyValueStore<K extends Enum<K> & KeyValueDefault> {
             }
         } catch (Exception ex) {
             Logger.error("getAllValues failed on " + tableName, ex, getClass().getName() + ".getAllValues()");
+        }
+        return map;
+    }
+
+    public Map<String, String> getAll() {
+        final Map<String, String> map = new HashMap<>();
+        try {
+            final String sql = "SELECT key,value FROM " + tableName;
+            final ResultSet rs = DatabaseManager.getInstance().con.prepareStatement(sql).executeQuery();
+            while (rs.next()) {
+                map.put(rs.getString("key"), rs.getString("value"));
+            }
+        } catch (Exception ex) {
+            Logger.error("getAll failed on " + tableName, ex, getClass().getName() + ".getAll()");
         }
         return map;
     }

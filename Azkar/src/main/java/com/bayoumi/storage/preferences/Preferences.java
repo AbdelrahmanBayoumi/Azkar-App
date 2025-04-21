@@ -2,9 +2,9 @@ package com.bayoumi.storage.preferences;
 
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.update.UpdateHandler;
-import com.bayoumi.util.Logger;
 import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.storage.KeyValueStore;
+import com.bayoumi.util.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

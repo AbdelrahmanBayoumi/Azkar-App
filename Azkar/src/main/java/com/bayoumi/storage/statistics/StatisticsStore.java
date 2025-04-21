@@ -39,12 +39,17 @@ public class StatisticsStore extends KeyValueStore<StatisticsType> {
         set(key, String.valueOf(currentValue + 1));
     }
 
+    public void reset(StatisticsType key) {
+        set(key, key.getDefaultValue());
+    }
+
     /**
      * Reset all statistics to their default values (0)
      */
     public void resetAll() {
+        // TODO: Reset all statistics in one request
         for (StatisticsType key : StatisticsType.values()) {
-            set(key, key.getDefaultValue());
+            reset(key);
         }
     }
 }

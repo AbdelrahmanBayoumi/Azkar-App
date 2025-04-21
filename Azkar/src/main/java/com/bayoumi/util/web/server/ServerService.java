@@ -1,7 +1,8 @@
 package com.bayoumi.util.web.server;
 
-import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.statistics.WeeklyStatsManager;
+import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
@@ -19,12 +20,15 @@ public class ServerService {
     public static void init() {
         new Thread(() -> {
             try {
+                WeeklyStatsManager.resetIfNeeded();
                 Logger.debug("[ServerService] Starting...");
                 final Properties config = FileUtils.getConfig();
                 Logger.debug("[ServerService] Config: " + config);
                 final String baseUrl = getBaseUrl(config);
                 Logger.debug("[ServerService] Base URL: " + baseUrl);
-                sendRequest(baseUrl, ServerUtil.preparePayload(getPreferencesJSON(), config));
+                final boolean sendUsageData = Settings.getInstance().getSendUsageData();
+                final JSONObject statistics = sendUsageData ? WeeklyStatsManager.getStatsJson() : new JSONObject();
+                sendRequest(baseUrl, ServerUtil.preparePayload(getPreferencesJSON(sendUsageData), statistics, config));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -54,11 +58,10 @@ public class ServerService {
         return fallbackConfig.getProperty("collectorServer.baseUrl");
     }
 
-    private static JSONObject getPreferencesJSON() {
+    private static JSONObject getPreferencesJSON(boolean sendUsageData) {
         final JSONObject json = new JSONObject();
         json.put("version", Constants.VERSION);
         AppPropertiesUtil.getProps().forEach(json::put);
-        final boolean sendUsageData = Settings.getInstance().getSendUsageData();
         if (sendUsageData) {
             Preferences.getInstance().getAll().forEach(json::put);
         } else {
