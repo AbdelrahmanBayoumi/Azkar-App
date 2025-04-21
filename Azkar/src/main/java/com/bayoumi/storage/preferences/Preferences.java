@@ -1,14 +1,10 @@
 package com.bayoumi.storage.preferences;
 
-import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.storage.KeyValueStore;
-import com.bayoumi.util.Logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Preferences extends KeyValueStore<PreferencesType> {
     private static Preferences instance;
