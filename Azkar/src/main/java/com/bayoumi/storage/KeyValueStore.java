@@ -26,13 +26,19 @@ public abstract class KeyValueStore<K extends Enum<K> & KeyValueDefault> {
 
     private void createTableIfNeeded() {
         try {
+            // 1) ensure the table exists
             DatabaseManager.getInstance()
                     .con
                     .prepareStatement("CREATE TABLE IF NOT EXISTS " + tableName + " ( key TEXT PRIMARY KEY, value TEXT );")
                     .execute();
-            // TODO: add indexes
+
+            // 2) then ensure an index on `key` for faster lookups
+            DatabaseManager.getInstance()
+                    .con
+                    .prepareStatement("CREATE INDEX IF NOT EXISTS idx_" + tableName + "_key ON " + tableName + "(key);")
+                    .execute();
         } catch (Exception ex) {
-            throw new RuntimeException("Failed to init table " + tableName, ex);
+            throw new RuntimeException("Failed to init table or index on " + tableName, ex);
         }
     }
 
