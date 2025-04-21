@@ -3,7 +3,7 @@ package com.bayoumi;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.dialog.DownloadResourcesController;
 import com.bayoumi.controllers.home.HomeController;
-import com.bayoumi.models.Onboarding;
+import com.bayoumi.repositry.OnboardingRepository;
 import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Settings;
@@ -198,7 +198,7 @@ public class Launcher extends Application {
         HelperMethods.SetAppDecoration(primaryStage);
 
         // show primaryStage
-        final boolean isFirstTimeOpened = Onboarding.isFirstTimeOpened();
+        final boolean isFirstTimeOpened = OnboardingRepository.isFirstTimeOpened();
         final boolean isNewVersion = !Constants.VERSION.equals(Preferences.getInstance().get(PreferencesType.APP_VERSION));
         if (isFirstTimeOpened || isNewVersion || !Settings.getInstance().getMinimized()) {
             primaryStage.show();
