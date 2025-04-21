@@ -6,10 +6,7 @@ import com.bayoumi.storage.statistics.StatisticsStore;
 import com.bayoumi.util.Logger;
 import kong.unirest.json.JSONObject;
 
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
@@ -17,13 +14,12 @@ import java.time.temporal.TemporalAdjusters;
 public class WeeklyStatsManager {
 
     public synchronized static void resetIfNeeded() {
-        final Instant now = Instant.now();
         final Instant computedWeekStart = computeWeekStart();
         final Instant storedWeekStart = loadOrInitWeekStart(computedWeekStart);
 
         final long weeksBetween = ChronoUnit.WEEKS.between(
-                storedWeekStart.atZone(ZoneId.systemDefault()).toLocalDate(),
-                now.atZone(ZoneId.systemDefault()).toLocalDate()
+                storedWeekStart.atZone(ZoneOffset.UTC).toLocalDate(),
+                Instant.now().atZone(ZoneOffset.UTC).toLocalDate()
         );
         if (weeksBetween >= 1) {
             Logger.debug("[WeeklyStatsManager] Rolling over stats. Old week start: " + storedWeekStart);
@@ -38,7 +34,7 @@ public class WeeklyStatsManager {
     }
 
     private static Instant computeWeekStart() {
-        final ZoneId zone = ZoneId.systemDefault();
+        final ZoneId zone = ZoneOffset.UTC;
         final LocalDate today = LocalDate.now(zone);
         final LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY));
         return weekStart.atStartOfDay(zone).toInstant();
