@@ -42,6 +42,7 @@ public enum PreferencesType implements KeyValueDefault {
     TIMED_AZKAR_FONT_SIZE("timed_azkar_font_size", "23"),
     TIMED_AZKAR_DATA_VERSION("timed_azkar_data_version", "0.0.0"),
     IS_PRAYERS_REMINDER_STOPPED("is_prayers_reminder_stopped", "false"),
+
     // ======= Other Settings =======
     LANGUAGE("language", "ar"),
     HIJRI_OFFSET("hijri_offset", "5"),
@@ -51,24 +52,7 @@ public enum PreferencesType implements KeyValueDefault {
     AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true"),
     SEND_USAGE_DATA("send_usage_data", "true"),
     APP_VERSION("app_version", "0"),
-    DB_VERSION("db_version", "0"),
-    // ======== Statistics ========
-    SETTINGS_OPEN_STATISTICS("settings_open_statistics", "0"),
-    SETTINGS_AZKAR_STATISTICS("settings_azkar_statistics", "0"),
-    SETTINGS_PRAYERS_STATISTICS("settings_prayers_statistics", "0"),
-    SETTINGS_OTHER_STATISTICS("settings_other_statistics", "0"),
-    SETTINGS_COLORS_STATISTICS("settings_colors_statistics", "0"),
-    SETTINGS_AZKAR_DB_STATISTICS("settings_db_statistics", "0"),
-    TIMED_AZKAR_SETTINGS_STATISTICS("timed_azkar_settings_statistics", "0"),
-    MORNING_AZKAR_OPEN_STATISTICS("morning_azkar_statistics", "0"),
-    NIGHT_AZKAR_OPEN_STATISTICS("night_azkar_statistics", "0"),
-    MORNING_AZKAR_NOTIFICATION_STATISTICS("morning_azkar_notification_statistics", "0"),
-    MORNING_AZKAR_NOTIFICATION_CLICK_STATISTICS("morning_azkar_notification_click_statistics", "0"),
-    NIGHT_AZKAR_NOTIFICATION_STATISTICS("night_azkar_notification_statistics", "0"),
-    NIGHT_AZKAR_NOTIFICATION_CLICK_STATISTICS("night_azkar_notification_click_statistics", "0"),
-    OTHER_PRAYER_TIMES_OPEN_STATISTICS("other_prayer_times_statistics", "0"),
-    AZKAR_NOTIFICATION_STATISTICS("azkar_notification_statistics", "0"),
-    AZKAR_NOTIFICATION_CLICK_STATISTICS("azkar_notification_click_statistics", "0");
+    DB_VERSION("db_version", "0");
 
     private final String name;
     private final String defaultValue;

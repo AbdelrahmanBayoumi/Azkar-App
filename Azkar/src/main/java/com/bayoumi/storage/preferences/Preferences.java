@@ -27,12 +27,11 @@ public class Preferences extends KeyValueStore<PreferencesType> {
 
     private Preferences() {
         super("preferences", PreferencesType.class);
-        // TODO: move this check to a service
-        // check for updates if enabled
         checkForUpdate();
     }
 
     private void checkForUpdate() {
+        // TODO: move this check to a service
         Logger.debug("Start automaticCheckForUpdates");
         final Timer timer = new Timer();
         timer.schedule(
@@ -59,6 +58,7 @@ public class Preferences extends KeyValueStore<PreferencesType> {
 
 
     public Map<String, String> getAll() {
+        // TODO remove this
         final Map<String, String> preferences = new java.util.HashMap<>();
         try {
             final ResultSet result = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM preferences;").executeQuery();
@@ -79,6 +79,7 @@ public class Preferences extends KeyValueStore<PreferencesType> {
      * @return map of PreferencesType → parsed T
      */
     public <T> Map<PreferencesType, T> getValues(Collection<PreferencesType> keys, Function<String, T> parser) {
+        // TODO remove this
         // build SQL: SELECT key, value FROM preferences WHERE key IN (?, ?, …)
         final String placeholders = keys.stream().map(k -> "?").collect(Collectors.joining(","));
         final String sql = "SELECT key, value FROM preferences WHERE key IN (" + placeholders + ")";
