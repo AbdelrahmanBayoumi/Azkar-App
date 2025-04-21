@@ -1,7 +1,5 @@
 package com.bayoumi.storage.preferences;
 
-import com.bayoumi.models.settings.Settings;
-import com.bayoumi.services.update.UpdateHandler;
 import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.storage.KeyValueStore;
 import com.bayoumi.util.Logger;
@@ -27,29 +25,7 @@ public class Preferences extends KeyValueStore<PreferencesType> {
 
     private Preferences() {
         super("preferences", PreferencesType.class);
-        checkForUpdate();
     }
-
-    private void checkForUpdate() {
-        // TODO: move this check to a service
-        Logger.debug("Start automaticCheckForUpdates");
-        final Timer timer = new Timer();
-        timer.schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        Logger.debug("automaticCheckForUpdates: run()");
-                        if (UpdateHandler.getInstance().checkUpdate() == 1 & Settings.getInstance().getAutomaticCheckForUpdates()) {
-                            UpdateHandler.getInstance().showInstallPrompt();
-                        }
-                        // close the thread
-                        timer.cancel();
-                    }
-                },
-                390000 // 6.5min => to ensure that update will open when no notification is shown
-        );
-    }
-
 
     @Override
     protected List<PreferencesType> getKeysThatDoNotAllowedToHaveEmptyValues() {

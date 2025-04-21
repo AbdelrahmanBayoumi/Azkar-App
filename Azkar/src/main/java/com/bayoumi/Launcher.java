@@ -7,6 +7,7 @@ import com.bayoumi.models.settings.Settings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.repositry.OnboardingRepository;
 import com.bayoumi.services.TimedAzkarService;
+import com.bayoumi.services.update.UpdateService;
 import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.storage.LocationsDBManager;
 import com.bayoumi.storage.preferences.Preferences;
@@ -97,6 +98,9 @@ public class Launcher extends Application {
             // --- initialize Preferences ---
             Preferences.init();
             incrementPreloader();
+
+            // --- initialize Auto Update Check ---
+            UpdateService.checkForUpdate();
 
             // --- initialize database connection (locationsDB) ---
             try {
