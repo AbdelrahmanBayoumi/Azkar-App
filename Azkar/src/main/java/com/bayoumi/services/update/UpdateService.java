@@ -7,7 +7,6 @@ import java.util.Timer;
 
 public class UpdateService {
     public static void checkForUpdate() {
-        // TODO: move this check to a service
         final Timer timer = new Timer();
         timer.schedule(
                 new java.util.TimerTask() {
