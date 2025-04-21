@@ -4,6 +4,7 @@ import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.update.UpdateHandler;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.util.db.KeyValueStore;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +12,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Preferences {
+public class Preferences extends KeyValueStore<PreferencesType> {
     private static Preferences instance;
 
-    public static Preferences getInstance() {
+    public synchronized static Preferences getInstance() {
         return instance;
     }
 
@@ -24,15 +25,10 @@ public class Preferences {
         }
     }
 
-    private Preferences() throws Exception {
-        // 1. create table if not exists
-        if (DatabaseManager.getInstance().con == null) {
-            throw new Exception("Database not connected");
-        } else {
-            DatabaseManager.getInstance().con.prepareStatement("CREATE TABLE IF NOT EXISTS preferences ( key TEXT, value TEXT, PRIMARY KEY(key));").execute();
-        }
-
-        // 2. check for updates if enabled
+    private Preferences() {
+        super("preferences", PreferencesType.class);
+        // TODO: move this check to a service
+        // check for updates if enabled
         checkForUpdate();
     }
 
@@ -56,88 +52,9 @@ public class Preferences {
     }
 
 
-    private void save(PreferencesType key, String value) {
-        try {
-            DatabaseManager.getInstance().con.prepareStatement("INSERT INTO preferences (key,value) VALUES('" + key + "','" + value + "')").execute();
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".save()");
-        }
-    }
-
-    private void update(PreferencesType key, String value) {
-        try {
-            DatabaseManager.getInstance().stat = DatabaseManager.getInstance().con.prepareStatement("UPDATE preferences set value=? WHERE key=?");
-            DatabaseManager.getInstance().stat.setString(1, value);
-            DatabaseManager.getInstance().stat.setString(2, key.toString());
-            DatabaseManager.getInstance().stat.executeUpdate();
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".update()");
-        }
-    }
-
-    private boolean isExist(PreferencesType key) {
-        try {
-            ResultSet result = DatabaseManager.getInstance().con.prepareStatement("SELECT count(*) as exist FROM preferences WHERE key='" + key + "'").executeQuery();
-            if (result.next()) {
-                return result.getString("exist").equals("1");
-            }
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".isExist()");
-        }
-        return false;
-    }
-
-    public void set(PreferencesType key, String value) {
-        if (isExist(key)) {
-            Logger.debug("[Preferences] Update >> " + key + ": [" + value + "]");
-            update(key, value);
-        } else {
-            Logger.debug("[Preferences] Insert >> " + key + ": [" + value + "]");
-            save(key, value);
-        }
-//        notifyObservers(key, value);
-    }
-
-    public String get(PreferencesType key, String defaultValue) {
-        try {
-            // Check if key exists and return its value if found
-            ResultSet result = DatabaseManager.getInstance().con.prepareStatement("SELECT value FROM preferences WHERE key='" + key + "'").executeQuery();
-            if (result.next()) {
-                String value = result.getString("value");
-
-                // If the retrieved value is empty, and the key is not allowed to have an empty value,
-                // update the stored value to the default since empty strings are not permitted.
-                if (value != null && value.isEmpty() && !Arrays.asList(PreferencesType.ADHAN_AUDIO, PreferencesType.AUDIO_NAME).contains(key)) {
-                    update(key, defaultValue);
-                    return defaultValue;
-                }
-
-                // Return the existing value or default if value is null
-                return value != null ? value : defaultValue;
-            }
-            // If key doesn't exist, insert the default value
-            save(key, defaultValue);
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".get()");
-        }
-        return defaultValue;
-    }
-
-
-    public String get(PreferencesType key) {
-        return get(key, key.getDefaultValue());
-    }
-
-    public boolean getBoolean(PreferencesType key) {
-        return get(key, key.getDefaultValue()).equalsIgnoreCase("true");
-    }
-
-    public int getInt(PreferencesType key) {
-        return Integer.parseInt(get(key, key.getDefaultValue()));
-    }
-
-    public double getDouble(PreferencesType key) {
-        return Double.parseDouble(get(key, key.getDefaultValue()));
+    @Override
+    protected List<PreferencesType> getKeysThatDoNotAllowedToHaveEmptyValues() {
+        return Arrays.asList(PreferencesType.ADHAN_AUDIO, PreferencesType.AUDIO_NAME);
     }
 
 
@@ -180,7 +97,7 @@ public class Preferences {
                 }
             }
         } catch (Exception e) {
-            Logger.error(null, e, "Preferences.getValues()");
+            Logger.error(null, e, getClass().getName() + ".getValues()");
         }
         return result;
     }

@@ -1,6 +1,8 @@
 package com.bayoumi.models.preferences;
 
-public enum PreferencesType {
+import com.bayoumi.util.db.KeyValueDefault;
+
+public enum PreferencesType implements KeyValueDefault {
     // ======= Notification Settings =======
     NOTIFICATION_BACKGROUND_COLOR("notification_background_color", "#FFFFFF"),
     NOTIFICATION_BORDER_COLOR("notification_border_color", "#E9C46A"),
@@ -102,5 +104,3 @@ public enum PreferencesType {
         throw new IllegalArgumentException("Unknown PreferencesType key: " + key);
     }
 }
-
-
