@@ -1,4 +1,4 @@
-package com.bayoumi.util.db;
+package com.bayoumi.storage;
 
 public interface KeyValueDefault {
     String getDefaultValue();

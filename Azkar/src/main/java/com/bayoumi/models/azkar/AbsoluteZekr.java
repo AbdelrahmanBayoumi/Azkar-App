@@ -3,7 +3,7 @@ package com.bayoumi.models.azkar;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;

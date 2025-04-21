@@ -1,7 +1,7 @@
 package com.bayoumi.repositry;
 
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.storage.DatabaseManager;
 
 import java.sql.ResultSet;
 

@@ -1,6 +1,6 @@
 package com.bayoumi.util.web.server;
 
-import com.bayoumi.util.db.DatabaseManager;
+import com.bayoumi.storage.DatabaseManager;
 import kong.unirest.json.JSONObject;
 
 import java.util.Properties;

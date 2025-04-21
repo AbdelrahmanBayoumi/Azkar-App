@@ -1,6 +1,6 @@
 package com.bayoumi.storage.preferences;
 
-import com.bayoumi.util.db.KeyValueDefault;
+import com.bayoumi.storage.KeyValueDefault;
 
 public enum PreferencesType implements KeyValueDefault {
     // ======= Notification Settings =======
