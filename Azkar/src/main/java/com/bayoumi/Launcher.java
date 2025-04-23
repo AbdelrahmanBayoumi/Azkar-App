@@ -34,6 +34,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import kong.unirest.Unirest;
 
 import java.util.Objects;
 
@@ -87,6 +88,9 @@ public class Launcher extends Application {
             Logger.init();
             Logger.info("App Launched");
             incrementPreloader();
+
+            // --- initialize Unirest ---
+            Unirest.config().connectTimeout(30_000).socketTimeout(120_000);
 
             // --- initialize database connection ---
             DatabaseManager databaseManager = DatabaseManager.getInstance();
