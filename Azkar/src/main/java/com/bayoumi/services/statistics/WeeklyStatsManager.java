@@ -3,6 +3,8 @@ package com.bayoumi.services.statistics;
 import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.storage.statistics.StatisticsStore;
+import com.bayoumi.util.AppPropertiesUtil;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import kong.unirest.json.JSONObject;
 
@@ -13,7 +15,11 @@ import java.time.temporal.TemporalAdjusters;
 
 public class WeeklyStatsManager {
 
-    public synchronized static void resetIfNeeded() {
+    /**
+     * If we've moved into a fresh week, return the old week's start & stats, and then rollover.
+     * Otherwise, return null.
+     */
+    public static WeeklyStats oldWeekIfRolling(boolean sendUsageData) {
         final Instant computedWeekStart = computeWeekStart();
         final Instant storedWeekStart = loadOrInitWeekStart(computedWeekStart);
 
@@ -21,16 +27,20 @@ public class WeeklyStatsManager {
                 storedWeekStart.atZone(ZoneOffset.UTC).toLocalDate(),
                 Instant.now().atZone(ZoneOffset.UTC).toLocalDate()
         );
+
         if (weeksBetween >= 1) {
             Logger.debug("[WeeklyStatsManager] Rolling over stats. Old week start: " + storedWeekStart);
-            try {
-                StatisticsStore.getInstance().resetAll();
-                Preferences.getInstance().set(PreferencesType.WEEK_START, computedWeekStart.toString());
-                Logger.debug("[WeeklyStatsManager] New week start set to: " + computedWeekStart);
-            } catch (Exception ex) {
-                Logger.error(null, ex, WeeklyStatsManager.class.getName());
-            }
+            Logger.debug("[WeeklyStatsManager] New week start set to: " + computedWeekStart);
+            // snapshot old week
+            final JSONObject oldStats = getStatsJSON(sendUsageData);
+
+            // rollover
+            StatisticsStore.getInstance().resetAll();
+            Preferences.getInstance().set(PreferencesType.WEEK_START, computedWeekStart.toString());
+
+            return new WeeklyStats(storedWeekStart, oldStats, getPreferencesJSON(sendUsageData));
         }
+        return null;
     }
 
     private static Instant computeWeekStart() {
@@ -49,7 +59,24 @@ public class WeeklyStatsManager {
         }
     }
 
-    public static JSONObject getStatsJson() {
-        return new JSONObject(StatisticsStore.getInstance().getAll());
+    public static WeeklyStats getCurrentWeekStats(boolean sendUsageData) {
+        final Instant weekStart = loadOrInitWeekStart(WeeklyStatsManager.computeWeekStart());
+        return new WeeklyStats(weekStart, getStatsJSON(sendUsageData), getPreferencesJSON(sendUsageData));
+    }
+
+    private static JSONObject getStatsJSON(boolean sendUsageData) {
+        return sendUsageData ? new JSONObject(StatisticsStore.getInstance().getAll()) : new JSONObject();
+    }
+
+    private static JSONObject getPreferencesJSON(boolean sendUsageData) {
+        final JSONObject json = new JSONObject();
+        json.put("version", Constants.VERSION);
+        AppPropertiesUtil.getProps().forEach(json::put);
+        if (sendUsageData) {
+            Preferences.getInstance().getAllWithPrefix().forEach(json::put);
+        } else {
+            json.put("preferences.send_usage_data", false);
+        }
+        return json;
     }
 }

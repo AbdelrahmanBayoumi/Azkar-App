@@ -1,10 +1,8 @@
 package com.bayoumi.util.web.server;
 
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.statistics.WeeklyStats;
 import com.bayoumi.services.statistics.WeeklyStatsManager;
-import com.bayoumi.storage.preferences.Preferences;
-import com.bayoumi.util.AppPropertiesUtil;
-import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.file.FileUtils;
 import io.sentry.Sentry;
@@ -20,23 +18,28 @@ public class ServerService {
     public static void init() {
         new Thread(() -> {
             try {
-                WeeklyStatsManager.resetIfNeeded();
                 Logger.debug("[ServerService] Starting...");
                 final Properties config = FileUtils.getConfig();
-                Logger.debug("[ServerService] Config: " + config);
                 final String baseUrl = getBaseUrl(config);
-                Logger.debug("[ServerService] Base URL: " + baseUrl);
                 final boolean sendUsageData = Settings.getInstance().getSendUsageData();
-                final JSONObject statistics = sendUsageData ? WeeklyStatsManager.getStatsJson() : new JSONObject();
-                sendRequest(baseUrl, ServerUtil.preparePayload(getPreferencesJSON(sendUsageData), statistics, config));
+
+                final WeeklyStats oldWeekStats = WeeklyStatsManager.oldWeekIfRolling(sendUsageData);
+                if (oldWeekStats != null) {
+                    // send last week’s data before it vanishes
+                    sendRequest(baseUrl, ServerUtil.preparePayload(oldWeekStats, config));
+                }
+
+                // now send *this* week’s accumulating stats as usual
+                final WeeklyStats currentWeekStats = WeeklyStatsManager.getCurrentWeekStats(sendUsageData);
+                sendRequest(baseUrl, ServerUtil.preparePayload(currentWeekStats, config));
             } catch (Exception e) {
+                Sentry.captureException(e);
                 e.printStackTrace();
             }
         }).start();
     }
 
     private static String getBaseUrl(Properties fallbackConfig) {
-        Logger.debug("[ServerUtil] Loading remote config...");
         try {
             final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
             final HttpResponse<JsonNode> response = Unirest.get(REMOTE_CONFIG_URL)
@@ -58,19 +61,8 @@ public class ServerService {
         return fallbackConfig.getProperty("collectorServer.baseUrl");
     }
 
-    private static JSONObject getPreferencesJSON(boolean sendUsageData) {
-        final JSONObject json = new JSONObject();
-        json.put("version", Constants.VERSION);
-        AppPropertiesUtil.getProps().forEach(json::put);
-        if (sendUsageData) {
-            Preferences.getInstance().getAllWithPrefix().forEach(json::put);
-        } else {
-            json.put("preferences.send_usage_data", false);
-        }
-        return json;
-    }
-
     private static void sendRequest(String baseUrl, JSONObject bodyJSON) {
+        // TODO implement retry mechanism if the request fails & open request in thread
         Logger.debug("[ServerService] Sending request...");
         final HttpResponse<JsonNode> response = Unirest.post(baseUrl + "/client/usage")
                 .header("Content-Type", "application/json")
