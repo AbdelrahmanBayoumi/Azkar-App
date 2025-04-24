@@ -14,6 +14,7 @@ import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ServerService {
     public static void init() {
@@ -39,31 +40,43 @@ public class ServerService {
         }, "ServerService-Init-Thread").start();
     }
 
+    /**
+     * Attempts to fetch remote config.json with retries; falls back on local if all attempts fail.
+     */
     private static String getBaseUrl(Properties fallbackConfig) {
-        try {
-            final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
-            final HttpResponse<JsonNode> response = Unirest.get(REMOTE_CONFIG_URL)
-                    .header("Accept", "application/json")
-                    .asJson();
+        final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
+        final AtomicReference<HttpResponse<JsonNode>> respRef = new AtomicReference<>();
 
-            if (response.isSuccess()) {
-                final JSONObject remoteJson = response.getBody().getObject();
-                final String server = remoteJson.getString("server");
+        final boolean fetched = RetryTask.builder(() -> {
+                    HttpResponse<JsonNode> resp = Unirest.get(REMOTE_CONFIG_URL)
+                            .header("Accept", "application/json")
+                            .asJson();
+                    respRef.set(resp);
+                    return resp != null && resp.isSuccess();
+                })
+                .enableJitter(true)
+                .threadName("ConfigFetch-Thread")
+                .execute(); // synchronous retry
+
+        final HttpResponse<JsonNode> remoteResp = respRef.get();
+        if (fetched && remoteResp != null) {
+            try {
+                final String server = remoteResp.getBody().getObject().getString("server");
                 if (server != null && !server.isEmpty()) {
                     return server;
                 }
+            } catch (Exception e) {
+                Logger.error("Malformed remote config, using local.", e, ServerService.class.getName() + ".getBaseUrl()");
             }
-        } catch (Exception e) {
-            Logger.error("Failed to load remote config, falling back to local.", e, ServerService.class.getName() + ".getBaseUrl()");
+        } else {
+            Logger.debug("[ServerService] Remote config fetch failed, falling back to local.");
         }
 
-        // fallback to local property
         return fallbackConfig.getProperty("collectorServer.baseUrl");
     }
 
-
     private static void sendRequestWithRetryAsync(String baseUrl, JSONObject bodyJSON) {
-        RetryTask.builder(() -> sendRequest(baseUrl, bodyJSON)).enableJitter(true).executeAsync();
+        RetryTask.builder(() -> sendRequest(baseUrl, bodyJSON)).enableJitter(true).threadName("UsagePost-Thread").executeAsync();
     }
 
     private static boolean sendRequest(String baseUrl, JSONObject bodyJSON) {
@@ -73,14 +86,13 @@ public class ServerService {
                 .asJson();
 
         if (response != null && response.isSuccess()) {
-            Logger.debug("[ServerService] Success: " + response.getBody().toString());
-            return true; // exit after success
+            Logger.debug("[ServerService] Success: " + response.getBody());
+            return true;  // exit after success
         } else {
-            String errMsg = "[ServerService] API Error: " +
-                    (response != null && response.getBody() != null ? response.getBody().toString() : "null");
-            Logger.debug("[ServerService] " + errMsg);
-            Sentry.captureMessage(errMsg, SentryLevel.WARNING);
+            final String err = response != null && response.getBody() != null ? response.getBody().toString() : "null";
+            Logger.debug("[ServerService] API Error: " + err);
+            Sentry.captureMessage("API Error: " + err, SentryLevel.WARNING);
+            return false;
         }
-        return false;
     }
 }

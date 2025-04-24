@@ -31,13 +31,13 @@ public class RetryTask {
     public boolean execute() {
         long backoff = initialBackoffMs;
         for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            Logger.debug(String.format("[RetryTask] Attempt %d/%d...", attempt, maxRetries));
+            Logger.debug(String.format("[RetryTask-%s] Attempt %d/%d...", threadName, attempt, maxRetries));
             try {
                 if (action.get()) {
                     return true;
                 }
             } catch (Exception e) {
-                Logger.error(String.format("[RetryTask] Exception on attempt %d", attempt), e, getClass().getName() + ".execute()");
+                Logger.error(String.format("[RetryTask-%s] Exception on attempt %d", threadName, attempt), e, getClass().getName() + ".execute()");
             }
 
             if (attempt == maxRetries) {
