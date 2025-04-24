@@ -127,7 +127,7 @@ public class Launcher extends Application {
                 Logger.debug(ex.getLocalizedMessage());
             }
             incrementPreloader();
-            ServerService.init();
+            if (Constants.RUNNING_MODE.equals(Constants.Mode.PRODUCTION)) ServerService.init();
             incrementPreloader();
 
             TimedAzkarService.init();
