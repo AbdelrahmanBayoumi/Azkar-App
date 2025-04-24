@@ -10,8 +10,8 @@
       <variable name="Publisher" value="Abdelrahman Bayoumi" />
       <variable name="Publisher_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App" />
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
-      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.png" />
-      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.ico" />
+      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\installer\icon.png" />
+      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\installer\icon.ico" />
       <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
       <variable name="UPDATES_XML_URL" value="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/installer/updates.xml" />
       <variable name="BASE_RELEASE_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/${compiler:APP_VERSION}/" />
