@@ -54,7 +54,7 @@ public class ServerService {
                 }
             }
         } catch (Exception e) {
-            Logger.error("Failed to load remote config, falling back to local.", e, ServerUtil.class.getName() + ".getBaseUrl()");
+            Logger.error("Failed to load remote config, falling back to local.", e, ServerService.class.getName() + ".getBaseUrl()");
         }
 
         // fallback to local property
