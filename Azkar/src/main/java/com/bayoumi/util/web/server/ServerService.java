@@ -5,7 +5,7 @@ import com.bayoumi.services.statistics.WeeklyStats;
 import com.bayoumi.services.statistics.WeeklyStatsManager;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.file.FileUtils;
-import com.bayoumi.util.web.RetryUtil;
+import com.bayoumi.util.web.RetryTask;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import kong.unirest.HttpResponse;
@@ -27,12 +27,12 @@ public class ServerService {
                 final WeeklyStats oldWeekStats = WeeklyStatsManager.oldWeekIfRolling(sendUsageData);
                 if (oldWeekStats != null) {
                     // send last week’s data before it vanishes
-                    sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(oldWeekStats, config), 3);
+                    sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(oldWeekStats, config));
                 }
 
                 // now send *this* week’s accumulating stats as usual
                 final WeeklyStats currentWeekStats = WeeklyStatsManager.getCurrentWeekStats(sendUsageData);
-                sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(currentWeekStats, config), 3);
+                sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(currentWeekStats, config));
             } catch (Exception e) {
                 Logger.error("Exception during server init", e, ServerService.class.getName() + ".init()");
             }
@@ -62,9 +62,8 @@ public class ServerService {
     }
 
 
-    private static void sendRequestWithRetryAsync(String baseUrl, JSONObject bodyJSON, int maxRetries) {
-        RetryUtil.retryAsync(() -> sendRequest(baseUrl, bodyJSON), maxRetries, 10_000L, true,
-                "SendRequest-Thread");
+    private static void sendRequestWithRetryAsync(String baseUrl, JSONObject bodyJSON) {
+        RetryTask.builder(() -> sendRequest(baseUrl, bodyJSON)).enableJitter(true).executeAsync();
     }
 
     private static boolean sendRequest(String baseUrl, JSONObject bodyJSON) {
