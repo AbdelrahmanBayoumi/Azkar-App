@@ -55,6 +55,7 @@ public class Logger {
     public static void error(String msg, Throwable throwable, String CLASS_NAME) {
         new Thread(() -> {
             synchronized (LOCK) {
+                if(throwable == null) return;
                 if (Constants.RUNNING_MODE.equals(Constants.Mode.DEVELOPMENT)) {
                     throwable.printStackTrace();
                 } else {
