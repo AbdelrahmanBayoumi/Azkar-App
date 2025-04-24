@@ -7,6 +7,7 @@
 ■ التحسينات:
 
 - تغيير تسمية "مواقيت أخرى" إلى "مواقيت الليل" لتوضيح الغرض.
+- تم تفعيل جمع بعض البيانات الإحصائية افتراضيًا للمساعدة في تحسين أداء التطبيق وحل المشكلات. يمكنك إيقاف هذه الميزة في أي وقت من قسم "الخصوصية" في الإعدادات.
 
 ------------------
 
@@ -19,3 +20,4 @@
 ■ Enhancements:
 
 - Renamed "Other Timings" to "Night Timings" for better clarity.
+- Data collection for analytics is now enabled by default to help improve performance and resolve issues more efficiently. You can disable this feature at any time in the “Privacy” section under Settings.
