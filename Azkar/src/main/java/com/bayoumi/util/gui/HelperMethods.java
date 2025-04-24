@@ -36,7 +36,7 @@ public class HelperMethods {
 
     public static void SetIcon(Stage stage) {
         stage.getIcons().clear();
-        stage.getIcons().add(new Image("/com/bayoumi/images/icon.png"));
+        stage.getIcons().add(new Image("/com/bayoumi/images/logo_50x50.jpg"));
     }
 
     public static void setStageListener(Node node, Callback<Stage, Void> callback) {

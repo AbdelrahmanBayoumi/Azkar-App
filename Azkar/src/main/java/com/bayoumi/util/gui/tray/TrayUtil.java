@@ -63,7 +63,7 @@ public class TrayUtil {
 
             // set up a system tray icon.
             tray = java.awt.SystemTray.getSystemTray();
-            BufferedImage trayIconImage = ImageIO.read(Objects.requireNonNull(TrayUtil.class.getResource("/com/bayoumi/images/icon.png")));
+            BufferedImage trayIconImage = ImageIO.read(Objects.requireNonNull(TrayUtil.class.getResource("/com/bayoumi/images/logo_50x50.jpg")));
             int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
             trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
             trayIcon.setToolTip(Constants.APP_NAME + " App");
