@@ -1,8 +1,8 @@
 package com.bayoumi.models.settings;
 
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesObservable;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesObservable;
+import com.bayoumi.storage.preferences.PreferencesType;
 
 import java.util.AbstractMap.SimpleEntry;
 

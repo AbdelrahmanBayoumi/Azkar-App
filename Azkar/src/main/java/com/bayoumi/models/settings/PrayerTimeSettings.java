@@ -1,10 +1,10 @@
 package com.bayoumi.models.settings;
 
 import com.bayoumi.models.Muezzin;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.DatabaseManager;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
 import javafx.util.StringConverter;
 
 import java.sql.ResultSet;

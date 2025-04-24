@@ -8,7 +8,6 @@ import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
 import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.azkar.TimedZekrDTO;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.TimedAzkarService;
@@ -16,6 +15,8 @@ import com.bayoumi.services.azkar.AzkarService;
 import com.bayoumi.services.reminders.Reminder;
 import com.bayoumi.services.reminders.ReminderUtil;
 import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.preferences.PreferencesType;
+import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
@@ -207,13 +208,13 @@ public class HomeController implements Initializable {
     // ==============================================
     @FXML
     public void goToMorningAzkar() {
-        StatisticsService.getInstance().increment(PreferencesType.MORNING_AZKAR_OPEN_STATISTICS);
+        StatisticsService.getInstance().increment(StatisticsType.MORNING_AZKAR_OPENED);
         showTimedAzkar("morning");
     }
 
     @FXML
     public void goToNightAzkar() {
-        StatisticsService.getInstance().increment(PreferencesType.NIGHT_AZKAR_OPEN_STATISTICS);
+        StatisticsService.getInstance().increment(StatisticsType.NIGHT_AZKAR_OPENED);
         showTimedAzkar("night");
     }
 
@@ -246,7 +247,7 @@ public class HomeController implements Initializable {
     @FXML
     private void goToSettings() {
         try {
-            StatisticsService.getInstance().increment(PreferencesType.SETTINGS_OPEN_STATISTICS);
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_OPENED);
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.Settings);
             HelperMethods.ExitKeyCodeCombination(popUp.getStage().getScene(), popUp.getStage());
             popUp.showAndWait();
@@ -295,13 +296,13 @@ public class HomeController implements Initializable {
             morningAzkarDate.setTime(prayerTimesToday.fajr.getTime() + (settings.getAzkarSettings().getMorningAzkarOffset() * 60000L));
             ReminderUtil.getInstance().add(new Reminder(morningAzkarDate, () -> Platform.runLater(() ->
             {
-                StatisticsService.getInstance().increment(PreferencesType.MORNING_AZKAR_NOTIFICATION_STATISTICS);
+                StatisticsService.getInstance().increment(StatisticsType.MORNING_AZKAR_NOTIFICATION_SHOWN);
                 Notification.create(new NotificationContent("أذكار الصباح",
                                 new Image("/com/bayoumi/images/sun_50px.png")),
                         30,
                         settings.getNotificationSettings().getPosition(),
                         () -> {
-                            StatisticsService.getInstance().increment(PreferencesType.MORNING_AZKAR_NOTIFICATION_CLICK_STATISTICS);
+                            StatisticsService.getInstance().increment(StatisticsType.MORNING_AZKAR_NOTIFICATION_CLICKED);
                             Launcher.homeController.goToMorningAzkar();
                         },
                         new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume()));
@@ -311,13 +312,13 @@ public class HomeController implements Initializable {
             Date nightAzkarDate = ((Date) prayerTimesToday.asr.clone());
             nightAzkarDate.setTime(prayerTimesToday.asr.getTime() + (settings.getAzkarSettings().getNightAzkarOffset() * 60000L));
             ReminderUtil.getInstance().add(new Reminder(nightAzkarDate, () -> Platform.runLater(() -> {
-                StatisticsService.getInstance().increment(PreferencesType.NIGHT_AZKAR_NOTIFICATION_STATISTICS);
+                StatisticsService.getInstance().increment(StatisticsType.NIGHT_AZKAR_NOTIFICATION_SHOWN);
                 Notification.create(new NotificationContent("أذكار المساء",
                                 new Image("/com/bayoumi/images/night_50px.png")),
                         30,
                         settings.getNotificationSettings().getPosition(),
                         () -> {
-                            StatisticsService.getInstance().increment(PreferencesType.NIGHT_AZKAR_NOTIFICATION_CLICK_STATISTICS);
+                            StatisticsService.getInstance().increment(StatisticsType.NIGHT_AZKAR_NOTIFICATION_CLICKED);
                             Launcher.homeController.goToNightAzkar();
                         },
                         new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume()));

@@ -1,11 +1,11 @@
 package com.bayoumi.util.web.server;
 
-import com.bayoumi.models.preferences.Preferences;
 import com.bayoumi.models.settings.Settings;
-import com.bayoumi.util.AppPropertiesUtil;
-import com.bayoumi.util.Constants;
+import com.bayoumi.services.statistics.WeeklyStats;
+import com.bayoumi.services.statistics.WeeklyStatsManager;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.file.FileUtils;
+import com.bayoumi.util.web.RetryTask;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import kong.unirest.HttpResponse;
@@ -14,6 +14,7 @@ import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ServerService {
     public static void init() {
@@ -21,65 +22,77 @@ public class ServerService {
             try {
                 Logger.debug("[ServerService] Starting...");
                 final Properties config = FileUtils.getConfig();
-                Logger.debug("[ServerService] Config: " + config);
                 final String baseUrl = getBaseUrl(config);
-                Logger.debug("[ServerService] Base URL: " + baseUrl);
-                sendRequest(baseUrl, ServerUtil.preparePayload(getPreferencesJSON(), config));
+                final boolean sendUsageData = Settings.getInstance().getSendUsageData();
+
+                final WeeklyStats oldWeekStats = WeeklyStatsManager.oldWeekIfRolling(sendUsageData);
+                if (oldWeekStats != null) {
+                    // send last week’s data before it vanishes
+                    sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(oldWeekStats, config));
+                }
+
+                // now send *this* week’s accumulating stats as usual
+                final WeeklyStats currentWeekStats = WeeklyStatsManager.getCurrentWeekStats(sendUsageData);
+                sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(currentWeekStats, config));
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.error("Exception during server init", e, ServerService.class.getName() + ".init()");
             }
-        }).start();
+        }, "ServerService-Init-Thread").start();
     }
 
+    /**
+     * Attempts to fetch remote config.json with retries; falls back on local if all attempts fail.
+     */
     private static String getBaseUrl(Properties fallbackConfig) {
-        Logger.debug("[ServerUtil] Loading remote config...");
-        try {
-            final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
-            final HttpResponse<JsonNode> response = Unirest.get(REMOTE_CONFIG_URL)
-                    .header("Accept", "application/json")
-                    .asJson();
+        final String REMOTE_CONFIG_URL = "https://azkar-site.web.app/desktop/config.json";
+        final AtomicReference<HttpResponse<JsonNode>> respRef = new AtomicReference<>();
 
-            if (response.isSuccess()) {
-                final JSONObject remoteJson = response.getBody().getObject();
-                final String server = remoteJson.getString("server");
+        final boolean fetched = RetryTask.builder(() -> {
+                    HttpResponse<JsonNode> resp = Unirest.get(REMOTE_CONFIG_URL)
+                            .header("Accept", "application/json")
+                            .asJson();
+                    respRef.set(resp);
+                    return resp != null && resp.isSuccess();
+                })
+                .enableJitter(true)
+                .threadName("ConfigFetch-Thread")
+                .execute(); // synchronous retry
+
+        final HttpResponse<JsonNode> remoteResp = respRef.get();
+        if (fetched && remoteResp != null) {
+            try {
+                final String server = remoteResp.getBody().getObject().getString("server");
                 if (server != null && !server.isEmpty()) {
                     return server;
                 }
+            } catch (Exception e) {
+                Logger.error("Malformed remote config, using local.", e, ServerService.class.getName() + ".getBaseUrl()");
             }
-        } catch (Exception e) {
-            Logger.error("Failed to load remote config, falling back to local.", e, ServerUtil.class.getName() + ".getBaseUrl()");
+        } else {
+            Logger.debug("[ServerService] Remote config fetch failed, falling back to local.");
         }
 
-        // fallback to local property
         return fallbackConfig.getProperty("collectorServer.baseUrl");
     }
 
-    private static JSONObject getPreferencesJSON() {
-        final JSONObject json = new JSONObject();
-        json.put("version", Constants.VERSION);
-        AppPropertiesUtil.getProps().forEach(json::put);
-        final boolean sendUsageData = Settings.getInstance().getSendUsageData();
-        if (sendUsageData) {
-            Preferences.getInstance().getAll().forEach(json::put);
-        } else {
-            json.put("preferences.send_usage_data", false);
-        }
-        return json;
+    private static void sendRequestWithRetryAsync(String baseUrl, JSONObject bodyJSON) {
+        RetryTask.builder(() -> sendRequest(baseUrl, bodyJSON)).enableJitter(true).threadName("UsagePost-Thread").executeAsync();
     }
 
-    private static void sendRequest(String baseUrl, JSONObject bodyJSON) {
-        Logger.debug("[ServerService] Sending request...");
+    private static boolean sendRequest(String baseUrl, JSONObject bodyJSON) {
         final HttpResponse<JsonNode> response = Unirest.post(baseUrl + "/client/usage")
                 .header("Content-Type", "application/json")
                 .body(bodyJSON)
                 .asJson();
 
         if (response != null && response.isSuccess()) {
-            Logger.debug("[ServerService] Response: " + response.getBody().toString());
+            Logger.debug("[ServerService] Success: " + response.getBody());
+            return true;  // exit after success
         } else {
-            String errMsg = "[ServerService] API Error: " + (response != null && response.getBody() != null ? response.getBody().toString() : "");
-            Logger.debug("[ServerService] " + errMsg);
-            Sentry.captureMessage(errMsg, SentryLevel.ERROR);
+            final String err = response != null && response.getBody() != null ? response.getBody().toString() : "null";
+            Logger.debug("[ServerService] API Error: " + err);
+            Sentry.captureMessage("API Error: " + err, SentryLevel.WARNING);
+            return false;
         }
     }
 }

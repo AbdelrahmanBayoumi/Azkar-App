@@ -4,10 +4,10 @@ import com.batoulapps.adhan.Prayer;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.SunnahTimes;
 import com.bayoumi.Launcher;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
@@ -190,7 +190,7 @@ public class PrayerTimesController implements Initializable {
 
     @FXML
     private void openSunnahBox() {
-        StatisticsService.getInstance().increment(PreferencesType.OTHER_PRAYER_TIMES_OPEN_STATISTICS);
+        StatisticsService.getInstance().increment(StatisticsType.PRAYER_TIMES_OTHER_OPENED);
         sunnahBox.setVisible(true);
     }
 

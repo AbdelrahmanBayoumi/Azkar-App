@@ -29,7 +29,7 @@ public class Notification {
             EventHandler<ActionEvent> onClickHandler = null;
             if (onClickAction != null) {
                 onClickHandler = event -> {
-                    Logger.debug("Clicked: " + onClickAction);
+                    Logger.debug("[Notification] onClickAction");
                     onClickAction.run();
                 };
             }

@@ -1,9 +1,9 @@
 package com.bayoumi.models.azkar;
 
 import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.db.DatabaseManager;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -67,7 +67,7 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
         try {
             final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
             String newValue = BuilderUI.showEditTextField(Utility.toUTF(bundle.getString("zekr")), this.text);
-            if (!newValue.equals("")) {
+            if (!newValue.isEmpty()) {
                 DatabaseManager databaseManager = DatabaseManager.getInstance();
                 databaseManager.stat = databaseManager.con.prepareStatement("UPDATE absolute_zekr set text = ? WHERE id =" + this.id);
                 databaseManager.stat.setString(1, newValue);

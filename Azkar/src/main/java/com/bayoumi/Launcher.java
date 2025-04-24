@@ -3,18 +3,19 @@ package com.bayoumi;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.dialog.DownloadResourcesController;
 import com.bayoumi.controllers.home.HomeController;
-import com.bayoumi.models.Onboarding;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.preloader.CustomPreloaderMain;
+import com.bayoumi.repositry.OnboardingRepository;
 import com.bayoumi.services.TimedAzkarService;
+import com.bayoumi.services.update.UpdateService;
+import com.bayoumi.storage.DatabaseManager;
+import com.bayoumi.storage.LocationsDBManager;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.SentryUtil;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.db.DatabaseManager;
-import com.bayoumi.util.db.LocationsDBManager;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.BuilderUI;
@@ -33,6 +34,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import kong.unirest.Unirest;
 
 import java.util.Objects;
 
@@ -87,6 +89,9 @@ public class Launcher extends Application {
             Logger.info("App Launched");
             incrementPreloader();
 
+            // --- initialize Unirest ---
+            Unirest.config().connectTimeout(30_000).socketTimeout(120_000);
+
             // --- initialize database connection ---
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             if (!databaseManager.init()) {
@@ -97,6 +102,9 @@ public class Launcher extends Application {
             // --- initialize Preferences ---
             Preferences.init();
             incrementPreloader();
+
+            // --- initialize Auto Update Check ---
+            UpdateService.checkForUpdate();
 
             // --- initialize database connection (locationsDB) ---
             try {
@@ -198,7 +206,7 @@ public class Launcher extends Application {
         HelperMethods.SetAppDecoration(primaryStage);
 
         // show primaryStage
-        final boolean isFirstTimeOpened = Onboarding.isFirstTimeOpened();
+        final boolean isFirstTimeOpened = OnboardingRepository.isFirstTimeOpened();
         final boolean isNewVersion = !Constants.VERSION.equals(Preferences.getInstance().get(PreferencesType.APP_VERSION));
         if (isFirstTimeOpened || isNewVersion || !Settings.getInstance().getMinimized()) {
             primaryStage.show();

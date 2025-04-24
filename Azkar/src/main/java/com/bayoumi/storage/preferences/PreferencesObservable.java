@@ -1,4 +1,4 @@
-package com.bayoumi.models.preferences;
+package com.bayoumi.storage.preferences;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,8 +5,8 @@ import com.bayoumi.controllers.components.PrayerCalculationsController;
 import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
 import com.bayoumi.controllers.components.audio.ChooseAudioUtil;
-import com.bayoumi.models.Onboarding;
 import com.bayoumi.models.settings.*;
+import com.bayoumi.repositry.OnboardingRepository;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ScrollHandler;
@@ -141,7 +141,7 @@ public class OnboardingController implements Initializable {
         Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
         Settings.getInstance().setNightMode(darkTheme.isSelected());
 
-        Onboarding.setFirstTimeOpened(0);
+        OnboardingRepository.setFirstTimeOpened(0);
 
         ((Stage) format24.getScene().getWindow()).close();
     }

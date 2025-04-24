@@ -1,8 +1,7 @@
 package com.bayoumi.services.statistics;
 
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
-import com.bayoumi.util.Logger;
+import com.bayoumi.storage.statistics.StatisticsStore;
+import com.bayoumi.storage.statistics.StatisticsType;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,11 +13,11 @@ import java.util.concurrent.Executors;
 public class StatisticsService {
 
     private static StatisticsService instance;
-    private final Preferences prefs;
+    private final StatisticsStore store;
     private final ExecutorService executor;
 
     private StatisticsService() {
-        this.prefs = Preferences.getInstance();
+        this.store = StatisticsStore.getInstance();
         this.executor = Executors.newSingleThreadExecutor(runnable -> {
             Thread t = new Thread(runnable, "StatisticsService-Worker");
             t.setDaemon(true);
@@ -42,19 +41,9 @@ public class StatisticsService {
      *
      * @param key the statistic key to increment
      */
-    public void increment(final PreferencesType key) {
-        executor.submit(() -> {
-            try {
-                int current = prefs.getInt(key);
-                int updated = current + 1;
-                prefs.set(key, String.valueOf(updated));
-                Logger.debug("[StatisticsService] " + key + " incremented to " + updated);
-            } catch (Exception e) {
-                Logger.error(null, e, getClass().getName() + ".increment()");
-            }
-        });
+    public void increment(final StatisticsType key) {
+        executor.submit(() -> store.increment(key));
     }
-
 
     /**
      * Shuts down the internal executor service. Call on application exit if desired.

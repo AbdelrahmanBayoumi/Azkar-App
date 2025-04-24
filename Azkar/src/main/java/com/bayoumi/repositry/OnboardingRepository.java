@@ -1,11 +1,11 @@
-package com.bayoumi.models;
+package com.bayoumi.repositry;
 
+import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.DatabaseManager;
 
 import java.sql.ResultSet;
 
-public class Onboarding {
+public class OnboardingRepository {
 
     public static boolean isFirstTimeOpened() {
         try {
@@ -14,7 +14,7 @@ public class Onboarding {
                 return res.getInt("isFirstTimeOpened") == 1;
             }
         } catch (Exception ex) {
-            Logger.error(ex.getLocalizedMessage(), ex, Onboarding.class.getName() + ".isFirstTimeOpened()");
+            Logger.error(ex.getLocalizedMessage(), ex, OnboardingRepository.class.getName() + ".isFirstTimeOpened()");
         }
         return false;
     }
@@ -26,7 +26,7 @@ public class Onboarding {
                     .prepareStatement("UPDATE onboarding set isFirstTimeOpened = " + isFirstTimeOpened)
                     .executeUpdate();
         } catch (Exception ex) {
-            Logger.error(ex.getLocalizedMessage(), ex, Onboarding.class.getName() + ".setFirstTimeOpened()");
+            Logger.error(ex.getLocalizedMessage(), ex, OnboardingRepository.class.getName() + ".setFirstTimeOpened()");
         }
     }
 }

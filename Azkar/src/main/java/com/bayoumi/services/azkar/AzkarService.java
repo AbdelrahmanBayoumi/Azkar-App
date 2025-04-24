@@ -2,10 +2,10 @@ package com.bayoumi.services.azkar;
 
 import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.models.azkar.AbsoluteZekr;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.EditablePeriodTimerTask;
 import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
@@ -54,13 +54,13 @@ public class AzkarService {
             } else {
                 currentZekr = AbsoluteZekr.absoluteZekrObservableList.get(0); // Fallback to the first item
             }
-            StatisticsService.getInstance().increment(PreferencesType.AZKAR_NOTIFICATION_STATISTICS);
+            StatisticsService.getInstance().increment(StatisticsType.AZKAR_NOTIFICATION_SHOWN);
 
             Platform.runLater(()
                     -> Notification.create(new NotificationContent(currentZekr.getText(), null),
                     Settings.getInstance().getAzkarSettings().getAzkarDuration(),
                     Settings.getInstance().getNotificationSettings().getPosition(),
-                    () -> StatisticsService.getInstance().increment(PreferencesType.AZKAR_NOTIFICATION_CLICK_STATISTICS),
+                    () -> StatisticsService.getInstance().increment(StatisticsType.AZKAR_NOTIFICATION_CLICKED),
                     new NotificationAudio(Settings.getInstance().getAzkarSettings().getAudioName(), Settings.getInstance().getAzkarSettings().getVolume())));
             currentZekrIndex = (currentZekrIndex + 1) % AbsoluteZekr.absoluteZekrObservableList.size();
         },

@@ -2,9 +2,9 @@ package com.bayoumi.services;
 
 import com.bayoumi.controllers.dialog.DownloadResourcesController;
 import com.bayoumi.models.azkar.TimedZekrDTO;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.VersionComparator;
