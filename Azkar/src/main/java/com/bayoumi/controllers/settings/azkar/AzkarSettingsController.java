@@ -94,7 +94,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         highFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.high")));
         midFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.mid")));
         lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
-        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
+        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rare")));
         zakrAppearEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrAppearEvery")) + ":");
         zekrDurationEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zekrDurationEvery")) + ":");
         stopAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.stopTheAutomaticAppearanceOfAzkar")));

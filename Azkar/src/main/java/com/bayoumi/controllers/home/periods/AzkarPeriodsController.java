@@ -57,7 +57,7 @@ public class AzkarPeriodsController implements Initializable {
         highFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.high")));
         midFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.mid")));
         lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
-        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
+        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rare")));
     }
 
     @FXML
