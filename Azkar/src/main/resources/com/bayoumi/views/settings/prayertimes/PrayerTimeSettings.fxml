@@ -22,7 +22,7 @@
                 <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
             </padding>
             <HBox alignment="CENTER" spacing="20.0">
-                <Label fx:id="adhanLabel" text="الآذان">
+                <Label fx:id="adhanLabel" text="الأذان">
                <styleClass>
                   <String fx:value="font-text-bold" />
                   <String fx:value="_17" />

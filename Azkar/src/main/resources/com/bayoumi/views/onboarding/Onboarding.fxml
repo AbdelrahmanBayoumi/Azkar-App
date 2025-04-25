@@ -31,7 +31,7 @@
                   <children>
                      <HBox alignment="CENTER" spacing="20.0">
                         <children>
-                           <Label fx:id="adhanLabel" text="الآذان">
+                           <Label fx:id="adhanLabel" text="الأذان">
                               <styleClass>
                                  <String fx:value="font-text-bold" />
                                  <String fx:value="_17" />
