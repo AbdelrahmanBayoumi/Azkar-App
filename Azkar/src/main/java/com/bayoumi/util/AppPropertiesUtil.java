@@ -1,6 +1,7 @@
 package com.bayoumi.util;
 
 import com.bayoumi.Launcher;
+import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.storage.statistics.StatisticsStore;
 import kong.unirest.json.JSONObject;
@@ -40,6 +41,7 @@ public class AppPropertiesUtil {
 
     public static String getAllAppPropsAsJsonString() {
         final JSONObject jsonObject = new JSONObject(getProps());
+        jsonObject.put("id", DatabaseManager.getInstance().getID());
         jsonObject.put("uptime", getUptime());
         Preferences.getInstance().getAllWithPrefix().forEach(jsonObject::put);
         StatisticsStore.getInstance().getAllWithPrefix().forEach(jsonObject::put);
