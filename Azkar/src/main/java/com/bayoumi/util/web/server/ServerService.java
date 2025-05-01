@@ -3,6 +3,7 @@ package com.bayoumi.util.web.server;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.statistics.WeeklyStats;
 import com.bayoumi.services.statistics.WeeklyStatsManager;
+import com.bayoumi.storage.DatabaseManager;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.web.RetryTask;
@@ -14,9 +15,11 @@ import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ServerService {
+
     public static void init() {
         new Thread(() -> {
             try {
@@ -25,20 +28,80 @@ public class ServerService {
                 final String baseUrl = getBaseUrl(config);
                 final boolean sendUsageData = Settings.getInstance().getSendUsageData();
 
+
                 final WeeklyStats oldWeekStats = WeeklyStatsManager.oldWeekIfRolling(sendUsageData);
                 if (oldWeekStats != null) {
                     // send last week’s data before it vanishes
-                    sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(oldWeekStats, config));
+                    sendRequest(baseUrl, oldWeekStats, config);
                 }
 
                 // now send *this* week’s accumulating stats as usual
                 final WeeklyStats currentWeekStats = WeeklyStatsManager.getCurrentWeekStats(sendUsageData);
-                sendRequestWithRetryAsync(baseUrl, ServerUtil.preparePayload(currentWeekStats, config));
+                sendRequest(baseUrl, currentWeekStats, config);
             } catch (Exception e) {
                 Logger.error("Exception during server init", e, ServerService.class.getName() + ".init()");
             }
         }, "ServerService-Init-Thread").start();
     }
+
+    private static void sendRequest(String baseUrl, WeeklyStats weeklyStats, Properties config) throws Exception {
+        final String id = DatabaseManager.getInstance().getID();
+        final boolean isFirstTimeOpened = (id == null || id.isEmpty());
+        RetryTask.Builder taskBuilder;
+        if (isFirstTimeOpened) {
+            taskBuilder = RetryTask.builder(() -> {
+                try {
+                    return createRequest(baseUrl, weeklyStats, config);
+                } catch (Exception ex) {
+                    Logger.error(null, ex, ServerService.class.getName() + ".sendRequest()");
+                    return false;
+                }
+            });
+        } else {
+            final JSONObject payload = ServerUtil.preparePayload(id, weeklyStats, config);
+            taskBuilder = RetryTask.builder(() -> updateRequest(baseUrl, payload));
+        }
+
+        taskBuilder.enableJitter(true).threadName("UsagePost-Thread").execute();
+    }
+
+    private static boolean updateRequest(String baseUrl, JSONObject bodyJSON) {
+        final HttpResponse<JsonNode> response = Unirest.put(baseUrl + "/client/usage")
+                .header("Content-Type", "application/json")
+                .body(bodyJSON)
+                .asJson();
+
+        if (response != null && response.isSuccess()) {
+            Logger.debug("[ServerService] Success: " + response.getBody());
+            return true;  // exit after success
+        } else {
+            final String err = response != null && response.getBody() != null ? response.getBody().toString() : "null";
+            Logger.debug("[ServerService] API Error: " + err);
+            Sentry.captureMessage("API Error: " + err, SentryLevel.WARNING);
+            return false;
+        }
+    }
+
+    private static boolean createRequest(String baseUrl, WeeklyStats weeklyStats, Properties config) throws Exception {
+        String id = UUID.randomUUID().toString();
+        final HttpResponse<JsonNode> response = Unirest.post(baseUrl + "/client/usage")
+                .header("Content-Type", "application/json")
+                .body(ServerUtil.preparePayload(id, weeklyStats, config))
+                .asJson();
+
+        if (response != null && response.isSuccess()) {
+            Logger.debug("[ServerService] Success: " + response.getBody());
+            // save generated ID to DB
+            DatabaseManager.getInstance().setID(id);
+            return true;  // exit after success
+        } else {
+            final String err = response != null && response.getBody() != null ? response.getBody().toString() : "null";
+            Logger.debug("[ServerService] API Error: " + err);
+            Sentry.captureMessage("API Error: " + err, SentryLevel.WARNING);
+            return false;
+        }
+    }
+
 
     /**
      * Attempts to fetch remote config.json with retries; falls back on local if all attempts fail.
@@ -73,26 +136,5 @@ public class ServerService {
         }
 
         return fallbackConfig.getProperty("collectorServer.baseUrl");
-    }
-
-    private static void sendRequestWithRetryAsync(String baseUrl, JSONObject bodyJSON) {
-        RetryTask.builder(() -> sendRequest(baseUrl, bodyJSON)).enableJitter(true).threadName("UsagePost-Thread").executeAsync();
-    }
-
-    private static boolean sendRequest(String baseUrl, JSONObject bodyJSON) {
-        final HttpResponse<JsonNode> response = Unirest.post(baseUrl + "/client/usage")
-                .header("Content-Type", "application/json")
-                .body(bodyJSON)
-                .asJson();
-
-        if (response != null && response.isSuccess()) {
-            Logger.debug("[ServerService] Success: " + response.getBody());
-            return true;  // exit after success
-        } else {
-            final String err = response != null && response.getBody() != null ? response.getBody().toString() : "null";
-            Logger.debug("[ServerService] API Error: " + err);
-            Sentry.captureMessage("API Error: " + err, SentryLevel.WARNING);
-            return false;
-        }
     }
 }
