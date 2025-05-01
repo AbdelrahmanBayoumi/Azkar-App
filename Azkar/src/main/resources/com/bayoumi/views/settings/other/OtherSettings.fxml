@@ -220,7 +220,7 @@
                               </JFXButton>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="1.0">
+                        <HBox alignment="CENTER_LEFT" spacing="3.0">
                            <children>
                               <VBox>
                                  <children>
@@ -250,6 +250,54 @@
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="10.0" style="-fx-border-color: #DCFCE7; -fx-border-radius: 20; -fx-background-radius: 20;" styleClass="green-box">
+                     <children>
+                        <Label fx:id="shareLabel" alignment="CENTER" contentDisplay="RIGHT" layoutX="31.0" layoutY="31.0" maxWidth="555.0" minHeight="-Infinity" text="هذا العمل أقدمه صدقة جارية لوجه الله، فادعوا لي بالقبول، والمغفرة. وإن رأيتم فائدة، فشاركوها، فـ&quot;الدال على الخير كفاعله&quot;." textAlignment="CENTER" wrapText="true">
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_15" />
+                           </styleClass>
+                        </Label>
+                        <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0">
+                           <children>
+                              <MaterialDesignIconView glyphName="EARTH" onMouseClicked="#openWebsite" size="30" style="-fx-fill: -fx-primary-text;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="GITHUB_BOX" layoutX="241.0" layoutY="36.0" onMouseClicked="#openGitHub" size="30" style="-fx-fill: -fx-primary-text;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="INSTAGRAM" onMouseClicked="#openInstagram" size="30" style="-fx-fill: #C13584;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="TWITTER_BOX" layoutX="281.0" layoutY="36.0" onMouseClicked="#openX" size="30" style="-fx-fill: #1DA1F2;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="FACEBOOK_BOX" layoutX="301.0" layoutY="36.0" onMouseClicked="#openFacebook" size="30" style="-fx-fill: #1877F2;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                           </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="-10.0" />
+                     </VBox.margin>
                   </VBox>
                   <VBox alignment="CENTER" minHeight="60.0" spacing="10.0">
                      <children>

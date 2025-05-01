@@ -477,6 +477,17 @@ Text {
     -fx-text-fill: -fx-primary-text;
 }
 
+.green-box{
+    -fx-background-color: #F0FDF4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 20, 0, 0, 0);
+}
+.green-box .label {
+    -fx-text-fill: green;
+}
+.green-box .glyph-icon {
+    -fx-fill: green;
+}
+
 /* == Alert == */
 .dialog-pane > .content.label {
     -fx-padding: 20;

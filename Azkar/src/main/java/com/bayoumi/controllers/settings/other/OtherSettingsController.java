@@ -47,7 +47,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     private Spinner<Integer> hijriDateOffset;
     @FXML
     private Label minimizeAtStart, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel,
-            versionNumberLabel, website, termsOfUse, privacyPolicy;
+            versionNumberLabel, website, termsOfUse, privacyPolicy, shareLabel;
     @FXML
     private VBox scrollChild, loadingBox;
     @FXML
@@ -75,6 +75,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         website.setText(Utility.toUTF(bundle.getString("website")));
         termsOfUse.setText(Utility.toUTF(bundle.getString("termsOfUse")));
         privacyPolicy.setText(Utility.toUTF(bundle.getString("privacyPolicy")));
+        shareLabel.setText(Utility.toUTF(bundle.getString("shareLabel")));
 
         if (hijriDateOffset.getValue() != null) {
             hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(this.bundle.getLocale().toString()));
@@ -119,17 +120,42 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         }
     }
 
-    @FXML
-    private void openWebsite() {
+    private void openLink(String link, String methodName) {
         try {
-            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/"));
+            Desktop.getDesktop().browse(new URI(link));
         } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".openWebsite()");
+            Logger.error(null, e, getClass().getName() + "." + methodName + "()");
         }
     }
 
     @FXML
+    private void openGitHub() {
+        openLink("https://github.com/AbdelrahmanBayoumi/Azkar-App/", "openGtiHub");
+    }
+
+    @FXML
+    private void openFacebook() {
+        openLink("http://fb.com/azkar.application", "openFacebook");
+    }
+
+    @FXML
+    private void openInstagram() {
+        openLink("http://instagram.com/azkar.application", "openInstagram");
+    }
+
+    @FXML
+    private void openX() {
+        openLink("https://x.com/AzkarSoftware", "openGtiHub");
+    }
+
+    @FXML
+    private void openWebsite() {
+        openLink("https://azkar-site.web.app/", "openWebsite");
+    }
+
+    @FXML
     private void openUsageDataSite() {
+        openLink("https://azkar-site.web.app/desktop/usage-data/", "openUsageDataSite");
         try {
             Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/desktop/usage-data/"));
         } catch (Exception e) {
@@ -139,20 +165,12 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
     @FXML
     private void onTermsOfUseClick() {
-        try {
-            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/policies/terms-of-use/"));
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".onTermsOfUseClick()");
-        }
+        openLink("https://azkar-site.web.app/policies/terms-of-use/", "onTermsOfUseClick");
     }
 
     @FXML
     private void onPrivacyPolicyClicked() {
-        try {
-            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/policies/privacy-policy/"));
-        } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".onPrivacyPolicyClicked()");
-        }
+        openLink("https://azkar-site.web.app/policies/privacy-policy/", "onPrivacyPolicyClicked");
     }
 
     @Override

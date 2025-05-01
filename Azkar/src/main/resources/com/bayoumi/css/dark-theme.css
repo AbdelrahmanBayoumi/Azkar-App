@@ -88,6 +88,10 @@
     -fx-border-color: -fx-gray;
 }
 
+.separator:vertical .line {
+    -fx-border-width: 1px;
+}
+
 /* ======= Scroll =======  */
 .scroll-bar:vertical > .track-background,
 .scroll-bar:horizontal > .track-background {
@@ -101,4 +105,14 @@
 
 .scroll-pane .corner {
     -fx-background-color: -fx-secondary-hover;
+}
+
+.green-box{
+    -fx-background-color: #122428;
+}
+.green-box > .label {
+    -fx-text-fill: rgb(134, 239, 172);
+}
+.green-box > .label > .glyph-icon {
+    -fx-fill: rgb(134, 239, 172);
 }
