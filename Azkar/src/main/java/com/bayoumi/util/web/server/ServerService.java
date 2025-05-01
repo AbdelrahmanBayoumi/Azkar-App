@@ -11,7 +11,6 @@ import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
-import kong.unirest.json.JSONObject;
 
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -54,10 +53,9 @@ public class ServerService {
 
         final boolean isFirstTimeOpened = (id == null || id.isEmpty());
         if (isFirstTimeOpened) {
-            RetryTask.builder(() -> usage.createUsage(weeklyStats, successCallback, failCallback, config)).enableJitter(true).execute();
+            RetryTask.builder(() -> usage.createUsage(weeklyStats, config, successCallback, failCallback)).enableJitter(true).execute();
         } else {
-            final JSONObject payload = ServerUtil.preparePayload(id, weeklyStats, config);
-            RetryTask.builder(() -> usage.updateUsage(payload, successCallback, failCallback)).enableJitter(true).execute();
+            RetryTask.builder(() -> usage.updateUsage(id, weeklyStats, config, successCallback, failCallback)).enableJitter(true).execute();
         }
     }
 }

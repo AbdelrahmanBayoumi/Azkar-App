@@ -28,9 +28,9 @@ public class ClientUsageService {
      * Create (POST) a new client-usage record.
      */
     public boolean createUsage(WeeklyStats stats,
+                               Properties config,
                                Consumer<HttpResponse<JsonNode>> successCallback,
-                               Consumer<HttpResponse<JsonNode>> failCallback,
-                               Properties config) {
+                               Consumer<HttpResponse<JsonNode>> failCallback) {
         final String id = UUID.randomUUID().toString();
         JSONObject payload;
         try {
@@ -58,9 +58,20 @@ public class ClientUsageService {
     /**
      * Update (PUT) an existing client-usage record.
      */
-    public boolean updateUsage(JSONObject payload,
+    public boolean updateUsage(String id,
+                               WeeklyStats stats,
+                               Properties config,
                                Consumer<HttpResponse<JsonNode>> successCallback,
                                Consumer<HttpResponse<JsonNode>> failCallback) {
+
+        JSONObject payload;
+        try {
+            payload = ServerUtil.preparePayload(id, stats, config);
+        } catch (Exception e) {
+            Logger.error("Payload prep failed", e, getClass().getName() + ".updateUsage()");
+            return false;
+        }
+
         final HttpResponse<JsonNode> response = Unirest.put(baseUrl + "/client/usage")
                 .header("Content-Type", "application/json")
                 .body(payload)
