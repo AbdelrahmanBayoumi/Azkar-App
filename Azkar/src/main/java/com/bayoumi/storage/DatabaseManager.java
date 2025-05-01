@@ -6,7 +6,6 @@ import com.bayoumi.util.Logger;
 import org.flywaydb.core.Flyway;
 
 import java.sql.*;
-import java.util.UUID;
 
 public class DatabaseManager {
 
@@ -66,16 +65,10 @@ public class DatabaseManager {
     public String getID() {
         try {
             ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT ID FROM program_characteristics").executeQuery();
-            String id;
             if (res.next()) {
-                id = res.getString("ID");
+                final String id = res.getString("ID");
                 if (id != null && !id.isEmpty()) return id;
             }
-            // if ID is null or empty, generate new one
-            id = UUID.randomUUID().toString();
-            // save generated ID to DB
-            DatabaseManager.getInstance().setID(id);
-            return id;
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".getID()");
         }
