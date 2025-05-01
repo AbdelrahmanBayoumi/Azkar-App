@@ -1,6 +1,7 @@
 ■ الميزات الجديدة:
 
 - إمكانية التبديل بين الوضع الفاتح والوضع الداكن.
+- إضافة خيار لتغيير لون الإشعارات (الخلفية والنص والحدود).
 - إضافة إمكانية رفع ملفات صوتية مخصصة للأذان، مما يسمح للمستخدمين برفع أي ملف صوتي يرغبون به للأذان.
 - إضافة زر لتفعيل/إلغاء تذكير الأذان حسب رغبة المستخدمين.
 
@@ -14,6 +15,7 @@
 ■ New Features:
 
 - Ability to switch between light and dark modes.
+- Added an option to change the notification colors (background, text, and borders).
 - Added the ability to upload custom Adhan audio files, allowing users to upload any desired Adhan audio file.
 - Added a button to enable/disable Adhan reminders as per user preference.
 
