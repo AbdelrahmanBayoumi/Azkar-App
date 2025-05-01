@@ -208,7 +208,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
-        ScrollHandler.init(root, scrollPane, 1);
+        ScrollHandler.init(root, scrollPane, 3);
     }
 
     @FXML

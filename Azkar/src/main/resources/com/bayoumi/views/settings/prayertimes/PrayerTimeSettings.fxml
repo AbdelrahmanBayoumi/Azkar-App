@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
@@ -48,5 +49,21 @@
             </styleClass>
          </JFXCheckBox>
         </VBox>
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <JFXButton fx:id="forProblemsAndSuggestionsButton" contentDisplay="RIGHT" graphicTextGap="17.0"
+                       minWidth="240.0" onAction="#openFeedback" style="-fx-background-radius: 15;"
+                       text="للمشاكل والإقتراحات">
+                <graphic>
+                    <FontAwesomeIconView glyphName="COMMENTS" size="24"/>
+                </graphic>
+                <font>
+                    <Font name="System Bold" size="16.0"/>
+                </font>
+                <styleClass>
+                    <String fx:value="font-text-bold"/>
+                    <String fx:value="_16"/>
+                </styleClass>
+            </JFXButton>
+        </HBox>
     </VBox>
 </ScrollPane>

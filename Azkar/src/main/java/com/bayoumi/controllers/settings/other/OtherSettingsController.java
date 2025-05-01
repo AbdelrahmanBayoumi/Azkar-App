@@ -184,8 +184,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
             final Stage stage = BuilderUI.initStageDecorated(scene, "");
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.show();
-            ((Stage) version.getScene().getWindow()).close();
+            stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openFeedback()");
         }
