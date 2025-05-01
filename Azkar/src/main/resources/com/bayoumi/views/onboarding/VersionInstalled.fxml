@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-
 <VBox fx:id="root" alignment="TOP_CENTER" prefHeight="580.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.onboarding.VersionInstalledController">
    <Label fx:id="mainTitleLabel" alignment="CENTER" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: -fx-secondary; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0); -fx-text-fill: -fx-light-text;" text="التغييرات في الإصدار الجديد">
       <graphic>
@@ -34,9 +33,21 @@
          <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
       </padding>
       <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-      <HBox alignment="CENTER" spacing="35.0">
+      <HBox alignment="CENTER" spacing="45.0">
          <children>
-            <JFXCheckBox fx:id="darkTheme" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" onAction="#darkThemeSelect" text="تفعيل النمط الداكن">
+            <JFXButton fx:id="notificationColorButton" contentDisplay="RIGHT" focusTraversable="false" graphicTextGap="20.0" onAction="#goToNotificationColor" text="اختر لون الإشعار">
+               <padding>
+                  <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
+               </padding>
+               <styleClass>
+                  <String fx:value="_15" />
+                  <String fx:value="font-text-bold" />
+               </styleClass>
+               <graphic>
+                  <MaterialDesignIconView glyphName="PALETTE" size="22" />
+               </graphic>
+            </JFXButton>
+            <JFXCheckBox fx:id="darkTheme" contentDisplay="RIGHT" graphicTextGap="10.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#darkThemeSelect" text="تفعيل النمط الداكن">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -45,10 +56,13 @@
                   <String fx:value="_15" />
                </styleClass>
                <graphic>
-                  <MaterialDesignIconView glyphName="PALETTE" size="22" />
+                  <FontAwesomeIconView glyphName="MOON_ALT" size="24" />
                </graphic>
             </JFXCheckBox>
          </children>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
       </HBox>
       <VBox.margin>
          <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />

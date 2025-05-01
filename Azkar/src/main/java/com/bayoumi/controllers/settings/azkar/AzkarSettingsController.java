@@ -307,7 +307,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             ((ChooseNotificationColorController) popUp.getController()).setData();
             popUp.showAndWait();
         } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".goToAzkar()");
+            Logger.error(null, e, getClass().getName() + ".goToNotificationColor()");
         }
     }
 
