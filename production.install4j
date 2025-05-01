@@ -24,8 +24,6 @@
     </mountPoints>
     <entries>
       <fileEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/target/jfx/app/Azkar-jfx.jar" />
-      <fileEntry mountPoint="58" file="${compiler:ICON_ICO}" />
-      <fileEntry mountPoint="58" file="${compiler:ICON_PNG}" />
       <dirEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/target/jfx/app/lib" entryMode="subdir" subDirectory="lib" />
       <dirEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/jarFiles" entryMode="subdir" subDirectory="jarFiles" />
       <fileEntry mountPoint="58" file="${compiler:PARENT_DIR}/LICENSE" />
