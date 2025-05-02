@@ -165,8 +165,10 @@ public class FeedbackController implements Initializable {
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".send()");
             }
-            progress.setVisible(false);
-            reset();
+            Platform.runLater(() -> {
+                progress.setVisible(false);
+                reset();
+            });
         }).start();
     }
 
