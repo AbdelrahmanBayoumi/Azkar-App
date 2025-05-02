@@ -12,6 +12,7 @@
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
       <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\installer\icon.png" />
       <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\installer\icon.ico" />
+      <variable name="LICENSE_AGREEMENT" value="${compiler:PARENT_DIR}\installer\EULA_" />
       <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
       <variable name="UPDATES_XML_URL" value="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/installer/updates.xml" />
       <variable name="BASE_RELEASE_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/${compiler:APP_VERSION}/" />
@@ -144,6 +145,40 @@ return console.askOkCancel(message, true);
                 <serializedBean>
                   <property name="labelText" type="string">${i18n:ClickNext}</property>
                 </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="799" beanClass="com.install4j.runtime.beans.screens.LicenseScreen" rollbackBarrierExitCode="0">
+            <formComponents>
+              <formComponent id="800" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                <serializedBean>
+                  <property name="labelText" type="string">${i18n:LicenseLabel3}</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="801" beanClass="com.install4j.runtime.beans.formcomponents.LicenseComponent" useExternalParametrization="true" externalParametrizationName="License Agreement" externalParametrizationMode="include">
+                <serializedBean>
+                  <property name="acceptInitiallySelected" type="boolean" value="true" />
+                  <property name="displayedTextFile" id="LocalizedExternalFile0">
+                    <property name="languageIdToExternalFile">
+                      <entry>
+                        <string>en</string>
+                        <object class="com.install4j.api.beans.ExternalFile">
+                          <string>${compiler:LICENSE_AGREEMENT}en.txt</string>
+                        </object>
+                      </entry>
+                    </property>
+                  </property>
+                  <property name="fillVertical" type="boolean" value="true" />
+                  <property name="variableName" type="string">licenseText</property>
+                </serializedBean>
+                <externalParametrizationPropertyNames>
+                  <propertyName>acceptInitiallySelected</propertyName>
+                  <propertyName>displayedText</propertyName>
+                  <propertyName>displayedTextFile</propertyName>
+                  <propertyName>readAllRequired</propertyName>
+                  <propertyName>textSource</propertyName>
+                  <propertyName>variableName</propertyName>
+                </externalParametrizationPropertyNames>
               </formComponent>
             </formComponents>
           </screen>
@@ -305,6 +340,15 @@ return false;
                   <property name="checkboxText" type="string">${i18n:RunEntryExec("${compiler:sys.fullName}")}</property>
                   <property name="initiallySelected" type="boolean" value="true" />
                   <property name="variableName" type="string">executeLauncherAction</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="805" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" insetTop="10" insetBottom="10">
+                <serializedBean>
+                  <property name="labelHtml" type="string">&lt;html&gt;
+&lt;body&gt;
+&lt;p style="text-align:center" dir="rtl"&gt;تقبل الله منا ومنكم صالح الأعمال ✨&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</property>
                 </serializedBean>
               </formComponent>
             </formComponents>
