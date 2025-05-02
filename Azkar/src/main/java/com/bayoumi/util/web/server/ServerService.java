@@ -48,14 +48,18 @@ public class ServerService {
         final Consumer<HttpResponse<JsonNode>> failCallback = (res) -> {
             final String err = res != null && res.getBody() != null ? res.getBody().toString() : "null";
             Logger.debug("[ServerService] API Error: " + err);
-            Sentry.captureMessage("API Error: " + err, SentryLevel.WARNING);
+            Sentry.captureMessage("API Error: " + err, SentryLevel.ERROR);
         };
 
         final boolean isFirstTimeOpened = (id == null || id.isEmpty());
         if (isFirstTimeOpened) {
-            RetryTask.builder(() -> usage.createUsage(weeklyStats, config, successCallback, failCallback)).enableJitter(true).execute();
+            RetryTask.builder(() -> usage.createUsage(weeklyStats, config, successCallback, failCallback))
+                    .threadName("ServerService-CreateUsage-Thread")
+                    .enableJitter(true).execute();
         } else {
-            RetryTask.builder(() -> usage.updateUsage(id, weeklyStats, config, successCallback, failCallback)).enableJitter(true).execute();
+            RetryTask.builder(() -> usage.updateUsage(id, weeklyStats, config, successCallback, failCallback))
+                    .threadName("ServerService-UpdateUsage-Thread")
+                    .enableJitter(true).execute();
         }
     }
 }

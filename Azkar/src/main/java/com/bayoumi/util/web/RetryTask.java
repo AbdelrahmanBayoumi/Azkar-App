@@ -60,7 +60,7 @@ public class RetryTask {
             backoff *= 2;
         }
 
-        Logger.error(null, new Exception("[RetryTask] All retry attempts failed"), getClass().getName() + ".execute()");
+        Logger.error(null, new Exception("[RetryTask] All retry attempts failed: " + threadName), getClass().getName() + ".execute()");
         return false;
     }
 
