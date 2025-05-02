@@ -199,6 +199,24 @@
                   <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                </padding>
                <children>
+                  <Label maxWidth="390.0" text="﴿وَمِنَ اللَّيْلِ فَتَهَجَّدْ بِهِ نَافِلَةً لَّكَ عَسَىٰ أَن يَبْعَثَكَ رَبُّكَ مَقَامًا مَّحْمُودًا﴾" textAlignment="CENTER" wrapText="true">
+                     <styleClass>
+                        <String fx:value="_22" />
+                        <String fx:value="zekr-text" />
+                     </styleClass>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="25.0" layoutY="20.0" maxWidth="390.0" text="[الإسراء: 79]" textAlignment="CENTER" wrapText="true">
+                     <styleClass>
+                        <String fx:value="_15" />
+                        <String fx:value="zekr-text" />
+                     </styleClass>
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin>
+                  </Label>
                   <HBox alignment="CENTER" spacing="10.0" styleClass="box-prayer">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
