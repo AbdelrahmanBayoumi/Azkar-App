@@ -24,6 +24,9 @@ public class SentryUtil {
                 event.setExtra("upTime", AppPropertiesUtil.getUptime());
                 Preferences.getInstance().getAllWithPrefix().forEach(event::setTag);
                 StatisticsStore.getInstance().getAllWithPrefix().forEach(event::setTag);
+                if (event.getUser() == null || event.getUser().getId() == null || event.getUser().getId().isEmpty()) {
+                    event.setUser(getSentryUser());
+                }
                 return event;
             });
         });
@@ -31,10 +34,13 @@ public class SentryUtil {
         setSentryUser();
     }
 
-    private static void setSentryUser() {
-        final String id = DatabaseManager.getInstance().getID();
+    private static User getSentryUser() {
         final User user = new User();
-        user.setId(id);
-        Sentry.configureScope(scope -> scope.setUser(user));
+        user.setId(DatabaseManager.getInstance().getID());
+        return user;
+    }
+
+    private static void setSentryUser() {
+        Sentry.configureScope(scope -> scope.setUser(getSentryUser()));
     }
 }
