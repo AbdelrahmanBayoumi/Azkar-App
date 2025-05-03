@@ -11,24 +11,24 @@ public class SentryUtil {
 
 
     public static void init() throws Exception {
-        if (!Constants.RUNNING_MODE.equals(Constants.Mode.DEVELOPMENT)) {
-            Sentry.init(options -> {
-                options.setEnableExternalConfiguration(true); // To read sentry.properties
-                options.setDiagnosticLevel(SentryLevel.ERROR);
-                options.setDebug(false);
-                options.setRelease("azkar.app@" + Constants.VERSION + "+1");
-                AppPropertiesUtil.getProps().forEach(options::setTag);
+        if (!Constants.RUNNING_MODE.equals(Constants.Mode.PRODUCTION)) return;
 
-                options.setBeforeSend((event, hint) -> {
-                    event.setExtra("upTime", AppPropertiesUtil.getUptime());
-                    Preferences.getInstance().getAllWithPrefix().forEach(event::setTag);
-                    StatisticsStore.getInstance().getAllWithPrefix().forEach(event::setTag);
-                    return event;
-                });
+        Sentry.init(options -> {
+            options.setEnableExternalConfiguration(true); // To read sentry.properties
+            options.setDiagnosticLevel(SentryLevel.ERROR);
+            options.setDebug(false);
+            options.setRelease("azkar.app@" + Constants.VERSION + "+1");
+            AppPropertiesUtil.getProps().forEach(options::setTag);
+
+            options.setBeforeSend((event, hint) -> {
+                event.setExtra("upTime", AppPropertiesUtil.getUptime());
+                Preferences.getInstance().getAllWithPrefix().forEach(event::setTag);
+                StatisticsStore.getInstance().getAllWithPrefix().forEach(event::setTag);
+                return event;
             });
+        });
 
-            setSentryUser();
-        }
+        setSentryUser();
     }
 
     private static void setSentryUser() {
