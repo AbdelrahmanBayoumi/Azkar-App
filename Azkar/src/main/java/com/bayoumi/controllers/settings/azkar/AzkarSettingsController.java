@@ -302,7 +302,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private void goToNotificationColor() {
         try {
-            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_COLORS_OPENED);
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_NOTIFICATION_COLORS_OPENED);
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.ChooseNotificationColor);
             ((ChooseNotificationColorController) popUp.getController()).setData();
             popUp.showAndWait();

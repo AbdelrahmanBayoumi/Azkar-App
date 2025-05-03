@@ -8,7 +8,7 @@ public enum StatisticsType implements KeyValueDefault {
     SETTINGS_AZKAR_OPENED("settings_azkar_opened", "0"),
     SETTINGS_PRAYERS_OPENED("settings_prayers_opened", "0"),
     SETTINGS_OTHER_OPENED("settings_other_opened", "0"),
-    SETTINGS_COLORS_OPENED("settings_colors_opened", "0"),
+    SETTINGS_NOTIFICATION_COLORS_OPENED("settings_notification_colors_opened", "0"),
     SETTINGS_AZKAR_DB_OPENED("settings_azkar_db_opened", "0"),
     SETTINGS_TIMED_AZKAR_OPENED("settings_timed_azkar_opened", "0"),
 
