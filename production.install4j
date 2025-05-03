@@ -345,7 +345,7 @@ return false;
                 <serializedBean>
                   <property name="labelHtml" type="string">&lt;html&gt;
 &lt;body&gt;
-&lt;p style="text-align:center" dir="rtl"&gt;تقبل الله منا ومنكم صالح الأعمال ✨&lt;/p&gt;
+&lt;p style="text-align:center" dir="rtl"&gt;تقبل الله منا ومنكم صالح الأعمال&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</property>
                 </serializedBean>
