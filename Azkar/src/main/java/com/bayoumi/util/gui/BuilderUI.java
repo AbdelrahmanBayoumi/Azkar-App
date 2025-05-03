@@ -33,7 +33,6 @@ public class BuilderUI {
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
             stage.setScene(scene);
-            stage.initOwner(SingleInstance.getInstance().getCurrentStage());
             stage.initModality(Modality.APPLICATION_MODAL);
             HelperMethods.SetIcon(stage);
             UpdateConfirmController controller = loader.getController();
