@@ -164,6 +164,17 @@ public class FeedbackController implements Initializable {
                 });
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".send()");
+                Platform.runLater(() -> {
+                    VBox vBox = new VBox(10);
+                    vBox.setAlignment(Pos.CENTER);
+                    vBox.setPadding(new Insets(10));
+                    Label label = new Label(Utility.toUTF(bundle.getString("sendFailedTryAgain")));
+                    label.setStyle("-fx-font-size: 25px");
+                    FontAwesomeIconView checkIcon = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
+                    checkIcon.setStyle("-fx-fill: orange;-fx-font-size: 50;-fx-font-family: \"FontAwesome\"");
+                    vBox.getChildren().addAll(checkIcon, label);
+                    Notifications.create().graphic(vBox).show();
+                });
             }
             Platform.runLater(() -> {
                 progress.setVisible(false);
