@@ -34,6 +34,19 @@ Text {
     -fx-text-fill: -fx-primary-text;
 }
 
+
+.clickable-label {
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-color: transparent;
+    -fx-padding: 7px;
+    -fx-background-radius: 15px;
+}
+
+.clickable-label:hover {
+    -fx-text-fill: -fx-dark-text;
+    -fx-background-color: -fx-third-light;
+}
+
 /* ============ icons ============ */
 .glyph-icon {
     -fx-fill: -fx-primary-text;

@@ -157,10 +157,15 @@
                <children>
                   <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="nightTimings" onMouseClicked="#openSunnahBox" style="-fx-font-size: 16;" styleClass="font-text-bold" text="مواقيت الليل">
+                        <Label fx:id="nightTimings" onMouseClicked="#openSunnahBox" text="مواقيت الليل">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
+                           <styleClass>
+                              <String fx:value="font-text-bold" />
+                              <String fx:value="_16" />
+                              <String fx:value="clickable-label" />
+                           </styleClass>
                         </Label>
                      </children>
                   </HBox>
