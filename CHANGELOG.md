@@ -1,9 +1,9 @@
 <h1 align=center>📜 Changelog - سجل التغيير</h1>
 <p align=center>سجل التغيير هو ملف يحتوي على قائمة مرتبة ترتيبًا زمنيًا بالتغييرات الملحوظة لكل إصدار من المشروع.</p>
 
-## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.2.9...HEAD)
+## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.3.0...HEAD)
 
-## [1.3.0](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.3.0) - Unreleased yet
+## [1.3.0](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.3.0) - 2025-05-06
 
 ### Add
 

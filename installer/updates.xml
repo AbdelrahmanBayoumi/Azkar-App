@@ -1,103 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/1.2.9/">
-  <entry targetMediaFileId="60" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x64.exe" newVersion="1.2.9" newMediaFileId="60" fileSize="83189248" md5Sum="56a4b9171e2afe336d0d09a2149eb913" sha256Sum="7414b3975f6e688014180b0aeb2028634bb45a37aa4b77501c39a4f5a5fbd367" bundledJre="windows-amd64-1.8.0_271.tar.gz" archive="false" singleBundle="false">
-    <comment language="en"># هذا الاصدار مهم وضروري #&#xD;
+<updateDescriptor baseUrl="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/1.3.0/">
+  <entry targetMediaFileId="60" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x64.exe" newVersion="1.3.0" newMediaFileId="60" fileSize="82810880" md5Sum="2b457985c2be1c8fcca5ed2140c93852" sha256Sum="65a37bba34c280b854490c2b71335f6cdb9d8b012f4f78316b434e77c6fb1b5e" bundledJre="windows-amd64-1.8.0_271.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">■ الميزات الجديدة:&#xD;
 &#xD;
-من الضروري تحميل هذا الاصدار&#xD;
-لأن السيرفر الحالي الخاص بعمل التحديثات سيتم استبداله&#xD;
-ببديل مجاني وسيتم اغلاق السيرفر الحالي&#xD;
-بنهاية شهر أكتوبر 2024. لذلك من الضروري تحميل هذا التحديث&#xD;
-لتتمكن من تلقي التحديثات القادمة مستقبلاً من السيرفر الجديد&#xD;
+- إمكانية التبديل بين الوضع الفاتح والوضع الداكن.&#xD;
+- إضافة خيار لتغيير لون الإشعارات (الخلفية والنص والحدود).&#xD;
+- إضافة إمكانية رفع ملفات صوتية مخصصة للأذان، مما يسمح للمستخدمين برفع أي ملف صوتي يرغبون به للأذان.&#xD;
+- إضافة زر لتفعيل/إلغاء تذكير الأذان حسب رغبة المستخدمين.&#xD;
 &#xD;
-------------------&#xD;
+■ التحسينات:&#xD;
 &#xD;
-■ الميزات الجديدة:&#xD;
-&#xD;
-- إمكانية تغيير مستوى صوت الأذان&#xD;
-- إمكانية ضبط مدة بقاء الإشعار على الشاشة&#xD;
-- إضافة إمكانية تعديل أوقات الصلاة بتحديد قيمة التعديل (بالدقائق)، مما يسمح للمستخدمين بإضافة أو طرح دقائق من أوقات الصلاة المحسوبة قبل عرض النتيجة النهائية&#xD;
-&#xD;
-■ الإصلاحات:&#xD;
-&#xD;
-- إصلاح تكرار إشعارات الأذكار التي كانت تظهر بترتيب عشوائي من خلال تنفيذ آلية تتبع تسلسلية، لضمان عرض الإشعارات بالترتيب الصحيح والعودة إلى البداية بعد العنصر الأخير&#xD;
-- إصلاح الاختيار الخاطئ للمدن مثل دمشق، سوريا&#xD;
-&#xD;
-------------------&#xD;
-&#xD;
-# This update is important and necessary #&#xD;
-&#xD;
-It's important to downloading this update lies in the fact that the server used for updates will be replaced with a free alternative,&#xD;
-and the current server will be shut down by the end of October 2024.&#xD;
-Therefore, it is essential to download this update to ensure you receive future updates from the new server.&#xD;
-&#xD;
-&#xD;
-Here's the translation:&#xD;
-&#xD;
-It is essential to download this version because the current server used for updates will be replaced with a free alternative,&#xD;
-and the current server will be shut down by the end of October 2024.&#xD;
-Therefore, it is necessary to download this update to ensure you receive future updates from the new server.&#xD;
+- تغيير تسمية "مواقيت أخرى" إلى "مواقيت الليل" لتوضيح الغرض.&#xD;
+- تم تفعيل جمع بعض البيانات الإحصائية افتراضيًا للمساعدة في تحسين أداء التطبيق وحل المشكلات. يمكنك إيقاف هذه الميزة في أي وقت من قسم "الخصوصية" في الإعدادات.&#xD;
 &#xD;
 ------------------&#xD;
 &#xD;
 ■ New Features:&#xD;
 &#xD;
-- Ability to adjust the Adhan volume level&#xD;
-- Option to set the duration for which the notification stays on the screen&#xD;
-- Added the ability to modify prayer times by specifying an adjustment value (in minutes), allowing users to add or subtract minutes from the calculated prayer times before displaying the final result&#xD;
+- Ability to switch between light and dark modes.&#xD;
+- Added an option to change the notification colors (background, text, and borders).&#xD;
+- Added the ability to upload custom Adhan audio files, allowing users to upload any desired Adhan audio file.&#xD;
+- Added a button to enable/disable Adhan reminders as per user preference.&#xD;
 &#xD;
-■ Fixes:&#xD;
+■ Enhancements:&#xD;
 &#xD;
-- Fixed the repetition of Azkar notifications that appeared in a random order by implementing a sequential tracking mechanism to ensure notifications are displayed in the correct order and return to the beginning after the last item&#xD;
-- Fixed incorrect city selections such as Damascus, Syria</comment>
+- Renamed "Other Timings" to "Night Timings" for better clarity.&#xD;
+- Data collection for analytics is now enabled by default to help improve performance and resolve issues more efficiently. You can disable this feature at any time in the “Privacy” section under Settings.</comment>
   </entry>
-  <entry targetMediaFileId="792" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x32.exe" newVersion="1.2.9" newMediaFileId="792" fileSize="79623680" md5Sum="57ac3023bcdbda6498912d83d48c1e4d" sha256Sum="4c12fd99714be2ab136101eca175b5597115bfc202e719612933e42e84307e4c" bundledJre="windows-x86-1.8.0_271.tar.gz" archive="false" singleBundle="false">
-    <comment language="en"># هذا الاصدار مهم وضروري #&#xD;
+  <entry targetMediaFileId="792" updatableVersionMin="" updatableVersionMax="" fileName="Azkar_windows-x32.exe" newVersion="1.3.0" newMediaFileId="792" fileSize="79176192" md5Sum="e7737e35c0aef7bb526bcdc5582273a2" sha256Sum="462f28add533bebe38d5a84a60aa0ccd84c9ee26da5304dd0a0dc86f3a9a96bb" bundledJre="windows-x86-1.8.0_271.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">■ الميزات الجديدة:&#xD;
 &#xD;
-من الضروري تحميل هذا الاصدار&#xD;
-لأن السيرفر الحالي الخاص بعمل التحديثات سيتم استبداله&#xD;
-ببديل مجاني وسيتم اغلاق السيرفر الحالي&#xD;
-بنهاية شهر أكتوبر 2024. لذلك من الضروري تحميل هذا التحديث&#xD;
-لتتمكن من تلقي التحديثات القادمة مستقبلاً من السيرفر الجديد&#xD;
+- إمكانية التبديل بين الوضع الفاتح والوضع الداكن.&#xD;
+- إضافة خيار لتغيير لون الإشعارات (الخلفية والنص والحدود).&#xD;
+- إضافة إمكانية رفع ملفات صوتية مخصصة للأذان، مما يسمح للمستخدمين برفع أي ملف صوتي يرغبون به للأذان.&#xD;
+- إضافة زر لتفعيل/إلغاء تذكير الأذان حسب رغبة المستخدمين.&#xD;
 &#xD;
-------------------&#xD;
+■ التحسينات:&#xD;
 &#xD;
-■ الميزات الجديدة:&#xD;
-&#xD;
-- إمكانية تغيير مستوى صوت الأذان&#xD;
-- إمكانية ضبط مدة بقاء الإشعار على الشاشة&#xD;
-- إضافة إمكانية تعديل أوقات الصلاة بتحديد قيمة التعديل (بالدقائق)، مما يسمح للمستخدمين بإضافة أو طرح دقائق من أوقات الصلاة المحسوبة قبل عرض النتيجة النهائية&#xD;
-&#xD;
-■ الإصلاحات:&#xD;
-&#xD;
-- إصلاح تكرار إشعارات الأذكار التي كانت تظهر بترتيب عشوائي من خلال تنفيذ آلية تتبع تسلسلية، لضمان عرض الإشعارات بالترتيب الصحيح والعودة إلى البداية بعد العنصر الأخير&#xD;
-- إصلاح الاختيار الخاطئ للمدن مثل دمشق، سوريا&#xD;
-&#xD;
-------------------&#xD;
-&#xD;
-# This update is important and necessary #&#xD;
-&#xD;
-It's important to downloading this update lies in the fact that the server used for updates will be replaced with a free alternative,&#xD;
-and the current server will be shut down by the end of October 2024.&#xD;
-Therefore, it is essential to download this update to ensure you receive future updates from the new server.&#xD;
-&#xD;
-&#xD;
-Here's the translation:&#xD;
-&#xD;
-It is essential to download this version because the current server used for updates will be replaced with a free alternative,&#xD;
-and the current server will be shut down by the end of October 2024.&#xD;
-Therefore, it is necessary to download this update to ensure you receive future updates from the new server.&#xD;
+- تغيير تسمية "مواقيت أخرى" إلى "مواقيت الليل" لتوضيح الغرض.&#xD;
+- تم تفعيل جمع بعض البيانات الإحصائية افتراضيًا للمساعدة في تحسين أداء التطبيق وحل المشكلات. يمكنك إيقاف هذه الميزة في أي وقت من قسم "الخصوصية" في الإعدادات.&#xD;
 &#xD;
 ------------------&#xD;
 &#xD;
 ■ New Features:&#xD;
 &#xD;
-- Ability to adjust the Adhan volume level&#xD;
-- Option to set the duration for which the notification stays on the screen&#xD;
-- Added the ability to modify prayer times by specifying an adjustment value (in minutes), allowing users to add or subtract minutes from the calculated prayer times before displaying the final result&#xD;
+- Ability to switch between light and dark modes.&#xD;
+- Added an option to change the notification colors (background, text, and borders).&#xD;
+- Added the ability to upload custom Adhan audio files, allowing users to upload any desired Adhan audio file.&#xD;
+- Added a button to enable/disable Adhan reminders as per user preference.&#xD;
 &#xD;
-■ Fixes:&#xD;
+■ Enhancements:&#xD;
 &#xD;
-- Fixed the repetition of Azkar notifications that appeared in a random order by implementing a sequential tracking mechanism to ensure notifications are displayed in the correct order and return to the beginning after the last item&#xD;
-- Fixed incorrect city selections such as Damascus, Syria</comment>
+- Renamed "Other Timings" to "Night Timings" for better clarity.&#xD;
+- Data collection for analytics is now enabled by default to help improve performance and resolve issues more efficiently. You can disable this feature at any time in the “Privacy” section under Settings.</comment>
   </entry>
 </updateDescriptor>
