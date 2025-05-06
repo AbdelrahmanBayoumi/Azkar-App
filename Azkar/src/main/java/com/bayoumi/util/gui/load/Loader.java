@@ -47,7 +47,7 @@ public class Loader {
     }
 
     private LoaderComponent loadPopUp(Locations location) throws Exception {
-        FXMLLoader loader = new FXMLLoader(Loader.class.getResource(location.toString()));
+        final FXMLLoader loader = new FXMLLoader(Loader.class.getResource(location.toString()));
         final Parent view = loader.load();
         final Object controller = loader.getController();
         return new LoaderComponent(location, view, controller, BuilderUI.initStageDecorated(new Scene(view), ""));

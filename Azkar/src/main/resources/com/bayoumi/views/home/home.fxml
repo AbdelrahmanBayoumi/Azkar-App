@@ -13,10 +13,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stackPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="540.0" prefWidth="900.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
+<StackPane fx:id="stackPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="540.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.home.HomeController">
    <VBox prefHeight="200.0" prefWidth="100.0">
-      <VBox prefHeight="85.0" style="-fx-background-color: -fx-secondary;" VBox.vgrow="ALWAYS" />
-      <VBox prefHeight="160.0" style="-fx-background-color: -fx-bg;" VBox.vgrow="ALWAYS" />
+      <VBox prefHeight="85.0" style="-fx-background-color: -fx-secondary-bg;" VBox.vgrow="ALWAYS" />
+      <VBox prefHeight="160.0" VBox.vgrow="ALWAYS" />
    </VBox>
    <VBox alignment="CENTER" prefHeight="630.0" prefWidth="460.0" StackPane.alignment="CENTER">
       <VBox alignment="CENTER" spacing="10.0">
@@ -25,21 +25,21 @@
          </padding>
          <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT">
             <children>
-               <Label fx:id="hijriDate" style="-fx-text-fill: -fx-secondary-text;" text="DD MMMM YYYY">
+               <Label fx:id="hijriDate" style="-fx-text-fill: -fx-light-text;" text="DD MMMM YYYY">
                   <styleClass>
                      <String fx:value="font-text-medium" />
                      <String fx:value="_20" />
                   </styleClass>
                </Label>
                <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                  <Label fx:id="day" style="-fx-text-fill: -fx-secondary-text;" text="السبت">
+                  <Label fx:id="day" style="-fx-text-fill: -fx-light-text;" text="السبت">
                      <styleClass>
                         <String fx:value="font-text-medium" />
                         <String fx:value="_20" />
                      </styleClass>
                   </Label>
                </HBox>
-               <Label fx:id="gregorianDate" style="-fx-text-fill: -fx-secondary-text;" text="DD MMMM YYYY">
+               <Label fx:id="gregorianDate" style="-fx-text-fill: -fx-light-text;" text="DD MMMM YYYY">
                   <styleClass>
                      <String fx:value="font-text-medium" />
                      <String fx:value="_20" />
@@ -119,8 +119,8 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                            <styleClass>
-                              <String fx:value="box-noraml" />
-                              <String fx:value="font-button-medium" />
+                              <String fx:value="box-normal" />
+                              <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
                            <padding>
@@ -139,8 +139,8 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                            <styleClass>
-                              <String fx:value="box-noraml" />
-                              <String fx:value="font-button-medium" />
+                              <String fx:value="box-normal" />
+                              <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
                            <padding>
@@ -155,8 +155,8 @@
                               <FontAwesomeIconView glyphName="GEAR" size="45" />
                            </graphic>
                            <styleClass>
-                              <String fx:value="box-noraml" />
-                              <String fx:value="font-button-medium" />
+                              <String fx:value="box-normal" />
+                              <String fx:value="font-text-medium" />
                               <String fx:value="_17" />
                            </styleClass>
                            <padding>

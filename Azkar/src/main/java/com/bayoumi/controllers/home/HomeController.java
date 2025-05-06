@@ -8,10 +8,15 @@ import com.bayoumi.controllers.home.periods.AzkarPeriodsController;
 import com.bayoumi.controllers.home.prayertimes.PrayerTimesController;
 import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.azkar.TimedZekrDTO;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.TimedAzkarService;
+import com.bayoumi.services.azkar.AzkarService;
+import com.bayoumi.services.reminders.Reminder;
+import com.bayoumi.services.reminders.ReminderUtil;
+import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.preferences.PreferencesType;
+import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
@@ -23,9 +28,6 @@ import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
 import com.bayoumi.util.prayertimes.PrayerTimesUtil;
-import com.bayoumi.util.services.azkar.AzkarService;
-import com.bayoumi.util.services.reminders.Reminder;
-import com.bayoumi.util.services.reminders.ReminderUtil;
 import com.bayoumi.util.time.HijriDate;
 import com.bayoumi.util.time.Utilities;
 import javafx.animation.Animation;
@@ -47,6 +49,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -205,11 +208,13 @@ public class HomeController implements Initializable {
     // ==============================================
     @FXML
     public void goToMorningAzkar() {
+        StatisticsService.getInstance().increment(StatisticsType.MORNING_AZKAR_OPENED);
         showTimedAzkar("morning");
     }
 
     @FXML
     public void goToNightAzkar() {
+        StatisticsService.getInstance().increment(StatisticsType.NIGHT_AZKAR_OPENED);
         showTimedAzkar("night");
     }
 
@@ -228,7 +233,9 @@ public class HomeController implements Initializable {
             }
 
             final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar.toString()));
-            final Stage stage = BuilderUI.initStageDecorated(new Scene(fxmlLoader.load()), Utility.toUTF(bundle.getString(type + "Azkar")));
+            final Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            final Stage stage = BuilderUI.initStageDecorated(scene, Utility.toUTF(bundle.getString(type + "Azkar")));
             ((TimedAzkarController) fxmlLoader.getController()).setData(timedZekrDTOList, type, stage);
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
             stage.showAndWait();
@@ -240,6 +247,7 @@ public class HomeController implements Initializable {
     @FXML
     private void goToSettings() {
         try {
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_OPENED);
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.Settings);
             HelperMethods.ExitKeyCodeCombination(popUp.getStage().getScene(), popUp.getStage());
             popUp.showAndWait();
@@ -278,33 +286,54 @@ public class HomeController implements Initializable {
 
     private void initReminders() {
         ReminderUtil.getInstance().clear();
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.fajr, () -> playAdhan("صلاة الفجر")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.dhuhr, () -> playAdhan("صلاة الظهر")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.asr, () -> playAdhan("صلاة العصر")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.maghrib, () -> playAdhan("صلاة المغرب")));
-        ReminderUtil.getInstance().add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
+
+        if (!settings.getPrayerTimeSettings().isPrayersReminderStopped()) {
+            ReminderUtil.getInstance().addAll(getPrayersReminders());
+        }
+
         if (settings.getAzkarSettings().getMorningAzkarOffset() != 0) {
             Date morningAzkarDate = ((Date) prayerTimesToday.fajr.clone());
             morningAzkarDate.setTime(prayerTimesToday.fajr.getTime() + (settings.getAzkarSettings().getMorningAzkarOffset() * 60000L));
             ReminderUtil.getInstance().add(new Reminder(morningAzkarDate, () -> Platform.runLater(() ->
-                    Notification.create(new NotificationContent("أذكار الصباح",
-                                    new Image("/com/bayoumi/images/sun_50px.png")),
-                            30,
-                            settings.getNotificationSettings().getPosition(),
-                            () -> Launcher.homeController.goToMorningAzkar(),
-                            new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume())))));
+            {
+                StatisticsService.getInstance().increment(StatisticsType.MORNING_AZKAR_NOTIFICATION_SHOWN);
+                Notification.create(new NotificationContent("أذكار الصباح",
+                                new Image("/com/bayoumi/images/sun_50px.png")),
+                        30,
+                        settings.getNotificationSettings().getPosition(),
+                        () -> {
+                            StatisticsService.getInstance().increment(StatisticsType.MORNING_AZKAR_NOTIFICATION_CLICKED);
+                            Launcher.homeController.goToMorningAzkar();
+                        },
+                        new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume()));
+            })));
         }
         if (settings.getAzkarSettings().getNightAzkarOffset() != 0) {
             Date nightAzkarDate = ((Date) prayerTimesToday.asr.clone());
             nightAzkarDate.setTime(prayerTimesToday.asr.getTime() + (settings.getAzkarSettings().getNightAzkarOffset() * 60000L));
-            ReminderUtil.getInstance().add(new Reminder(nightAzkarDate, () -> Platform.runLater(() ->
-                    Notification.create(new NotificationContent("أذكار المساء",
-                                    new Image("/com/bayoumi/images/night_50px.png")),
-                            30,
-                            settings.getNotificationSettings().getPosition(),
-                            () -> Launcher.homeController.goToNightAzkar(),
-                            new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume())))));
+            ReminderUtil.getInstance().add(new Reminder(nightAzkarDate, () -> Platform.runLater(() -> {
+                StatisticsService.getInstance().increment(StatisticsType.NIGHT_AZKAR_NOTIFICATION_SHOWN);
+                Notification.create(new NotificationContent("أذكار المساء",
+                                new Image("/com/bayoumi/images/night_50px.png")),
+                        30,
+                        settings.getNotificationSettings().getPosition(),
+                        () -> {
+                            StatisticsService.getInstance().increment(StatisticsType.NIGHT_AZKAR_NOTIFICATION_CLICKED);
+                            Launcher.homeController.goToNightAzkar();
+                        },
+                        new NotificationAudio(settings.getAzkarSettings().getAudioName(), settings.getAzkarSettings().getVolume()));
+            })));
         }
+    }
+
+    private List<Reminder> getPrayersReminders() {
+        final List<Reminder> reminders = new ArrayList<>();
+        reminders.add(new Reminder(prayerTimesToday.fajr, () -> playAdhan("صلاة الفجر")));
+        reminders.add(new Reminder(prayerTimesToday.dhuhr, () -> playAdhan("صلاة الظهر")));
+        reminders.add(new Reminder(prayerTimesToday.asr, () -> playAdhan("صلاة العصر")));
+        reminders.add(new Reminder(prayerTimesToday.maghrib, () -> playAdhan("صلاة المغرب")));
+        reminders.add(new Reminder(prayerTimesToday.isha, () -> playAdhan("صلاة العشاء")));
+        return reminders;
     }
 
     private void checkForReminders(Date date) {
@@ -328,4 +357,7 @@ public class HomeController implements Initializable {
                 new NotificationAudio(finalAdhanFileName, settings.getAzkarSettings().getPrayerVolume())));
     }
 
+    public void changeTheme() {
+        mainContainer.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+    }
 }

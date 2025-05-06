@@ -1,0 +1,25 @@
+■ الميزات الجديدة:
+
+- إمكانية التبديل بين الوضع الفاتح والوضع الداكن.
+- إضافة خيار لتغيير لون الإشعارات (الخلفية والنص والحدود).
+- إضافة إمكانية رفع ملفات صوتية مخصصة للأذان، مما يسمح للمستخدمين برفع أي ملف صوتي يرغبون به للأذان.
+- إضافة زر لتفعيل/إلغاء تذكير الأذان حسب رغبة المستخدمين.
+
+■ التحسينات:
+
+- تغيير تسمية "مواقيت أخرى" إلى "مواقيت الليل" لتوضيح الغرض.
+- تم تفعيل جمع بعض البيانات الإحصائية افتراضيًا للمساعدة في تحسين أداء التطبيق وحل المشكلات. يمكنك إيقاف هذه الميزة في أي وقت من قسم "الخصوصية" في الإعدادات.
+
+------------------
+
+■ New Features:
+
+- Ability to switch between light and dark modes.
+- Added an option to change the notification colors (background, text, and borders).
+- Added the ability to upload custom Adhan audio files, allowing users to upload any desired Adhan audio file.
+- Added a button to enable/disable Adhan reminders as per user preference.
+
+■ Enhancements:
+
+- Renamed "Other Timings" to "Night Timings" for better clarity.
+- Data collection for analytics is now enabled by default to help improve performance and resolve issues more efficiently. You can disable this feature at any time in the “Privacy” section under Settings.

@@ -101,7 +101,7 @@
                             </HBox>
                         </VBox>
                         <Separator />
-                  <HBox alignment="CENTER" spacing="5.0">
+                  <HBox fx:id="azkarDurationBox" alignment="CENTER" spacing="5.0">
                      <children>
                         <Label fx:id="zekrDurationEvery" text="وقت ظهور الذكر ب(الثانيه):" textAlignment="CENTER" wrapText="true">
                            <styleClass>
@@ -112,7 +112,7 @@
                         <HBox alignment="CENTER" spacing="5.0" />
                         <HBox alignment="CENTER" spacing="5.0">
                            <children>
-                              <Spinner fx:id="azkarDuration" focusTraversable="false" prefWidth="90.0" onMouseClicked="#onAzkarDurationChange" />
+                              <Spinner fx:id="azkarDuration" focusTraversable="false" onMouseClicked="#onAzkarDurationChange" prefWidth="90.0" />
                               <Label fx:id="secondPlurality" text="الثانيه" textAlignment="CENTER" wrapText="true">
                                  <styleClass>
                                     <String fx:value="_18" />
@@ -158,9 +158,9 @@
                                                     <String fx:value="font-text-bold" />
                                                 </styleClass>
                                             </JFXComboBox>
-                                            <JFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" nodeOrientation="RIGHT_TO_LEFT" onAction="#play" style="-fx-background-color: transparent; -fx-border-color: -fx-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
+                                            <JFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" nodeOrientation="RIGHT_TO_LEFT" onAction="#play" style="-fx-background-color: transparent; -fx-border-color: -fx-reverse-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
                                                 <graphic>
-                                                    <FontAwesomeIconView glyphName="PLAY" size="30" style="-fx-fill: -fx-secondary;" />
+                                                    <FontAwesomeIconView glyphName="PLAY" size="30" style="-fx-fill: -fx-reverse-secondary;" />
                                                 </graphic>
                                                 <padding>
                                                     <Insets bottom="5.0" left="8.0" right="14.0" top="5.0" />
@@ -171,9 +171,9 @@
                                     <HBox fx:id="volumeBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                         <children>
                                             <JFXSlider fx:id="volumeSlider" blockIncrement="0.0" focusTraversable="false" prefWidth="300.0" value="50.0" HBox.hgrow="ALWAYS" />
-                                            <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#muteUnmute" style="-fx-background-color: transparent; -fx-border-color: -fx-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
+                                            <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#muteUnmute" style="-fx-background-color: transparent; -fx-border-color: -fx-reverse-secondary; -fx-background-radius: 15; -fx-border-width: 2; -fx-border-radius: 15;">
                                                 <graphic>
-                                                    <OctIconView fx:id="volume" glyphName="UNMUTE" size="30" style="-fx-fill: -fx-secondary;" />
+                                                    <OctIconView fx:id="volume" glyphName="UNMUTE" size="30" style="-fx-fill: -fx-reverse-secondary;" />
                                                 </graphic>
                                                 <padding>
                                                     <Insets bottom="6.0" left="8.0" right="8.0" top="6.0" />
@@ -309,13 +309,13 @@
                                  </Label>
                               </children>
                            </HBox>
-                           <JFXToggleButton fx:id="morningAzkarTimeToggle" minWidth="150.0" onAction="#onMorningAzkarTimeToggle" selected="true" text="مُفعلة" GridPane.columnIndex="2">
+                           <JFXToggleButton fx:id="morningAzkarTimeToggle" minWidth="150.0" onAction="#onMorningAzkarTimeToggle" selected="true" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="2">
                               <styleClass>
                                  <String fx:value="font-text-bold" />
                                  <String fx:value="_16" />
                               </styleClass>
                            </JFXToggleButton>
-                           <JFXToggleButton fx:id="nightAzkarTimeToggle" layoutX="414.0" layoutY="20.0" minWidth="150.0" onAction="#onNightAzkarTimeToggle" selected="true" text="مُفعلة" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <JFXToggleButton fx:id="nightAzkarTimeToggle" layoutX="414.0" layoutY="20.0" minWidth="150.0" onAction="#onNightAzkarTimeToggle" selected="true" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="2" GridPane.rowIndex="1">
                               <styleClass>
                                  <String fx:value="font-text-bold" />
                                  <String fx:value="_16" />

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" minHeight="200.0" prefWidth="500.0" spacing="20.0" styleClass="root" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.alert.confirm.ConfirmAlertController">
+<VBox alignment="CENTER" minHeight="200.0" prefWidth="500.0" spacing="20.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.alert.confirm.ConfirmAlertController">
     <padding>
         <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
     </padding>
@@ -26,7 +26,7 @@
       </padding>
       <JFXButton fx:id="discardButton" cancelButton="true" focusTraversable="false" onAction="#discardAction" prefWidth="9000.0" text="إلغاء">
          <styleClass>
-            <String fx:value="back-button" />
+            <String fx:value="gray-button" />
             <String fx:value="font-text-bold" />
             <String fx:value="_20" />
          </styleClass>

@@ -2,13 +2,13 @@ package com.bayoumi.services;
 
 import com.bayoumi.controllers.dialog.DownloadResourcesController;
 import com.bayoumi.models.azkar.TimedZekrDTO;
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesType;
 import com.bayoumi.models.settings.Language;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.Utility;
 import com.bayoumi.util.VersionComparator;
+import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
@@ -26,7 +26,6 @@ public class TimedAzkarService {
 
     private static final String FOLDER_NAME = "azkar";
     private static final String USER_AND_REPO = "Seen-Arabic/Morning-And-Evening-Adhkar-DB";
-    private static final int SCHEDULE_DELAY_MS = 1000 * 60 * 15; // 15 minutes
 
     /**
      * Initialize the TimedAzkarService by copying the files to the assets path and checking for updates
@@ -112,7 +111,7 @@ public class TimedAzkarService {
                 break;
             }
             Logger.debug("[TimedAzkarService] Copying from: " + from + " to: " + to);
-            Utility.copyIfNotExist(from, to);
+            FileUtils.copyIfNotExist(from, to);
         }
     }
 
@@ -162,7 +161,7 @@ public class TimedAzkarService {
                         }
                     }
                 },
-                SCHEDULE_DELAY_MS
+                1000 * 60 * 15 // 15 minutes
         );
     }
 }

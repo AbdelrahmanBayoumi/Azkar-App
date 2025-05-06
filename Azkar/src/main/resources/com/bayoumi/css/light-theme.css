@@ -1,0 +1,37 @@
+* {
+    -fx-primary: #2a9d8f;
+    -fx-primary-dark: derive(-fx-primary, -40%);
+    -fx-primary-light: derive(-fx-primary, 40%);
+
+    -fx-secondary: #33485d;
+    -fx-secondary-hover: derive(#264653, -40%);
+    -fx-secondary-light: derive(#264653, 40%);
+
+    -fx-third: #f4a261;
+    -fx-third-light: #e9c46a;
+
+    -fx-red: #c91a29;
+    -fx-gray: #bdbdbd;
+    -fx-green: #2a9d8f;
+    -fx-blue: blue;
+    /* ===== Background ===== */
+    -fx-bg: #f5f7fe;
+    -fx-secondary-bg: -fx-secondary;
+    /* ====== Text ====== */
+    -fx-primary-text: #000000;
+    -fx-secondary-text: #ffffff;
+    -fx-light-text: -fx-secondary-text;
+    -fx-dark-text: -fx-primary-text;
+    -fx-reverse-secondary: -fx-secondary;
+    /* ====== Button ====== */
+    -fx-primary-button: linear-gradient(-fx-primary-light, -fx-primary);
+    -fx-primary-button-text: -fx-secondary-text;
+    -fx-primary-button-hover: -fx-primary-dark;
+    /* ====== Table ====== */
+    -fx-even-table: #e5f1f4;
+    -fx-odd-table: #fbf9fa;
+    -fx-hover-table: white;
+    /* ====== Scroll ====== */
+    -fx-thumb-bg: derive(black, 90%);
+    -fx-thumb-bg-hover: derive(#4d4c4f, 10%);
+}

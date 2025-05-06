@@ -4,7 +4,7 @@ import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.forms.Feedback;
+import com.bayoumi.util.web.forms.Feedback;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -164,17 +164,30 @@ public class FeedbackController implements Initializable {
                 });
             } catch (Exception ex) {
                 Logger.error(null, ex, getClass().getName() + ".send()");
+                Platform.runLater(() -> {
+                    VBox vBox = new VBox(10);
+                    vBox.setAlignment(Pos.CENTER);
+                    vBox.setPadding(new Insets(10));
+                    Label label = new Label(Utility.toUTF(bundle.getString("sendFailedTryAgain")));
+                    label.setStyle("-fx-font-size: 25px");
+                    FontAwesomeIconView checkIcon = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
+                    checkIcon.setStyle("-fx-fill: orange;-fx-font-size: 50;-fx-font-family: \"FontAwesome\"");
+                    vBox.getChildren().addAll(checkIcon, label);
+                    Notifications.create().graphic(vBox).show();
+                });
             }
-            progress.setVisible(false);
-            reset();
+            Platform.runLater(() -> {
+                progress.setVisible(false);
+                reset();
+            });
         }).start();
     }
 
 
     @FXML
     private void toggleButton(ActionEvent event) {
-        focusedButton.getStyleClass().remove("secondary-button");
+        focusedButton.getStyleClass().remove("primary-button");
         focusedButton = (JFXButton) event.getSource();
-        focusedButton.getStyleClass().add("secondary-button");
+        focusedButton.getStyleClass().add("primary-button");
     }
 }

@@ -1,7 +1,9 @@
 package com.bayoumi.util.gui.load;
 
 public enum Locations {
+    SplashScreen("/com/bayoumi/views/preloader/SplashScreen.fxml"),
     Home("/com/bayoumi/views/home/home.fxml"),
+    NotificationContent("/com/bayoumi/views/notification/NotificationContent.fxml"),
     AbsoluteAzkar("/com/bayoumi/views/azkar/absolute/AbsoluteAzkar.fxml"),
     PrayerTimes("/com/bayoumi/views/home/prayertimes/PrayerTimes.fxml"),
     AzkarPeriods("/com/bayoumi/views/home/periods/AzkarPeriods.fxml"),
@@ -12,6 +14,7 @@ public enum Locations {
     OtherSettings("/com/bayoumi/views/settings/other/OtherSettings.fxml"),
     PrayerTimeSettings("/com/bayoumi/views/settings/prayertimes/PrayerTimeSettings.fxml"),
     AzkarSettings("/com/bayoumi/views/settings/azkar/AzkarSettings.fxml"),
+    ChooseAudio("/com/bayoumi/views/components/ChooseAudio.fxml"),
     UpdateConfirm("/com/bayoumi/views/dialog/UpdateConfirm.fxml"),
     ConfirmAlert("/com/bayoumi/views/alert/confirm/ConfirmAlert.fxml"),
     EditTextField("/com/bayoumi/views/alert/edit/textfield/EditTextField.fxml"),
@@ -20,6 +23,7 @@ public enum Locations {
     ChooseNotificationColor("/com/bayoumi/views/settings/azkar/ChooseNotificationColor.fxml"),
     DownloadResources("/com/bayoumi/views/dialog/DownloadResources.fxml"),
     Onboarding("/com/bayoumi/views/onboarding/Onboarding.fxml"),
+    VersionInstalled("/com/bayoumi/views/onboarding/VersionInstalled.fxml"),
     Feedback("/com/bayoumi/views/feedback/Feedback.fxml");
 
     private final String name;

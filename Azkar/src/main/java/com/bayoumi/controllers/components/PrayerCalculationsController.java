@@ -4,6 +4,7 @@ import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.PrayerTimeSettings;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.bayoumi.util.time.Utilities;
 import com.jfoenix.controls.JFXCheckBox;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,7 +34,10 @@ public class PrayerCalculationsController implements Initializable {
     @FXML
     private Label calculationMethodText, asrMadhabText, daylightSavingNote,
             prayerAdjustment, fajrText, sunriseText, dhuhrText, asrText, maghribText, ishaText,
-            minPluralityFajr, minPluralitySunrise, minPluralityDhuhr, minPluralityAsr, minPluralityMaghrib, minPluralityIsha;
+            minPluralityFajr, minPluralitySunrise, minPluralityDhuhr, minPluralityAsr, minPluralityMaghrib, minPluralityIsha,
+            prayerTimeDiffNoteHeader;
+    @FXML
+    private Text prayerTimeDiffNoteText;
 
     private void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
@@ -50,7 +55,7 @@ public class PrayerCalculationsController implements Initializable {
         minPluralityMaghrib.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, prayerTimeSettings.getMaghribAdjustment()));
         minPluralityIsha.setText(ArabicNumeralDiscrimination.minutesArabicPlurality(bundle, prayerTimeSettings.getIshaAdjustment()));
 
-        prayerAdjustment.setText(Utility.toUTF(bundle.getString("prayerAdjutment")));
+        prayerAdjustment.setText(Utility.toUTF(bundle.getString("prayerAdjustment")));
         fajrText.setText(Utility.toUTF(bundle.getString("fajr")));
         sunriseText.setText(Utility.toUTF(bundle.getString("sunrise")));
         if (Utilities.isFriday()) {
@@ -64,6 +69,9 @@ public class PrayerCalculationsController implements Initializable {
 
         methodComboBox.getItems().setAll(PrayerTimeSettings.Method.getListOfMethods());
         methodComboBox.setValue(prayerTimeSettings.getMethod());
+
+        prayerTimeDiffNoteHeader.setText(Utility.toUTF(bundle.getString("prayerTimeDiffNoteHeader")));
+        prayerTimeDiffNoteText.setText(Utility.toUTF(bundle.getString("prayerTimeDiffNoteText")));
     }
 
     public void setData() {
@@ -85,6 +93,8 @@ public class PrayerCalculationsController implements Initializable {
         asrAdjustment.getValueFactory().setValue(prayerTimeSettings.getAsrAdjustment());
         maghribAdjustment.getValueFactory().setValue(prayerTimeSettings.getMaghribAdjustment());
         ishaAdjustment.getValueFactory().setValue(prayerTimeSettings.getIshaAdjustment());
+
+        PopOverUtil.init(asrMadhabText, Utility.toUTF(bundle.getString("asrMadhabInfo")));
     }
 
     @Override

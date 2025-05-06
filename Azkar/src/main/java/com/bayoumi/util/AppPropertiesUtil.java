@@ -1,14 +1,11 @@
 package com.bayoumi.util;
 
 import com.bayoumi.Launcher;
-import com.bayoumi.models.preferences.Preferences;
+import com.bayoumi.storage.DatabaseManager;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.statistics.StatisticsStore;
 import kong.unirest.json.JSONObject;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -16,25 +13,10 @@ import java.util.TimeZone;
 
 public class AppPropertiesUtil {
 
-    public static void main(String[] args) {
-        Launcher.startTime = System.currentTimeMillis();
-        getProps().forEach((k, v) -> System.out.println(k + " : " + v));
-    }
-
-
     public static Map<String, String> getProps() {
         final Map<String, String> props = new HashMap<>();
 
-        // Application Information
-        props.put("app.running_mode", Constants.RUNNING_MODE.toString());
-        props.put("app.timestamp", String.valueOf(System.currentTimeMillis()));
-        props.put("app.startup_local_datetime", Launcher.startTime == null ? "N/A" : LocalDateTime.ofInstant(Instant.ofEpochMilli(Launcher.startTime), ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        props.put("app.thread_count", String.valueOf(Thread.activeCount()));
-
         // User Information
-        props.put("user.name", System.getProperty("user.name"));
-        props.put("user.dir", System.getProperty("user.dir"));
-        props.put("user.home", System.getProperty("user.home"));
         props.put("assets_path", Constants.assetsPath);
 
         // OS Information
@@ -44,7 +26,6 @@ public class AppPropertiesUtil {
 
         // Java Information
         props.put("java.version", System.getProperty("java.version"));
-        props.put("java.tmpdir", System.getProperty("java.io.tmpdir"));
 
         // Timezone Information
         props.put("timezone.id", TimeZone.getDefault().getID());
@@ -55,20 +36,15 @@ public class AppPropertiesUtil {
         // Locale Information
         props.put("locale.default", Locale.getDefault().toString());
 
-        // Current Date and Time
-        props.put("current.local_datetime", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        props.put("current.utc_datetime", ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_INSTANT));
-
-        // Hardware Information
-        props.put("hardware.available_processors", String.valueOf(Runtime.getRuntime().availableProcessors()));
-
         return props;
     }
 
     public static String getAllAppPropsAsJsonString() {
         final JSONObject jsonObject = new JSONObject(getProps());
+        jsonObject.put("id", DatabaseManager.getInstance().getID());
         jsonObject.put("uptime", getUptime());
-        Preferences.getInstance().getAll().forEach(jsonObject::put);
+        Preferences.getInstance().getAllWithPrefix().forEach(jsonObject::put);
+        StatisticsStore.getInstance().getAllWithPrefix().forEach(jsonObject::put);
         return jsonObject.toString();
     }
 

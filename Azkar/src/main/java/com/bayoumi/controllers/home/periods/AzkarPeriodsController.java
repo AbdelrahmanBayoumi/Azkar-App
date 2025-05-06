@@ -3,9 +3,9 @@ package com.bayoumi.controllers.home.periods;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.azkar.AzkarService;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.PopOverUtil;
-import com.bayoumi.util.services.azkar.AzkarService;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
@@ -57,7 +57,7 @@ public class AzkarPeriodsController implements Initializable {
         highFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.high")));
         midFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.mid")));
         lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
-        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
+        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rare")));
     }
 
     @FXML

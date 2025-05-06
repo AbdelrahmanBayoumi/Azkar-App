@@ -6,29 +6,27 @@
       <variable name="PARENT_DIR" value="." />
       <variable name="APP_FULL_NAME" value="Azkar" />
       <variable name="APP_SHORT_NAME" value="Azkar" />
-      <variable name="APP_VERSION" value="1.2.9" />
+      <variable name="APP_VERSION" value="1.3.0" />
       <variable name="Publisher" value="Abdelrahman Bayoumi" />
       <variable name="Publisher_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App" />
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
-      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.png" />
-      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\Azkar\src\main\resources\com\bayoumi\images\icon.ico" />
+      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\installer\icon.png" />
+      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\installer\icon.ico" />
+      <variable name="LICENSE_AGREEMENT" value="${compiler:PARENT_DIR}\installer\EULA_" />
       <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
       <variable name="UPDATES_XML_URL" value="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/installer/updates.xml" />
       <variable name="BASE_RELEASE_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/${compiler:APP_VERSION}/" />
     </variables>
     <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk8/jdk8u272-b10" />
   </application>
-  <files defaultOverwriteMode="1">
+  <files defaultOverwriteMode="1" defaultUninstallMode="2">
     <mountPoints>
       <mountPoint id="58" />
     </mountPoints>
     <entries>
       <fileEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/target/jfx/app/Azkar-jfx.jar" />
-      <fileEntry mountPoint="58" file="${compiler:ICON_ICO}" />
-      <fileEntry mountPoint="58" file="${compiler:ICON_PNG}" />
       <dirEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/target/jfx/app/lib" entryMode="subdir" subDirectory="lib" />
       <dirEntry mountPoint="58" file="${compiler:PARENT_DIR}/Azkar/jarFiles" entryMode="subdir" subDirectory="jarFiles" />
-      <fileEntry mountPoint="58" file="${compiler:PARENT_DIR}/LICENSE" />
     </entries>
   </files>
   <launchers>
@@ -149,6 +147,40 @@ return console.askOkCancel(message, true);
               </formComponent>
             </formComponents>
           </screen>
+          <screen id="799" beanClass="com.install4j.runtime.beans.screens.LicenseScreen" rollbackBarrierExitCode="0">
+            <formComponents>
+              <formComponent id="800" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                <serializedBean>
+                  <property name="labelText" type="string">${i18n:LicenseLabel3}</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="801" beanClass="com.install4j.runtime.beans.formcomponents.LicenseComponent" useExternalParametrization="true" externalParametrizationName="License Agreement" externalParametrizationMode="include">
+                <serializedBean>
+                  <property name="acceptInitiallySelected" type="boolean" value="true" />
+                  <property name="displayedTextFile" id="LocalizedExternalFile0">
+                    <property name="languageIdToExternalFile">
+                      <entry>
+                        <string>en</string>
+                        <object class="com.install4j.api.beans.ExternalFile">
+                          <string>${compiler:LICENSE_AGREEMENT}en.txt</string>
+                        </object>
+                      </entry>
+                    </property>
+                  </property>
+                  <property name="fillVertical" type="boolean" value="true" />
+                  <property name="variableName" type="string">licenseText</property>
+                </serializedBean>
+                <externalParametrizationPropertyNames>
+                  <propertyName>acceptInitiallySelected</propertyName>
+                  <propertyName>displayedText</propertyName>
+                  <propertyName>displayedTextFile</propertyName>
+                  <propertyName>readAllRequired</propertyName>
+                  <propertyName>textSource</propertyName>
+                  <propertyName>variableName</propertyName>
+                </externalParametrizationPropertyNames>
+              </formComponent>
+            </formComponents>
+          </screen>
           <screen id="8" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" rollbackBarrierExitCode="0">
             <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
             <actions>
@@ -224,6 +256,20 @@ return console.askOkCancel(message, true);
                   <property name="itemName" type="string">${compiler:sys.fullName} ${compiler:sys.version}</property>
                 </serializedBean>
               </action>
+              <action name="Remove unused sharawy_doaa.mp3" id="797" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">File file = new File(context.getInstallationDirectory(), "jarFiles/audio/adhan/sharawy_doaa.mp3");
+if (!file.exists() || file.delete()) {
+      return true;
+}
+return false;
+</property>
+                    </object>
+                  </property>
+                </serializedBean>
+              </action>
             </actions>
             <formComponents>
               <formComponent id="16" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
@@ -295,6 +341,15 @@ return console.askOkCancel(message, true);
                   <property name="variableName" type="string">executeLauncherAction</property>
                 </serializedBean>
               </formComponent>
+              <formComponent id="805" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" insetTop="10" insetBottom="10">
+                <serializedBean>
+                  <property name="labelHtml" type="string">&lt;html&gt;
+&lt;body&gt;
+&lt;p style="text-align:center" dir="rtl"&gt;تقبل الله منا ومنكم صالح الأعمال&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</property>
+                </serializedBean>
+              </formComponent>
             </formComponents>
           </screen>
         </screens>
@@ -337,6 +392,30 @@ return console.askYesNo(message, true);
           <screen id="27" beanClass="com.install4j.runtime.beans.screens.UninstallationScreen" rollbackBarrierExitCode="0">
             <actions>
               <action id="29" beanClass="com.install4j.runtime.beans.actions.UninstallFilesAction" actionElevationType="elevated" rollbackBarrierExitCode="0" />
+              <action id="793" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" commentSet="true" comment="This is to ensure that the DB and any files added in runtime (not by installer) to be deleted when uninstalled" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="files" type="array" class="java.io.File" length="1">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>jarFiles</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="recursive" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="798" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="files" type="array" class="java.io.File" length="1">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>${compiler:env.LOCALAPPDATA}/${compiler:APP_SHORT_NAME}</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="recursive" type="boolean" value="true" />
+                </serializedBean>
+              </action>
             </actions>
             <formComponents>
               <formComponent id="28" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
@@ -351,7 +430,22 @@ return console.askYesNo(message, true);
             <formComponents>
               <formComponent id="31" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
                 <serializedBean>
-                  <property name="labelText" type="string">${form:successMessage}</property>
+                  <property name="labelText" type="string">${form:successMessage}
+
+Thank you for using Azkar!
+
+If you have any feedback or suggestions for improvement, feel free to contact us through our website:</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="794" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
+                <serializedBean>
+                  <property name="hyperlinkText" type="string">azkar-site.web.app</property>
+                  <property name="url" type="string">https://azkar-site.web.app/</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="795" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
+                <serializedBean>
+                  <property name="labelText" type="string">We hope to see you again soon! &#x1f31f;</property>
                 </serializedBean>
               </formComponent>
             </formComponents>
@@ -1101,8 +1195,5 @@ return true;</property>
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_271" />
     </windows>
   </mediaSets>
-  <buildIds>
-    <mediaSet refId="60" />
-  </buildIds>
   <buildOptions verbose="true" />
 </install4j>

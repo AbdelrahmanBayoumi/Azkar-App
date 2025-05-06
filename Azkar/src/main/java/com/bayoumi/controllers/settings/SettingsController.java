@@ -1,6 +1,8 @@
 package com.bayoumi.controllers.settings;
 
 import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.load.Locations;
@@ -56,6 +58,7 @@ public class SettingsController implements Initializable {
     @FXML
     private void openAzkarSettings() {
         try {
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_AZKAR_OPENED);
             if (!azkarButton.equals(selectedButton)) {
                 toggle(azkarButton);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.AzkarSettings.toString()));
@@ -70,6 +73,7 @@ public class SettingsController implements Initializable {
     @FXML
     private void openCitySettings() {
         try {
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_PRAYERS_OPENED);
             if (!cityButton.equals(selectedButton)) {
                 toggle(cityButton);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.PrayerTimeSettings.toString()));
@@ -84,6 +88,7 @@ public class SettingsController implements Initializable {
     @FXML
     private void openOtherSettings() {
         try {
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_OTHER_OPENED);
             if (!otherButton.equals(selectedButton)) {
                 toggle(otherButton);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.OtherSettings.toString()));

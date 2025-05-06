@@ -1,6 +1,6 @@
 package com.bayoumi.models.settings;
 
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.PreferencesType;
 
 import java.util.Locale;
 import java.util.Observable;

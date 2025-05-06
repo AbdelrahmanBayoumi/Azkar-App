@@ -1,0 +1,639 @@
+@font-face {
+    font-family: "Tajawal-Medium";
+    src: url("../fonts/Tajawal/Tajawal-Medium.ttf");
+}
+
+@font-face {
+    font-family: "Tajawal-Bold";
+    src: url("../fonts/Tajawal/Tajawal-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Tajawal-Regular";
+    src: url("../fonts/Tajawal/Tajawal-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Noto Naskh Arabic";
+    src: url("../fonts/NotoNaskhArabic-Bold.ttf");
+}
+
+* {
+    -fx-bold-font-family: Tajawal-Bold;
+    -fx-medium-font-family: "Tajawal-Medium";
+}
+.root {
+    -fx-background-color: -fx-bg;
+}
+
+/* ============ text ============ */
+Text {
+    -fx-fill: -fx-primary-text;
+}
+.label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+
+.clickable-label {
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-color: transparent;
+    -fx-padding: 7px;
+    -fx-background-radius: 15px;
+}
+
+.clickable-label:hover {
+    -fx-text-fill: -fx-dark-text;
+    -fx-background-color: -fx-third-light;
+}
+
+/* ============ icons ============ */
+.glyph-icon {
+    -fx-fill: -fx-primary-text;
+}
+
+/* ============ button ============ */
+.button {
+    -fx-background-color: -fx-primary-button;
+    -fx-background-radius: 20;
+    -fx-text-fill: -fx-primary-button-text;
+    -fx-cursor: hand;
+}
+
+.button .glyph-icon {
+    -fx-fill: -fx-primary-button-text;
+}
+
+.button:hover {
+    -fx-background-color: -fx-primary-button-hover;
+}
+
+.frequency-btn {
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-color: transparent;
+}
+
+.frequency-btn:hover {
+    -fx-text-fill: -fx-dark-text;
+    -fx-background-color: -fx-third-light;
+}
+
+.frequency-btn:hover .glyph-icon {
+    -fx-fill: -fx-dark-text;
+}
+
+.frequency-btn-selected {
+    -fx-text-fill: -fx-dark-text;
+    -fx-background-color: -fx-third-light;
+}
+
+.frequency-btn-selected:hover {
+    -fx-text-fill: -fx-dark-text;
+    -fx-background-color: -fx-third-light;
+}
+
+.transparent-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-text-fill: -fx-primary-text;
+}
+
+.transparent-button .glyph-icon {
+    -fx-fill: -fx-primary-text;
+}
+
+.transparent-button:hover {
+    -fx-background-color: transparent;
+}
+
+.close-button {
+    -fx-background-color: linear-gradient(red, -fx-red);
+}
+
+.close-button:hover {
+    -fx-background-color: derive(-fx-red, -20%);
+}
+
+.confirm-button {
+    -fx-background-color: linear-gradient(green, darkgreen);
+}
+
+.confirm-button:hover {
+    -fx-background-color: derive(green, -20%);
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(-fx-primary-light, -fx-primary);
+    -fx-text-fill: -fx-light-text;
+}
+
+.primary-button .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+.primary-button:hover {
+    -fx-background-color: derive(-fx-primary, -10%);
+}
+
+.secondary-button {
+    -fx-background-color: linear-gradient(-fx-secondary, -fx-secondary-hover);
+    -fx-text-fill: -fx-light-text;
+}
+
+.secondary-button .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+.secondary-button:hover {
+    -fx-background-color: derive(-fx-secondary, -50%);
+}
+
+.secondary-button-outline {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-secondary;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-text-fill: -fx-secondary;
+}
+
+.secondary-button-outline:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.secondary-button-outline .glyph-icon {
+    -fx-fill: -fx-secondary;
+}
+
+.secondary-button-outline:hover .glyph-icon {
+    -fx-fill: -fx-secondary-text;
+}
+
+.gray-button {
+    -fx-background-color: linear-gradient(-fx-gray, gray);
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.gray-button:hover {
+    -fx-background-color: gray;
+    -fx-text-fill: -fx-primary-button-text;
+}
+
+.gray-button .glyph-icon {
+    -fx-fill: -fx-secondary-text;
+}
+
+.gray-button:hover .glyph-icon {
+    -fx-fill: -fx-primary-button-text;
+}
+
+.next-zekr-button {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-secondary-text;
+}
+
+.next-zekr-button:hover {
+    -fx-background-color: -fx-secondary-hover;
+}
+
+.box-normal {
+    -fx-background-color: -fx-secondary-text;
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-radius: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+}
+
+.box-normal .glyph-icon {
+    -fx-fill: -fx-primary-text;
+}
+
+.box-normal:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-text-fill: -fx-light-text;
+    -fx-background-radius: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+}
+
+.box-normal:hover .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+/* ============ check-box ============ */
+.check-box {
+    -jfx-checked-color: -fx-secondary;
+    -jfx-unchecked-color: -fx-reverse-secondary;
+    -fx-text-fill: -fx-primary-text;
+}
+
+/* ============ radio-button ============ */
+.radio-button {
+    -fx-text-fill: -fx-primary-text;
+    -jfx-selected-color: -fx-primary-text;
+    -jfx-unselected-color: -fx-primary-text;
+    -fx-font-size: 20;
+}
+
+.radio-button:selected {
+    -fx-font-size: 16;
+}
+
+.radio-button:hover {
+    -fx-font-size: 16;
+}
+
+/* ============ combo-box ============ */
+.combo-box {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.combo-box .list-cell {
+    -fx-alignment: CENTER;
+}
+
+.combo-box .list-cell:selected:empty {
+    -fx-alignment: CENTER;
+}
+
+.combo-box .list-cell:selected {
+    -fx-alignment: CENTER;
+}
+.combo-box > .list-cell {
+    -fx-text-fill: -fx-primary-text;
+}
+.combo-box-normal {
+    -fx-text-fill: -fx-primary-text;
+    -jfx-focus-color: -fx-primary-text;
+    -jfx-unfocus-color: -fx-primary-text;
+    -fx-text-inner-color: -fx-primary-text;
+    -fx-prompt-text-fill: -fx-primary-text;
+}
+
+/* ============ TextField ============ */
+.text-field-normal {
+    -jfx-focus-color: -fx-primary-text;
+    -jfx-unfocus-color: -fx-primary-text;
+    -fx-prompt-text-fill: derive(-fx-primary-text, 90%);
+    -fx-text-fill: -fx-primary-text;
+    -fx-font-size: 17;
+}
+.jfx-text-field .error-label {
+    -fx-text-fill: -fx-red;
+}
+
+/* ============ TextArea ============ */
+.text-area {
+    -fx-background-insets: 0;
+    -fx-background-color: -fx-secondary-text;
+}
+
+.text-area .viewport {
+    -fx-background-color: -fx-secondary-text;
+}
+.text-area .content {
+    -fx-background-color: -fx-secondary-text;
+}
+
+/* ============ Table ============ */
+.table {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+    -fx-font-size: 17px;
+}
+
+.table .column-header-background {
+    -fx-border-width: 1;
+}
+
+.table .column-header,
+.table .column-header-background .filler {
+    -fx-border-width: 1;
+}
+
+.table .table-column {
+    -fx-alignment: center;
+}
+
+.table .column-header .label {
+    -fx-text-fill: black;
+    -fx-font-weight: normal;
+    -fx-alignment: CENTER;
+    -fx-font-family: "Tajawal-Bold";
+}
+
+.tree-table-row-cell {
+    -fx-border-style: solid;
+    -fx-border-width: 0.25;
+    -fx-font: normal 20px "Tajawal-Medium";
+}
+
+.tree-table-row-cell .tree-table-cell {
+    -fx-text-fill: -fx-primary-text;
+}
+
+.tree-table-row-cell:even {
+    -fx-background-color: -fx-even-table;
+}
+
+.tree-table-row-cell:odd {
+    -fx-background-color: -fx-odd-table;
+}
+
+.tree-table-row-cell:hover {
+    -fx-font-size: 20px;
+    -fx-background-color: -fx-hover-table;
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+}
+
+.table-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.table-btn .glyph-icon {
+    -fx-fill: -fx-reverse-secondary;
+    -fx-font-family: "FontAwesome";
+    -fx-font-size: 20px;
+}
+
+.table-btn:hover {
+    -fx-background-color: transparent;
+}
+
+/* ============ Scroll Pane ============ */
+.scroll-pane {
+    -fx-background-color: -fx-bg;
+}
+
+.scroll-bar:vertical > .track-background,
+.scroll-bar:horizontal > .track-background {
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
+}
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.15em 0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0 0.15em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-thumb-bg;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -fx-thumb-bg-hover;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+/* ============ Prayer Times ============ */
+.prayer-view .box-prayer {
+    -fx-border-color: gray;
+    -fx-border-width: 0 0 1 0;
+}
+
+.box-prayer-selected {
+    -fx-background-color: -fx-secondary;
+    -fx-background-radius: 0;
+}
+
+.box-prayer-selected .label {
+    -fx-text-fill: -fx-light-text;
+    -fx-font-size: 27;
+}
+
+/* ============ Progress Bar ============ */
+.progress-bar .bar {
+    -fx-padding: 4px;
+    -fx-background-insets: 0;
+}
+
+/*==== SLIDER ====*/
+.progress-slider .track {
+    /* Hide the track */
+    -fx-background-color: null;
+}
+
+.slider .track {
+    /* Hide the track */
+    -fx-background-color: null;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2.5, 2.5, 1.5;
+    -fx-padding: 0.208333em;
+    -fx-background-insets: 0;
+}
+
+.jfx-slider > .track {
+    /* -fx-background-color: -fx-primary; */
+    -fx-background-color: -fx-secondary;
+}
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: -fx-secondary;
+    -fx-background-color: -fx-primary;
+}
+
+.white-box {
+    -fx-background-color: -fx-secondary-text;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 20, 0, 0, 0);
+    -fx-background-radius: 30;
+}
+
+.white-box > .label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+.green-box{
+    -fx-background-color: #F0FDF4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 20, 0, 0, 0);
+}
+.green-box .label {
+    -fx-text-fill: green;
+}
+.green-box .glyph-icon {
+    -fx-fill: green;
+}
+
+/* == Alert == */
+.dialog-pane > .content.label {
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-font-family: "Tajawal-Bold";
+    -fx-font-size: 16;
+}
+
+.dialog-pane .button {
+    -fx-font-size: 15;
+}
+
+.pop-over-label {
+    -fx-padding: 10;
+    -fx-background-color: -fx-third-light;
+    -fx-text-fill: -fx-dark-text;
+    -fx-font-family: "Tajawal-Bold";
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+    -fx-max-width: 400;
+}
+/* ============ Spinner ============ */
+.spinner {
+    -fx-background-color: -fx-secondary-light;
+    -fx-padding: 1;
+    -fx-background-radius: 3 5 5 3;
+}
+
+/* Style the text field within the spinner */
+.spinner .text-field {
+    -fx-background-color: derive(-fx-secondary-text, 20%);
+    -fx-text-fill: -fx-primary-text;
+    -fx-background-radius: 2;
+}
+
+.spinner .increment-arrow-button {
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 0 4 0 0;
+}
+
+.spinner .decrement-arrow-button {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-primary-light;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-radius: 0 0 4 0;
+}
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: #ffffff;
+}
+/* ==== Progress Indicator ==== */
+ProgressIndicator .spinner {
+    -fx-background-color: transparent;
+}
+
+/* ==== Zekr ==== */
+.zekr-text {
+    -fx-font-family: "Noto Naskh Arabic";
+    -fx-font-weight: BOLD;
+    -fx-text-alignment: center;
+}
+
+.zekr-progress > .track {
+    -fx-background-color: white;
+}
+
+.zekr-progress > .bar {
+    -fx-background-radius: 30;
+    -fx-background-color: -fx-primary-light;
+}
+
+/* === fonts === */
+.font-text-bold {
+    -fx-font-family: "Tajawal-Bold";
+}
+
+.font-text-medium {
+    -fx-font-family: "Tajawal-Medium";
+}
+
+/* === fonts-sizes === */
+.normal-font-weight {
+    -fx-font-weight: normal;
+}
+
+.bold-font-weight {
+    -fx-font-weight: bold;
+}
+
+._13 {
+    -fx-font-size: 13;
+}
+._15 {
+    -fx-font-size: 15;
+}
+
+._16 {
+    -fx-font-size: 16;
+}
+
+._17 {
+    -fx-font-size: 17;
+}
+
+._18 {
+    -fx-font-size: 18;
+}
+
+._19 {
+    -fx-font-size: 19;
+}
+
+._20 {
+    -fx-font-size: 20;
+}
+
+._21 {
+    -fx-font-size: 21;
+}
+
+._22 {
+    -fx-font-size: 22;
+}
+
+._23 {
+    -fx-font-size: 23;
+}
+
+._24 {
+    -fx-font-size: 24;
+}
+
+._25 {
+    -fx-font-size: 25;
+}

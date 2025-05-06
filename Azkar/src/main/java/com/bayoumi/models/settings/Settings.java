@@ -1,8 +1,8 @@
 package com.bayoumi.models.settings;
 
-import com.bayoumi.models.preferences.Preferences;
-import com.bayoumi.models.preferences.PreferencesObservable;
-import com.bayoumi.models.preferences.PreferencesType;
+import com.bayoumi.storage.preferences.Preferences;
+import com.bayoumi.storage.preferences.PreferencesObservable;
+import com.bayoumi.storage.preferences.PreferencesType;
 
 import java.util.AbstractMap.SimpleEntry;
 
@@ -29,6 +29,7 @@ public class Settings extends PreferencesObservable {
     private final SimpleEntry<PreferencesType, Boolean> minimized;
     private final SimpleEntry<PreferencesType, Language> language;
     private final SimpleEntry<PreferencesType, Integer> hijriOffset;
+    private final SimpleEntry<PreferencesType, Boolean> sendUsageData;
 
 
     private Settings() {
@@ -41,6 +42,7 @@ public class Settings extends PreferencesObservable {
         minimized = new SimpleEntry<>(PreferencesType.MINIMIZED, Boolean.valueOf(PreferencesType.MINIMIZED.getDefaultValue()));
         language = new SimpleEntry<>(PreferencesType.LANGUAGE, Language.get(PreferencesType.LANGUAGE.getDefaultValue()));
         hijriOffset = new SimpleEntry<>(PreferencesType.HIJRI_OFFSET, Integer.valueOf(PreferencesType.HIJRI_OFFSET.getDefaultValue()));
+        sendUsageData = new SimpleEntry<>(PreferencesType.SEND_USAGE_DATA, Boolean.valueOf(PreferencesType.SEND_USAGE_DATA.getDefaultValue()));
 
         loadSettings();
     }
@@ -52,6 +54,20 @@ public class Settings extends PreferencesObservable {
         minimized.setValue(Preferences.getInstance().getBoolean(minimized.getKey()));
         language.setValue(Language.get(Preferences.getInstance().get(language.getKey())));
         hijriOffset.setValue(Preferences.getInstance().getInt(hijriOffset.getKey()));
+        sendUsageData.setValue(Preferences.getInstance().getBoolean(sendUsageData.getKey()));
+    }
+
+    public boolean getSendUsageData() {
+        return sendUsageData.getValue();
+    }
+
+    public void setSendUsageData(boolean value) {
+        // 1. set value to local variable
+        sendUsageData.setValue(value);
+        // 2. save value to DB
+        Preferences.getInstance().set(sendUsageData.getKey(), value + "");
+        // 3. notify observers
+        notifyObservers(sendUsageData.getKey(), value);
     }
 
     public int getHijriOffset() {
@@ -118,6 +134,14 @@ public class Settings extends PreferencesObservable {
         // 3. notify observers
         notifyObservers(nightMode.getKey(), value);
     }
+
+    public String[] getThemeFilesCSS() {
+        return new String[]{
+                "/com/bayoumi/css/base.css",
+                getNightMode() ? "/com/bayoumi/css/dark-theme.css" : "/com/bayoumi/css/light-theme.css"
+        };
+    }
+
 
     public boolean getAutomaticCheckForUpdates() {
         return automaticCheckForUpdates.getValue();

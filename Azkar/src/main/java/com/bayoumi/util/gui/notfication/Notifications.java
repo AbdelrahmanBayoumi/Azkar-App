@@ -26,11 +26,13 @@
  */
 package com.bayoumi.util.gui.notfication;
 
+import com.bayoumi.models.settings.NotificationColor;
+import com.bayoumi.services.azkar.AzkarService;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.gui.ClickHandlerAndIgnoreDrag;
-import com.bayoumi.util.services.azkar.AzkarService;
 import impl.org.controlsfx.skin.NotificationBar;
 import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -106,7 +108,8 @@ public class Notifications {
 
     private String title;
     private String text;
-    private String borderColor = "#E9C46A";
+    private String borderColor = NotificationColor.LIGHT_THEME.getBorderColor();
+    private String backgroundColor = NotificationColor.LIGHT_THEME.getBackgroundColor();
     private Node graphic;
     private ObservableList<Action> actions = FXCollections.observableArrayList();
     private Pos position = Pos.BOTTOM_RIGHT;
@@ -157,6 +160,15 @@ public class Notifications {
         this.borderColor = borderColor;
         return this;
     }
+
+    /**
+     * Specify the background color of the notification.
+     */
+    public Notifications backgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
 
     /**
      * Specify the title to show in the notification.
@@ -370,7 +382,8 @@ public class Notifications {
                 if (window == null) {
                     window = AzkarService.FAKE_STAGE;
                     if (window == null) {
-                        Sentry.captureException(new IllegalStateException("Could not find a valid owner window for the notification"));
+                        // TODO: Fix usage of FAKE_STAGE
+                        Sentry.captureMessage("Could not find a valid owner window for the notification", SentryLevel.WARNING);
                         AzkarService.FAKE_STAGE = new Stage(StageStyle.UTILITY);
                         AzkarService.FAKE_STAGE.setOpacity(0);
                         AzkarService.FAKE_STAGE.show();
@@ -619,7 +632,7 @@ public class Notifications {
 
             isShowing = true;
             if (notificationBar.getGraphic() != null && notificationBar.getGraphic().getParent() != null && notificationBar.getGraphic().getParent().getParent() != null) {
-                notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";");
+                notificationBar.getGraphic().getParent().getParent().setStyle("-fx-border-color:" + notificationToShow.borderColor + ";-fx-background-color:" + notificationToShow.backgroundColor + ";");
             }
             notificationBar.doShow();
 

@@ -1,20 +1,26 @@
 package com.bayoumi.models;
 
 import com.bayoumi.util.Constants;
+import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.FileUtils;
 import javafx.util.StringConverter;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Muezzin {
-    public final static String PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
-
     private final String fileName;
     private final String englishName;
     private final String arabicName;
 
-    // Static instances (replacing enum constants)
+    // Static instances
     public static final Muezzin ABDULBASIT_ABDUSAMAD = new Muezzin("Abdulbasit Abdusamad", "عبد الباسط عبد الصمد", "adhan-abdulbasit-abdusamad.mp3");
     public static final Muezzin ABUL_AINAIN_SHUAISHA = new Muezzin("Abul Ainain Shuaisha", "أبو العنين شعيشع", "adhan-abul-ainain-shuaisha.mp3");
     public static final Muezzin ALI_IBN_AHMAD_MALA = new Muezzin("Ali Ibn Ahmad Mala", "علي بن أحمد ملا", "adhan-ali-ibn-ahmad-mala.mp3");
@@ -39,6 +45,52 @@ public class Muezzin {
         values.add(NO_SOUND);
         VALUES = Collections.unmodifiableList(values);
     }
+
+    public static String PARENT_PATH = "jarFiles/audio/adhan/";
+
+    static {
+        if (Constants.isAssetsPathChanged) {
+            PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
+            try {
+                Muezzin.copyAdhanFilesToAssetsPath();
+            } catch (IOException e) {
+                Logger.error(e.getLocalizedMessage(), e, Muezzin.class.getName() + ".copyAdhanFilesToAssetsPath()");
+            }
+        }
+    }
+
+    private static void copyAdhanFilesToAssetsPath() throws IOException {
+        for (Muezzin muezzin : VALUES) {
+            if (muezzin.equals(NO_SOUND)) continue;
+            final Path from = Paths.get("jarFiles/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
+            final Path to = Paths.get(Constants.assetsPath + "/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
+            if (from.equals(to)) {
+                Logger.debug("[Muezzin] Skipping from: " + from + " to: " + to);
+                break;
+            }
+            Logger.debug("[Muezzin] Copying from: " + from + " to: " + to);
+            FileUtils.copyIfNotExist(from, to);
+        }
+    }
+
+    public static List<Muezzin> getAdhanList() {
+        // Index Muezzin instances by fileName for quick lookup
+        Map<String, Muezzin> muezzinMap = values().stream()
+                .collect(Collectors.toMap(Muezzin::getFileName, muezzin -> muezzin));
+
+        // Build the list of Muezzin objects
+        return getAdhanFilesNames().stream()
+                .map(fileName -> muezzinMap.getOrDefault(fileName, new Muezzin(FileUtils.removeExtension(fileName), FileUtils.removeExtension(fileName), fileName)))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getAdhanFilesNames() {
+        List<String> audioFiles = new ArrayList<>();
+        FileUtils.addFilesNameToList(new File(PARENT_PATH), audioFiles);
+        return audioFiles;
+    }
+
+    // =========================================================================
 
     public Muezzin(String englishName, String arabicName, String fileName) {
         this.fileName = fileName;
@@ -66,8 +118,8 @@ public class Muezzin {
         return VALUES;
     }
 
-    public static Muezzin getFromFileName(List<Muezzin> seatchList, String fileName) {
-        for (Muezzin muezzin : seatchList) {
+    public static Muezzin getFromFileName(List<Muezzin> muezzinList, String fileName) {
+        for (Muezzin muezzin : muezzinList) {
             if (fileName.equals(muezzin.getFileName())) {
                 return muezzin;
             }

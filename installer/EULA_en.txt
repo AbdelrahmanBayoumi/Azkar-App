@@ -1,0 +1,82 @@
+Azkar Desktop – End-User License Agreement (EULA)
+
+IMPORTANT: Please read this agreement carefully before using the Azkar Desktop application. By continuing to install or use this software, you confirm your full acceptance of this agreement, the Privacy Policy, and the Terms of Use.
+
+1. License and Open-Source Terms
+The source code of Azkar Desktop is released under the MIT License. This means you are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the source code, as long as you include the original MIT license notice and attribution.
+
+However, this license only applies to the source code. The following assets are excluded and remain the property of the original developer:
+
+* The application name and branding
+* Visual identity elements (logo, icons, design)
+* Precompiled installer files (EXE, JAR, ZIP, etc.)
+
+You may not use the app’s name, logos, audio, or compiled distributions in your own software or commercial offerings without explicit written permission from the original developer.
+
+2. Permitted Use
+You may use the Azkar Desktop app for your own personal, non-commercial purposes.
+
+You may:
+
+* Use the app to receive Azkar notifications and prayer times
+* Customize settings and behavior within the app
+* Modify the source code for educational, research, or open-source purposes in line with the MIT License
+
+You may not:
+
+* Sell or redistribute the application or a modified version as a commercial product
+* Package or distribute the software as a closed-source application without open attribution
+* Use the software in a harmful, illegal, or abusive manner
+* Remove credit to the original developer
+
+3. Data Collection and Privacy
+Azkar Desktop collects limited, anonymous technical data to help improve performance, stability, and overall user experience. This includes:
+
+* Operating system version (e.g., Windows 10)
+* Application version and architecture (e.g., amd64)
+* Preferences you selected in the app (language, audio file, location, time format, etc.)
+* A randomly generated UUID (anonymous device identifier)
+
+This data is:
+
+* Sent securely to a private analytics server maintained by the developer
+* Used only to detect bugs, track usage trends, and improve future versions
+* Never shared with third parties
+* Never linked to your name, email, or any personal information
+
+You may disable data collection at any time from the following location:
+Settings → “Share Usage Data” → OFF
+
+For full privacy details, open the following pages in your browser:
+
+Usage Data: https://azkar-site.web.app/desktop/usage-data/
+Privacy Policy: https://azkar-site.web.app/policies/privacy-policy/
+Terms of Use: https://azkar-site.web.app/policies/terms-of-use/
+
+4. Disclaimer of Warranty
+Azkar Desktop is provided “AS IS” without any warranty of any kind — express or implied. The developer makes no guarantees regarding the app’s fitness for a particular purpose, correctness, uninterrupted operation, or that it will be free of defects.
+
+You agree to use the app at your own risk. The developer shall not be liable for any damages, including but not limited to:
+
+* Data loss
+* Application crashes
+* Operating system interference
+
+5. Updates and Feature Changes
+Features in the app may change over time. Updates may add, remove, or modify functionality. All updates are optional and require your confirmation before installation.
+
+By using an updated version, you accept any updated terms or notices included in that release.
+
+6. Contact and Support
+If you have any questions about this agreement or need clarification, you may contact the developer at:
+
+Email: azkar.application@gmail.com
+Website: https://azkar-site.web.app
+
+7. Final Acceptance
+By clicking “I Agree” or continuing installation, you confirm that you:
+
+* Understand and accept the terms above
+* Acknowledge the open-source license applies to code only
+* Agree to use the software in accordance with all applicable laws
+* Have read and agree to the Privacy Policy and Terms of Use

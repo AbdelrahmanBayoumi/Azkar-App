@@ -3,9 +3,11 @@ package com.bayoumi.controllers.settings.azkar;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.azkar.AbsoluteZekr;
 import com.bayoumi.models.settings.*;
+import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.statistics.StatisticsType;
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.*;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
@@ -74,7 +76,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private JFXSlider volumeSlider;
     @FXML
-    private HBox volumeBox;
+    private HBox volumeBox, azkarDurationBox;
     @FXML
     private JFXToggleButton morningAzkarTimeToggle, nightAzkarTimeToggle;
     @FXML
@@ -92,7 +94,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         highFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.high")));
         midFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.mid")));
         lowFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.low")));
-        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rear")));
+        rearFrequency.setText(Utility.toUTF(bundle.getString("azkar.period.rare")));
         zakrAppearEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zakrAppearEvery")) + ":");
         zekrDurationEvery.setText(Utility.toUTF(bundle.getString("settings.azkar.zekrDurationEvery")) + ":");
         stopAzkar.setText(Utility.toUTF(bundle.getString("settings.azkar.stopTheAutomaticAppearanceOfAzkar")));
@@ -119,13 +121,14 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         updateBundle(LanguageBundle.getInstance().getResourceBundle());
 
         playIcon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
-        playIcon.setStyle("-fx-fill: -fx-secondary;");
+        playIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
         playIcon.setGlyphSize(30);
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
-        pauseIcon.setStyle("-fx-fill: -fx-secondary;");
+        pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
 
         periodBox.disableProperty().bind(stopAzkar.selectedProperty());
+        azkarDurationBox.disableProperty().bind(stopAzkar.selectedProperty());
         // init Spinner Values
         IntegerSpinner.init(azkarPeriod);
         IntegerSpinner.init(azkarPeriod_hour);
@@ -143,7 +146,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         // init Saved data form DB
         azkarSettings = Settings.getInstance().getAzkarSettings();
         azkarAlarmComboBox.setValue(azkarSettings.getAudioName());
-        azkarAlarmComboBox.setItems(FileUtils.getAudioList());
+        azkarAlarmComboBox.setItems(NotificationAudio.getAudioList());
         playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
         azkarAlarmComboBox.setOnAction(event -> {
             playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
@@ -205,7 +208,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         currentFrequency = highFrequency;
         currentFrequency.getStyleClass().add("frequency-btn-selected");
 
-        ScrollHandler.init(root, scrollPane, 1);
+        ScrollHandler.init(root, scrollPane, 3);
     }
 
     @FXML
@@ -220,10 +223,10 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             Logger.debug(fileName);
             if (!fileName.equals("بدون صوت")) {
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File("jarFiles/audio/" + fileName).toURI().toString()));
+                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(Constants.assetsPath + "/audio/" + fileName).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
-                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
                 MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);
@@ -299,19 +302,23 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     @FXML
     private void goToNotificationColor() {
         try {
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_NOTIFICATION_COLORS_OPENED);
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.ChooseNotificationColor);
             ((ChooseNotificationColorController) popUp.getController()).setData();
             popUp.showAndWait();
         } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".goToAzkar()");
+            Logger.error(null, e, getClass().getName() + ".goToNotificationColor()");
         }
     }
 
     @FXML
     private void goToAzkar() {
         try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString())))));
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_AZKAR_DB_OPENED);
+            final Stage stage = new Stage();
+            final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.AbsoluteAzkar.toString()))));
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            stage.setScene(scene);
             HelperMethods.SetIcon(stage);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();

@@ -4,6 +4,8 @@ import com.bayoumi.models.azkar.TimedZekrDTO;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.statistics.StatisticsService;
+import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
@@ -267,6 +269,7 @@ public class TimedAzkarController implements Initializable {
     @FXML
     private void openSettings() {
         try {
+            StatisticsService.getInstance().increment(StatisticsType.SETTINGS_TIMED_AZKAR_OPENED);
             final FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.TimedAzkar_Settings.toString()));
             final JFXDialog dialog = new JFXDialog(sp, loader.load(), JFXDialog.DialogTransition.TOP);
             ((SettingsController) loader.getController()).setData(dialog, this::updateFontSize);
@@ -316,7 +319,7 @@ public class TimedAzkarController implements Initializable {
                 if (FileDownloader.downloadFile(audioPath, audioFile)) {
                     Platform.runLater(() -> playMedia(audioFile));
                 } else {
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl")));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), bundle));
                 }
                 Platform.runLater(() -> progressBox.setVisible(false));
             }).start();
@@ -342,13 +345,18 @@ public class TimedAzkarController implements Initializable {
             mediaPlayer = new MediaPlayer(new Media(audioFile.toURI().toString()));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".playMedia()");
-            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), Utility.toUTF(bundle.getString("dir")).equals("rtl"));
+            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
             return;
         }
         mediaPlayer.setVolume(100);
         mediaPlayer.play();
         mediaPlayer.setOnReady(() -> Logger.debug("Media is ready to play."));
-        mediaPlayer.setOnPlaying(() -> Logger.debug("Media is playing."));
+        mediaPlayer.setOnPlaying(() -> {
+            Logger.debug("Media is playing.");
+            if (isWindowClosed()) {
+                pauseOrStopMedia(audioFile);
+            }
+        });
         mediaPlayer.setOnPaused(() -> pauseOrStopMedia(audioFile));
         mediaPlayer.setOnStopped(() -> pauseOrStopMedia(audioFile));
         mediaPlayer.setOnEndOfMedia(() -> pauseOrStopMedia(audioFile));
@@ -368,4 +376,7 @@ public class TimedAzkarController implements Initializable {
         return mediaPlayer != null && mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
     }
 
+    private boolean isWindowClosed() {
+        return !progressBox.getScene().getWindow().isShowing();
+    }
 }

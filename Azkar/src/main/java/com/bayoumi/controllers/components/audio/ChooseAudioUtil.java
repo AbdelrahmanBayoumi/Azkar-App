@@ -5,7 +5,7 @@ import com.bayoumi.models.Muezzin;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
-import com.bayoumi.util.file.FileUtils;
+import com.bayoumi.util.gui.load.Locations;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 
@@ -16,9 +16,9 @@ public class ChooseAudioUtil {
 
     public static ChooseAudioController adhan(ResourceBundle bundle, Pane container) {
         try {
-            List<Muezzin> muezzinList = FileUtils.getAdhanList();
-            FXMLLoader loader = new FXMLLoader(ChooseAudioUtil.class.getResource("/com/bayoumi/views/components/ChooseAudio.fxml"));
-            container.getChildren().add(loader.load());
+            List<Muezzin> muezzinList = Muezzin.getAdhanList();
+            FXMLLoader loader = new FXMLLoader(ChooseAudioUtil.class.getResource(Locations.ChooseAudio.getName()));
+            container.getChildren().add(1, loader.load());
             ChooseAudioController chooseAudioController = loader.getController();
             chooseAudioController.setData(Utility.toUTF(bundle.getString("muezzin")),
                     Muezzin.getFromFileName(muezzinList, Settings.getInstance().getPrayerTimeSettings().getAdhanAudio()),
@@ -26,7 +26,7 @@ public class ChooseAudioUtil {
 
             return chooseAudioController;
         } catch (Exception ex) {
-            Logger.error("loading ChooseAudio", ex, ChooseAudioUtil.class.getName() + ".adhan()");
+            Logger.error("Loading ChooseAudio", ex, ChooseAudioUtil.class.getName() + ".adhan()");
             Launcher.workFine.setValue(false);
         }
         return null;

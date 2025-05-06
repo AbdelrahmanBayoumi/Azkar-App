@@ -1,31 +1,33 @@
 package com.bayoumi.controllers.settings.other;
 
+import com.bayoumi.Launcher;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
+import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.services.update.UpdateHandler;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
-import com.bayoumi.util.gui.PopOverUtil;
+import com.bayoumi.util.gui.ScrollHandler;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
-import com.bayoumi.util.update.UpdateHandler;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXToggleButton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -40,19 +42,21 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private ComboBox<Language> languageComboBox;
     @FXML
-    private JFXCheckBox minimizeAtStart, format24, darkTheme, autoUpdateCheckBox;
+    private JFXCheckBox autoUpdateCheckBox, usageDataCheckBox;
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private Label hijriDateLabel, version, adjustingTheHijriDateText, languageText;
+    private Label minimizeAtStart, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel,
+            versionNumberLabel, website, termsOfUse, privacyPolicy, shareLabel;
     @FXML
-    private VBox loadingBox;
-    @FXML
-    private Text adjustingTheHijriDateNote;
+    private VBox scrollChild, loadingBox;
     @FXML
     private Button checkForUpdateButton, forProblemsAndSuggestionsButton;
     @FXML
-    private StackPane root;
+    private ScrollPane scrollPane;
+    @FXML
+    private JFXToggleButton minimizeAtStartToggle, format24Toggle, darkThemeToggle;
+
 
     public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
@@ -65,18 +69,29 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         checkForUpdateButton.setText(Utility.toUTF(bundle.getString("checkForUpdate")));
         forProblemsAndSuggestionsButton.setText(Utility.toUTF(bundle.getString("forProblemsAndSuggestions")));
         autoUpdateCheckBox.setText(Utility.toUTF(bundle.getString("checkForUpdatesAutomatically")));
+        usageDataCheckBox.setText(Utility.toUTF(bundle.getString("usageDataCheckBox")));
+        usageStatsLabel.setText(Utility.toUTF(bundle.getString("usageStats")));
+        versionNumberLabel.setText(Utility.toUTF(bundle.getString("versionNumber")));
+        website.setText(Utility.toUTF(bundle.getString("website")));
+        termsOfUse.setText(Utility.toUTF(bundle.getString("termsOfUse")));
+        privacyPolicy.setText(Utility.toUTF(bundle.getString("privacyPolicy")));
+        shareLabel.setText(Utility.toUTF(bundle.getString("shareLabel")));
+
         if (hijriDateOffset.getValue() != null) {
             hijriDateLabel.setText(new HijriDate(hijriDateOffset.getValue()).getString(this.bundle.getLocale().toString()));
         }
+
+        toggleAction(format24Toggle);
+        toggleAction(minimizeAtStartToggle);
+        toggleAction(darkThemeToggle);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            updateBundle(LanguageBundle.getInstance().getResourceBundle());
-            LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
-
+            ScrollHandler.init(scrollChild, scrollPane, 4);
             final Settings settings = Settings.getInstance();
+
 
             hijriDateLabel.setText(new HijriDate(settings.getHijriOffset()).getString(settings.getLanguage().getLocale()));
             hijriDateOffset.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-20, 20, 0));
@@ -89,28 +104,73 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             languageComboBox.setItems(FXCollections.observableArrayList(Language.values()));
             languageComboBox.setValue(settings.getLanguage());
 
-            format24.setSelected(settings.getEnable24Format());
-
-            minimizeAtStart.setSelected(settings.getMinimized());
-
-            darkTheme.setSelected(settings.getNightMode());
-            PopOverUtil.setPopOverAndDisable(darkTheme, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("underDevelopment")));
+            format24Toggle.setSelected(settings.getEnable24Format());
+            minimizeAtStartToggle.setSelected(settings.getMinimized());
+            darkThemeToggle.setSelected(settings.getNightMode());
 
             version.setText(Constants.VERSION);
 
             autoUpdateCheckBox.setSelected(settings.getAutomaticCheckForUpdates());
+            usageDataCheckBox.setSelected(settings.getSendUsageData());
+
+            updateBundle(LanguageBundle.getInstance().getResourceBundle());
+            LanguageBundle.getInstance().addObserver((o, arg) -> updateBundle(LanguageBundle.getInstance().getResourceBundle()));
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".initialize()");
         }
     }
 
+    private void openLink(String link, String methodName) {
+        try {
+            Desktop.getDesktop().browse(new URI(link));
+        } catch (Exception e) {
+            Logger.error(null, e, getClass().getName() + "." + methodName + "()");
+        }
+    }
+
+    @FXML
+    private void openGitHub() {
+        openLink("https://github.com/AbdelrahmanBayoumi/Azkar-App/", "openGtiHub");
+    }
+
+    @FXML
+    private void openFacebook() {
+        openLink("http://fb.com/azkar.application", "openFacebook");
+    }
+
+    @FXML
+    private void openInstagram() {
+        openLink("http://instagram.com/azkar.application", "openInstagram");
+    }
+
+    @FXML
+    private void openX() {
+        openLink("https://x.com/AzkarSoftware", "openGtiHub");
+    }
+
     @FXML
     private void openWebsite() {
+        openLink("https://azkar-site.web.app/", "openWebsite");
+    }
+
+    @FXML
+    private void openUsageDataSite() {
+        openLink("https://azkar-site.web.app/desktop/usage-data/", "openUsageDataSite");
         try {
-            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/"));
+            Desktop.getDesktop().browse(new URI("https://azkar-site.web.app/desktop/usage-data/"));
         } catch (Exception e) {
-            Logger.error(null, e, getClass().getName() + ".openWebsite()");
+            Logger.error(null, e, getClass().getName() + ".openUsageDataSite()");
         }
+    }
+
+    @FXML
+    private void onTermsOfUseClick() {
+        openLink("https://azkar-site.web.app/policies/terms-of-use/", "onTermsOfUseClick");
+    }
+
+    @FXML
+    private void onPrivacyPolicyClicked() {
+        openLink("https://azkar-site.web.app/policies/privacy-policy/", "onPrivacyPolicyClicked");
     }
 
     @Override
@@ -120,10 +180,11 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private void openFeedback() {
         try {
-            final Stage stage = BuilderUI.initStageDecorated(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Feedback.toString())))), "");
+            final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Locations.Feedback.toString()))));
+            scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            final Stage stage = BuilderUI.initStageDecorated(scene, "");
             HelperMethods.ExitKeyCodeCombination(stage.getScene(), stage);
-            stage.show();
-            ((Stage) version.getScene().getWindow()).close();
+            stage.showAndWait();
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".openFeedback()");
         }
@@ -136,14 +197,14 @@ public class OtherSettingsController implements Initializable, SettingsInterface
             switch (UpdateHandler.getInstance().checkUpdate()) {
                 case 0:
                     Logger.info(getClass().getName() + ".checkForUpdate(): " + "No Update Found");
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, Utility.toUTF(this.bundle.getString("thereAreNoNewUpdates")), Utility.toUTF(this.bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.INFORMATION, Utility.toUTF(this.bundle.getString("thereAreNoNewUpdates")), bundle));
                     break;
                 case 1:
                     UpdateHandler.getInstance().showInstallPrompt();
                     break;
                 case -1:
                     Logger.info(getClass().getName() + ".checkForUpdate(): " + "error => only installers and single bundle archives on macOS are supported for background updates");
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(this.bundle.getString("problemInSearchingForUpdates")), Utility.toUTF(this.bundle.getString("dir")).equals("RIGHT_TO_LEFT")));
+                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(this.bundle.getString("problemInSearchingForUpdates")), bundle));
                     break;
             }
             Platform.runLater(() -> loadingBox.setVisible(false));
@@ -161,22 +222,45 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     }
 
     @FXML
+    private void onUsageDataCheck() {
+        Settings.getInstance().setSendUsageData(usageDataCheckBox.isSelected());
+    }
+
+    @FXML
     private void hijriDateOffsetUpdate() {
         Settings.getInstance().setHijriOffset(hijriDateOffset.getValue());
     }
 
     @FXML
     private void darkThemeSelect() {
-        Settings.getInstance().setNightMode(darkTheme.isSelected());
+        toggleAction(darkThemeToggle);
+        Settings.getInstance().setNightMode(darkThemeToggle.isSelected());
+        darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+        Launcher.homeController.changeTheme();
+        if (darkThemeToggle.isSelected()) {
+            NotificationColor.setDarkTheme();
+        } else {
+            NotificationColor.setLightTheme();
+        }
     }
 
     @FXML
     private void format24Select() {
-        Settings.getInstance().setEnable24Format(format24.isSelected());
+        toggleAction(format24Toggle);
+        Settings.getInstance().setEnable24Format(format24Toggle.isSelected());
     }
 
     @FXML
     private void minimizeAtStartSelect() {
-        Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
+        toggleAction(minimizeAtStartToggle);
+        Settings.getInstance().setMinimized(minimizeAtStartToggle.isSelected());
+    }
+
+    private void toggleAction(JFXToggleButton toggleButton) {
+        if (toggleButton.isSelected()) {
+            toggleButton.setText(Utility.toUTF(bundle.getString("enabled")));
+        } else {
+            toggleButton.setText(Utility.toUTF(bundle.getString("disabled")));
+        }
     }
 }

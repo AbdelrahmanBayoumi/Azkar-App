@@ -2,8 +2,8 @@ package com.bayoumi.models.location;
 
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.storage.LocationsDBManager;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.db.LocationsDBManager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

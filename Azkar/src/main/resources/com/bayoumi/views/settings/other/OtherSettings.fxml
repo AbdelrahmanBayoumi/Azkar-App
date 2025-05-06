@@ -2,205 +2,394 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.other.OtherSettingsController">
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.settings.other.OtherSettingsController">
    <children>
-      <VBox alignment="CENTER" prefHeight="341.0" prefWidth="605.0" spacing="20.0" styleClass="root">
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-         <children>
-            <VBox alignment="CENTER" spacing="30.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true">
+         <content>
+            <VBox fx:id="scrollChild" alignment="CENTER" spacing="20.0" styleClass="root">
+               <padding>
+                  <Insets bottom="30.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
                <children>
-                  <HBox alignment="CENTER" spacing="15.0">
+                  <VBox alignment="CENTER" spacing="30.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
                      <children>
-                        <Label fx:id="languageText" minWidth="70.0" text="اللغة" textAlignment="CENTER" wrapText="true">
+                        <HBox alignment="CENTER" spacing="15.0">
+                           <children>
+                              <Label fx:id="languageText" minWidth="80.0" text="اللغة" textAlignment="CENTER" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="_18" />
+                                    <String fx:value="font-text-bold" />
+                                 </styleClass>
+                              </Label>
+                              <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <ComboBox fx:id="languageComboBox" maxWidth="1.7976931348623157E308" onAction="#saveLanguage" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <styleClass>
+                                          <String fx:value="text-field-normal" />
+                                          <String fx:value="font-text-bold" />
+                                          <String fx:value="_17" />
+                                       </styleClass>
+                                    </ComboBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <GridPane alignment="CENTER" hgap="20.0" vgap="15.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" />
+                              <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label fx:id="format24" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" minWidth="220.0" text="نظام 24 ساعة" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="CALENDAR_CLOCK" size="22" />
+                                 </graphic>
+                              </Label>
+                              <Label fx:id="darkTheme" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" minWidth="220.0" text="الوضع الليلي" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="MOON_ALT" size="22" />
+                                 </graphic>
+                              </Label>
+                              <JFXToggleButton fx:id="format24Toggle" minWidth="150.0" onAction="#format24Select" selected="true" size="8.0" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="1">
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_15" />
+                                 </styleClass>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </JFXToggleButton>
+                              <JFXToggleButton fx:id="darkThemeToggle" layoutX="414.0" layoutY="20.0" minWidth="150.0" onAction="#darkThemeSelect" selected="true" size="8.0" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </JFXToggleButton>
+                              <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                              <Label fx:id="minimizeAtStart" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" minWidth="220.0" text="دائما تصغير البرنامج عند البدء" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="CHEVRON_DOUBLE_DOWN" size="22" />
+                                 </graphic>
+                              </Label>
+                              <JFXToggleButton fx:id="minimizeAtStartToggle" minWidth="150.0" onAction="#minimizeAtStartSelect" selected="true" size="8.0" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </JFXToggleButton>
+                              <Separator layoutX="10.0" layoutY="152.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
+                     <children>
+                        <Label fx:id="hijriDateLabel" text="1 رمضان ١٤٤٢ هـ">
                            <styleClass>
-                              <String fx:value="_18" />
+                              <String fx:value="_17" />
                               <String fx:value="font-text-bold" />
                            </styleClass>
                         </Label>
-                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
                            <children>
-                              <ComboBox fx:id="languageComboBox" maxWidth="1.7976931348623157E308" onAction="#saveLanguage" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
+                              <Label fx:id="adjustingTheHijriDateText" text="تعديل التاريخ الهجري بزيادة أيام أو إنقاصها" textAlignment="CENTER" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="_18" />
+                                    <String fx:value="font-text-bold" />
+                                 </styleClass>
+                              </Label>
+                              <Spinner fx:id="hijriDateOffset" focusTraversable="false" onMouseClicked="#hijriDateOffsetUpdate" prefWidth="90.0" />
+                           </children>
+                        </HBox>
+                        <Label fx:id="adjustingTheHijriDateNote" maxWidth="1.7976931348623157E308" text="التاريخ الهجري لا يستخدم كمرجع للعبادة على سبيل المثال بداية الصوم ، وعيد الفطر ، وعيد الأضحى." wrapText="true">
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_13" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox spacing="20.0" style="-fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);" styleClass="white-box">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <JFXCheckBox fx:id="autoUpdateCheckBox" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" onAction="#autoUpdateCheck" text="تحقق من وجود تحديثات تلقائيا">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <graphic>
+                                          <MaterialDesignIconView glyphName="ROTATE_3D" size="22" />
+                                       </graphic>
+                                       <styleClass>
+                                          <String fx:value="font-text-medium" />
+                                          <String fx:value="_13" />
+                                       </styleClass>
+                                    </JFXCheckBox>
+                                 </children>
+                              </HBox>
+                              <JFXButton fx:id="checkForUpdateButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#checkForUpdate" style="-fx-background-radius: 15;" text="تحقق من وجود تحديثات">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="REFRESH" size="24" />
+                                 </graphic>
+                                 <styleClass>
+                                    <String fx:value="secondary-button" />
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                           <children>
+                              <JFXButton fx:id="forProblemsAndSuggestionsButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#openFeedback" style="-fx-background-radius: 15;" text="للمشاكل والإقتراحات">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="COMMENTS" size="24" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="3.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <JFXCheckBox fx:id="usageDataCheckBox" contentDisplay="RIGHT" onAction="#onUsageDataCheck" text="ساهم في تطوير تطبيق الأذكار بإرسال" wrapText="true">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <styleClass>
+                                          <String fx:value="font-text-medium" />
+                                          <String fx:value="_13" />
+                                       </styleClass>
+                                    </JFXCheckBox>
+                                 </children>
+                              </VBox>
+                              <Label fx:id="usageStatsLabel" maxWidth="1.7976931348623157E308" onMouseClicked="#openUsageDataSite" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="إحصائيات الاستخدام" underline="true" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_13" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="10.0" style="-fx-border-color: #DCFCE7; -fx-border-radius: 20; -fx-background-radius: 20;" styleClass="green-box">
+                     <children>
+                        <Label fx:id="shareLabel" alignment="CENTER" contentDisplay="RIGHT" layoutX="31.0" layoutY="31.0" maxWidth="555.0" minHeight="-Infinity" text="هذا العمل أقدمه صدقة جارية لوجه الله، فادعوا لي بالقبول، والمغفرة. وإن رأيتم فائدة، فشاركوها، فـ&quot;الدال على الخير كفاعله&quot;." textAlignment="CENTER" wrapText="true">
+                           <styleClass>
+                              <String fx:value="font-text-medium" />
+                              <String fx:value="_15" />
+                           </styleClass>
+                        </Label>
+                        <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0">
+                           <children>
+                              <MaterialDesignIconView glyphName="EARTH" onMouseClicked="#openWebsite" size="30" style="-fx-fill: -fx-primary-text;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="GITHUB_BOX" layoutX="241.0" layoutY="36.0" onMouseClicked="#openGitHub" size="30" style="-fx-fill: -fx-primary-text;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="INSTAGRAM" onMouseClicked="#openInstagram" size="30" style="-fx-fill: #C13584;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="TWITTER_BOX" layoutX="281.0" layoutY="36.0" onMouseClicked="#openX" size="30" style="-fx-fill: #1DA1F2;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                              <MaterialDesignIconView glyphName="FACEBOOK_BOX" layoutX="301.0" layoutY="36.0" onMouseClicked="#openFacebook" size="30" style="-fx-fill: #1877F2;">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </MaterialDesignIconView>
+                           </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="-10.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0" spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="41.0" spacing="10.0">
+                           <children>
+                              <Label fx:id="termsOfUse" maxWidth="1.7976931348623157E308" onMouseClicked="#onTermsOfUseClick" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="سياسة الاستخدام" underline="true" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_15" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                              <Separator orientation="VERTICAL" />
+                              <Label fx:id="privacyPolicy" layoutX="233.0" layoutY="10.0" maxWidth="1.7976931348623157E308" onMouseClicked="#onPrivacyPolicyClicked" style="-fx-text-fill: -fx-blue; -fx-underline: true;" text="سياسة الخصوصية" underline="true" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_15" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <Label fx:id="website" alignment="CENTER" text="الموقع الإلكتروني:">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_17" />
+                                 </styleClass>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="EARTH" size="22" />
+                                 </graphic>
+                              </Label>
+                              <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: -fx-blue;" text="azkar-site.web.app" textFill="#1d0968" underline="true">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <styleClass>
-                                    <String fx:value="text-field-normal" />
-                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="font-text-medium" />
                                     <String fx:value="_17" />
                                  </styleClass>
-                              </ComboBox>
+                              </Label>
                            </children>
-                        </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <Label fx:id="versionNumberLabel" alignment="CENTER" text="رقم اصدار البرنامج:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_17" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="version" text="0.0">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <styleClass>
+                                    <String fx:value="font-text-medium" />
+                                    <String fx:value="_17" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" spacing="30.0">
-                     <children>
-                        <JFXCheckBox fx:id="format24" nodeOrientation="LEFT_TO_RIGHT" onAction="#format24Select" text="نظام 24 ساعة">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <styleClass>
-                              <String fx:value="font-text-bold" />
-                              <String fx:value="_15" />
-                           </styleClass>
-                        </JFXCheckBox>
-                        <JFXCheckBox fx:id="darkTheme" nodeOrientation="LEFT_TO_RIGHT" onAction="#darkThemeSelect" text="الوضع الليلي">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <styleClass>
-                              <String fx:value="font-text-bold" />
-                              <String fx:value="_15" />
-                           </styleClass>
-                        </JFXCheckBox>
-                        <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" onAction="#minimizeAtStartSelect" text="دائما تصغير البرنامج عند البدء">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <styleClass>
-                              <String fx:value="font-text-bold" />
-                              <String fx:value="_15" />
-                           </styleClass>
-                        </JFXCheckBox>
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </VBox>
-            <VBox alignment="CENTER" spacing="20.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); -fx-background-color: -fx-secondary-text; -fx-background-radius: 20;">
-               <children>
-                  <Label fx:id="hijriDateLabel" text="1 رمضان ١٤٤٢ هـ">
-                     <styleClass>
-                        <String fx:value="_17" />
-                        <String fx:value="font-text-bold" />
-                     </styleClass>
-                  </Label>
-                  <HBox alignment="CENTER_LEFT" spacing="20.0">
-                     <children>
-                        <Label fx:id="adjustingTheHijriDateText" text="تعديل التاريخ الهجري بزيادة أيام أو إنقاصها" textAlignment="CENTER" wrapText="true">
-                           <styleClass>
-                              <String fx:value="_18" />
-                              <String fx:value="font-text-bold" />
-                           </styleClass>
-                        </Label>
-                        <Spinner fx:id="hijriDateOffset" focusTraversable="false" onMouseClicked="#hijriDateOffsetUpdate" prefWidth="90.0" />
-                     </children>
-                  </HBox>
-                  <TextFlow>
-                     <children>
-                        <Text fx:id="adjustingTheHijriDateNote" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="font-text-medium" text="التاريخ الهجري لا يستخدم كمرجع للعبادة على سبيل المثال بداية الصوم ، وعيد الفطر ، وعيد الأضحى." textAlignment="JUSTIFY" />
-                     </children>
-                  </TextFlow>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-               </padding>
-            </VBox>
-            <HBox alignment="CENTER_RIGHT" spacing="10.0">
-               <children>
-                  <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                     <children>
-                        <JFXCheckBox fx:id="autoUpdateCheckBox" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" onAction="#autoUpdateCheck" styleClass="font-text-medium" text="تحقق من وجود تحديثات تلقائيا">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                        </JFXCheckBox>
-                     </children>
-                  </HBox>
-                  <JFXButton fx:id="checkForUpdateButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#checkForUpdate" style="-fx-background-radius: 15;" text="تحقق من وجود تحديثات">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="REFRESH" size="24" />
-                     </graphic>
-                     <styleClass>
-                        <String fx:value="secondary-button" />
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_16" />
-                     </styleClass>
-                  </JFXButton>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" spacing="10.0">
-               <children>
-                  <JFXButton fx:id="forProblemsAndSuggestionsButton" contentDisplay="RIGHT" graphicTextGap="17.0" minWidth="240.0" onAction="#openFeedback" style="-fx-background-radius: 15;" text="للمشاكل والإقتراحات">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="COMMENTS" size="24" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_16" />
-                     </styleClass>
-                  </JFXButton>
-               </children>
-            </HBox>
-            <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="2.0">
-               <children>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" styleClass="font-text-medium" text="website: ">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                        </Label>
-                        <Label alignment="CENTER" onMouseClicked="#openWebsite" style="-fx-text-fill: blue;" styleClass="font-text-medium" text="azkar-site.web.app/" textFill="#1d0968" underline="true">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" styleClass="font-text-medium" text="Product Version : Azkar App ">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="version" styleClass="font-text-medium" text="0.0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
-                        </Label>
-                     </children>
-                  </HBox>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </VBox>
                </children>
             </VBox>
-         </children>
-      </VBox>
+         </content>
+      </ScrollPane>
       <VBox fx:id="loadingBox" alignment="CENTER" spacing="20.0" style="-fx-background-color: rgba(0, 0, 0, 0.7);" visible="false">
          <children>
             <ProgressIndicator />
-            <Label style="-fx-text-fill: -fx-secondary-text;" text="جاري البحث.." textFill="WHITE">
+            <Label style="-fx-text-fill: derive(-fx-light-text, 30%);" text="جاري البحث.." textFill="WHITE">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>

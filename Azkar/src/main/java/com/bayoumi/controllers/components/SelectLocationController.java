@@ -283,11 +283,11 @@ public class SelectLocationController implements Initializable {
 
     private void toggleSelectButtonStyle(JFXButton newButton) {
         if (selectedButton != null) {
-            selectedButton.getStyleClass().remove("secondary-button");
+            selectedButton.getStyleClass().remove("primary-button");
         }
         selectedButton = newButton;
         if (selectedButton != null) {
-            selectedButton.getStyleClass().add("secondary-button");
+            selectedButton.getStyleClass().add("primary-button");
         }
     }
 

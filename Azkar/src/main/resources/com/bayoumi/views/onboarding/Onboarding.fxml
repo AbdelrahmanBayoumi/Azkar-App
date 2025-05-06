@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="780.0" styleClass="root" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.onboarding.OnboardingController">
+<AnchorPane prefHeight="600.0" prefWidth="780.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bayoumi.controllers.onboarding.OnboardingController">
    <children>
       <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -30,7 +31,7 @@
                   <children>
                      <HBox alignment="CENTER" spacing="20.0">
                         <children>
-                           <Label fx:id="adhanLabel" text="الآذان">
+                           <Label fx:id="adhanLabel" text="الأذان">
                               <styleClass>
                                  <String fx:value="font-text-bold" />
                                  <String fx:value="_17" />
@@ -42,31 +43,51 @@
                   </children>
                </VBox>
                <Separator prefWidth="200.0" />
-               <HBox alignment="CENTER" spacing="60.0">
-                  <JFXCheckBox fx:id="format24" nodeOrientation="LEFT_TO_RIGHT" text="نظام 24 ساعة">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <styleClass>
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_15" />
-                     </styleClass>
-                  </JFXCheckBox>
-                  <JFXCheckBox fx:id="minimizeAtStart" nodeOrientation="LEFT_TO_RIGHT" selected="true" text="دائما تصغير البرنامج عند البدء">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <styleClass>
-                        <String fx:value="font-text-bold" />
-                        <String fx:value="_15" />
-                     </styleClass>
-                  </JFXCheckBox>
+               <HBox alignment="CENTER" spacing="35.0">
+                  <children>
+                     <JFXCheckBox fx:id="minimizeAtStart" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" text="دائما تصغير البرنامج عند البدء">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                        <styleClass>
+                           <String fx:value="font-text-bold" />
+                           <String fx:value="_15" />
+                        </styleClass>
+                        <graphic>
+                           <MaterialDesignIconView glyphName="CHEVRON_DOUBLE_DOWN" size="22" />
+                        </graphic>
+                     </JFXCheckBox>
+                     <JFXCheckBox fx:id="darkTheme" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" onAction="#onDarkThemeChange" text="الوضع الليلي">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                        <styleClass>
+                           <String fx:value="font-text-bold" />
+                           <String fx:value="_15" />
+                        </styleClass>
+                        <graphic>
+                           <MaterialDesignIconView glyphName="PALETTE" size="22" />
+                        </graphic>
+                     </JFXCheckBox>
+                     <JFXCheckBox fx:id="format24" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" text="نظام 24 ساعة">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                        <styleClass>
+                           <String fx:value="font-text-bold" />
+                           <String fx:value="_15" />
+                        </styleClass>
+                        <graphic>
+                           <MaterialDesignIconView glyphName="CALENDAR_CLOCK" size="22" />
+                        </graphic>
+                     </JFXCheckBox>
+                  </children>
                </HBox>
             </VBox>
          </content>
       </ScrollPane>
       <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: -fx-secondary; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <Label fx:id="settingsCanBeChangedFromWithinTheProgramAsWell" maxWidth="1.7976931348623157E308" style="-fx-text-fill: -fx-secondary-text;" text="يمكن تغيير الإعدادت من داخل البرنامج أيضًا" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
+         <Label fx:id="settingsCanBeChangedFromWithinTheProgramAsWell" maxWidth="1.7976931348623157E308" style="-fx-text-fill: -fx-light-text;" text="يمكن تغيير الإعدادت من داخل البرنامج أيضًا" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
             <styleClass>
                <String fx:value="font-text-bold" />
                <String fx:value="_15" />
