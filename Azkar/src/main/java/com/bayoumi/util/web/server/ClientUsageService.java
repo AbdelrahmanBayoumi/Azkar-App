@@ -29,11 +29,12 @@ public class ClientUsageService {
      */
     public boolean createUsage(WeeklyStats stats,
                                Consumer<HttpResponse<JsonNode>> successCallback,
-                               Consumer<HttpResponse<JsonNode>> failCallback) {
-        String id = UUID.randomUUID().toString();
+                               Consumer<HttpResponse<JsonNode>> failCallback,
+                               Properties config) {
+        final String id = UUID.randomUUID().toString();
         JSONObject payload;
         try {
-            payload = ServerUtil.preparePayload(id, stats, null);
+            payload = ServerUtil.preparePayload(id, stats, config);
         } catch (Exception e) {
             Logger.error("Payload prep failed", e, getClass().getName() + ".createUsage()");
             return false;

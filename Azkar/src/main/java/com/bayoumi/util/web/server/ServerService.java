@@ -54,7 +54,7 @@ public class ServerService {
 
         final boolean isFirstTimeOpened = (id == null || id.isEmpty());
         if (isFirstTimeOpened) {
-            RetryTask.builder(() -> usage.createUsage(weeklyStats, successCallback, failCallback)).enableJitter(true).execute();
+            RetryTask.builder(() -> usage.createUsage(weeklyStats, successCallback, failCallback, config)).enableJitter(true).execute();
         } else {
             final JSONObject payload = ServerUtil.preparePayload(id, weeklyStats, config);
             RetryTask.builder(() -> usage.updateUsage(payload, successCallback, failCallback)).enableJitter(true).execute();
