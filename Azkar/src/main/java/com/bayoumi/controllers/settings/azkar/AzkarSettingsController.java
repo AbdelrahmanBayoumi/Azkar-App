@@ -15,6 +15,7 @@ import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.gui.notfication.Notification;
 import com.bayoumi.util.gui.notfication.NotificationAudio;
 import com.bayoumi.util.gui.notfication.NotificationContent;
+import com.bayoumi.util.media.MediaAvailabilityUtil;
 import com.bayoumi.util.time.ArabicNumeralDiscrimination;
 import com.jfoenix.controls.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -126,6 +127,10 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
+        
+        if (!MediaAvailabilityUtil.isMediaAvailable()) {
+            disableMediaControls();
+        }
 
         periodBox.disableProperty().bind(stopAzkar.selectedProperty());
         azkarDurationBox.disableProperty().bind(stopAzkar.selectedProperty());
@@ -211,8 +216,21 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         ScrollHandler.init(root, scrollPane, 3);
     }
 
+    private void disableMediaControls() {
+        playButton.setDisable(true);
+        volumeBox.setDisable(true); 
+        playButton.getStyleClass().add("unavailable-feature");
+        volumeBox.getStyleClass().add("unavailable-feature");
+        Tooltip.install(playButton, new Tooltip(Utility.toUTF(bundle.getString("error.mediaUnavailable"))));
+        Tooltip.install(volumeBox, new Tooltip(Utility.toUTF(bundle.getString("error.mediaUnavailable"))));
+    }
+
     @FXML
     private void play() {
+        if (!MediaAvailabilityUtil.isMediaAvailable()) {
+            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("error.mediaUnavailable")), bundle);
+            return;
+        }
         if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
             MEDIA_PLAYER.stop();
             MEDIA_PLAYER.dispose(); // Release the resources
@@ -224,7 +242,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             if (!fileName.equals("بدون صوت")) {
                 try {
                     MEDIA_PLAYER = new MediaPlayer(new Media(new File(Constants.assetsPath + "/audio/" + fileName).toURI().toString()));
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;

@@ -3,6 +3,11 @@
     src: url("../fonts/Tajawal/Tajawal-Medium.ttf");
 }
 
+.unavailable-feature {
+    -fx-opacity: 0.6;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,0,0,0.2), 5, 0, 0, 0);
+}
+
 @font-face {
     font-family: "Tajawal-Bold";
     src: url("../fonts/Tajawal/Tajawal-Bold.ttf");
