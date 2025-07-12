@@ -6,6 +6,7 @@ import com.bayoumi.controllers.home.HomeController;
 import com.bayoumi.models.settings.Settings;
 import com.bayoumi.preloader.CustomPreloaderMain;
 import com.bayoumi.repositry.OnboardingRepository;
+import com.bayoumi.services.AbsoluteZekrService;
 import com.bayoumi.services.TimedAzkarService;
 import com.bayoumi.services.update.UpdateService;
 import com.bayoumi.storage.DatabaseManager;
@@ -131,6 +132,7 @@ public class Launcher extends Application {
             incrementPreloader();
 
             TimedAzkarService.init();
+            AbsoluteZekrService.init();
             incrementPreloader();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".init()");
