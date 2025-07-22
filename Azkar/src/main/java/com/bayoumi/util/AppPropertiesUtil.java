@@ -6,6 +6,8 @@ import com.bayoumi.storage.preferences.Preferences;
 import com.bayoumi.storage.statistics.StatisticsStore;
 import kong.unirest.json.JSONObject;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -18,6 +20,10 @@ public class AppPropertiesUtil {
 
         // User Information
         props.put("assets_path", Constants.assetsPath);
+        props.put("app.thread_count", String.valueOf(Thread.activeCount()));
+        props.put("user.dir", System.getProperty("user.dir"));
+        props.put("user.dir.writeable", String.valueOf(Files.isWritable(Paths.get(System.getProperty("user.dir")))));
+        props.put("user.home", System.getProperty("user.home"));
 
         // OS Information
         props.put("os.name", System.getProperty("os.name"));
@@ -26,6 +32,7 @@ public class AppPropertiesUtil {
 
         // Java Information
         props.put("java.version", System.getProperty("java.version"));
+        props.put("java.tmpdir", System.getProperty("java.io.tmpdir"));
 
         // Timezone Information
         props.put("timezone.id", TimeZone.getDefault().getID());
