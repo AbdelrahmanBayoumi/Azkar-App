@@ -43,8 +43,8 @@ public class SingleInstance {
 
     private void singleInstanceApplicationCheck() {
         try {
-            InetAddress localAddress = InetAddress.getLocalHost();
-            Logger.debug("InetAddress.getLocalHost(): " + localAddress + ":" + PORT);
+            InetAddress localAddress = InetAddress.getLoopbackAddress();
+            Logger.debug("InetAddress.getLoopbackAddress(): " + localAddress + ":" + PORT);
             server = new ServerSocket(PORT, 1, localAddress);
             Logger.debug("Server Online ...");
             // listen to other Instances
@@ -63,7 +63,7 @@ public class SingleInstance {
             // notify the running instance to be on Top
             sendToServer();
         } catch (Exception ex) {
-            Platform.runLater(this::showAlreadyRunningError);
+            Logger.error("Error in singleInstanceApplicationCheck", ex, getClass().getName() + ".singleInstanceApplicationCheck()");
         }
     }
 
@@ -83,7 +83,7 @@ public class SingleInstance {
 
     private void sendToServer() {
         try {
-            final Socket socket = new Socket(InetAddress.getLocalHost(), PORT);
+            final Socket socket = new Socket(InetAddress.getLoopbackAddress(), PORT);
             Logger.debug("Connection Success ...");
             try {
                 PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
@@ -95,18 +95,11 @@ public class SingleInstance {
             }
         } catch (Exception e) {
             Logger.error("Exception in Connecting to server : ", e, getClass().getName() + "sendToServer()");
-            Platform.runLater(this::showAlreadyRunningError);
+            // Assuming the port is taken by another application or in a zombie state
+            // We should allow the application to start
         }
     }
 
-    private void showAlreadyRunningError() {
-        // catch anything unexpected !
-        Logger.debug("Program already running, exiting");
-        Alert warning = new Alert(Alert.AlertType.WARNING);
-        warning.setHeaderText("Program already running, exiting");
-        warning.showAndWait();
-        System.exit(0);
-    }
 
     public void openCurrentStage() {
         Platform.runLater(() -> {
