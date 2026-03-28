@@ -11,6 +11,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <app.name>Azkar</app.name>
         <mainClass>com.bayoumi.Launcher</mainClass>
     </properties>
@@ -18,6 +20,10 @@
     <packaging>jar</packaging>
 
     <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
         <repository>
             <id>ej-technologies</id>
             <url>https://maven.ej-technologies.com/repository</url>
@@ -107,6 +113,13 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.17.0</version>
+        </dependency>
+
+        <!-- Dorkbox SystemTray: uses native AppIndicator/GTK via JNA (no extra OS libs needed) -->
+        <dependency>
+            <groupId>com.dorkbox</groupId>
+            <artifactId>SystemTray</artifactId>
+            <version>3.17</version>
         </dependency>
     </dependencies>
 

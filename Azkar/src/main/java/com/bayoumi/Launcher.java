@@ -194,11 +194,7 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) throws Exception {
         handleLocationDBError();
         // initialize tray icon
-        try {
-            new TrayUtil(primaryStage);
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + "new TrayUtil()");
-        }
+        TrayUtil.init(primaryStage);
         // add loaded scene to primaryStage
         primaryStage.setScene(scene);
 
