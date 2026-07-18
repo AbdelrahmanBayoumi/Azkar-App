@@ -15,33 +15,32 @@ import javafx.util.Duration;
 public class Notification {
 
     public static void create(NotificationContent content, double duration, Pos position, Runnable onClickAction, NotificationAudio audio) {
-        audio.play();
-        for (javafx.stage.Screen screen : javafx.stage.Screen.getScreens()) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Notification.class.getResource(Locations.NotificationContent.getName()));
+            Parent notificationView = loader.load();
+            ((NotificationsControlsFXController) loader.getController()).setData(content.getText(), content.getImage());
+            audio.play();
+            final Runnable closeCallback = () -> {
+                Logger.debug("Closing Notification ...");
+                if (audio.isPlaying()) {
+                    audio.stop();
+                }
+            };
+            EventHandler<ActionEvent> onClickHandler = null;
+            if (onClickAction != null) {
+                onClickHandler = event -> {
+                    Logger.debug("[Notification] onClickAction");
+                    onClickAction.run();
+                };
+            }
+            EventHandler<ActionEvent> finalOnClickHandler = onClickHandler;
+
             Platform.runLater(() -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(Notification.class.getResource(com.bayoumi.util.gui.load.Locations.NotificationContent.getName()));
-                    javafx.scene.Parent notificationView = loader.load();
-                    ((NotificationsControlsFXController) loader.getController()).setData(content.getText(), content.getImage());
-
-                    final Runnable closeCallback = () -> {
-                        Logger.debug("Closing Notification ...");
-                        if (audio.isPlaying()) {
-                            audio.stop();
-                        }
-                    };
-                    javafx.event.EventHandler<javafx.event.ActionEvent> onClickHandler = null;
-                    if (onClickAction != null) {
-                        onClickHandler = event -> {
-                            Logger.debug("[Notification] onClickAction");
-                            onClickAction.run();
-                        };
-                    }
-
                     Notifications.create()
-                            .owner(screen)
                             .graphic(notificationView)
                             .hideAfter(Duration.seconds(duration))
-                            .onAction(onClickHandler)
+                            .onAction(finalOnClickHandler)
                             .closeHandler(closeCallback)
                             .position(position)
                             .backgroundColor(Settings.getInstance().getNotificationSettings().getBackgroundColor())
@@ -52,6 +51,8 @@ public class Notification {
                     Logger.error(null, e, Notification.class.getName() + ".create()");
                 }
             });
+        } catch (Exception ex) {
+            Logger.error(null, ex, Notification.class.getName() + ".create()");
         }
     }
 
