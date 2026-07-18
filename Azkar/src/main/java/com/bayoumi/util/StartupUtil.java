@@ -1,0 +1,95 @@
+package com.bayoumi.util;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Files;
+
+public class StartupUtil {
+
+    public static void setAutostart(boolean enable) {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            setWindowsAutostart(enable);
+        } else if (os.contains("linux")) {
+            setLinuxAutostart(enable);
+        }
+    }
+
+    private static void setWindowsAutostart(boolean enable) {
+        try {
+            String executablePath = getExecutablePath();
+            if (executablePath == null) return;
+
+            String regCommand;
+            if (enable) {
+                regCommand = "reg add \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v \"Azkar\" /t REG_SZ /d \"\\\"" + executablePath + "\\\"\" /f";
+            } else {
+                regCommand = "reg delete \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v \"Azkar\" /f";
+            }
+            Runtime.getRuntime().exec(regCommand);
+        } catch (Exception e) {
+            Logger.error("Error setting Windows autostart", e, StartupUtil.class.getName());
+        }
+    }
+
+    private static void setLinuxAutostart(boolean enable) {
+        try {
+            File autostartDir = new File(System.getProperty("user.home") + "/.config/autostart");
+            if (!autostartDir.exists()) {
+                autostartDir.mkdirs();
+            }
+            File desktopFile = new File(autostartDir, "Azkar.desktop");
+
+            if (enable) {
+                String executablePath = getExecutablePath();
+                if (executablePath == null) return;
+
+                String content = "[Desktop Entry]\n" +
+                        "Type=Application\n" +
+                        "Version=1.0\n" +
+                        "Name=Azkar\n" +
+                        "Comment=Azkar Application\n" +
+                        "Exec=\"" + executablePath + "\"\n" +
+                        "Icon=Azkar\n" +
+                        "Terminal=false\n" +
+                        "Categories=Utility;\n";
+                try (FileWriter writer = new FileWriter(desktopFile)) {
+                    writer.write(content);
+                }
+                desktopFile.setExecutable(true);
+            } else {
+                if (desktopFile.exists()) {
+                    Files.delete(desktopFile.toPath());
+                }
+            }
+        } catch (Exception e) {
+            Logger.error("Error setting Linux autostart", e, StartupUtil.class.getName());
+        }
+    }
+
+    private static String getExecutablePath() {
+        try {
+            // If running via install4j launcher
+            String install4jExe = System.getProperty("executablepath");
+            if (install4jExe != null && !install4jExe.isEmpty()) {
+                return install4jExe;
+            }
+            // Fallback for Windows
+            String exe4jModule = System.getProperty("exe4j.moduleName");
+            if (exe4jModule != null && !exe4jModule.isEmpty()) {
+                return exe4jModule;
+            }
+
+            // Fallback to jar location (though it might not be what we want if we need the native launcher)
+            String path = StartupUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            if (path.endsWith(".jar")) {
+                // If it's a jar, we might be running java -jar ...
+                return "java -jar \"" + path + "\"";
+            }
+            return path;
+        } catch (Exception e) {
+            Logger.error("Error getting executable path", e, StartupUtil.class.getName());
+            return null;
+        }
+    }
+}

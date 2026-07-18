@@ -340,13 +340,14 @@ public class Notifications {
 
         private static final NotificationPopupHandler INSTANCE = new NotificationPopupHandler();
         private static final String FINAL_ANCHOR_Y = "finalAnchorY";
+        private static final String SCREEN_START_X = "screenStartX";
+        private static final String SCREEN_START_Y = "screenStartY";
+        private static final String SCREEN_WIDTH = "screenWidth";
+        private static final String SCREEN_HEIGHT = "screenHeight";
+        private static final String SCREEN_OBJECT = "screenObject";
         private static final double PADDING = 15;
         private static final double SPACING = 30;
-        private final Map<Pos, List<Popup>> popupsMap = new HashMap<>();
-        private double startX;
-        private double startY;
-        private double screenWidth;
-        private double screenHeight;
+        private final Map<Screen, Map<Pos, List<Popup>>> screenPopupsMap = new HashMap<>();
         // for animating in the notifications
         private final ParallelTransition parallelTransition = new ParallelTransition();
 
@@ -365,7 +366,8 @@ public class Notifications {
 //                    notifications.onAction.handle(actionEvent);
 //                }
                 // animate out the popup
-                createHideTimeline(barPopUp.getPopup(), barPopUp.getNotificationBar(), notifications.position, Duration.ZERO).play();
+                Screen screen = (Screen) barPopUp.getPopup().getProperties().get(SCREEN_OBJECT);
+                createHideTimeline(barPopUp.getPopup(), barPopUp.getNotificationBar(), notifications.position, screen, Duration.ZERO).play();
                 if (notifications.closeCallback != null) {
                     notifications.closeCallback.run();
                 }
@@ -374,6 +376,8 @@ public class Notifications {
 
         public NotificationBarPopUp show(Notifications notification) {
             Window window;
+            double startX, startY, screenWidth, screenHeight;
+            Screen screen;
             if (notification.owner == null) {
                 /*
                  * If the owner is not set, we work with the whole screen.
@@ -391,7 +395,7 @@ public class Notifications {
                         window = AzkarService.FAKE_STAGE;
                     }
                 }
-                Screen screen = notification.screen != null
+                screen = notification.screen != null
                         ? notification.screen
                         : getScreenBounds(window).orElse(Screen.getPrimary());
                 Rectangle2D screenBounds = screen.getVisualBounds();
@@ -410,8 +414,9 @@ public class Notifications {
                 screenWidth = notification.owner.getWidth();
                 screenHeight = notification.owner.getHeight();
                 window = notification.owner;
+                screen = getScreenBounds(window).orElse(Screen.getPrimary());
             }
-            return show(window, notification);
+            return show(window, notification, screen, startX, startY, screenWidth, screenHeight);
         }
 
         private Optional<Screen> getScreenBounds(Window window) {
@@ -427,7 +432,7 @@ public class Notifications {
                     .findFirst();
         }
 
-        private NotificationBarPopUp show(Window owner, final Notifications notification) {
+        private NotificationBarPopUp show(Window owner, final Notifications notification, Screen screen, double startX, double startY, double screenWidth, double screenHeight) {
             // Stylesheets which are added to the scene of a popup aren't
             // considered for styling. For this reason, we need to find the next
             // window in the hierarchy which isn't a popup.
@@ -452,7 +457,8 @@ public class Notifications {
             final Pos p = notification.position;
 
             final Notifications notificationToShow;
-            final List<Popup> popups = popupsMap.get(p);
+            final Map<Pos, List<Popup>> popupsMap = screenPopupsMap.get(screen);
+            final List<Popup> popups = popupsMap == null ? null : popupsMap.get(p);
             if (notification.threshold > 0 && popups != null && popups.size() >= notification.threshold) {
                 for (Popup popupElement : popups) {
                     popupElement.hide();
@@ -527,7 +533,7 @@ public class Notifications {
                     // doHide();
 
                     // animate out the popup by fading it
-                    createHideTimeline(popup, this, p, Duration.ZERO).play();
+                    createHideTimeline(popup, this, p, screen, Duration.ZERO).play();
                 }
 
                 @Override
@@ -537,7 +543,7 @@ public class Notifications {
 
                 @Override
                 public double getContainerHeight() {
-                    return startY + screenHeight;
+                    return (double) popup.getProperties().get(SCREEN_START_Y) + (double) popup.getProperties().get(SCREEN_HEIGHT);
                 }
 
                 @Override
@@ -567,7 +573,7 @@ public class Notifications {
                         notificationToShow.closeCallback.run();
                     }
                     // animate out the popup
-                    createHideTimeline(popup, notificationBar, p, Duration.ZERO).play();
+                    createHideTimeline(popup, notificationBar, p, screen, Duration.ZERO).play();
 
                     ActionEvent actionEvent = new ActionEvent(notificationBar, notificationBar);
                     notificationToShow.onAction.handle(actionEvent);
@@ -629,6 +635,12 @@ public class Notifications {
             popup.setAnchorX(anchorX);
             setFinalAnchorY(popup, anchorY);
             popup.setAnchorY(anchorY);
+            // store screen bounds in popup properties for stacking logic
+            popup.getProperties().put(SCREEN_START_X, startX);
+            popup.getProperties().put(SCREEN_START_Y, startY);
+            popup.getProperties().put(SCREEN_WIDTH, screenWidth);
+            popup.getProperties().put(SCREEN_HEIGHT, screenHeight);
+            popup.getProperties().put(SCREEN_OBJECT, screen);
 
             isShowing = true;
             if (notificationBar.getGraphic() != null && notificationBar.getGraphic().getParent() != null && notificationBar.getGraphic().getParent().getParent() != null) {
@@ -636,10 +648,10 @@ public class Notifications {
             }
             notificationBar.doShow();
 
-            addPopupToMap(p, popup);
+            addPopupToMap(screen, p, popup);
 
             // begin a timeline to get rid of the popup
-            Timeline timeline = createHideTimeline(popup, notificationBar, p, notification.hideAfterDuration);
+            Timeline timeline = createHideTimeline(popup, notificationBar, p, screen, notification.hideAfterDuration);
             timeline.play();
             timeline.setOnFinished(event -> {
                 if (notification.closeCallback != null) {
@@ -649,12 +661,12 @@ public class Notifications {
             return new NotificationBarPopUp(notificationBar, popup);
         }
 
-        private void hide(Popup popup, Pos p) {
+        private void hide(Popup popup, Pos p, Screen screen) {
             popup.hide();
-            removePopupFromMap(p, popup);
+            removePopupFromMap(screen, p, popup);
         }
 
-        private Timeline createHideTimeline(final Popup popup, NotificationBar bar, final Pos p, Duration startDelay) {
+        private Timeline createHideTimeline(final Popup popup, NotificationBar bar, final Pos p, Screen screen, Duration startDelay) {
             KeyValue fadeOutBegin = new KeyValue(bar.opacityProperty(), 1.0);
             KeyValue fadeOutEnd = new KeyValue(bar.opacityProperty(), 0.0);
 
@@ -663,35 +675,35 @@ public class Notifications {
 
             Timeline timeline = new Timeline(kfBegin, kfEnd);
             timeline.setDelay(startDelay);
-            timeline.setOnFinished(e -> hide(popup, p));
+            timeline.setOnFinished(e -> hide(popup, p, screen));
 
             return timeline;
         }
 
-        private void addPopupToMap(Pos p, Popup popup) {
-            List<Popup> popups;
-            if (!popupsMap.containsKey(p)) {
-                popups = new LinkedList<>();
-                popupsMap.put(p, popups);
-            } else {
-                popups = popupsMap.get(p);
-            }
+        private void addPopupToMap(Screen screen, Pos p, Popup popup) {
+            Map<Pos, List<Popup>> popupsMap = screenPopupsMap.computeIfAbsent(screen, k -> new HashMap<>());
+            List<Popup> popups = popupsMap.computeIfAbsent(p, k -> new LinkedList<>());
 
-            doAnimation(p, popup);
+            doAnimation(screen, p, popup);
 
             // add the popup to the list so it is kept in memory and can be
             // accessed later on
             popups.add(popup);
         }
 
-        private void removePopupFromMap(Pos p, Popup popup) {
-            if (popupsMap.containsKey(p)) {
+        private void removePopupFromMap(Screen screen, Pos p, Popup popup) {
+            Map<Pos, List<Popup>> popupsMap = screenPopupsMap.get(screen);
+            if (popupsMap != null && popupsMap.containsKey(p)) {
                 List<Popup> popups = popupsMap.get(p);
                 popups.remove(popup);
             }
         }
 
-        private void doAnimation(Pos p, Popup changedPopup) {
+        private void doAnimation(Screen screen, Pos p, Popup changedPopup) {
+            Map<Pos, List<Popup>> popupsMap = screenPopupsMap.get(screen);
+            if (popupsMap == null) {
+                return;
+            }
             List<Popup> popups = popupsMap.get(p);
             if (popups == null) {
                 return;

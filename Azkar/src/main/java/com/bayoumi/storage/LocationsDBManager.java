@@ -1,9 +1,13 @@
 package com.bayoumi.storage;
 
+import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,8 +19,15 @@ public class LocationsDBManager {
     public Connection con = null;
 
     private LocationsDBManager() throws Exception {
+        if (Constants.isAssetsPathChanged) {
+            try {
+                copyDatabaseToAssetsPath();
+            } catch (IOException e) {
+                Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".copyDatabaseToAssetsPath()");
+            }
+        }
         try {
-            if (!Files.exists(Paths.get("jarFiles/db/locations.db"))) {
+            if (!Files.exists(Paths.get(Constants.assetsPath + "/db/locations.db"))) {
                 // Throw error to download the DB again
                 throw new Exception("LocationsDB does not exist");
             } else {
@@ -29,7 +40,7 @@ public class LocationsDBManager {
                     con.close();
                     con = null;
                     // Delete created locations.db file
-                    new File("jarFiles/db/locations.db").delete();
+                    new File(Constants.assetsPath + "/db/locations.db").delete();
                     // Throw error to download the DB again
                     throw new Exception("LocationsDB does not exist");
                 }
@@ -53,7 +64,7 @@ public class LocationsDBManager {
 
     private boolean connectToDatabase() {
         try {
-            final String url = "jdbc:sqlite:jarFiles/db/locations.db";
+            final String url = "jdbc:sqlite:" + Constants.assetsPath + "/db/locations.db";
             if (con != null && con.getMetaData().getURL().equals(url)) {
                 return true;
             }
@@ -69,6 +80,15 @@ public class LocationsDBManager {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".connectToDatabase()");
         }
         return false;
+    }
+
+    private void copyDatabaseToAssetsPath() throws IOException {
+        final Path from = Paths.get("jarFiles/db/locations.db").toAbsolutePath();
+        final Path to = Paths.get(Constants.assetsPath + "/db/locations.db").toAbsolutePath();
+        if (from.equals(to)) {
+            return;
+        }
+        FileUtils.copyIfNotExist(from, to);
     }
 
 }

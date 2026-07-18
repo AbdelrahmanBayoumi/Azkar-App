@@ -24,12 +24,16 @@ public class Constants {
             if (Files.isWritable(Paths.get(Constants.class.getProtectionDomain().getCodeSource().getLocation().toURI()))) {
                 assetsPath = "jarFiles";
             } else {
-                assetsPath = System.getenv("LOCALAPPDATA") + "/" + Constants.APP_NAME + "/jarFiles";
+                String localAppData = System.getenv("LOCALAPPDATA");
+                if (localAppData == null || localAppData.isEmpty()) {
+                    assetsPath = System.getProperty("user.home") + "/." + Constants.APP_NAME + "/jarFiles";
+                } else {
+                    assetsPath = localAppData + "/" + Constants.APP_NAME + "/jarFiles";
+                }
                 isAssetsPathChanged = true;
             }
         } catch (Exception ex) {
             Sentry.captureException(ex);
-            // TODO is Logger valid here or its not initialized yet ?
             Logger.error(ex.getLocalizedMessage(), ex, Constants.class.getName() + " -> static init");
         }
     }

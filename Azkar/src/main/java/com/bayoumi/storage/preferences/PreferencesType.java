@@ -53,6 +53,7 @@ public enum PreferencesType implements KeyValueDefault {
     MINIMIZED("minimized", "false"),
     AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true"),
     SEND_USAGE_DATA("send_usage_data", "true"),
+    RUN_AT_STARTUP("run_at_startup", "false"),
     APP_VERSION("app_version", "0"),
     WEEK_START("week_start", Instant.EPOCH.toString());
 

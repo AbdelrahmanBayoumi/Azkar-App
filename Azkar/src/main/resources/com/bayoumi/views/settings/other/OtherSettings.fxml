@@ -135,7 +135,38 @@
                                  </padding>
                               </JFXToggleButton>
                               <Separator layoutX="10.0" layoutY="152.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                              <Separator layoutX="30.0" layoutY="111.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                              <Label fx:id="runAtStartup" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" minWidth="220.0" text="فتح البرنامج تلقائيا عند بدء تشغيل الجهاز" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="6">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="WINDOW_MAXIMIZE" size="22" />
+                                 </graphic>
+                              </Label>
+                              <JFXToggleButton fx:id="runAtStartupToggle" layoutX="396.0" layoutY="153.0" minWidth="150.0" onAction="#runAtStartupSelect" selected="true" size="8.0" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                 <styleClass>
+                                    <String fx:value="font-text-bold" />
+                                    <String fx:value="_16" />
+                                 </styleClass>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </JFXToggleButton>
                            </children>
+                           <rowConstraints>
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                           </rowConstraints>
                         </GridPane>
                      </children>
                      <padding>

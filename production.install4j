@@ -10,10 +10,10 @@
       <variable name="Publisher" value="Abdelrahman Bayoumi" />
       <variable name="Publisher_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App" />
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
-      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\installer\icon.png" />
-      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\installer\icon.ico" />
-      <variable name="LICENSE_AGREEMENT" value="${compiler:PARENT_DIR}\installer\EULA_" />
-      <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
+      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}/installer/icon.png" />
+      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}/installer/icon.ico" />
+      <variable name="LICENSE_AGREEMENT" value="${compiler:PARENT_DIR}/installer/EULA_" />
+      <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}/changelog/${compiler:APP_VERSION}.txt" />
       <variable name="UPDATES_XML_URL" value="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/installer/updates.xml" />
       <variable name="BASE_RELEASE_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/${compiler:APP_VERSION}/" />
     </variables>
@@ -398,18 +398,6 @@ return console.askYesNo(message, true);
                     <element index="0">
                       <object class="java.io.File">
                         <string>jarFiles</string>
-                      </object>
-                    </element>
-                  </property>
-                  <property name="recursive" type="boolean" value="true" />
-                </serializedBean>
-              </action>
-              <action id="798" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
-                <serializedBean>
-                  <property name="files" type="array" class="java.io.File" length="1">
-                    <element index="0">
-                      <object class="java.io.File">
-                        <string>${compiler:env.LOCALAPPDATA}/${compiler:APP_SHORT_NAME}</string>
                       </object>
                     </element>
                   </property>
@@ -1194,6 +1182,15 @@ return true;</property>
     <windows name="Windows 32" id="792" mediaFileName="${compiler:sys.shortName}_${compiler:sys.platform}" jreBitType="32">
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_271" />
     </windows>
+    <unixInstaller name="Unix Installer" id="806">
+      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
+    </unixInstaller>
+    <linuxDeb name="Linux Deb Archive" id="807">
+      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
+    </linuxDeb>
   </mediaSets>
+  <buildIds buildAll="false">
+    <mediaSet refId="807" />
+  </buildIds>
   <buildOptions verbose="true" />
 </install4j>
