@@ -453,6 +453,12 @@ public class Notifications {
 
             final Popup popup = new Popup();
             popup.setAutoFix(false);
+            // store screen bounds in popup properties for stacking logic early to prevent NPE during layout pass
+            popup.getProperties().put(SCREEN_START_X, startX);
+            popup.getProperties().put(SCREEN_START_Y, startY);
+            popup.getProperties().put(SCREEN_WIDTH, screenWidth);
+            popup.getProperties().put(SCREEN_HEIGHT, screenHeight);
+            popup.getProperties().put(SCREEN_OBJECT, screen);
 
             final Pos p = notification.position;
 
@@ -635,12 +641,6 @@ public class Notifications {
             popup.setAnchorX(anchorX);
             setFinalAnchorY(popup, anchorY);
             popup.setAnchorY(anchorY);
-            // store screen bounds in popup properties for stacking logic
-            popup.getProperties().put(SCREEN_START_X, startX);
-            popup.getProperties().put(SCREEN_START_Y, startY);
-            popup.getProperties().put(SCREEN_WIDTH, screenWidth);
-            popup.getProperties().put(SCREEN_HEIGHT, screenHeight);
-            popup.getProperties().put(SCREEN_OBJECT, screen);
 
             isShowing = true;
             if (notificationBar.getGraphic() != null && notificationBar.getGraphic().getParent() != null && notificationBar.getGraphic().getParent().getParent() != null) {
