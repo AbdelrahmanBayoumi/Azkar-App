@@ -15,20 +15,51 @@ public class StartupUtil {
         }
     }
 
+    public static boolean isAutostartEnabled() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return isWindowsAutostartEnabled();
+        } else if (os.contains("linux")) {
+            return isLinuxAutostartEnabled();
+        }
+        return false;
+    }
+
     private static void setWindowsAutostart(boolean enable) {
         try {
             String executablePath = getExecutablePath();
             if (executablePath == null) return;
 
-            String regCommand;
+            String cmd = executablePath.endsWith(".jar") 
+                    ? "java -jar \"" + executablePath + "\"" 
+                    : "\"" + executablePath + "\"";
+
+            ProcessBuilder pb;
             if (enable) {
-                regCommand = "reg add \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v \"Azkar\" /t REG_SZ /d \"\\\"" + executablePath + "\\\"\" /f";
+                pb = new ProcessBuilder("reg", "add",
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        "/v", "Azkar", "/t", "REG_SZ",
+                        "/d", cmd, "/f");
             } else {
-                regCommand = "reg delete \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v \"Azkar\" /f";
+                pb = new ProcessBuilder("reg", "delete",
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        "/v", "Azkar", "/f");
             }
-            Runtime.getRuntime().exec(regCommand);
+            pb.start();
         } catch (Exception e) {
             Logger.error("Error setting Windows autostart", e, StartupUtil.class.getName());
+        }
+    }
+
+    private static boolean isWindowsAutostartEnabled() {
+        try {
+            Process process = new ProcessBuilder("reg", "query",
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                    "/v", "Azkar").start();
+            return process.waitFor() == 0;
+        } catch (Exception e) {
+            Logger.error("Error checking Windows autostart", e, StartupUtil.class.getName());
+            return false;
         }
     }
 
@@ -44,12 +75,16 @@ public class StartupUtil {
                 String executablePath = getExecutablePath();
                 if (executablePath == null) return;
 
+                String execLine = executablePath.endsWith(".jar")
+                        ? "java -jar \"" + executablePath + "\""
+                        : "\"" + executablePath + "\"";
+
                 String content = "[Desktop Entry]\n" +
                         "Type=Application\n" +
                         "Version=1.0\n" +
                         "Name=Azkar\n" +
                         "Comment=Azkar Application\n" +
-                        "Exec=\"" + executablePath + "\"\n" +
+                        "Exec=" + execLine + "\n" +
                         "Icon=Azkar\n" +
                         "Terminal=false\n" +
                         "Categories=Utility;\n";
@@ -67,6 +102,16 @@ public class StartupUtil {
         }
     }
 
+    private static boolean isLinuxAutostartEnabled() {
+        try {
+            File desktopFile = new File(System.getProperty("user.home") + "/.config/autostart/Azkar.desktop");
+            return desktopFile.exists();
+        } catch (Exception e) {
+            Logger.error("Error checking Linux autostart", e, StartupUtil.class.getName());
+            return false;
+        }
+    }
+
     private static String getExecutablePath() {
         try {
             // If running via install4j launcher
@@ -80,11 +125,10 @@ public class StartupUtil {
                 return exe4jModule;
             }
 
-            // Fallback to jar location (though it might not be what we want if we need the native launcher)
+            // Fallback to jar location
             String path = StartupUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
             if (path.endsWith(".jar")) {
-                // If it's a jar, we might be running java -jar ...
-                return "java -jar \"" + path + "\"";
+                return path;
             }
             return path;
         } catch (Exception e) {

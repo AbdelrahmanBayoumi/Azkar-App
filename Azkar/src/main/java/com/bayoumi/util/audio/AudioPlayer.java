@@ -22,8 +22,9 @@ public class AudioPlayer {
     private Clip clip;
     private Runnable onEndOfMedia;
     private Runnable onStopped;
-    private Runnable onError;
     private volatile boolean playing = false;
+
+    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
     /**
      * Creates an AudioPlayer for the given audio file.
@@ -33,9 +34,16 @@ public class AudioPlayer {
      * @throws AudioPlayerException if the file cannot be loaded
      */
     public AudioPlayer(File audioFile) throws AudioPlayerException {
+        if (audioFile.length() > MAX_FILE_SIZE) {
+            throw new AudioPlayerException(
+                    "Audio file too large: " + (audioFile.length() / (1024 * 1024)) + " MB (max 10 MB)",
+                    null);
+        }
+        AudioInputStream rawStream = null;
+        AudioInputStream decodedStream = null;
         try {
             // BufferedInputStream is required for mp3spi to handle mark/reset
-            AudioInputStream rawStream = AudioSystem.getAudioInputStream(
+            rawStream = AudioSystem.getAudioInputStream(
                     new BufferedInputStream(new FileInputStream(audioFile))
             );
 
@@ -51,7 +59,6 @@ public class AudioPlayer {
                     false
             );
 
-            AudioInputStream decodedStream;
             if (AudioSystem.isConversionSupported(decodedFormat, baseFormat)) {
                 decodedStream = AudioSystem.getAudioInputStream(decodedFormat, rawStream);
             } else {
@@ -85,6 +92,20 @@ public class AudioPlayer {
             throw new AudioPlayerException("Cannot read audio file: " + audioFile.getAbsolutePath(), e);
         } catch (LineUnavailableException e) {
             throw new AudioPlayerException("Audio output line unavailable", e);
+        } finally {
+            closeQuietly(decodedStream);
+            if (decodedStream != rawStream) {
+                closeQuietly(rawStream);
+            }
+        }
+    }
+
+    private static void closeQuietly(AutoCloseable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -170,12 +191,6 @@ public class AudioPlayer {
         this.onStopped = callback;
     }
 
-    /**
-     * Sets a callback to run (on the JavaFX Application Thread) on playback errors.
-     */
-    public void setOnError(Runnable callback) {
-        this.onError = callback;
-    }
 
     /**
      * Custom exception for audio player errors.

@@ -21,10 +21,6 @@
 
     <repositories>
         <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-        </repository>
-        <repository>
             <id>ej-technologies</id>
             <url>https://maven.ej-technologies.com/repository</url>
         </repository>

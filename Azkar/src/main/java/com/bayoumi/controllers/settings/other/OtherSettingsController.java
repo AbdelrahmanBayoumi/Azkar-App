@@ -109,7 +109,13 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
             format24Toggle.setSelected(settings.getEnable24Format());
             minimizeAtStartToggle.setSelected(settings.getMinimized());
-            runAtStartupToggle.setSelected(settings.getRunAtStartup());
+            
+            boolean startupEnabled = StartupUtil.isAutostartEnabled();
+            runAtStartupToggle.setSelected(startupEnabled);
+            if (startupEnabled != settings.getRunAtStartup()) {
+                settings.setRunAtStartup(startupEnabled);
+            }
+
             darkThemeToggle.setSelected(settings.getNightMode());
 
             version.setText(Constants.VERSION);
