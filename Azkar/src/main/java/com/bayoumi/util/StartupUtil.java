@@ -7,19 +7,17 @@ import java.nio.file.Files;
 public class StartupUtil {
 
     public static void setAutostart(boolean enable) {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
+        if (OSUtil.isWindows()) {
             setWindowsAutostart(enable);
-        } else if (os.contains("linux")) {
+        } else if (OSUtil.isLinux()) {
             setLinuxAutostart(enable);
         }
     }
 
     public static boolean isAutostartEnabled() {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
+        if (OSUtil.isWindows()) {
             return isWindowsAutostartEnabled();
-        } else if (os.contains("linux")) {
+        } else if (OSUtil.isLinux()) {
             return isLinuxAutostartEnabled();
         }
         return false;
