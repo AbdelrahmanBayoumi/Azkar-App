@@ -71,20 +71,25 @@ public class AudioPlayer {
 
             final Clip finalClip = clip;
             clip.addLineListener(event -> {
-                if (event.getType() == LineEvent.Type.STOP) {
-                    if (playing && finalClip.getMicrosecondPosition() >= finalClip.getMicrosecondLength()) {
-                        // Reached end of media
-                        playing = false;
-                        if (onEndOfMedia != null) {
-                            Platform.runLater(onEndOfMedia);
-                        }
-                        dispose();
-                    } else if (!playing) {
-                        // Manually stopped
-                        if (onStopped != null) {
-                            Platform.runLater(onStopped);
+                try {
+                    if (event.getType() == LineEvent.Type.STOP) {
+                        boolean isOpen = finalClip.isOpen();
+                        if (playing && isOpen && finalClip.getMicrosecondPosition() >= finalClip.getMicrosecondLength()) {
+                            // Reached end of media
+                            playing = false;
+                            if (onEndOfMedia != null) {
+                                Platform.runLater(onEndOfMedia);
+                            }
+                            dispose();
+                        } else if (!playing) {
+                            // Manually stopped
+                            if (onStopped != null) {
+                                Platform.runLater(onStopped);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    Logger.error("Exception in AudioPlayer LineListener", e, "AudioPlayer");
                 }
             });
         } catch (Throwable e) {
