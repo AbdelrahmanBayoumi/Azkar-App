@@ -404,6 +404,23 @@ return console.askYesNo(message, true);
                   <property name="recursive" type="boolean" value="true" />
                 </serializedBean>
               </action>
+              <action id="798" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="conditionExpression">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">Util.isWindows()</property>
+                    </object>
+                  </property>
+                  <property name="files" type="array" class="java.io.File" length="1">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>${compiler:env.LOCALAPPDATA}/${compiler:APP_SHORT_NAME}</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="recursive" type="boolean" value="true" />
+                </serializedBean>
+              </action>
             </actions>
             <formComponents>
               <formComponent id="28" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
@@ -1189,8 +1206,6 @@ return true;</property>
       <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
     </linuxDeb>
   </mediaSets>
-  <buildIds buildAll="false">
-    <mediaSet refId="807" />
-  </buildIds>
+  <buildIds buildAll="true" />
   <buildOptions verbose="true" />
 </install4j>

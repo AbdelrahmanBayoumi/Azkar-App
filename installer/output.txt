@@ -1,3 +1,4 @@
 # List of generated media files. The columns are tab-separated:
 # id | media file type | display name | media file path
-807	unix	Linux Deb Archive	/home/bayoumi/Projects/git_projects/AbdelrahmanBayoumi/Azkar-App/installer/Azkar_linux_1_3_0.deb
+792	windows	Windows 32	C:\dev\Coding\GitHub\AbdelrahmanBayoumi\Azkar-App\installer\Azkar_windows-x32.exe
+60	windows	Windows 64	C:\dev\Coding\GitHub\AbdelrahmanBayoumi\Azkar-App\installer\Azkar_windows-x64.exe
