@@ -69,15 +69,16 @@ public class AudioPlayer {
             clip = AudioSystem.getClip();
             clip.open(decodedStream);
 
-            // Listen for playback completion
+            final Clip finalClip = clip;
             clip.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP) {
-                    if (playing && clip.getMicrosecondPosition() >= clip.getMicrosecondLength()) {
+                    if (playing && finalClip.getMicrosecondPosition() >= finalClip.getMicrosecondLength()) {
                         // Reached end of media
                         playing = false;
                         if (onEndOfMedia != null) {
                             Platform.runLater(onEndOfMedia);
                         }
+                        dispose();
                     } else if (!playing) {
                         // Manually stopped
                         if (onStopped != null) {
@@ -117,13 +118,10 @@ public class AudioPlayer {
     }
 
     /**
-     * Stops playback and releases position.
+     * Stops playback and releases all resources.
      */
     public void stop() {
-        if (clip != null && clip.isRunning()) {
-            playing = false;
-            clip.stop();
-        }
+        dispose();
     }
 
     /**
@@ -133,11 +131,23 @@ public class AudioPlayer {
     public void dispose() {
         if (clip != null) {
             playing = false;
-            if (clip.isRunning()) {
-                clip.stop();
+            try {
+                if (clip.isRunning()) {
+                    clip.stop();
+                }
+                clip.close();
+            } catch (Exception ignored) {
             }
-            clip.close();
             clip = null;
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            dispose();
+        } finally {
+            super.finalize();
         }
     }
 
