@@ -60,7 +60,7 @@ public class TrayUtil {
         Thread initThread = new Thread(() -> {
             try {
                 instance.setupTray();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 Logger.error("Failed to initialize system tray",
                         e, TrayUtil.class.getName() + ".init()");
                 // If tray fails, allow normal window close to exit the app

@@ -86,12 +86,8 @@ public class AudioPlayer {
                     }
                 }
             });
-        } catch (UnsupportedAudioFileException e) {
-            throw new AudioPlayerException("Unsupported audio format: " + audioFile.getName(), e);
-        } catch (IOException e) {
-            throw new AudioPlayerException("Cannot read audio file: " + audioFile.getAbsolutePath(), e);
-        } catch (LineUnavailableException e) {
-            throw new AudioPlayerException("Audio output line unavailable", e);
+        } catch (Throwable e) {
+            throw new AudioPlayerException("Error loading audio file: " + audioFile.getName(), e);
         } finally {
             closeQuietly(decodedStream);
             if (decodedStream != rawStream) {
