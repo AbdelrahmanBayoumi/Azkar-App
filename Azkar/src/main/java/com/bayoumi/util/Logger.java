@@ -67,7 +67,7 @@ public class Logger {
                 String m = DataAndTime + " => "
                         + "Exception[ " + throwable.getLocalizedMessage() + " ] in => "
                         + CLASS_NAME;
-                 m += (msg != null) ? (" => " + msg) : "";
+                m += (msg != null) ? (" => " + msg) : "";
                 System.err.println(m);
                 if (PRINT_WRITER != null) {
                     PRINT_WRITER.println(m);

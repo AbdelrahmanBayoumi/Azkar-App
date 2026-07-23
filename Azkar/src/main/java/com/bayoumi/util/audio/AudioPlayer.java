@@ -7,7 +7,6 @@ import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * Cross-platform audio player using javax.sound.sampled API.

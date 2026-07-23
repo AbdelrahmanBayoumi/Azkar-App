@@ -26,10 +26,11 @@ public class StartupUtil {
     private static void setWindowsAutostart(boolean enable) {
         try {
             String executablePath = getExecutablePath();
-            if (executablePath == null) return;
+            if (executablePath == null)
+                return;
 
-            String cmd = executablePath.endsWith(".jar") 
-                    ? "java -jar \"" + executablePath + "\"" 
+            String cmd = executablePath.endsWith(".jar")
+                    ? "java -jar \"" + executablePath + "\""
                     : "\"" + executablePath + "\"";
 
             ProcessBuilder pb;
@@ -71,7 +72,8 @@ public class StartupUtil {
 
             if (enable) {
                 String executablePath = getExecutablePath();
-                if (executablePath == null) return;
+                if (executablePath == null)
+                    return;
 
                 String execLine = executablePath.endsWith(".jar")
                         ? "java -jar \"" + executablePath + "\""
