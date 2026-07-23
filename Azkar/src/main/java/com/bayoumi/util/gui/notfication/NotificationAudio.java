@@ -3,12 +3,14 @@ package com.bayoumi.util.gui.notfication;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.audio.AudioPlayer;
+import com.bayoumi.util.file.AppPathManager;
 import com.bayoumi.util.file.FileUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,16 +33,19 @@ public class NotificationAudio {
 
     private static void copyAudioFilesToAssetsPath() throws IOException {
         final List<String> audioFiles = new ArrayList<>();
-        FileUtils.addFilesNameToList(new File("jarFiles/audio"), audioFiles);
+        File sourceAudioDir = AppPathManager.getAppInstallDir().resolve("jarFiles/audio").toFile();
+        FileUtils.addFilesNameToList(sourceAudioDir, audioFiles);
         for (String audioFile : audioFiles) {
-            final Path from = Paths.get("jarFiles/audio/" + audioFile).toAbsolutePath();
+            final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/audio/" + audioFile).toAbsolutePath();
             final Path to = Paths.get(Constants.assetsPath + "/audio/" + audioFile).toAbsolutePath();
             if (from.equals(to)) {
                 Logger.debug("[NotificationAudio] Skipping from: " + from + " to: " + to);
                 break;
             }
             Logger.debug("[NotificationAudio] Copying from: " + from + " to: " + to);
-            FileUtils.copyIfNotExist(from, to);
+            if (Files.exists(from)) {
+                FileUtils.copyIfNotExist(from, to);
+            }
         }
     }
 

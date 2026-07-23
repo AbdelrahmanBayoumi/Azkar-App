@@ -1,9 +1,6 @@
 package com.bayoumi.util;
 
-import io.sentry.Sentry;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.bayoumi.util.file.AppPathManager;
 
 public class Constants {
     public enum Mode {PRODUCTION, DEVELOPMENT}
@@ -20,21 +17,8 @@ public class Constants {
     public static boolean isAssetsPathChanged = false;
 
     static {
-        try {
-            if (Files.isWritable(Paths.get(Constants.class.getProtectionDomain().getCodeSource().getLocation().toURI()))) {
-                assetsPath = "jarFiles";
-            } else {
-                String localAppData = System.getenv("LOCALAPPDATA");
-                if (localAppData == null || localAppData.isEmpty()) {
-                    assetsPath = System.getProperty("user.home") + "/." + Constants.APP_NAME + "/jarFiles";
-                } else {
-                    assetsPath = localAppData + "/" + Constants.APP_NAME + "/jarFiles";
-                }
-                isAssetsPathChanged = true;
-            }
-        } catch (Exception ex) {
-            Sentry.captureException(ex);
-            Logger.error(ex.getLocalizedMessage(), ex, Constants.class.getName() + " -> static init");
-        }
+        AppPathManager.init();
+        assetsPath = AppPathManager.getAssetsPath();
+        isAssetsPathChanged = AppPathManager.isAssetsPathChanged();
     }
 }

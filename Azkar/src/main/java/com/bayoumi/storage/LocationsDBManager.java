@@ -2,6 +2,7 @@ package com.bayoumi.storage;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.AppPathManager;
 import com.bayoumi.util.file.FileUtils;
 
 import java.io.File;
@@ -83,12 +84,14 @@ public class LocationsDBManager {
     }
 
     private void copyDatabaseToAssetsPath() throws IOException {
-        final Path from = Paths.get("jarFiles/db/locations.db").toAbsolutePath();
+        final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/db/locations.db").toAbsolutePath();
         final Path to = Paths.get(Constants.assetsPath + "/db/locations.db").toAbsolutePath();
         if (from.equals(to)) {
             return;
         }
-        FileUtils.copyIfNotExist(from, to);
+        if (Files.exists(from)) {
+            FileUtils.copyIfNotExist(from, to);
+        }
     }
 
 }

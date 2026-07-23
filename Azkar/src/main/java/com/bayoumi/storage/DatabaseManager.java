@@ -1,11 +1,13 @@
 package com.bayoumi.storage;
 
-
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.AppPathManager;
+import com.bayoumi.util.file.FileUtils;
 import org.flywaydb.core.Flyway;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -66,7 +68,6 @@ public class DatabaseManager {
         return false;
     }
 
-
     /**
      * Retrieves the ID from the database. If the ID is null or empty, a new one is generated and saved to the database.
      *
@@ -97,11 +98,13 @@ public class DatabaseManager {
     }
 
     private void copyDatabaseToAssetsPath() throws IOException {
-        final Path from = Paths.get("jarFiles/db/data.db").toAbsolutePath();
+        final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/db/data.db").toAbsolutePath();
         final Path to = Paths.get(Constants.assetsPath + "/db/data.db").toAbsolutePath();
         if (from.equals(to)) {
             return;
         }
-        com.bayoumi.util.file.FileUtils.copyIfNotExist(from, to);
+        if (Files.exists(from)) {
+            FileUtils.copyIfNotExist(from, to);
+        }
     }
 }
