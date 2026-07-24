@@ -3,10 +3,8 @@ package com.bayoumi.storage;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.file.AppPathManager;
-import com.bayoumi.util.file.FileUtils;
+import org.sqlite.SQLiteConfig;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,37 +18,12 @@ public class LocationsDBManager {
     public Connection con = null;
 
     private LocationsDBManager() throws Exception {
-        try {
-            copyDatabaseToAssetsPath();
-        } catch (IOException e) {
-            Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".copyDatabaseToAssetsPath()");
-        }
-        try {
-            if (!Files.exists(Paths.get(Constants.assetsPath + "/db/locations.db"))) {
-                // Throw error to download the DB again
-                throw new Exception("LocationsDB does not exist");
-            } else {
-                if (!connectToDatabase()) {
-                    throw new Exception("Cannot connect to LocationsDB");
-                }
-                if (!DatabaseHelper.checkIfTablesExist(con, "Countries")
-                        || !DatabaseHelper.checkIfTablesExist(con, "cityd")) {
-                    // close connection
-                    con.close();
-                    con = null;
-                    // Delete created locations.db file
-                    new File(Constants.assetsPath + "/db/locations.db").delete();
-                    // Throw error to download the DB again
-                    throw new Exception("LocationsDB does not exist");
-                }
-            }
-        } catch (Exception ex) {
-            // close connection
-            if (con != null) {
-                con.close();
-                con = null;
-            }
-            throw ex;
+        Path bundledPath = AppPathManager.getAppInstallDir().resolve("jarFiles/db/locations.db").toAbsolutePath();
+        Path fallbackPath = Paths.get(Constants.assetsPath + "/db/locations.db").toAbsolutePath();
+
+        this.con = openDatabaseConnection(bundledPath, fallbackPath);
+        if (this.con == null) {
+            throw new Exception("LocationsDB does not exist or is invalid");
         }
     }
 
@@ -61,32 +34,56 @@ public class LocationsDBManager {
         return databaseManager;
     }
 
-    private boolean connectToDatabase() {
-        try {
-            final String url = "jdbc:sqlite:" + Constants.assetsPath + "/db/locations.db";
-            if (con != null && con.getMetaData().getURL().equals(url)) {
-                return true;
+    static Connection openDatabaseConnection(Path bundledPath, Path fallbackPath) {
+        Path normBundled = (bundledPath != null) ? bundledPath.toAbsolutePath().normalize() : null;
+        Path normFallback = (fallbackPath != null) ? fallbackPath.toAbsolutePath().normalize() : null;
+
+        if (normBundled != null && Files.isRegularFile(normBundled)) {
+            Connection candidate = tryConnectReadOnly(normBundled);
+            if (candidate != null) {
+                return candidate;
             }
-            if (con == null) {
-                // .... Connect to SQlLite ....
-                Class.forName("org.sqlite.JDBC");
-                con = DriverManager.getConnection(url);
-                con.prepareStatement("PRAGMA foreign_keys=ON").execute();
-                return true;
-            }
-        } catch (ClassNotFoundException | SQLException ex) {
-            con = null;
-            Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".connectToDatabase()");
         }
-        return false;
+        if (normFallback != null && Files.isRegularFile(normFallback)) {
+            if (normBundled != null && normFallback.equals(normBundled)) {
+                return null;
+            }
+            Connection candidate = tryConnectReadOnly(normFallback);
+            if (candidate != null) {
+                return candidate;
+            }
+        }
+        return null;
     }
 
-    private void copyDatabaseToAssetsPath() throws IOException {
-        final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/db/locations.db").toAbsolutePath();
-        final Path to = Paths.get(Constants.assetsPath + "/db/locations.db").toAbsolutePath();
-        if (!FileUtils.copySeedIfNotExist(from, to)) {
-            Logger.warn("[LocationsDBManager] Required locations.db seed file missing: " + to);
+    private static Connection tryConnectReadOnly(Path dbPath) {
+        Connection connection = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            SQLiteConfig config = new SQLiteConfig();
+            config.setReadOnly(true);
+            String url = "jdbc:sqlite:" + dbPath.toAbsolutePath().normalize().toString();
+            connection = DriverManager.getConnection(url, config.toProperties());
+            try (java.sql.Statement st = connection.createStatement()) {
+                st.execute("PRAGMA foreign_keys=ON;");
+            }
+            if (DatabaseHelper.checkIfTablesExist(connection, "Countries")
+                    && DatabaseHelper.checkIfTablesExist(connection, "cityd")) {
+                return connection;
+            } else {
+                connection.close();
+                return null;
+            }
+        } catch (Exception ex) {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ignored) {
+                }
+            }
+            Logger.error(ex.getLocalizedMessage(), ex, LocationsDBManager.class.getName() + ".tryConnectReadOnly()");
         }
+        return null;
     }
 
 }

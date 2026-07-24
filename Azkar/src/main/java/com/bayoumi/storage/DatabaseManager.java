@@ -2,14 +2,8 @@ package com.bayoumi.storage;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
-import com.bayoumi.util.file.AppPathManager;
-import com.bayoumi.util.file.FileUtils;
 import org.flywaydb.core.Flyway;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 
 public class DatabaseManager {
@@ -29,13 +23,6 @@ public class DatabaseManager {
     }
 
     public boolean init() {
-        if (Constants.isAssetsPathChanged) {
-            try {
-                copyDatabaseToAssetsPath();
-            } catch (IOException e) {
-                Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".copyDatabaseToAssetsPath()");
-            }
-        }
         try {
             Flyway.configure()
                     .dataSource("jdbc:sqlite:" + Constants.assetsPath + "/db/data.db", "", "")
@@ -94,17 +81,6 @@ public class DatabaseManager {
             databaseManager.stat.executeUpdate();
         } catch (SQLException ex) {
             Logger.error(null, ex, getClass().getName() + ".setID(ID: " + ID + ")");
-        }
-    }
-
-    private void copyDatabaseToAssetsPath() throws IOException {
-        final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/db/data.db").toAbsolutePath();
-        final Path to = Paths.get(Constants.assetsPath + "/db/data.db").toAbsolutePath();
-        if (from.equals(to)) {
-            return;
-        }
-        if (Files.exists(from)) {
-            FileUtils.copyIfNotExist(from, to);
         }
     }
 }
