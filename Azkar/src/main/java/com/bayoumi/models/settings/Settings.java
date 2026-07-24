@@ -30,6 +30,7 @@ public class Settings extends PreferencesObservable {
     private final SimpleEntry<PreferencesType, Language> language;
     private final SimpleEntry<PreferencesType, Integer> hijriOffset;
     private final SimpleEntry<PreferencesType, Boolean> sendUsageData;
+    private final SimpleEntry<PreferencesType, Boolean> runAtStartup;
 
 
     private Settings() {
@@ -43,6 +44,7 @@ public class Settings extends PreferencesObservable {
         language = new SimpleEntry<>(PreferencesType.LANGUAGE, Language.get(PreferencesType.LANGUAGE.getDefaultValue()));
         hijriOffset = new SimpleEntry<>(PreferencesType.HIJRI_OFFSET, Integer.valueOf(PreferencesType.HIJRI_OFFSET.getDefaultValue()));
         sendUsageData = new SimpleEntry<>(PreferencesType.SEND_USAGE_DATA, Boolean.valueOf(PreferencesType.SEND_USAGE_DATA.getDefaultValue()));
+        runAtStartup = new SimpleEntry<>(PreferencesType.RUN_AT_STARTUP, Boolean.valueOf(PreferencesType.RUN_AT_STARTUP.getDefaultValue()));
 
         loadSettings();
     }
@@ -55,6 +57,7 @@ public class Settings extends PreferencesObservable {
         language.setValue(Language.get(Preferences.getInstance().get(language.getKey())));
         hijriOffset.setValue(Preferences.getInstance().getInt(hijriOffset.getKey()));
         sendUsageData.setValue(Preferences.getInstance().getBoolean(sendUsageData.getKey()));
+        runAtStartup.setValue(Preferences.getInstance().getBoolean(runAtStartup.getKey()));
     }
 
     public boolean getSendUsageData() {
@@ -154,6 +157,19 @@ public class Settings extends PreferencesObservable {
         Preferences.getInstance().set(automaticCheckForUpdates.getKey(), value + "");
         // 3. notify observers
         notifyObservers(automaticCheckForUpdates.getKey(), value);
+    }
+
+    public boolean getRunAtStartup() {
+        return runAtStartup.getValue();
+    }
+
+    public void setRunAtStartup(boolean value) {
+        // 1. set value to local variable
+        runAtStartup.setValue(value);
+        // 2. save value to DB
+        Preferences.getInstance().set(runAtStartup.getKey(), value + "");
+        // 3. notify observers
+        notifyObservers(runAtStartup.getKey(), value);
     }
 
     public AzkarSettings getAzkarSettings() {

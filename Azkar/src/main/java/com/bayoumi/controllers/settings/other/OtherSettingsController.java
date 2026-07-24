@@ -9,6 +9,7 @@ import com.bayoumi.models.settings.Settings;
 import com.bayoumi.services.update.UpdateHandler;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.StartupUtil;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
@@ -46,7 +47,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private Spinner<Integer> hijriDateOffset;
     @FXML
-    private Label minimizeAtStart, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel,
+    private Label minimizeAtStart, runAtStartup, format24, darkTheme, hijriDateLabel, version, adjustingTheHijriDateText, languageText, adjustingTheHijriDateNote, usageStatsLabel,
             versionNumberLabel, website, termsOfUse, privacyPolicy, shareLabel;
     @FXML
     private VBox scrollChild, loadingBox;
@@ -55,7 +56,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private JFXToggleButton minimizeAtStartToggle, format24Toggle, darkThemeToggle;
+    private JFXToggleButton minimizeAtStartToggle, runAtStartupToggle, format24Toggle, darkThemeToggle;
 
 
     public void updateBundle(ResourceBundle bundle) {
@@ -64,6 +65,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
         format24.setText(Utility.toUTF(bundle.getString("hour24System")));
         darkTheme.setText(Utility.toUTF(bundle.getString("darkTheme")));
         minimizeAtStart.setText(Utility.toUTF(bundle.getString("minimizeAtStart")));
+        runAtStartup.setText(Utility.toUTF(bundle.getString("runAtStartup")));
         adjustingTheHijriDateText.setText(Utility.toUTF(bundle.getString("adjustingTheHijriDateText")));
         adjustingTheHijriDateNote.setText(Utility.toUTF(bundle.getString("adjustingTheHijriDateNote")));
         checkForUpdateButton.setText(Utility.toUTF(bundle.getString("checkForUpdate")));
@@ -83,6 +85,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
         toggleAction(format24Toggle);
         toggleAction(minimizeAtStartToggle);
+        toggleAction(runAtStartupToggle);
         toggleAction(darkThemeToggle);
     }
 
@@ -106,6 +109,13 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
             format24Toggle.setSelected(settings.getEnable24Format());
             minimizeAtStartToggle.setSelected(settings.getMinimized());
+
+            boolean startupEnabled = StartupUtil.isAutostartEnabled();
+            runAtStartupToggle.setSelected(startupEnabled);
+            if (startupEnabled != settings.getRunAtStartup()) {
+                settings.setRunAtStartup(startupEnabled);
+            }
+
             darkThemeToggle.setSelected(settings.getNightMode());
 
             version.setText(Constants.VERSION);
@@ -254,6 +264,13 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     private void minimizeAtStartSelect() {
         toggleAction(minimizeAtStartToggle);
         Settings.getInstance().setMinimized(minimizeAtStartToggle.isSelected());
+    }
+
+    @FXML
+    private void runAtStartupSelect() {
+        toggleAction(runAtStartupToggle);
+        Settings.getInstance().setRunAtStartup(runAtStartupToggle.isSelected());
+        StartupUtil.setAutostart(runAtStartupToggle.isSelected());
     }
 
     private void toggleAction(JFXToggleButton toggleButton) {
