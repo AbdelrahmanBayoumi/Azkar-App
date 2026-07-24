@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 public class AppPathManager {
 
     private static String assetsPath;
-    private static boolean assetsPathChanged = false;
 
     private AppPathManager() {
     }
@@ -63,10 +62,8 @@ public class AppPathManager {
 
             Path resolvedPath = Paths.get(assetsPath);
             if (!resolvedPath.equals(jarFilesDir)) {
-                assetsPathChanged = true;
                 ensureWritableDirectory(resolvedPath);
             } else {
-                assetsPathChanged = false;
                 if (!jarFilesExists) {
                     ensureWritableDirectory(jarFilesDir);
                 }
@@ -176,9 +173,5 @@ public class AppPathManager {
             init();
         }
         return assetsPath;
-    }
-
-    public static boolean isAssetsPathChanged() {
-        return assetsPathChanged;
     }
 }

@@ -111,7 +111,7 @@
             <version>2.17.0</version>
         </dependency>
 
-        <!-- Dorkbox SystemTray: uses native AppIndicator/GTK via JNA (no extra OS libs needed) -->
+        <!-- Dorkbox SystemTray: uses native AppIndicator/GTK via JNA; some Linux desktops still need AppIndicator support -->
         <dependency>
             <groupId>com.dorkbox</groupId>
             <artifactId>SystemTray</artifactId>

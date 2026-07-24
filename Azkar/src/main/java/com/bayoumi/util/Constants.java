@@ -14,11 +14,9 @@ public class Constants {
     public static final String QURAN_FONT_FAMILY = "Noto Naskh Arabic";
 
     public static String assetsPath;
-    public static boolean isAssetsPathChanged = false;
 
     static {
         AppPathManager.init();
         assetsPath = AppPathManager.getAssetsPath();
-        isAssetsPathChanged = AppPathManager.isAssetsPathChanged();
     }
 }

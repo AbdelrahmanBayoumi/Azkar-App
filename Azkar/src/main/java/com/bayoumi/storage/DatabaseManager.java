@@ -1,5 +1,6 @@
 package com.bayoumi.storage;
 
+
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import org.flywaydb.core.Flyway;
@@ -54,6 +55,7 @@ public class DatabaseManager {
         }
         return false;
     }
+
 
     /**
      * Retrieves the ID from the database. If the ID is null or empty, a new one is generated and saved to the database.
