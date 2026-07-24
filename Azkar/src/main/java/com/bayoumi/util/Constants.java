@@ -6,7 +6,6 @@ public class Constants {
     public enum Mode {PRODUCTION, DEVELOPMENT}
 
     // Program characteristics
-    public static String assetsPath;
     public final static String APP_NAME = "Azkar";
     public final static String VERSION = "1.3.1";
     public final static Mode RUNNING_MODE = Mode.DEVELOPMENT;
@@ -14,6 +13,7 @@ public class Constants {
     public final static String LOCATIONS_DB_URL = "https://github.com/AbdelrahmanBayoumi/LocationsDB/releases/latest/download/locations.db";
     public static final String QURAN_FONT_FAMILY = "Noto Naskh Arabic";
 
+    public static String assetsPath;
     public static boolean isAssetsPathChanged = false;
 
     static {

@@ -8,7 +8,6 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -58,13 +57,11 @@ public class Muezzin {
     public static String PARENT_PATH = "jarFiles/audio/adhan/";
 
     static {
-        if (Constants.isAssetsPathChanged) {
-            PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
-            try {
-                Muezzin.copyAdhanFilesToAssetsPath();
-            } catch (IOException e) {
-                Logger.error(e.getLocalizedMessage(), e, Muezzin.class.getName() + ".copyAdhanFilesToAssetsPath()");
-            }
+        PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
+        try {
+            Muezzin.copyAdhanFilesToAssetsPath();
+        } catch (IOException e) {
+            Logger.error(e.getLocalizedMessage(), e, Muezzin.class.getName() + ".copyAdhanFilesToAssetsPath()");
         }
     }
 
@@ -72,16 +69,10 @@ public class Muezzin {
         for (Muezzin muezzin : VALUES) {
             if (muezzin.equals(NO_SOUND))
                 continue;
-            final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/audio/adhan/" + muezzin.getFileName())
-                    .toAbsolutePath();
+            final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
             final Path to = Paths.get(Constants.assetsPath + "/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
-            if (from.equals(to)) {
-                Logger.debug("[Muezzin] Skipping from: " + from + " to: " + to);
-                break;
-            }
-            Logger.debug("[Muezzin] Copying from: " + from + " to: " + to);
-            if (Files.exists(from)) {
-                FileUtils.copyIfNotExist(from, to);
+            if (!FileUtils.copySeedIfNotExist(from, to)) {
+                Logger.warn("[Muezzin] Required adhan seed audio missing: " + to);
             }
         }
     }

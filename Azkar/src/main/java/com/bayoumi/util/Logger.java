@@ -53,6 +53,34 @@ public class Logger {
         }
     }
 
+    public static void warn(String msg) {
+        new Thread(() -> {
+            synchronized (LOCK) {
+                String dataAndTime = DATE_TIME_FORMAT.format(new Date());
+                String logMsg = dataAndTime + " => WARNING: " + msg;
+                System.out.println(logMsg);
+                if (PRINT_WRITER != null) {
+                    PRINT_WRITER.println(logMsg);
+                    PRINT_WRITER.flush();
+                }
+            }
+        }).start();
+    }
+
+    public static void warn(String msg, Throwable throwable) {
+        new Thread(() -> {
+            synchronized (LOCK) {
+                String dataAndTime = DATE_TIME_FORMAT.format(new Date());
+                String logMsg = dataAndTime + " => WARNING: " + msg + (throwable != null ? " (" + throwable.getLocalizedMessage() + ")" : "");
+                System.out.println(logMsg);
+                if (PRINT_WRITER != null) {
+                    PRINT_WRITER.println(logMsg);
+                    PRINT_WRITER.flush();
+                }
+            }
+        }).start();
+    }
+
 
     public static void error(String msg, Throwable throwable, String CLASS_NAME) {
         new Thread(() -> {

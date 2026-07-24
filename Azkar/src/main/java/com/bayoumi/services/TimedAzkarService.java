@@ -107,13 +107,8 @@ public class TimedAzkarService {
         for (Language language : Language.values()) {
             final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles" + "/" + FOLDER_NAME + "/" + language.getLocale() + ".json").toAbsolutePath();
             final Path to = Paths.get(Constants.assetsPath + "/" + FOLDER_NAME + "/" + language.getLocale() + ".json").toAbsolutePath();
-            if (from.equals(to)) {
-                Logger.debug("[TimedAzkarService] Skipping from: " + from + " to: " + to);
-                break;
-            }
-            Logger.debug("[TimedAzkarService] Copying from: " + from + " to: " + to);
-            if (Files.exists(from)) {
-                FileUtils.copyIfNotExist(from, to);
+            if (!FileUtils.copySeedIfNotExist(from, to)) {
+                Logger.warn("[TimedAzkarService] Required azkar seed JSON missing: " + to);
             }
         }
     }

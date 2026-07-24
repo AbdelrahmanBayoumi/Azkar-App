@@ -20,12 +20,10 @@ public class LocationsDBManager {
     public Connection con = null;
 
     private LocationsDBManager() throws Exception {
-        if (Constants.isAssetsPathChanged) {
-            try {
-                copyDatabaseToAssetsPath();
-            } catch (IOException e) {
-                Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".copyDatabaseToAssetsPath()");
-            }
+        try {
+            copyDatabaseToAssetsPath();
+        } catch (IOException e) {
+            Logger.error(e.getLocalizedMessage(), e, getClass().getName() + ".copyDatabaseToAssetsPath()");
         }
         try {
             if (!Files.exists(Paths.get(Constants.assetsPath + "/db/locations.db"))) {
@@ -86,11 +84,8 @@ public class LocationsDBManager {
     private void copyDatabaseToAssetsPath() throws IOException {
         final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/db/locations.db").toAbsolutePath();
         final Path to = Paths.get(Constants.assetsPath + "/db/locations.db").toAbsolutePath();
-        if (from.equals(to)) {
-            return;
-        }
-        if (Files.exists(from)) {
-            FileUtils.copyIfNotExist(from, to);
+        if (!FileUtils.copySeedIfNotExist(from, to)) {
+            Logger.warn("[LocationsDBManager] Required locations.db seed file missing: " + to);
         }
     }
 
