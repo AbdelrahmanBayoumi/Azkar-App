@@ -61,7 +61,6 @@ public class ChooseAudioController implements Initializable {
     public static synchronized boolean stopIfPlaying() {
         if (audioPlayer != null && audioPlayer.isPlaying()) {
             audioPlayer.stop();
-            audioPlayer.dispose();
             audioPlayer = null;
             return true;
         }
@@ -158,7 +157,7 @@ public class ChooseAudioController implements Initializable {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         // TODO: support & test other audio formats
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.ogg")
+                new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav")
         );
         final File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
         if (selectedFile != null && selectedFile.isFile()) {

@@ -106,7 +106,7 @@ We evaluated the following options for Java 8 system tray integration on the tar
 > [!IMPORTANT]
 > **Architectural Directive for Contributors & AI Assistants:**
 > The current project decision is to use **Dorkbox SystemTray 3.17** as the single, unified system tray backend across all supported platforms (Windows, Linux, and macOS).
-> A unified backend reduces platform-specific code, testing overhead, and interaction risks between JavaFX Application Thread and multiple tray implementations. The previous direct left-click behavior on Windows is intentionally traded for a consistent menu-based interaction across all operating systems.
+> Using one API reduces platform-specific implementation code, but every supported platform still requires testing. Click and menu behavior can vary with the backend Dorkbox selects for each operating system and desktop environment.
 
 ### Decision: Accept `dorkbox SystemTray 3.17` with menu-only interaction
 
@@ -169,8 +169,8 @@ On the tested Linux Mint Cinnamon environment, clicking the tray icon opens the 
 
 Applications using other tray implementations may support a distinct activation action. The limitation documented here applies to the Dorkbox 3.17 AppIndicator API used by this project.
 
-### 2. Windows behavior change
-On Windows, the original AWT implementation supported left-click to open the app directly and right-click for the menu. With dorkbox, both clicks now show the menu. This is a minor UX regression for Windows users (one extra click).
+### 2. Windows behavior requires verification
+On Windows, the original AWT implementation supported left-click to open the app directly and right-click for the menu. The Dorkbox migration may change that interaction depending on the selected backend. Windows click behavior has not yet been manually verified for this change.
 
 ### 3. SLF4J warning in console
 Dorkbox depends on SLF4J. Without an SLF4J binding configured, you'll see:

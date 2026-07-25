@@ -1224,6 +1224,6 @@ return true;</property>
       <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
     </linuxDeb>
   </mediaSets>
-  <buildIds buildAll="true" />
+  <buildIds />
   <buildOptions verbose="true" />
 </install4j>

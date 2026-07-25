@@ -152,7 +152,6 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             volumeBox.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
             if (audioPlayer != null && audioPlayer.isPlaying()) {
                 audioPlayer.stop();
-                audioPlayer.dispose();
                 audioPlayer = null;
                 playButton.setGraphic(playIcon);
                 playButton.setPadding(new Insets(5, 14, 5, 8));
@@ -214,15 +213,19 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private void play() {
         if (audioPlayer != null && audioPlayer.isPlaying()) {
             audioPlayer.stop();
-            audioPlayer.dispose();
             audioPlayer = null;
             playButton.setGraphic(playIcon);
         } else {
             String fileName = azkarAlarmComboBox.getValue();
             Logger.debug(fileName);
             if (!fileName.equals("بدون صوت")) {
+                File audioFile = NotificationAudio.resolveAudioFile(fileName);
+                if (audioFile == null) {
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
+                    return;
+                }
                 try {
-                    audioPlayer = new AudioPlayer(new File(Constants.assetsPath + "/audio/" + fileName));
+                    audioPlayer = new AudioPlayer(audioFile);
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);

@@ -60,6 +60,10 @@ public class NotificationAudio {
         }
     }
 
+    public static File resolveAudioFile(String fileName) {
+        return resolveAudioFile(fileName, getBundledAudioDir(), getUserAudioDir());
+    }
+
     static File resolveAudioFile(String fileName, Path bundledDir, Path userDir) {
         if (fileName == null || fileName.trim().isEmpty() || fileName.contains("بدون صوت")) {
             return null;
@@ -126,7 +130,6 @@ public class NotificationAudio {
     public void stop() {
         if (this.audioPlayer != null) {
             this.audioPlayer.stop();
-            this.audioPlayer.dispose();
             this.audioPlayer = null;
         }
     }

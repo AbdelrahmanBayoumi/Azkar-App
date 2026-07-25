@@ -44,6 +44,7 @@ import java.util.ResourceBundle;
 
 public class TimedAzkarController implements Initializable {
     private AudioPlayer audioPlayer;
+    private boolean closed;
     private ResourceBundle bundle;
     private List<TimedZekrDTO> timedAzkarList;
     private Image morningImage, nightImage;
@@ -100,10 +101,9 @@ public class TimedAzkarController implements Initializable {
         playButton.setText(Utility.toUTF(bundle.getString("playAudio")));
         toggleZekrDescriptionButton.setText(Utility.toUTF(bundle.getString("toggleZekrDescription")));
     }
-
-
     public void setData(List<TimedZekrDTO> timedZekrDTOList, String type, Stage stage) {
         currentIndex = 0;
+        closed = false;
         if (type.toLowerCase().contains("morning")) {
             title.setText(Utility.toUTF(bundle.getString("morningAzkar")));
             image.setImage(morningImage);
@@ -115,7 +115,10 @@ public class TimedAzkarController implements Initializable {
         }
 
         count.requestFocus();
-        stage.setOnCloseRequest(event -> stopIfPlaying());
+        stage.setOnCloseRequest(event -> {
+            closed = true;
+            stopIfPlaying();
+        });
     }
 
     @FXML
@@ -315,12 +318,21 @@ public class TimedAzkarController implements Initializable {
             }
             progressBox.setVisible(true);
             new Thread(() -> {
-                if (FileDownloader.downloadFile(audioPath, audioFile)) {
-                    Platform.runLater(() -> playMedia(audioFile));
-                } else {
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), bundle));
-                }
-                Platform.runLater(() -> progressBox.setVisible(false));
+                boolean downloadSuccess = FileDownloader.downloadFile(audioPath, audioFile);
+                Platform.runLater(() -> {
+                    if (closed || isWindowClosed()) {
+                        if (audioFile.exists() && !audioFile.delete()) {
+                            Logger.error("Failed to delete cancelled audio file.", new Exception("Failed to delete audio file."), getClass().getName() + ".onPlayAudio()");
+                        }
+                    } else {
+                        if (downloadSuccess) {
+                            playMedia(audioFile);
+                        } else {
+                            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), bundle);
+                        }
+                        progressBox.setVisible(false);
+                    }
+                });
             }).start();
         }
     }
@@ -328,7 +340,6 @@ public class TimedAzkarController implements Initializable {
     private void pauseOrStopMedia(File audioFile) {
         if (audioPlayer != null) {
             audioPlayer.stop();
-            audioPlayer.dispose();
             audioPlayer = null;
         }
         if (audioFile != null && audioFile.exists() && !audioFile.delete()) {
@@ -340,6 +351,12 @@ public class TimedAzkarController implements Initializable {
     }
 
     private void playMedia(File audioFile) {
+        if (closed || isWindowClosed()) {
+            if (audioFile != null && audioFile.exists() && !audioFile.delete()) {
+                Logger.error("Failed to delete audio file after window close.", new Exception("Failed to delete audio file."), getClass().getName() + ".playMedia()");
+            }
+            return;
+        }
         try {
             audioPlayer = new AudioPlayer(audioFile);
         } catch (Exception e) {
@@ -355,6 +372,10 @@ public class TimedAzkarController implements Initializable {
         playButton.setGraphic(pauseIcon);
         playButton.setPadding(new Insets(5, 11, 5, 11));
         playButton.setText(Utility.toUTF(bundle.getString("stopAudio")));
+    }
+
+    private boolean isWindowClosed() {
+        return progressBox == null || progressBox.getScene() == null || progressBox.getScene().getWindow() == null || !progressBox.getScene().getWindow().isShowing();
     }
 
     private void stopIfPlaying() {
