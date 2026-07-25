@@ -17,17 +17,17 @@ public class LocationsDBManager {
     private static LocationsDBManager databaseManager = null;  // static
     public Connection con = null;
 
-    private LocationsDBManager() throws Exception {
+    private LocationsDBManager() throws SQLException {
         Path bundledPath = AppPathManager.getAppInstallDir().resolve("jarFiles/db/locations.db").toAbsolutePath();
         Path fallbackPath = Paths.get(Constants.assetsPath + "/db/locations.db").toAbsolutePath();
 
         this.con = openDatabaseConnection(bundledPath, fallbackPath);
         if (this.con == null) {
-            throw new Exception("LocationsDB does not exist or is invalid");
+            throw new SQLException("LocationsDB does not exist or is invalid");
         }
     }
 
-    public static LocationsDBManager getInstance() throws Exception {
+    public static LocationsDBManager getInstance() throws SQLException {
         if (databaseManager == null) {
             databaseManager = new LocationsDBManager();
         }
@@ -45,13 +45,11 @@ public class LocationsDBManager {
             }
         }
         if (normFallback != null && Files.isRegularFile(normFallback)) {
-            if (normBundled != null && normFallback.equals(normBundled)) {
+            if (normFallback.equals(normBundled)) {
                 return null;
             }
             Connection candidate = tryConnectReadOnly(normFallback);
-            if (candidate != null) {
-                return candidate;
-            }
+            return candidate;
         }
         return null;
     }
@@ -62,7 +60,7 @@ public class LocationsDBManager {
             Class.forName("org.sqlite.JDBC");
             SQLiteConfig config = new SQLiteConfig();
             config.setReadOnly(true);
-            String url = "jdbc:sqlite:" + dbPath.toAbsolutePath().normalize().toString();
+            String url = "jdbc:sqlite:" + dbPath.toAbsolutePath().normalize();
             connection = DriverManager.getConnection(url, config.toProperties());
             try (java.sql.Statement st = connection.createStatement()) {
                 st.execute("PRAGMA foreign_keys=ON;");

@@ -54,10 +54,9 @@ public class Muezzin {
         VALUES = Collections.unmodifiableList(values);
     }
 
-    public static String PARENT_PATH = "jarFiles/audio/adhan/";
+    public static final String PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
 
     static {
-        PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
         try {
             Muezzin.copyAdhanFilesToAssetsPath();
         } catch (IOException e) {

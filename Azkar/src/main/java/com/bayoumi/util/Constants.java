@@ -13,7 +13,7 @@ public class Constants {
     public final static String LOCATIONS_DB_URL = "https://github.com/AbdelrahmanBayoumi/LocationsDB/releases/latest/download/locations.db";
     public static final String QURAN_FONT_FAMILY = "Noto Naskh Arabic";
 
-    public static String assetsPath;
+    public static final String assetsPath;
 
     static {
         AppPathManager.init();

@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
-    public static AudioPlayer AUDIO_PLAYER;
+    private static AudioPlayer audioPlayer;
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
@@ -59,17 +59,17 @@ public class ChooseAudioController implements Initializable {
     private JFXButton uploadButton;
 
     public static boolean stopIfPlaying() {
-        final boolean isMediaPlaying = isMediaPlaying();
-        if (isMediaPlaying) {
-            AUDIO_PLAYER.stop();
-            AUDIO_PLAYER.dispose();
-            AUDIO_PLAYER = null;
+        if (audioPlayer != null && audioPlayer.isPlaying()) {
+            audioPlayer.stop();
+            audioPlayer.dispose();
+            audioPlayer = null;
+            return true;
         }
-        return isMediaPlaying;
+        return false;
     }
 
     private static boolean isMediaPlaying() {
-        return AUDIO_PLAYER != null && AUDIO_PLAYER.isPlaying();
+        return audioPlayer != null && audioPlayer.isPlaying();
     }
 
     public Muezzin getValue() {
@@ -146,8 +146,8 @@ public class ChooseAudioController implements Initializable {
             } else if (prayerVolumeSlider.getValue() == 0) {
                 volume.setIcon(OctIcon.MUTE);
             }
-            if (null != AUDIO_PLAYER) {
-                AUDIO_PLAYER.setVolume(azkarSettings.getPrayerVolume() / 100.0);
+            if (null != audioPlayer) {
+                audioPlayer.setVolume(azkarSettings.getPrayerVolume() / 100.0);
             }
         });
 
@@ -194,17 +194,17 @@ public class ChooseAudioController implements Initializable {
             Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
                 try {
-                    AUDIO_PLAYER = new AudioPlayer(new File(muezzin.getPath()));
+                    audioPlayer = new AudioPlayer(new File(muezzin.getPath()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
-                AUDIO_PLAYER.setVolume(prayerVolumeSlider.getValue() / 100.0);
-                AUDIO_PLAYER.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
-                AUDIO_PLAYER.setOnStopped(() -> playButton.setGraphic(playIcon));
-                AUDIO_PLAYER.play();
+                audioPlayer.setVolume(prayerVolumeSlider.getValue() / 100.0);
+                audioPlayer.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
+                audioPlayer.setOnStopped(() -> playButton.setGraphic(playIcon));
+                audioPlayer.play();
                 setPauseIcon();
             }
         }
