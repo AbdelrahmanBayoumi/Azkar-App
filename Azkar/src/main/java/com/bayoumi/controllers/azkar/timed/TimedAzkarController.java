@@ -366,4 +366,8 @@ public class TimedAzkarController implements Initializable {
     private boolean isMediaPlaying() {
         return audioPlayer != null && audioPlayer.isPlaying();
     }
+
+    private boolean isWindowClosed() {
+        return !progressBox.getScene().getWindow().isShowing();
+    }
 }

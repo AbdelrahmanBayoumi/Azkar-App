@@ -10,32 +10,18 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import javax.imageio.ImageIO;
-import javax.swing.SwingUtilities;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 /**
- * Manages system tray integration using the platform-appropriate backend.
+ * Manages system tray integration using dorkbox SystemTray.
+ * Supports Linux (AppIndicator/GTK via JNA), Windows, and macOS.
  * <p>
  * Usage: {@code TrayUtil.init(primaryStage);}
  */
 public class TrayUtil {
 
-    private enum Backend {
-        NONE,
-        DORKBOX,
-        AWT
-    }
-
     private final Stage stage;
-    private final Object trayLock = new Object();
-    private volatile Backend backend = Backend.NONE;
-    private volatile SystemTray tray;
-    private volatile java.awt.SystemTray awtTray;
-    private volatile java.awt.TrayIcon awtTrayIcon;
-    private volatile boolean trayReady;
-    private volatile boolean shutdownRequested;
+    private volatile SystemTray tray; // written on init thread, read on FX thread
 
     private TrayUtil(Stage stage) {
         this.stage = stage;
@@ -46,281 +32,96 @@ public class TrayUtil {
      * <p>
      * - Prevents JavaFX implicit exit so the app stays alive in the tray.
      * - Registers a close handler that hides the window instead of exiting.
-     * - Launches tray setup off the JavaFX Application Thread on the appropriate platform thread.
+     * - Launches tray setup on a background daemon thread to avoid blocking the UI.
      *
      * @param stage the primary application stage
      * @return the TrayUtil instance (can be stored for future shutdown calls)
      */
     public static TrayUtil init(Stage stage) {
         TrayUtil instance = new TrayUtil(stage);
-        instance.trayReady = false;
 
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        if (osName.contains("win") || osName.contains("linux")) {
-            Platform.setImplicitExit(false);
-            instance.installSupportedCloseHandler();
-        }
+        // Prevent JavaFX from exiting when the last window is closed
+        Platform.setImplicitExit(false);
 
-        if (osName.contains("win")) {
-            instance.initWindowsTray();
-        } else if (osName.contains("linux")) {
-            instance.initLinuxTray();
-        } else {
-            Platform.setImplicitExit(true);
-        }
+        // Hide window on close instead of exiting; the tray keeps the app alive
+        stage.setOnCloseRequest(event -> {
+            if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
+                if (Platform.isImplicitExit()) {
+                    // Tray failed to init — fall back to normal exit behavior
+                    instance.shutdown();
+                    Utility.exitProgramAction();
+                }
+                stage.hide();
+                event.consume();
+            }
+        });
 
-        return instance;
-    }
-
-    /**
-     * Sets up the Linux tray icon, tooltip, and menu.
-     */
-    private void initLinuxTray() {
+        // Initialize tray on a background thread to avoid blocking the JavaFX UI thread
         Thread initThread = new Thread(() -> {
             try {
-                setupLinuxTray();
-            } catch (Exception e) {
+                instance.setupTray();
+            } catch (Throwable e) {
                 Logger.error("Failed to initialize system tray",
                         e, TrayUtil.class.getName() + ".init()");
-                shutdown();
+                // If tray fails, allow normal window close to exit the app
                 Platform.setImplicitExit(true);
             }
         }, "Tray-Init-Thread");
         initThread.setDaemon(true);
         initThread.start();
-    }
 
-    private void setupLinuxTray() throws Exception {
-        if (shutdownRequested) {
-            return;
-        }
-
-        SystemTray localTray = null;
-        boolean committed = false;
-        try {
-            Logger.debug("[TrayUtil] Calling SystemTray.get()...");
-            localTray = SystemTray.get();
-            if (localTray == null) {
-                if (shutdownRequested) {
-                    return;
-                }
-                throw new Exception("SystemTray not supported on this platform.");
-            }
-            Logger.debug("[TrayUtil] SystemTray instance: " + localTray.getClass().getName());
-
-            if (shutdownRequested) {
-                cleanupLinuxTray(localTray);
-                return;
-            }
-
-            URL imageUrl = TrayUtil.class.getResource("/com/bayoumi/images/logo_50x50.png");
-            if (imageUrl == null) {
-                throw new Exception("Tray icon image not found.");
-            }
-
-            localTray.setImage(imageUrl);
-            localTray.setTooltip(Constants.APP_NAME + " App");
-
-            buildLinuxMenu(localTray);
-
-            boolean shouldCleanup = false;
-            synchronized (trayLock) {
-                if (shutdownRequested) {
-                    shouldCleanup = true;
-                } else {
-                    tray = localTray;
-                    backend = Backend.DORKBOX;
-                    trayReady = true;
-                    committed = true;
-                }
-            }
-
-            if (shouldCleanup) {
-                cleanupLinuxTray(localTray);
-                return;
-            }
-
-            Logger.info("[TrayUtil] System tray initialized successfully.");
-        } catch (Exception e) {
-            if (localTray != null && !committed) {
-                cleanupLinuxTray(localTray);
-            }
-            throw e;
-        }
+        return instance;
     }
 
     /**
-     * Sets up the Windows tray icon, tooltip, and menu.
+     * Sets up the tray icon, tooltip, and menu.
      */
-    private void initWindowsTray() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                setupWindowsTray();
-            } catch (Exception e) {
-                Logger.error("Failed to initialize system tray",
-                        e, TrayUtil.class.getName() + ".init()");
-                shutdown();
-                Platform.setImplicitExit(true);
-            }
-        });
-    }
-
-    private void setupWindowsTray() throws Exception {
-        if (shutdownRequested) {
-            return;
-        }
-
-        java.awt.Toolkit.getDefaultToolkit();
-        if (!java.awt.SystemTray.isSupported()) {
+    private void setupTray() throws Exception {
+        Logger.debug("[TrayUtil] Calling SystemTray.get()...");
+        tray = SystemTray.get();
+        if (tray == null) {
             throw new Exception("SystemTray not supported on this platform.");
         }
+        Logger.debug("[TrayUtil] SystemTray instance: " + tray.getClass().getName());
 
         URL imageUrl = TrayUtil.class.getResource("/com/bayoumi/images/logo_50x50.png");
         if (imageUrl == null) {
             throw new Exception("Tray icon image not found.");
         }
 
-        BufferedImage trayIconImage = ImageIO.read(imageUrl);
-        if (trayIconImage == null) {
-            throw new Exception("Tray icon image not found.");
-        }
+        tray.setImage(imageUrl);
+        tray.setTooltip(Constants.APP_NAME + " App");
 
-        java.awt.TrayIcon localTrayIcon = new java.awt.TrayIcon(trayIconImage);
-        localTrayIcon.setImageAutoSize(true);
-        localTrayIcon.setToolTip(Constants.APP_NAME + " App");
-        localTrayIcon.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getButton() == java.awt.event.MouseEvent.BUTTON1) {
-                    Platform.runLater(TrayUtil.this::showStage);
-                }
-            }
-        });
+        buildMenu();
 
-        java.awt.PopupMenu popup = new java.awt.PopupMenu();
-        java.awt.MenuItem openItem = new java.awt.MenuItem("Open");
-        openItem.addActionListener(event -> Platform.runLater(this::showStage));
-        openItem.setFont(java.awt.Font.decode(null).deriveFont(java.awt.Font.BOLD));
-        popup.add(openItem);
-        popup.addSeparator();
-        java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
-        exitItem.addActionListener(event -> {
-            shutdown();
-            Platform.runLater(Utility::exitProgramAction);
-        });
-        popup.add(exitItem);
-        localTrayIcon.setPopupMenu(popup);
-
-        java.awt.SystemTray localTray = java.awt.SystemTray.getSystemTray();
-        boolean iconAdded = false;
-        boolean committed = false;
-        try {
-            localTray.add(localTrayIcon);
-            iconAdded = true;
-
-            boolean shouldCleanup = false;
-            synchronized (trayLock) {
-                if (shutdownRequested) {
-                    shouldCleanup = true;
-                } else {
-                    awtTray = localTray;
-                    awtTrayIcon = localTrayIcon;
-                    backend = Backend.AWT;
-                    trayReady = true;
-                    committed = true;
-                }
-            }
-
-            if (shouldCleanup) {
-                cleanupWindowsTrayIcon(localTray, localTrayIcon);
-                return;
-            }
-
-            Logger.info("[TrayUtil] System tray initialized successfully.");
-        } catch (Exception e) {
-            if (iconAdded && !committed) {
-                cleanupWindowsTrayIcon(localTray, localTrayIcon);
-            }
-            throw e;
-        }
+        Logger.info("[TrayUtil] System tray initialized successfully.");
     }
 
     /**
-     * Builds the Linux tray popup menu with Open and Exit actions.
+     * Builds the tray popup menu with Open and Exit actions.
      */
-    private void buildLinuxMenu(SystemTray localTray) {
-        localTray.getMenu().add(new MenuItem("Open", e -> Platform.runLater(this::showStage)));
-        localTray.getMenu().add(new Separator());
-        localTray.getMenu().add(new MenuItem("Exit", e -> {
+    private void buildMenu() {
+        tray.getMenu().add(new MenuItem("Open", e -> {
+            Logger.info("[TrayUtil] Menu 'Open' clicked.");
+            Platform.runLater(this::showStage);
+        }));
+
+        tray.getMenu().add(new Separator());
+
+        tray.getMenu().add(new MenuItem("Exit", e -> {
+            Logger.info("[TrayUtil] Menu 'Exit' clicked.");
             shutdown();
             Platform.runLater(Utility::exitProgramAction);
         }));
-    }
-
-    private void cleanupLinuxTray(SystemTray localTray) {
-        try {
-            localTray.shutdown();
-        } catch (Exception cleanupException) {
-            Logger.warn("Failed to clean up Linux tray after initialization failure", cleanupException);
-        }
-    }
-
-    private void cleanupWindowsTrayIcon(java.awt.SystemTray localTray, java.awt.TrayIcon localTrayIcon) {
-        try {
-            localTray.remove(localTrayIcon);
-        } catch (Exception cleanupException) {
-            Logger.warn("Failed to remove Windows tray icon after initialization failure", cleanupException);
-        }
-    }
-
-    private void installSupportedCloseHandler() {
-        stage.setOnCloseRequest(event -> {
-            if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
-                if (trayReady) {
-                    stage.hide();
-                    event.consume();
-                    return;
-                }
-                shutdown();
-                Utility.exitProgramAction();
-                event.consume();
-            }
-        });
     }
 
     /**
      * Shuts down the system tray. Safe to call from any thread.
      */
     public void shutdown() {
-        SystemTray localDorkboxTray = null;
-        java.awt.SystemTray localAwtTray = null;
-        java.awt.TrayIcon localAwtTrayIcon = null;
-
-        synchronized (trayLock) {
-            shutdownRequested = true;
-            trayReady = false;
-
-            if (backend == Backend.DORKBOX) {
-                localDorkboxTray = tray;
-                tray = null;
-                backend = Backend.NONE;
-            } else if (backend == Backend.AWT) {
-                localAwtTray = awtTray;
-                localAwtTrayIcon = awtTrayIcon;
-                awtTray = null;
-                awtTrayIcon = null;
-                backend = Backend.NONE;
-            }
-        }
-
-        Platform.setImplicitExit(true);
-
-        if (localDorkboxTray != null) {
-            cleanupLinuxTray(localDorkboxTray);
-        }
-
-        if (localAwtTray != null && localAwtTrayIcon != null) {
-            cleanupWindowsTrayIcon(localAwtTray, localAwtTrayIcon);
+        SystemTray localTray = tray; // read volatile once
+        if (localTray != null) {
+            localTray.shutdown();
         }
     }
 

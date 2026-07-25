@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ServiceConfigurationError;
 
 /**
  * Cross-platform audio player using javax.sound.sampled API.
@@ -92,7 +93,9 @@ public class AudioPlayer {
                     Logger.error("Exception in AudioPlayer LineListener", e, "AudioPlayer");
                 }
             });
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException e) {
+        } catch (Exception | LinkageError | ServiceConfigurationError e) {
+            dispose();
+            // Wrap SPI decoding, native linkage, and I/O exceptions into AudioPlayerException
             throw new AudioPlayerException("Error loading audio file: " + audioFile.getName(), e);
         } finally {
             closeQuietly(decodedStream);
