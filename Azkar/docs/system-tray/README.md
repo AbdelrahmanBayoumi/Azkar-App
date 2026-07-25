@@ -1,9 +1,10 @@
 # System Tray Integration
 
-> **Status**: Implemented using [dorkbox SystemTray v3.17](https://github.com/dorkbox/SystemTray)  
-> **Platforms**: Linux (Cinnamon/GNOME/KDE), Windows, macOS  
-> **Java Version**: Oracle JDK 8  
-> **Last Updated**: March 2026
+> - **Status**: Implemented using [dorkbox SystemTray v3.17](https://github.com/dorkbox/SystemTray)
+> - **Library-supported platforms**: Linux, Windows, macOS
+> - **Project-verified environment**: Linux Mint (Cinnamon)
+> - **Java Version**: Oracle JDK 8
+> - **Last Updated**: July 2026
 
 ---
 
@@ -16,8 +17,7 @@
 5. [Why We Chose Dorkbox](#why-we-chose-dorkbox)
 6. [Current Implementation](#current-implementation)
 7. [Known Limitations](#known-limitations)
-8. [Future Improvements (Java 21)](#future-improvements-java-21)
-9. [References](#references)
+8. [References](#references)
 
 ---
 
@@ -27,7 +27,7 @@ The Azkar app runs in the system tray so users can close the main window while t
 - **Menu → Open**: Show the main window.
 - **Menu → Exit**: Fully close the application.
 
-On **Windows**, this has always worked using Java's built-in `java.awt.SystemTray`. On **Linux**, the built-in approach is fundamentally broken on modern desktop environments. This document explains why and what we did about it.
+The original Windows implementation used Java's built-in `java.awt.SystemTray`. On the tested Linux Mint Cinnamon environment, that implementation did not provide a usable icon or click handling. This document records the observed behavior and the current Dorkbox-based solution.
 
 ---
 
@@ -46,8 +46,8 @@ The original protocol. The application creates a tiny X11 window and "embeds" it
 
 A DBus-based protocol. The application registers itself as a "StatusNotifierItem" over DBus. The panel reads the icon and menu from the app via DBus messages. The panel owns the rendering and click handling.
 
-- **Used by**: Qt apps (CopyQ, Telegram), Electron apps (Discord, Slack), GTK3+ apps
-- **Status**: **Active standard**. Used by Cinnamon, GNOME, KDE Plasma, XFCE.
+- **Used by**: Applications and desktop components that implement StatusNotifier or AppIndicator
+- **Status**: A common modern approach. Availability and click behavior depend on the desktop environment and installed extensions.
 
 ### What Does Cinnamon (Linux Mint) Actually Use?
 
@@ -66,7 +66,7 @@ $ dbus-send --session --dest=org.freedesktop.DBus \
     "org.kde.StatusNotifierWatcher"      # ← compatibility alias
 ```
 
-**Result**: Cinnamon does **NOT** run an XEmbed tray manager. It exclusively uses StatusNotifier via its `xapp-sn-watcher` service. This means `java.awt.SystemTray` has nowhere to embed its icon — which is why it shows up as a **black square with no click events**.
+**Result on the tested system**: Cinnamon did **not** expose an XEmbed tray manager and provided StatusNotifier services through `xapp-sn-watcher`. In that environment, `java.awt.SystemTray` produced a **black square with no click events**.
 
 ---
 
@@ -76,7 +76,7 @@ When running the Azkar app on Linux Mint (Cinnamon), the system tray icon:
 
 1. **Appeared as a black square** — Java AWT creates an XEmbed window, but since there's no XEmbed manager, the icon renders with no transparency and no proper embedding.
 2. **Did not respond to any clicks** — Mouse events are never dispatched to the Java process because the XEmbed protocol isn't active.
-3. **Caused the app to freeze** — During startup, Java probes for X11 tray atoms (`_NET_SYSTEM_TRAY_S0`). When they don't exist, the probe blocks the JavaFX Application Thread, causing the OS to mark the app "Not Responding".
+3. **Could stall startup** — Initializing the tray on the JavaFX Application Thread could make the UI unresponsive. The current implementation performs tray initialization on a background daemon thread.
 
 We also tried forcing GTK2 (`System.setProperty("jdk.gtk.version", "2")`) to see if the older GTK path would work. It did not — the underlying issue is the missing XEmbed tray manager, not the GTK version.
 
@@ -84,25 +84,20 @@ We also tried forcing GTK2 (`System.setProperty("jdk.gtk.version", "2")`) to see
 
 ## Library Comparison
 
-We evaluated every available option for Java 8 system tray integration on Linux:
+We evaluated the following options for Java 8 system tray integration on the target Linux environment:
 
 | Library | Protocol | Java 8 | Icon Works | Left-Click → Open | Right-Click → Menu | Standalone |
 |---|---|---|---|---|---|---|
 | `java.awt.SystemTray` | XEmbed | ✅ | ❌ Black box | ❌ No events | ❌ No events | ✅ |
 | `java.awt.SystemTray` + GTK2 | XEmbed | ✅ | ❌ Black box | ❌ No events | ❌ No events | ✅ |
 | **dorkbox SystemTray 3.17** | **AppIndicator** | **✅** | **✅** | ❌ Menu only | **✅** | **✅** |
-| dorkbox SystemTray 4.4 | AppIndicator | ❌ (Java 11+) | N/A | N/A | N/A | ✅ |
 | FXTrayIcon | XEmbed (via AWT) | ✅ | ❌ Same AWT problem | ❌ | ❌ | ✅ |
-| kropp/java-statusnotifier | StatusNotifier (DBus) | ❌ (Java 17+) | ✅ | ✅ Has `Activate` | ✅ | ✅ |
-| DIY with dbus-java 3.x | StatusNotifier (DBus) | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ### Key Findings
 
-- **`java.awt.SystemTray`** is permanently broken on Linux Mint Cinnamon because the XEmbed protocol is not available.
-- **`FXTrayIcon`** wraps AWT internally, so it inherits the exact same XEmbed problem.
-- **`kropp/java-statusnotifier`** is the "perfect" library — it implements StatusNotifierItem directly over DBus with full `Activate` (left-click) support. But it requires **Java 17+**.
-- **DIY with `dbus-java 3.x`** would work on Java 8, but requires writing ~500–800 lines of DBus boilerplate (interface definitions, property handling, service registration, menu protocol).
-- **`dorkbox SystemTray 3.17`** is the only library that works on Java 8, renders the icon correctly, and provides a functional menu — but it does not expose a left-click callback.
+- **`java.awt.SystemTray`** did not work on the tested Linux Mint Cinnamon environment because no XEmbed tray manager was available.
+- **`FXTrayIcon`** uses AWT internally, so it did not avoid the observed XEmbed behavior.
+- **`dorkbox SystemTray 3.17`** worked with Java 8 on the tested environment, rendered the icon correctly, and provided a functional menu. The API used by this project does not expose a distinct left-click callback for the AppIndicator backend.
 
 ---
 
@@ -116,23 +111,22 @@ We evaluated every available option for Java 8 system tray integration on Linux:
 ### Decision: Accept `dorkbox SystemTray 3.17` with menu-only interaction
 
 **Pros:**
-- ✅ Icon renders correctly on Linux with full transparency
-- ✅ Menu (Open / Exit) works reliably
+- ✅ Icon renders correctly on the tested Linux Mint environment
+- ✅ Menu (Open / Exit) works on the tested environment
 - ✅ Compatible with Java 8 (Oracle JDK 1.8.0_221)
-- ✅ Standalone — uses JNA internally to call `libayatana-appindicator3.so` which is already installed on Linux Mint. No extra user packages needed.
-- ✅ Cross-platform — works on Windows and macOS too
-- ✅ Well-maintained library (489 stars, active development)
+- ✅ Uses the AppIndicator support already installed on the tested Linux Mint system. Other Linux distributions or desktop environments may require an AppIndicator library or shell extension.
+- ✅ The library supports Windows and macOS, allowing the project to use one tray API across platforms
 
 **Cons:**
 - ❌ Left-click on the icon opens the menu instead of directly opening the app. User must click "Open" from the menu.
-- ❌ This is a library design choice (not a platform limitation). dorkbox intentionally does not expose click callbacks because AppIndicator behavior varies across desktop environments.
-- ❌ Adds ~3MB of transitive dependencies (JNA, jna-platform, SLF4J)
+- ❌ Dorkbox 3.17 does not expose a distinct AppIndicator click callback through the API used here, and indicator behavior varies across desktop environments.
+- ❌ Adds native-integration and logging dependencies, including JNA and SLF4J
 
 **Why not DIY?**
-Writing a raw DBus StatusNotifierItem implementation for Java 8 would give us left-click support, but the maintenance cost is disproportionate to the benefit. It's 500+ lines of protocol-level code for a single UX improvement (one fewer click to open the app). This doesn't justify the risk for a stable production app.
+Writing and maintaining a raw DBus StatusNotifierItem implementation is outside the scope of this change. The project accepts the menu-based interaction instead of adding a second tray implementation for one-click activation.
 
 **Why not upgrade Java?**
-The project is built with Oracle JDK 8, packaged with install4j, and distributed to end users. Upgrading the JDK is a separate project that impacts the entire build pipeline. When we do upgrade to **Java 21**, we should revisit this decision (see [Future Improvements](#future-improvements-java-21)).
+The project is built with Oracle JDK 8 and packaged with install4j. A runtime upgrade is a separate project that affects the build and packaging pipeline; that work may revisit the tray decision.
 
 ---
 
@@ -140,13 +134,13 @@ The project is built with Oracle JDK 8, packaged with install4j, and distributed
 
 ### Architecture
 
+```text
+TrayUtil.java
+    └── dorkbox SystemTray 3.17 (AutoDetect)
+            └── OS/desktop-specific backend
 ```
-┌──────────────────┐     ┌──────────────────────┐     ┌───────────────┐
-│  TrayUtil.java   │     │  dorkbox SystemTray   │     │  Cinnamon     │
-│  (our code)      │────▶│  v3.17 (AppIndicator) │────▶│  Panel        │
-│                  │     │  via JNA → libayatana  │     │               │
-└──────────────────┘     └──────────────────────┘     └───────────────┘
-```
+
+On the tested Linux Mint Cinnamon system, AutoDetect selected the AppIndicator path. Dorkbox may select a different native or AWT/Swing backend on other operating systems and desktop environments.
 
 ### Key Design Decisions in TrayUtil.java
 
@@ -171,9 +165,9 @@ The project is built with Oracle JDK 8, packaged with install4j, and distributed
 ## Known Limitations
 
 ### 1. No distinct left-click / right-click behavior on Linux
-On Linux, clicking the tray icon (left or right) always opens the menu. To open the app, users must click the icon then click "Open". This is because dorkbox uses the AppIndicator protocol which routes all interactions through the menu.
+On the tested Linux Mint Cinnamon environment, clicking the tray icon opens the menu. To open the app, users click the icon and then select "Open". Behavior may differ on other desktop environments.
 
-Note: Other apps like CopyQ and AnyDesk can distinguish left/right clicks because they are written in C++/Qt which talks directly to the StatusNotifier DBus interface and handles the `Activate` signal natively. This is not a Linux limitation — it's a Java library limitation.
+Applications using other tray implementations may support a distinct activation action. The limitation documented here applies to the Dorkbox 3.17 AppIndicator API used by this project.
 
 ### 2. Windows behavior change
 On Windows, the original AWT implementation supported left-click to open the app directly and right-click for the menu. With dorkbox, both clicks now show the menu. This is a minor UX regression for Windows users (one extra click).
@@ -188,37 +182,6 @@ This is harmless and can be suppressed by adding an SLF4J binding (e.g., `slf4j-
 
 ---
 
-## Future Improvements (Java 21)
-
-When the project upgrades to Java 21, we should revisit the tray implementation:
-
-### Option A: Use `kropp/java-statusnotifier`
-- **Repo**: https://github.com/kropp/java-statusnotifier
-- **What it does**: Pure Java implementation of the FreeDesktop StatusNotifierItem specification.
-- **Benefit**: Full support for `Activate` (left-click), `ContextMenu` (right-click), and `SecondaryActivate`.
-- **Requires**: Java 17+, `dbus-java-core:4.x`
-
-### Option B: Use `dbus-java 4.x` directly
-- **Repo**: https://github.com/hypfvieh/dbus-java
-- **What it does**: Low-level DBus bindings for Java.
-- **Benefit**: Full control over StatusNotifierItem registration and signal handling.
-- **Requires**: Java 11+, more boilerplate than Option A.
-
-### Option C: Platform-aware implementation
-Use dorkbox on Windows (where it works great) and `kropp/java-statusnotifier` on Linux (for left-click support). Detect the OS at runtime:
-```java
-if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-    // Use StatusNotifierItem via dbus-java
-} else {
-    // Use dorkbox SystemTray
-}
-```
-
-### Recommendation
-**Option A** (`kropp/java-statusnotifier`) is the cleanest path. It handles exactly what we need with minimal code. Combine with **Option C** (platform detection) for the best UX on both Windows and Linux.
-
----
-
 ## References
 
 ### Protocol Documentation
@@ -228,12 +191,10 @@ if (System.getProperty("os.name").toLowerCase().contains("linux")) {
 
 ### Libraries
 - [dorkbox/SystemTray](https://github.com/dorkbox/SystemTray) — Cross-platform tray (used)
-- [kropp/java-statusnotifier](https://github.com/kropp/java-statusnotifier) — Java StatusNotifierItem (future)
-- [hypfvieh/dbus-java](https://github.com/hypfvieh/dbus-java) — Java DBus bindings
 - [dustinkredmond/FXTrayIcon](https://github.com/dustinkredmond/FXTrayIcon) — JavaFX tray wrapper (not suitable)
 
 ### Issues & Discussions
-- [dorkbox/SystemTray #78: OnClick handler for indicator](https://github.com/dorkbox/SystemTray/issues/78) — Open issue requesting left-click support (no resolution)
+- [dorkbox/SystemTray #78: OnClick handler for indicator](https://github.com/dorkbox/SystemTray/issues/78) — Closed issue about indicator activation
 - [Qt QSystemTrayIcon::activated](https://doc.qt.io/qt-5/qsystemtrayicon.html#activated) — How Qt handles left-click via `Trigger` reason
 
 ### System Diagnostics (Linux Mint Cinnamon)
