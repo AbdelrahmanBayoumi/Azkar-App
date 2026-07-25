@@ -16,7 +16,18 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ServiceConfigurationError;
 
-/** Cross-platform streaming audio player using {@link javax.sound.sampled}. */
+/**
+ * Cross-platform streaming audio player using the {@link javax.sound.sampled} API.
+ * <p>
+ * Replaces JavaFX {@code MediaPlayer} to avoid native GStreamer/GLib crashes on Linux.
+ * Supports WAV natively, and MP3/OGG via SPI providers (mp3spi, vorbisspi) which are
+ * automatically discovered from the classpath.
+ * </p>
+ * <p>
+ * Streams audio chunks dynamically via {@link SourceDataLine} in a background worker thread
+ * to maintain a minimal memory footprint and prevent UI freezing during large file playback.
+ * </p>
+ */
 public class AudioPlayer {
 
     enum State { READY, PLAYING, STOP_REQUESTED, COMPLETED, FAILED, DISPOSED }
