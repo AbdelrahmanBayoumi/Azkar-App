@@ -39,8 +39,10 @@ public class Logger {
             synchronized (LOCK) {
                 String DataAndTime = DATE_TIME_FORMAT.format(new Date());
                 System.out.println(DataAndTime + " => " + msg);
-                PRINT_WRITER.println(DataAndTime + " => " + msg);
-                PRINT_WRITER.flush();
+                if (PRINT_WRITER != null) {
+                    PRINT_WRITER.println(DataAndTime + " => " + msg);
+                    PRINT_WRITER.flush();
+                }
             }
         }).start();
     }
@@ -49,6 +51,34 @@ public class Logger {
         if (Constants.RUNNING_MODE.equals(Constants.Mode.DEVELOPMENT)) {
             System.out.println(DATE_TIME_FORMAT.format(new Date()) + " => " + msg.toString());
         }
+    }
+
+    public static void warn(String msg) {
+        new Thread(() -> {
+            synchronized (LOCK) {
+                String dataAndTime = DATE_TIME_FORMAT.format(new Date());
+                String logMsg = dataAndTime + " => WARNING: " + msg;
+                System.out.println(logMsg);
+                if (PRINT_WRITER != null) {
+                    PRINT_WRITER.println(logMsg);
+                    PRINT_WRITER.flush();
+                }
+            }
+        }).start();
+    }
+
+    public static void warn(String msg, Throwable throwable) {
+        new Thread(() -> {
+            synchronized (LOCK) {
+                String dataAndTime = DATE_TIME_FORMAT.format(new Date());
+                String logMsg = dataAndTime + " => WARNING: " + msg + (throwable != null ? " (" + throwable.getLocalizedMessage() + ")" : "");
+                System.out.println(logMsg);
+                if (PRINT_WRITER != null) {
+                    PRINT_WRITER.println(logMsg);
+                    PRINT_WRITER.flush();
+                }
+            }
+        }).start();
     }
 
 
@@ -67,8 +97,10 @@ public class Logger {
                         + CLASS_NAME;
                 m += (msg != null) ? (" => " + msg) : "";
                 System.err.println(m);
-                PRINT_WRITER.println(m);
-                PRINT_WRITER.flush();
+                if (PRINT_WRITER != null) {
+                    PRINT_WRITER.println(m);
+                    PRINT_WRITER.flush();
+                }
             }
         }).start();
     }

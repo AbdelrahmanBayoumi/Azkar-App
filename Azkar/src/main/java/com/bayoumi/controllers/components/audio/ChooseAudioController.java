@@ -8,6 +8,7 @@ import com.bayoumi.models.settings.Settings;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.audio.AudioPlayer;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.PopOverUtil;
 import com.jfoenix.controls.JFXButton;
@@ -23,8 +24,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -38,7 +37,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
-    public static MediaPlayer MEDIA_PLAYER;
+    private static AudioPlayer audioPlayer = null;
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
@@ -59,18 +58,14 @@ public class ChooseAudioController implements Initializable {
     @FXML
     private JFXButton uploadButton;
 
-    public static boolean stopIfPlaying() {
-        final boolean isMediaPlaying = isMediaPlaying();
-        if (isMediaPlaying) {
-            MEDIA_PLAYER.stop();
-            MEDIA_PLAYER.dispose(); // Release the resources
-            MEDIA_PLAYER = null;   // Remove reference
+    public static synchronized boolean stopIfPlaying() {
+        if (audioPlayer != null && audioPlayer.isPlaying()) {
+            audioPlayer.stop();
+            audioPlayer.dispose();
+            audioPlayer = null;
+            return true;
         }
-        return isMediaPlaying;
-    }
-
-    private static boolean isMediaPlaying() {
-        return MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING);
+        return false;
     }
 
     public Muezzin getValue() {
@@ -147,8 +142,8 @@ public class ChooseAudioController implements Initializable {
             } else if (prayerVolumeSlider.getValue() == 0) {
                 volume.setIcon(OctIcon.MUTE);
             }
-            if (null != MEDIA_PLAYER) {
-                MEDIA_PLAYER.setVolume(azkarSettings.getPrayerVolume() / 100.0);
+            if (null != audioPlayer) {
+                audioPlayer.setVolume(azkarSettings.getPrayerVolume() / 100.0);
             }
         });
 
@@ -163,7 +158,7 @@ public class ChooseAudioController implements Initializable {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         // TODO: support & test other audio formats
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Audio Files", "*.mp3")
+                new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.ogg")
         );
         final File selectedFile = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
         if (selectedFile != null && selectedFile.isFile()) {
@@ -195,17 +190,17 @@ public class ChooseAudioController implements Initializable {
             Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
+                    audioPlayer = new AudioPlayer(new File(muezzin.getPath()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
-                MEDIA_PLAYER.setVolume(prayerVolumeSlider.getValue() / 100.0);
-                MEDIA_PLAYER.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
-                MEDIA_PLAYER.setOnStopped(() -> playButton.setGraphic(playIcon));
-                MEDIA_PLAYER.play();
+                audioPlayer.setVolume(prayerVolumeSlider.getValue() / 100.0);
+                audioPlayer.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
+                audioPlayer.setOnStopped(() -> playButton.setGraphic(playIcon));
+                audioPlayer.play();
                 setPauseIcon();
             }
         }

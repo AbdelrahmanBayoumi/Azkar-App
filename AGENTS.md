@@ -12,13 +12,13 @@ Use Java 8 and Maven 3.3+; Scene Builder 8.5.0 is recommended for FXML. From `Az
 - `mvn -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 test` compiles and runs tests.
 - `mvn -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 package` creates `target/Azkar.jar`.
 
-The overrides are required because `jdk.version` is not connected to the compiler plugin in `pom.xml`.
+The explicit overrides mirror the Java 8 settings already declared in `pom.xml`; they are optional, while `jdk.version` is not connected to the compiler plugin.
 
 ## Coding Style & Testing
 
 Use four spaces and same-line opening braces. Types are PascalCase, methods and fields lowerCamelCase, and constants UPPER_SNAKE_CASE. Preserve suffixes `Controller`, `Service`, `Manager`, `Util`, and `DTO`; use lowerCamelCase FXML IDs and handlers. No formatter is enforced; DeepSource analyzes Java 8.
 
-No test framework or coverage threshold is configured. Add test dependencies to `pom.xml`, mirror packages under `src/test/java/`, and name tests `*Test.java`. Manually verify affected screens in both languages and relevant light/dark themes.
+JUnit 4 tests are present. Add new tests under `src/test/java/`, mirror packages as needed, and name tests `*Test.java`. Manually verify affected screens in both languages and relevant light/dark themes.
 
 ## Agent Workflow & Devil's Advocate
 
