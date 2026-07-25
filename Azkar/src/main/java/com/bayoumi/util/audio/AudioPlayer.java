@@ -24,7 +24,7 @@ public class AudioPlayer {
     private Runnable onStopped;
     private volatile boolean playing = false;
 
-    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+    private static final long MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 
     /**
      * Creates an AudioPlayer for the given audio file.
@@ -36,7 +36,7 @@ public class AudioPlayer {
     public AudioPlayer(File audioFile) throws AudioPlayerException {
         if (audioFile.length() > MAX_FILE_SIZE) {
             throw new AudioPlayerException(
-                    "Audio file too large: " + (audioFile.length() / (1024 * 1024)) + " MB (max 10 MB)",
+                    "Audio file too large: " + (audioFile.length() / (1024 * 1024)) + " MB (max 100 MB)",
                     null);
         }
         AudioInputStream rawStream = null;
