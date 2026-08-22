@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 public final class SystemThemeUtil {
     private static final long CACHE_TTL_MS = 2000L;
 
-    private static volatile Boolean cachedIsDark;
-    private static volatile long cachedAt;
+    private static volatile Boolean cachedIsDark = null;
+    private static volatile long cachedAt = 0L;
 
     private SystemThemeUtil() {
     }
