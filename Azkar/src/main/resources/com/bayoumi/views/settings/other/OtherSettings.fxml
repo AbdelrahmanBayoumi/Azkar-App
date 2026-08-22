@@ -103,15 +103,16 @@
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </padding>
                               </JFXToggleButton>
-                              <JFXToggleButton fx:id="darkThemeToggle" layoutX="414.0" layoutY="20.0" minWidth="150.0" onAction="#darkThemeSelect" selected="true" size="8.0" style="-fx-text-fill: -fx-primary-text;" text="مُفعلة" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <ComboBox fx:id="themeComboBox" maxWidth="1.7976931348623157E308" minWidth="150.0" onAction="#themeSelect" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                  <styleClass>
+                                    <String fx:value="text-field-normal" />
                                     <String fx:value="font-text-bold" />
                                     <String fx:value="_16" />
                                  </styleClass>
-                                 <padding>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </padding>
-                              </JFXToggleButton>
+                              </ComboBox>
                               <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                               <Label fx:id="minimizeAtStart" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" minWidth="220.0" text="دائما تصغير البرنامج عند البدء" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
                                  <font>

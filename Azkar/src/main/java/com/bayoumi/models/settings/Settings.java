@@ -24,7 +24,7 @@ public class Settings extends PreferencesObservable {
     private final PrayerTimeSettings prayerTimeSettings;
     private final NotificationSettings notificationSettings;
     private final SimpleEntry<PreferencesType, Boolean> automaticCheckForUpdates;
-    private final SimpleEntry<PreferencesType, Boolean> nightMode;
+    private final SimpleEntry<PreferencesType, Theme> theme;
     private final SimpleEntry<PreferencesType, Boolean> enable24Format;
     private final SimpleEntry<PreferencesType, Boolean> minimized;
     private final SimpleEntry<PreferencesType, Language> language;
@@ -37,7 +37,7 @@ public class Settings extends PreferencesObservable {
         prayerTimeSettings = new PrayerTimeSettings();
         notificationSettings = new NotificationSettings();
         automaticCheckForUpdates = new SimpleEntry<>(PreferencesType.AUTOMATIC_CHECK_FOR_UPDATES, Boolean.valueOf(PreferencesType.AUTOMATIC_CHECK_FOR_UPDATES.getDefaultValue()));
-        nightMode = new SimpleEntry<>(PreferencesType.ENABLE_DARK_MODE, Boolean.valueOf(PreferencesType.ENABLE_DARK_MODE.getDefaultValue()));
+        theme = new SimpleEntry<>(PreferencesType.ENABLE_DARK_MODE, Theme.from(PreferencesType.ENABLE_DARK_MODE.getDefaultValue()));
         enable24Format = new SimpleEntry<>(PreferencesType.ENABLE_24_FORMAT, Boolean.valueOf(PreferencesType.ENABLE_24_FORMAT.getDefaultValue()));
         minimized = new SimpleEntry<>(PreferencesType.MINIMIZED, Boolean.valueOf(PreferencesType.MINIMIZED.getDefaultValue()));
         language = new SimpleEntry<>(PreferencesType.LANGUAGE, Language.get(PreferencesType.LANGUAGE.getDefaultValue()));
@@ -49,7 +49,7 @@ public class Settings extends PreferencesObservable {
 
     public void loadSettings() {
         automaticCheckForUpdates.setValue(Preferences.getInstance().getBoolean(automaticCheckForUpdates.getKey()));
-        nightMode.setValue(Preferences.getInstance().getBoolean(nightMode.getKey()));
+        theme.setValue(Theme.from(Preferences.getInstance().get(theme.getKey())));
         enable24Format.setValue(Preferences.getInstance().getBoolean(enable24Format.getKey()));
         minimized.setValue(Preferences.getInstance().getBoolean(minimized.getKey()));
         language.setValue(Language.get(Preferences.getInstance().get(language.getKey())));
@@ -122,17 +122,45 @@ public class Settings extends PreferencesObservable {
         notifyObservers(enable24Format.getKey(), value);
     }
 
+    public Theme getTheme() {
+        return theme.getValue();
+    }
+
+    public void setTheme(Theme value) {
+        if (value == null || value == theme.getValue()) {
+            return;
+        }
+        theme.setValue(value);
+        Preferences.getInstance().set(theme.getKey(), value.getPreferenceValue());
+        notifyObservers(theme.getKey(), value);
+    }
+
     public boolean getNightMode() {
-        return nightMode.getValue();
+        return theme.getValue().isDark();
     }
 
     public void setNightMode(boolean value) {
-        // 1. set value to local variable
-        nightMode.setValue(value);
-        // 2. save value to DB
-        Preferences.getInstance().set(nightMode.getKey(), value + "");
-        // 3. notify observers
-        notifyObservers(nightMode.getKey(), value);
+        setTheme(value ? Theme.DARK : Theme.LIGHT);
+    }
+
+    public void syncDefaultNotificationColors() {
+        if (theme.getValue() != Theme.SYSTEM) {
+            return;
+        }
+        final NotificationSettings notification = getNotificationSettings();
+        final boolean usingLightDefaults =
+                NotificationColor.LIGHT_THEME.getBackgroundColor().equals(notification.getBackgroundColor())
+                        && NotificationColor.LIGHT_THEME.getTextColor().equals(notification.getTextColor())
+                        && NotificationColor.LIGHT_THEME.getBorderColor().equals(notification.getBorderColor());
+        final boolean usingDarkDefaults =
+                NotificationColor.DARK_THEME.getBackgroundColor().equals(notification.getBackgroundColor())
+                        && NotificationColor.DARK_THEME.getTextColor().equals(notification.getTextColor())
+                        && NotificationColor.DARK_THEME.getBorderColor().equals(notification.getBorderColor());
+        if (getNightMode() && usingLightDefaults) {
+            NotificationColor.setDarkTheme();
+        } else if (!getNightMode() && usingDarkDefaults) {
+            NotificationColor.setLightTheme();
+        }
     }
 
     public String[] getThemeFilesCSS() {

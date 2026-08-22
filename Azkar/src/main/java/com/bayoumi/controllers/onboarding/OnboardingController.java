@@ -1,6 +1,5 @@
 package com.bayoumi.controllers.onboarding;
 
-import com.bayoumi.Launcher;
 import com.bayoumi.controllers.components.PrayerCalculationsController;
 import com.bayoumi.controllers.components.SelectLocationController;
 import com.bayoumi.controllers.components.audio.ChooseAudioController;
@@ -10,13 +9,16 @@ import com.bayoumi.repositry.OnboardingRepository;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.ScrollHandler;
+import com.bayoumi.util.gui.ThemeUtil;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.Locations;
 import com.jfoenix.controls.JFXCheckBox;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -34,17 +36,20 @@ public class OnboardingController implements Initializable {
     @FXML
     private VBox container, adhanContainer, languageChooseBox;
     @FXML
-    private JFXCheckBox format24, minimizeAtStart, darkTheme;
+    private JFXCheckBox format24, minimizeAtStart;
+    @FXML
+    private ComboBox<Theme> themeComboBox;
     @FXML
     private Button saveAndFinish;
     @FXML
-    private Label configureTheProgramSettings, adhanLabel, settingsCanBeChangedFromWithinTheProgramAsWell;
+    private Label configureTheProgramSettings, adhanLabel, settingsCanBeChangedFromWithinTheProgramAsWell, themeLabel;
 
     public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         adhanLabel.setText(Utility.toUTF(bundle.getString("adhan")));
         format24.setText(Utility.toUTF(bundle.getString("hour24System")));
-        darkTheme.setText(Utility.toUTF(bundle.getString("darkTheme")));
+        themeLabel.setText(Utility.toUTF(bundle.getString("theme")));
+        refreshThemeComboBox();
         minimizeAtStart.setText(Utility.toUTF(bundle.getString("minimizeAtStart")));
         saveAndFinish.setText(Utility.toUTF(bundle.getString("saveAndFinish")));
         configureTheProgramSettings.setText(Utility.toUTF(bundle.getString("configureTheProgramSettings")));
@@ -61,6 +66,8 @@ public class OnboardingController implements Initializable {
             prayerTimeSettings = Settings.getInstance().getPrayerTimeSettings();
 
             minimizeAtStart.setSelected(true);
+            themeComboBox.setItems(FXCollections.observableArrayList(Theme.values()));
+            themeComboBox.setValue(Settings.getInstance().getTheme());
             ScrollHandler.init(container, scrollPane, 4);
         } catch (Exception ex) {
             Logger.error(null, ex, getClass().getName() + ".initialize()");
@@ -97,14 +104,22 @@ public class OnboardingController implements Initializable {
     }
 
     @FXML
-    private void onDarkThemeChange() {
-        Settings.getInstance().setNightMode(darkTheme.isSelected());
-        darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
-        Launcher.homeController.changeTheme();
-        if (darkTheme.isSelected()) {
-            NotificationColor.setDarkTheme();
-        } else {
-            NotificationColor.setLightTheme();
+    private void onThemeChange() {
+        final Theme selected = themeComboBox.getValue();
+        if (selected == null) {
+            return;
+        }
+        ThemeUtil.applyUserTheme(selected);
+    }
+
+    private void refreshThemeComboBox() {
+        if (themeComboBox == null || bundle == null) {
+            return;
+        }
+        final Theme selected = themeComboBox.getValue();
+        themeComboBox.setConverter(Theme.stringConvertor(themeComboBox, bundle));
+        if (selected != null) {
+            themeComboBox.setValue(selected);
         }
     }
 
@@ -139,7 +154,9 @@ public class OnboardingController implements Initializable {
         // save other settings
         Settings.getInstance().setEnable24Format(format24.isSelected());
         Settings.getInstance().setMinimized(minimizeAtStart.isSelected());
-        Settings.getInstance().setNightMode(darkTheme.isSelected());
+        if (themeComboBox.getValue() != null) {
+            ThemeUtil.applyUserTheme(themeComboBox.getValue());
+        }
 
         OnboardingRepository.setFirstTimeOpened(0);
 
