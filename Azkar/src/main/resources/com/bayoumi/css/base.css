@@ -272,7 +272,14 @@ Text {
 .combo-box-popup .list-view {
     -fx-background-color: -fx-secondary-text;
     -fx-background-insets: 0;
-    -fx-padding: 4;
+    -fx-padding: 0;
+}
+
+.combo-box-popup .list-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
 }
 
 .combo-box-popup .list-cell {
@@ -280,6 +287,7 @@ Text {
     -fx-background-radius: 8;
     -fx-text-fill: -fx-primary-text;
     -fx-padding: 6 8 6 8;
+    -fx-pref-width: 0;
 }
 
 .combo-box-popup .list-cell .label {
@@ -309,7 +317,8 @@ Text {
 .adhan-delete-btn {
     -fx-background-color: transparent;
     -fx-background-radius: 12;
-    -jfx-rippler-fill: -fx-red;
+    -fx-padding: 2 4 2 4;
+    -jfx-rippler-fill: transparent;
 }
 
 .adhan-delete-btn:hover {
