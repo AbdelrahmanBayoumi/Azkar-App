@@ -61,7 +61,7 @@ public class Muezzin {
 
     private static void copyAdhanFilesToAssetsPath() throws IOException {
         for (Muezzin muezzin : VALUES) {
-            if (muezzin.isSilent()) continue;
+            if (muezzin.equals(NO_SOUND)) continue;
             final Path from = Paths.get("jarFiles/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
             final Path to = Paths.get(Constants.assetsPath + "/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
             if (from.equals(to)) {
@@ -107,7 +107,7 @@ public class Muezzin {
      * Uploaded files are created with a file name that is not in {@link #VALUES}.
      */
     public boolean isCustom() {
-        if (isSilent()) {
+        if (fileName == null || fileName.isEmpty()) {
             return false;
         }
         for (Muezzin builtIn : VALUES) {
@@ -116,14 +116,6 @@ public class Muezzin {
             }
         }
         return true;
-    }
-
-    public boolean isSilent() {
-        return fileName == null || fileName.isEmpty();
-    }
-
-    public static boolean isSilent(Muezzin muezzin) {
-        return muezzin == null || muezzin.isSilent();
     }
 
     public String getEnglishName() {
@@ -178,26 +170,6 @@ public class Muezzin {
                 return null;
             }
         };
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Muezzin)) {
-            return false;
-        }
-        final Muezzin other = (Muezzin) obj;
-        if (fileName == null) {
-            return other.fileName == null;
-        }
-        return fileName.equals(other.fileName);
-    }
-
-    @Override
-    public int hashCode() {
-        return fileName == null ? 0 : fileName.hashCode();
     }
 
     @Override
