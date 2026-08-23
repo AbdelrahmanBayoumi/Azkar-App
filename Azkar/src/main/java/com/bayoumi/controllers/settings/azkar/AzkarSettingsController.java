@@ -51,7 +51,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private AzkarSettings azkarSettings;
     private NotificationSettings notificationSettings;
     private JFXButton currentFrequency;
-    private AudioPlayer audioPlayer;
+    private AudioPlayer audioPlayer = null;
     private double previousValue = 50;
     private boolean isMuted = false;
     @FXML
@@ -150,8 +150,9 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         azkarAlarmComboBox.setOnAction(event -> {
             playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
             volumeBox.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
-            if (audioPlayer != null && audioPlayer.isPlaying()) {
-                audioPlayer.stop();
+            final AudioPlayer player = audioPlayer;
+            if (player != null && player.isPlaying()) {
+                player.stop();
                 audioPlayer = null;
                 playButton.setGraphic(playIcon);
                 playButton.setPadding(new Insets(5, 14, 5, 8));
@@ -211,8 +212,9 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
 
     @FXML
     private void play() {
-        if (audioPlayer != null && audioPlayer.isPlaying()) {
-            audioPlayer.stop();
+        final AudioPlayer player = audioPlayer;
+        if (player != null && player.isPlaying()) {
+            player.stop();
             audioPlayer = null;
             playButton.setGraphic(playIcon);
         } else {

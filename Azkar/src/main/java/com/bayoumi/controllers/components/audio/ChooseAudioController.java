@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
-    private static AudioPlayer audioPlayer;
+    private static AudioPlayer audioPlayer = null;
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
@@ -59,8 +59,9 @@ public class ChooseAudioController implements Initializable {
     private JFXButton uploadButton;
 
     public static synchronized boolean stopIfPlaying() {
-        if (audioPlayer != null && audioPlayer.isPlaying()) {
-            audioPlayer.stop();
+        final AudioPlayer player = audioPlayer;
+        if (player != null && player.isPlaying()) {
+            player.stop();
             audioPlayer = null;
             return true;
         }
