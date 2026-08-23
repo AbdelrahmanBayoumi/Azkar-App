@@ -269,6 +269,79 @@ Text {
     -fx-prompt-text-fill: -fx-primary-text;
 }
 
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-secondary-text;
+    -fx-background-insets: 0;
+    -fx-padding: 4;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-text-fill: -fx-primary-text;
+    -fx-padding: 6 8 6 8;
+}
+
+.combo-box-popup .list-cell .label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+.combo-box-popup .list-cell:filled:hover,
+.combo-box-popup .list-cell:filled:focused {
+    -fx-background-color: -fx-third-light;
+}
+
+.combo-box-popup .list-cell:filled:hover .label,
+.combo-box-popup .list-cell:filled:focused .label {
+    -fx-text-fill: -fx-dark-text;
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: -fx-primary;
+}
+
+.combo-box-popup .list-cell:filled:selected .label,
+.combo-box-popup .list-cell:filled:selected:hover .label {
+    -fx-text-fill: -fx-light-text;
+}
+
+.adhan-delete-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -jfx-rippler-fill: -fx-red;
+}
+
+.adhan-delete-btn:hover {
+    -fx-background-color: transparent;
+}
+
+.adhan-delete-btn .glyph-icon {
+    -fx-fill: -fx-reverse-secondary;
+}
+
+.adhan-delete-btn:hover .glyph-icon {
+    -fx-fill: -fx-red;
+}
+
+.combo-box-popup .list-cell:filled:selected .adhan-delete-btn .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+.combo-box-popup .list-cell:filled:selected .adhan-delete-btn:hover .glyph-icon {
+    -fx-fill: -fx-third-light;
+}
+
+.adhan-delete-tooltip {
+    -fx-background-color: -fx-third-light;
+    -fx-text-fill: -fx-dark-text;
+    -fx-font-family: "Tajawal-Bold";
+    -fx-font-size: 13px;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 8;
+    -fx-background-insets: 0;
+}
+
 /* ============ TextField ============ */
 .text-field-normal {
     -jfx-focus-color: -fx-primary-text;
