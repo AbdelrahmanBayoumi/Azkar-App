@@ -332,20 +332,6 @@ Text {
     -fx-fill: -fx-red;
 }
 
-.tooltip.adhan-delete-tooltip {
-    -fx-background-color: -fx-third-light;
-    -fx-text-fill: -fx-dark-text;
-    -fx-font-family: "Tajawal-Bold";
-    -fx-font-size: 13px;
-    -fx-padding: 8 12 8 12;
-    -fx-background-radius: 6;
-    -fx-background-insets: 0;
-    -fx-border-width: 0;
-    -fx-border-color: transparent;
-    -fx-effect: null;
-    -fx-shape: null;
-}
-
 /* ============ TextField ============ */
 .text-field-normal {
     -jfx-focus-color: -fx-primary-text;

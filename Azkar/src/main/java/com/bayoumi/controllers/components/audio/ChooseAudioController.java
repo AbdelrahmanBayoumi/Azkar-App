@@ -28,7 +28,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -214,7 +213,6 @@ public class ChooseAudioController implements Initializable {
                 deleteBtn.setFocusTraversable(false);
                 deleteBtn.getStyleClass().add("adhan-delete-btn");
                 deleteBtn.setRipplerFill(Color.web("#c91a29"));
-                deleteBtn.setTooltip(createDeleteTooltip());
                 deleteBtn.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> deleteIcon.setStyle("-fx-fill: #c91a29;"));
                 deleteBtn.addEventFilter(MouseEvent.MOUSE_EXITED, event -> deleteIcon.setStyle(""));
                 deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
@@ -244,25 +242,6 @@ public class ChooseAudioController implements Initializable {
                 setGraphic(row);
             }
         });
-    }
-
-    private Tooltip createDeleteTooltip() {
-        final Tooltip tooltip = new Tooltip(Utility.toUTF(
-                LanguageBundle.getInstance().getResourceBundle().getString("deleteAudioTooltip")));
-        tooltip.getStyleClass().add("adhan-delete-tooltip");
-        tooltip.setOnShown(event -> {
-            if (tooltip.getScene() == null) {
-                return;
-            }
-            if (audioBox.getScene() != null) {
-                tooltip.getScene().getStylesheets().setAll(audioBox.getScene().getStylesheets());
-            }
-            tooltip.getScene().setFill(Color.TRANSPARENT);
-            if (tooltip.getScene().getRoot() != null) {
-                tooltip.getScene().getRoot().setStyle("-fx-background-color: transparent;");
-            }
-        });
-        return tooltip;
     }
 
     private String muezzinDisplayName(Muezzin muezzin) {
