@@ -3,6 +3,10 @@
 
 ## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.3.0...HEAD)
 
+### Fix
+
+- 🔊 Add an option to delete uploaded custom Adhan audio files [#103](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/103)
+
 ## [1.3.0](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.3.0) - 2025-05-06
 
 ### Add
