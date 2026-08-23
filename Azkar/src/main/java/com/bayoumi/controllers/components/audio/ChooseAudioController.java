@@ -10,6 +10,7 @@ import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.PopOverUtil;
+import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
@@ -17,12 +18,20 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -58,8 +67,6 @@ public class ChooseAudioController implements Initializable {
     private JFXButton playButton;
     @FXML
     private JFXButton uploadButton;
-    @FXML
-    private JFXButton deleteButton;
 
     public static boolean stopIfPlaying() {
         final boolean isMediaPlaying = isMediaPlaying();
@@ -98,7 +105,6 @@ public class ChooseAudioController implements Initializable {
         } else {
             audioBox.setConverter(Muezzin.englishConverter());
         }
-        updateDeleteButtonState();
 
         prayerVolumeSlider.setValue(azkarSettings.getPrayerVolume());
         prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
@@ -117,7 +123,6 @@ public class ChooseAudioController implements Initializable {
         Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
         prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
-        updateDeleteButtonState();
     }
 
     @Override
@@ -132,15 +137,14 @@ public class ChooseAudioController implements Initializable {
         audioBox.setOnAction(event -> {
             playButton.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
             prayerVolumeBox.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
-            updateDeleteButtonState();
             if (stopIfPlaying()) {
                 setPlayIcon();
             }
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
+        configureAudioBoxCells();
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
-        PopOverUtil.init(deleteButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("deleteAudioTooltip")));
 
         prayerVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             azkarSettings.setPrayerVolume((int) prayerVolumeSlider.getValue());
@@ -184,7 +188,6 @@ public class ChooseAudioController implements Initializable {
                         .filter(muezzin -> muezzin.getFileName().equals(selectedFile.getName())).findAny()
                         .orElse(Muezzin.NO_SOUND);
                 audioBox.setValue(newMuezzin);
-                updateDeleteButtonState();
             } catch (IOException e) {
                 Logger.error(null, e, getClass().getName() + ".uploadAudio()");
                 final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
@@ -193,35 +196,92 @@ public class ChooseAudioController implements Initializable {
         }
     }
 
-    @FXML
-    private void deleteAudio() {
-        final Muezzin selected = audioBox.getValue();
-        if (selected == null || !selected.isCustom()) {
+    private void configureAudioBoxCells() {
+        audioBox.setCellFactory(listView -> new ListCell<Muezzin>() {
+            private final Label nameLabel = new Label();
+            private final Region spacer = new Region();
+            private final TableViewButton deleteBtn = new TableViewButton("", new FontAwesomeIconView(FontAwesomeIcon.TRASH));
+            private final HBox row = new HBox(8, nameLabel, spacer, deleteBtn);
+
+            {
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setMaxWidth(Double.MAX_VALUE);
+                row.setPadding(new Insets(0, 4, 0, 8));
+                deleteBtn.setFocusTraversable(false);
+                PopOverUtil.init(deleteBtn, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("deleteAudioTooltip")));
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                    event.consume();
+                    final Muezzin item = getItem();
+                    if (item != null && item.isCustom()) {
+                        deleteAudio(item);
+                    }
+                });
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, Event::consume);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, Event::consume);
+            }
+
+            @Override
+            protected void updateItem(Muezzin item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+                nameLabel.setText(muezzinDisplayName(item));
+                final boolean custom = item.isCustom();
+                deleteBtn.setVisible(custom);
+                deleteBtn.setManaged(custom);
+                setText(null);
+                setGraphic(row);
+            }
+        });
+    }
+
+    private String muezzinDisplayName(Muezzin muezzin) {
+        if (muezzin == null) {
+            return "";
+        }
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
+            return muezzin.getArabicName();
+        }
+        return muezzin.getEnglishName();
+    }
+
+    private void deleteAudio(Muezzin target) {
+        if (target == null || !target.isCustom()) {
             return;
         }
-        final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
-        final String displayName = Settings.getInstance().getLanguage().equals(Language.Arabic)
-                ? selected.getArabicName()
-                : selected.getEnglishName();
-        if (!BuilderUI.showConfirmAlert(true, String.format(Utility.toUTF(bundle.getString("deleteAudioConfirm")), displayName))) {
-            return;
-        }
-        if (MEDIA_PLAYER != null) {
-            MEDIA_PLAYER.stop();
-            MEDIA_PLAYER.dispose();
-            MEDIA_PLAYER = null;
-            setPlayIcon();
-        }
-        try {
-            Files.deleteIfExists(Paths.get(selected.getPath()));
-        } catch (IOException e) {
-            Logger.error(null, e, getClass().getName() + ".deleteAudio()");
-            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDeleteAudio")), bundle);
-            return;
-        }
-        setMuezzins();
-        audioBox.setValue(fallbackMuezzin());
-        updateDeleteButtonState();
+        audioBox.hide();
+        Platform.runLater(() -> {
+            final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+            if (!BuilderUI.showConfirmAlert(true, String.format(Utility.toUTF(bundle.getString("deleteAudioConfirm")), muezzinDisplayName(target)))) {
+                return;
+            }
+            final Muezzin current = audioBox.getValue();
+            final boolean deletingSelected = current != null && target.getFileName().equals(current.getFileName());
+            if (MEDIA_PLAYER != null && deletingSelected) {
+                MEDIA_PLAYER.stop();
+                MEDIA_PLAYER.dispose();
+                MEDIA_PLAYER = null;
+                setPlayIcon();
+            }
+            try {
+                Files.deleteIfExists(Paths.get(target.getPath()));
+            } catch (IOException e) {
+                Logger.error(null, e, getClass().getName() + ".deleteAudio()");
+                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDeleteAudio")), bundle);
+                return;
+            }
+            final String previousFileName = current == null ? null : current.getFileName();
+            setMuezzins();
+            if (deletingSelected || previousFileName == null) {
+                audioBox.setValue(fallbackMuezzin());
+            } else {
+                audioBox.setValue(Muezzin.getFromFileName(audioBox.getItems(), previousFileName));
+            }
+        });
     }
 
     private Muezzin fallbackMuezzin() {
@@ -234,14 +294,6 @@ public class ChooseAudioController implements Initializable {
                         && !muezzin.getFileName().isEmpty())
                 .findFirst()
                 .orElse(Muezzin.NO_SOUND);
-    }
-
-    private void updateDeleteButtonState() {
-        if (deleteButton == null) {
-            return;
-        }
-        final Muezzin selected = audioBox.getValue();
-        deleteButton.setDisable(selected == null || !selected.isCustom());
     }
 
     @FXML
