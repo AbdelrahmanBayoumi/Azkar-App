@@ -248,8 +248,15 @@ public class ChooseAudioController implements Initializable {
                 LanguageBundle.getInstance().getResourceBundle().getString("deleteAudioTooltip")));
         tooltip.getStyleClass().add("adhan-delete-tooltip");
         tooltip.setOnShown(event -> {
-            if (tooltip.getScene() != null && audioBox.getScene() != null) {
+            if (tooltip.getScene() == null) {
+                return;
+            }
+            if (audioBox.getScene() != null) {
                 tooltip.getScene().getStylesheets().setAll(audioBox.getScene().getStylesheets());
+            }
+            tooltip.getScene().setFill(Color.TRANSPARENT);
+            if (tooltip.getScene().getRoot() != null) {
+                tooltip.getScene().getRoot().setStyle("-fx-background-color: transparent;");
             }
         });
         return tooltip;

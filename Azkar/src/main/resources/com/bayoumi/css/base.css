@@ -288,12 +288,12 @@ Text {
 
 .combo-box-popup .list-cell:filled:hover,
 .combo-box-popup .list-cell:filled:focused {
-    -fx-background-color: -fx-third-light;
+    -fx-background-color: -fx-primary-light;
 }
 
 .combo-box-popup .list-cell:filled:hover .label,
 .combo-box-popup .list-cell:filled:focused .label {
-    -fx-text-fill: -fx-dark-text;
+    -fx-text-fill: -fx-light-text;
 }
 
 .combo-box-popup .list-cell:filled:selected,
@@ -320,26 +320,29 @@ Text {
     -fx-fill: -fx-reverse-secondary;
 }
 
-.adhan-delete-btn:hover .glyph-icon {
+.adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:hover .adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:selected .adhan-delete-btn:hover .glyph-icon {
     -fx-fill: -fx-red;
 }
 
+.combo-box-popup .list-cell:filled:hover .adhan-delete-btn .glyph-icon,
 .combo-box-popup .list-cell:filled:selected .adhan-delete-btn .glyph-icon {
     -fx-fill: -fx-light-text;
 }
 
-.combo-box-popup .list-cell:filled:selected .adhan-delete-btn:hover .glyph-icon {
-    -fx-fill: -fx-third-light;
-}
-
-.adhan-delete-tooltip {
+.tooltip.adhan-delete-tooltip {
     -fx-background-color: -fx-third-light;
     -fx-text-fill: -fx-dark-text;
     -fx-font-family: "Tajawal-Bold";
     -fx-font-size: 13px;
     -fx-padding: 8 12 8 12;
-    -fx-background-radius: 8;
+    -fx-background-radius: 6;
     -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-effect: null;
+    -fx-shape: null;
 }
 
 /* ============ TextField ============ */
