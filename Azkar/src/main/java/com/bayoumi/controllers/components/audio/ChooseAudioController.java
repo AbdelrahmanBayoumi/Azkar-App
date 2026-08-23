@@ -202,7 +202,8 @@ public class ChooseAudioController implements Initializable {
         audioBox.setCellFactory(listView -> new ListCell<Muezzin>() {
             private final Label nameLabel = new Label();
             private final Region spacer = new Region();
-            private final TableViewButton deleteBtn = new TableViewButton("", new FontAwesomeIconView(FontAwesomeIcon.TRASH));
+            private final FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+            private final TableViewButton deleteBtn = new TableViewButton("", deleteIcon);
             private final HBox row = new HBox(8, nameLabel, spacer, deleteBtn);
 
             {
@@ -214,6 +215,8 @@ public class ChooseAudioController implements Initializable {
                 deleteBtn.getStyleClass().add("adhan-delete-btn");
                 deleteBtn.setRipplerFill(Color.web("#c91a29"));
                 deleteBtn.setTooltip(createDeleteTooltip());
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> deleteIcon.setStyle("-fx-fill: #c91a29;"));
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_EXITED, event -> deleteIcon.setStyle(""));
                 deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
                     event.consume();
                     final Muezzin item = getItem();

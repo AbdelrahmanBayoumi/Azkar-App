@@ -320,15 +320,16 @@ Text {
     -fx-fill: -fx-reverse-secondary;
 }
 
-.adhan-delete-btn:hover .glyph-icon,
-.combo-box-popup .list-cell:filled:hover .adhan-delete-btn:hover .glyph-icon,
-.combo-box-popup .list-cell:filled:selected .adhan-delete-btn:hover .glyph-icon {
-    -fx-fill: -fx-red;
-}
-
 .combo-box-popup .list-cell:filled:hover .adhan-delete-btn .glyph-icon,
 .combo-box-popup .list-cell:filled:selected .adhan-delete-btn .glyph-icon {
     -fx-fill: -fx-light-text;
+}
+
+.adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:hover .adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:selected .adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:focused .adhan-delete-btn:hover .glyph-icon {
+    -fx-fill: -fx-red;
 }
 
 .tooltip.adhan-delete-tooltip {
