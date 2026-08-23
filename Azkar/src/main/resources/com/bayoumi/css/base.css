@@ -275,9 +275,14 @@ Text {
     -fx-padding: 0;
 }
 
-.combo-box-popup .list-view .scroll-bar:horizontal {
+.combo-box-popup .list-view .scroll-bar:horizontal,
+.combo-box-popup .list-view.adhan-combo-no-scroll .scroll-bar {
     -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+    -fx-max-width: 0;
     -fx-pref-height: 0;
+    -fx-min-height: 0;
     -fx-max-height: 0;
     -fx-padding: 0;
 }

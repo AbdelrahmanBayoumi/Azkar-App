@@ -14,6 +14,7 @@ import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
@@ -25,9 +26,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -54,6 +57,8 @@ public class ChooseAudioController implements Initializable {
     private FontAwesomeIconView playIcon;
     private double previousValue = 50;
     private boolean isMuted = false;
+    private static final double ADHAN_ROW_HEIGHT = 36;
+    private static final int ADHAN_MAX_VISIBLE_ROWS = 10;
 
     // ======= FXML =======
     @FXML
@@ -144,6 +149,7 @@ public class ChooseAudioController implements Initializable {
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
         configureAudioBoxCells();
+        audioBox.setOnShown(event -> fitAdhanPopupList());
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
@@ -198,58 +204,77 @@ public class ChooseAudioController implements Initializable {
     }
 
     private void configureAudioBoxCells() {
-        audioBox.setCellFactory(listView -> {
-            final ListCell<Muezzin> cell = new ListCell<Muezzin>() {
-                private final Label nameLabel = new Label();
-                private final FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
-                private final TableViewButton deleteBtn = new TableViewButton("", deleteIcon);
-                private final HBox row = new HBox(8, nameLabel, deleteBtn);
+        audioBox.setCellFactory(listView -> new ListCell<Muezzin>() {
+            private final Label nameLabel = new Label();
+            private final FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+            private final TableViewButton deleteBtn = new TableViewButton("", deleteIcon);
+            private final HBox row = new HBox(8, nameLabel, deleteBtn);
 
-                {
-                    nameLabel.setMinWidth(0);
-                    nameLabel.setMaxWidth(Double.MAX_VALUE);
-                    HBox.setHgrow(nameLabel, Priority.ALWAYS);
-                    row.setAlignment(Pos.CENTER_LEFT);
-                    row.setMinWidth(0);
-                    row.setMaxWidth(Double.MAX_VALUE);
-                    deleteIcon.setGlyphSize(18);
-                    deleteBtn.setFocusTraversable(false);
-                    deleteBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-                    deleteBtn.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-                    deleteBtn.getStyleClass().add("adhan-delete-btn");
-                    deleteBtn.setRipplerFill(Color.TRANSPARENT);
-                    deleteBtn.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> deleteIcon.setFill(Color.web("#c91a29")));
-                    deleteBtn.addEventFilter(MouseEvent.MOUSE_EXITED, event -> deleteIcon.setFill(null));
-                    deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-                        event.consume();
-                        final Muezzin item = getItem();
-                        if (item != null && item.isCustom()) {
-                            deleteAudio(item);
-                        }
-                    });
-                    deleteBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, Event::consume);
-                    deleteBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, Event::consume);
-                }
-
-                @Override
-                protected void updateItem(Muezzin item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                        setGraphic(null);
-                        return;
+            {
+                nameLabel.setMinWidth(0);
+                nameLabel.setMaxWidth(Double.MAX_VALUE);
+                HBox.setHgrow(nameLabel, Priority.ALWAYS);
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setMinWidth(0);
+                row.setMaxWidth(Double.MAX_VALUE);
+                deleteIcon.setGlyphSize(18);
+                deleteBtn.setFocusTraversable(false);
+                deleteBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+                deleteBtn.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+                deleteBtn.getStyleClass().add("adhan-delete-btn");
+                deleteBtn.setRipplerFill(Color.TRANSPARENT);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> deleteIcon.setFill(Color.web("#c91a29")));
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_EXITED, event -> deleteIcon.setFill(null));
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                    event.consume();
+                    final Muezzin item = getItem();
+                    if (item != null && item.isCustom()) {
+                        deleteAudio(item);
                     }
-                    nameLabel.setText(muezzinDisplayName(item));
-                    final boolean custom = item.isCustom();
-                    deleteBtn.setVisible(custom);
-                    deleteBtn.setManaged(custom);
+                });
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, Event::consume);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, Event::consume);
+                setPrefWidth(0);
+            }
+
+            @Override
+            protected void updateItem(Muezzin item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
                     setText(null);
-                    setGraphic(row);
+                    setGraphic(null);
+                    return;
                 }
-            };
-            cell.prefWidthProperty().bind(listView.widthProperty().subtract(2));
-            return cell;
+                nameLabel.setText(muezzinDisplayName(item));
+                final boolean custom = item.isCustom();
+                deleteBtn.setVisible(custom);
+                deleteBtn.setManaged(custom);
+                setText(null);
+                setGraphic(row);
+            }
         });
+    }
+
+    private void fitAdhanPopupList() {
+        if (!(audioBox.getSkin() instanceof ComboBoxListViewSkin)) {
+            return;
+        }
+        final Node popupContent = ((ComboBoxListViewSkin<?>) audioBox.getSkin()).getPopupContent();
+        if (!(popupContent instanceof ListView)) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        final ListView<Muezzin> listView = (ListView<Muezzin>) popupContent;
+        final int count = audioBox.getItems() == null ? 0 : audioBox.getItems().size();
+        final int visible = Math.max(1, Math.min(count, ADHAN_MAX_VISIBLE_ROWS));
+        final double height = visible * ADHAN_ROW_HEIGHT + 2;
+        listView.setFixedCellSize(ADHAN_ROW_HEIGHT);
+        listView.setPrefHeight(height);
+        listView.setMinHeight(height);
+        listView.setMaxHeight(height);
+        audioBox.setVisibleRowCount(visible);
+        listView.getStyleClass().removeAll("adhan-combo-no-scroll", "adhan-combo-scroll");
+        listView.getStyleClass().add(count > ADHAN_MAX_VISIBLE_ROWS ? "adhan-combo-scroll" : "adhan-combo-no-scroll");
     }
 
     private String muezzinDisplayName(Muezzin muezzin) {
