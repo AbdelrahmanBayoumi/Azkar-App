@@ -90,7 +90,7 @@ public class ChooseAudioController implements Initializable {
 
     public Muezzin getValue() {
         if (audioBox == null || audioBox.getValue() == null || audioBox.getValue().equals(Muezzin.NO_SOUND)) {
-            return Muezzin.NO_SOUND;
+            return copyOfNoSound();
         }
         return audioBox.getValue();
     }
@@ -299,9 +299,10 @@ public class ChooseAudioController implements Initializable {
             }
             final Muezzin current = audioBox.getValue();
             final boolean deletingSelected = current != null && target.getFileName().equals(current.getFileName());
-            if (MEDIA_PLAYER != null && deletingSelected) {
-                MEDIA_PLAYER.stop();
-                MEDIA_PLAYER.dispose();
+            final MediaPlayer player = MEDIA_PLAYER;
+            if (player != null && deletingSelected) {
+                player.stop();
+                player.dispose();
                 MEDIA_PLAYER = null;
                 setPlayIcon();
             }
@@ -324,14 +325,18 @@ public class ChooseAudioController implements Initializable {
 
     private Muezzin fallbackMuezzin() {
         if (audioBox.getItems() == null || audioBox.getItems().isEmpty()) {
-            return Muezzin.NO_SOUND;
+            return copyOfNoSound();
         }
         return audioBox.getItems().stream()
                 .filter(muezzin -> !muezzin.isCustom()
                         && muezzin.getFileName() != null
                         && !muezzin.getFileName().isEmpty())
                 .findFirst()
-                .orElse(Muezzin.NO_SOUND);
+                .orElseGet(ChooseAudioController::copyOfNoSound);
+    }
+
+    private static Muezzin copyOfNoSound() {
+        return new Muezzin(Muezzin.NO_SOUND.getEnglishName(), Muezzin.NO_SOUND.getArabicName(), Muezzin.NO_SOUND.getFileName());
     }
 
     @FXML
@@ -342,18 +347,20 @@ public class ChooseAudioController implements Initializable {
             final Muezzin muezzin = audioBox.getValue();
             Logger.debug(muezzin);
             if (!muezzin.equals(Muezzin.NO_SOUND)) {
+                final MediaPlayer player;
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
+                    player = new MediaPlayer(new Media(new File(muezzin.getPath()).toURI().toString()));
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
-                MEDIA_PLAYER.setVolume(prayerVolumeSlider.getValue() / 100.0);
-                MEDIA_PLAYER.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
-                MEDIA_PLAYER.setOnStopped(() -> playButton.setGraphic(playIcon));
-                MEDIA_PLAYER.play();
+                player.setVolume(prayerVolumeSlider.getValue() / 100.0);
+                player.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
+                player.setOnStopped(() -> playButton.setGraphic(playIcon));
+                MEDIA_PLAYER = player;
+                player.play();
                 setPauseIcon();
             }
         }
