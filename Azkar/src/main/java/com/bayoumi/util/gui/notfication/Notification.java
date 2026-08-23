@@ -22,7 +22,7 @@ public class Notification {
             audio.play();
             final Runnable closeCallback = () -> {
                 Logger.debug("Closing Notification ...");
-                if (audio.getMediaPlayer() != null) {
+                if (audio.isPlaying()) {
                     audio.stop();
                 }
             };

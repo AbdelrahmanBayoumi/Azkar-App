@@ -3,6 +3,10 @@
 
 ## [Unreleased](https://github.com/AbdelrahmanBayoumi/Azkar-App/compare/1.3.0...HEAD)
 
+### Fix
+
+- 🔊 Replace JavaFX `MediaPlayer` with a JDK `javax.sound.sampled` player so Adhan and Azkar audio no longer crash the JVM on Linux via GStreamer [#109](https://github.com/AbdelrahmanBayoumi/Azkar-App/issues/109)
+
 ## [1.3.0](https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/tag/1.3.0) - 2025-05-06
 
 ### Add
