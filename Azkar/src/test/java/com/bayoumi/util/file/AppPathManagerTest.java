@@ -1,6 +1,7 @@
 package com.bayoumi.util.file;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,25 +29,10 @@ public class AppPathManagerTest {
     // ===== AssetsPathContext & Decision Table =====
 
     @Test
-    public void resolveAssetsPath_jarFilesExistsAndWritable_returnsInstallDirJarFiles() throws IOException {
-        Path jarFiles = mockInstallDir.resolve("jarFiles");
-        Files.createDirectories(jarFiles);
-
+    public void resolveAssetsPath_production_linux_returnsUserDataDir() {
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, true, true, true, "/home/testuser", null);
-        String resolved = AppPathManager.resolveAssetsPath(ctx);
-
-        Assert.assertEquals(jarFiles.toAbsolutePath().normalize().toString(), resolved);
-        Assert.assertTrue("Must be absolute", Paths.get(resolved).isAbsolute());
-    }
-
-    @Test
-    public void resolveAssetsPath_jarFilesExistsButNotWritable_returnsUserDataDir() throws IOException {
-        Path jarFiles = mockInstallDir.resolve("jarFiles");
-        Files.createDirectories(jarFiles);
-
-        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, true, false, true, "/home/testuser", null);
+                mockInstallDir, "/home/testuser", null,
+                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expected = Paths.get("/home/testuser/.Azkar/jarFiles").toAbsolutePath().normalize().toString();
@@ -55,9 +41,10 @@ public class AppPathManagerTest {
     }
 
     @Test
-    public void resolveAssetsPath_jarFilesNotExistAndInstallDirWritable_returnsInstallDirJarFiles() {
+    public void resolveAssetsPath_development_returnsInstallDirJarFiles() {
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, false, false, true, "/home/testuser", null);
+                mockInstallDir, "/home/testuser", null,
+                AppPathManager.RuntimeEnvironment.DEVELOPMENT, AppPathManager.OperatingSystem.LINUX);
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expected = mockInstallDir.resolve("jarFiles").toAbsolutePath().normalize().toString();
@@ -65,51 +52,115 @@ public class AppPathManagerTest {
     }
 
     @Test
-    public void resolveAssetsPath_jarFilesNotExistAndInstallDirNotWritable_returnsUserDataDir() {
+    public void resolveAssetsPath_production_windows_withLocalAppData_usesLocalAppData() {
+        String userHome = "/users/testuser";
+        String localAppData = "/users/testuser/appdata/local";
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, false, false, false, "/home/testuser", null);
+                mockInstallDir, userHome, localAppData,
+                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.WINDOWS);
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
-        String expected = Paths.get("/home/testuser/.Azkar/jarFiles").toAbsolutePath().normalize().toString();
+        String expected = Paths.get(localAppData, "Azkar", "jarFiles").toAbsolutePath().normalize().toString();
         Assert.assertEquals(expected, resolved);
     }
 
     @Test
-    public void resolveAssetsPath_neverReturnsRelativeJarFiles() {
+    public void resolveAssetsPath_production_windows_withoutLocalAppData_usesUserHomeAppDataLocal() {
+        String userHome = "/users/testuser";
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, true, true, true, "/home/testuser", null);
+                mockInstallDir, userHome, null,
+                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.WINDOWS);
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
-        Assert.assertNotEquals("jarFiles", resolved);
-        Assert.assertTrue("Must be absolute", Paths.get(resolved).isAbsolute());
-    }
-
-    @Test
-    public void resolveAssetsPath_withLocalAppData_usesLocalAppDataPath() {
-        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, false, false, false, "/home/testuser", "/mock/appdata/local");
-        String resolved = AppPathManager.resolveAssetsPath(ctx);
-
-        String expected = Paths.get("/mock/appdata/local/Azkar/jarFiles").toAbsolutePath().normalize().toString();
+        String expected = Paths.get(userHome, "AppData", "Local", "Azkar", "jarFiles").toAbsolutePath().normalize().toString();
         Assert.assertEquals(expected, resolved);
     }
 
     @Test
-    public void resolveAssetsPath_withoutLocalAppData_usesUserHomeDotAzkar() {
+    public void resolveAssetsPath_production_legacyDbExistsAndWritable_returnsLegacyPathWhenCanonicalDbMissing() throws IOException {
+        Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
+        Files.createDirectories(legacyJarFiles.resolve("db"));
+        Files.write(legacyJarFiles.resolve("db/data.db"), new byte[]{1, 2, 3});
+
+        String userHome = tempFolder.newFolder("freshUserHome").getAbsolutePath();
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                mockInstallDir, false, false, false, "/home/testuser", null);
+                mockInstallDir, userHome, null,
+                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
-        Assert.assertTrue("Should contain user home", resolved.contains("/home/testuser"));
-        Assert.assertTrue("Should contain .Azkar", resolved.contains(".Azkar"));
+        Assert.assertEquals(legacyJarFiles.toAbsolutePath().normalize().toString(), resolved);
+    }
+
+    @Test
+    public void resolveAssetsPath_production_canonicalDbExists_returnsCanonicalEvenIfLegacyDbExists() throws IOException {
+        Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
+        Files.createDirectories(legacyJarFiles.resolve("db"));
+        Files.write(legacyJarFiles.resolve("db/data.db"), new byte[]{1, 2, 3});
+
+        File customUserHome = tempFolder.newFolder("existingUserHome");
+        Path canonicalJarFiles = Paths.get(customUserHome.getAbsolutePath(), ".Azkar", "jarFiles");
+        Files.createDirectories(canonicalJarFiles.resolve("db"));
+        Files.write(canonicalJarFiles.resolve("db/data.db"), new byte[]{4, 5, 6});
+
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                mockInstallDir, customUserHome.getAbsolutePath(), null,
+                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
+        String resolved = AppPathManager.resolveAssetsPath(ctx);
+
+        Assert.assertEquals(canonicalJarFiles.toAbsolutePath().normalize().toString(), resolved);
+    }
+
+    @Test
+    public void resolveAssetsPath_production_legacyDbIsDirectory_returnsCanonical() throws IOException {
+        Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
+        Files.createDirectories(legacyJarFiles.resolve("db/data.db")); // directory instead of file
+
+        String userHome = tempFolder.newFolder("dirUserHome").getAbsolutePath();
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                mockInstallDir, userHome, null,
+                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
+        String resolved = AppPathManager.resolveAssetsPath(ctx);
+
+        String expectedCanonical = Paths.get(userHome, ".Azkar", "jarFiles").toAbsolutePath().normalize().toString();
+        Assert.assertEquals(expectedCanonical, resolved);
     }
 
     // ===== computeUserDataAssetsPath =====
 
     @Test
     public void computeUserDataAssetsPath_alwaysAbsolute() {
-        String result = AppPathManager.computeUserDataAssetsPath("/home/user", null);
+        String result = AppPathManager.computeUserDataAssetsPath("/home/user", null, false);
         Assert.assertTrue(Paths.get(result).isAbsolute());
+    }
+
+    @Test
+    public void computeUserDataAssetsPath_linux_ignoresLocalAppData() {
+        String result = AppPathManager.computeUserDataAssetsPath("/home/user", "/fake/local/appdata", false);
+        Assert.assertEquals(Paths.get("/home/user/.Azkar/jarFiles").toAbsolutePath().normalize().toString(), result);
+    }
+
+    @Test
+    public void computeUserDataAssetsPath_windows_usesLocalAppDataWhenPresent() {
+        String userHome = "/home/user";
+        String localAppData = "/home/user/custom/localappdata";
+        String result = AppPathManager.computeUserDataAssetsPath(userHome, localAppData, true);
+        Assert.assertEquals(Paths.get(localAppData, "Azkar", "jarFiles").toAbsolutePath().normalize().toString(), result);
+    }
+
+    @Test
+    public void computeUserDataAssetsPath_windows_fallbackWhenLocalAppDataNull() {
+        String userHome = "/home/user";
+        String result = AppPathManager.computeUserDataAssetsPath(userHome, null, true);
+        Assert.assertEquals(Paths.get(userHome, "AppData", "Local", "Azkar", "jarFiles").toAbsolutePath().normalize().toString(), result);
+    }
+
+    @Test
+    public void computeUserDataAssetsPath_realWindowsPath_onWindows() {
+        Assume.assumeTrue(com.bayoumi.util.OSUtil.isWindows());
+        String localAppData = "C:\\Users\\user\\AppData\\Local";
+        String userHome = "C:\\Users\\user";
+        String result = AppPathManager.computeUserDataAssetsPath(userHome, localAppData, true);
+        Assert.assertEquals(Paths.get(localAppData, "Azkar", "jarFiles").toAbsolutePath().normalize().toString(), result);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -122,7 +173,7 @@ public class AppPathManagerTest {
         AppPathManager.computeUserDataAssetsPath("   ", null);
     }
 
-    // ===== Dev Layout Detection =====
+    // ===== Dev Layout Detection & Routing =====
 
     @Test
     public void findDevelopmentProjectRoot_targetClasses_returnsProjectRoot() throws IOException {
@@ -176,6 +227,84 @@ public class AppPathManagerTest {
 
         Path result = AppPathManager.findDevelopmentProjectRoot(fakeTarget.toPath());
         Assert.assertNull("Path named target but without pom.xml or jarFiles should return null", result);
+    }
+
+    @Test
+    public void detectEnvironment_targetClasses_returnsDevelopment() throws IOException {
+        File projectRoot = tempFolder.newFolder("DevProject");
+        new File(projectRoot, "pom.xml").createNewFile();
+        File classesDir = new File(projectRoot, "target/classes");
+        classesDir.mkdirs();
+
+        AppPathManager.RuntimeEnvironment env = AppPathManager.detectEnvironment(classesDir.toPath());
+        Assert.assertEquals(AppPathManager.RuntimeEnvironment.DEVELOPMENT, env);
+    }
+
+    @Test
+    public void detectEnvironment_nonDevPath_returnsProduction() throws IOException {
+        File prodDir = tempFolder.newFolder("opt", "Azkar");
+        AppPathManager.RuntimeEnvironment env = AppPathManager.detectEnvironment(prodDir.toPath());
+        Assert.assertEquals(AppPathManager.RuntimeEnvironment.PRODUCTION, env);
+    }
+
+    @Test
+    public void resolveAppInstallDir_targetClasses_returnsProjectRoot() throws IOException {
+        File projectRoot = tempFolder.newFolder("DevProjectDir");
+        new File(projectRoot, "pom.xml").createNewFile();
+        File classesDir = new File(projectRoot, "target/classes");
+        classesDir.mkdirs();
+
+        Path resolved = AppPathManager.resolveAppInstallDir(classesDir.toPath());
+        Assert.assertEquals(projectRoot.toPath().toAbsolutePath().normalize(), resolved);
+    }
+
+    @Test
+    public void resolveAppInstallDir_nonDevPath_returnsInstallDir() throws IOException {
+        File prodDir = tempFolder.newFolder("opt", "AzkarApp");
+        Path resolved = AppPathManager.resolveAppInstallDir(prodDir.toPath());
+        Assert.assertEquals(prodDir.toPath().toAbsolutePath().normalize(), resolved);
+    }
+
+    @Test
+    public void resolveAssetsPath_realTargetLayout_resolvesToProjectJarFiles_withoutTouchingRealUserData() throws IOException {
+        File projectRoot = tempFolder.newFolder("RealLayoutProject");
+        new File(projectRoot, "pom.xml").createNewFile();
+        File projectJarFiles = new File(projectRoot, "jarFiles");
+        projectJarFiles.mkdirs();
+        File classesDir = new File(projectRoot, "target/classes");
+        classesDir.mkdirs();
+
+        Path installDir = AppPathManager.resolveAppInstallDir(classesDir.toPath());
+        AppPathManager.RuntimeEnvironment env = AppPathManager.detectEnvironment(classesDir.toPath());
+        AppPathManager.OperatingSystem os = AppPathManager.OperatingSystem.LINUX;
+
+        String syntheticHome = tempFolder.newFolder("syntheticHome").getAbsolutePath();
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                installDir, syntheticHome, null, env, os);
+        String resolved = AppPathManager.resolveAssetsPath(ctx);
+
+        Assert.assertEquals(projectJarFiles.toPath().toAbsolutePath().normalize().toString(), resolved);
+        Assert.assertFalse("Must not create or use synthetic user data directory for dev",
+                Files.exists(Paths.get(syntheticHome, ".Azkar")));
+    }
+
+    // ===== Writability Probe =====
+
+    @Test
+    public void isDirectoryActuallyWritable_writableDirectory_returnsTrue() throws IOException {
+        Path tempDir = tempFolder.newFolder("writableDir").toPath();
+        Assert.assertTrue(AppPathManager.isDirectoryActuallyWritable(tempDir));
+    }
+
+    @Test
+    public void isDirectoryActuallyWritable_nonExistentDirectory_returnsFalse() {
+        Path nonExistent = mockInstallDir.resolve("does_not_exist");
+        Assert.assertFalse(AppPathManager.isDirectoryActuallyWritable(nonExistent));
+    }
+
+    @Test
+    public void isDirectoryActuallyWritable_nullDirectory_returnsFalse() {
+        Assert.assertFalse(AppPathManager.isDirectoryActuallyWritable(null));
     }
 
     // ===== copyIfNotExist =====

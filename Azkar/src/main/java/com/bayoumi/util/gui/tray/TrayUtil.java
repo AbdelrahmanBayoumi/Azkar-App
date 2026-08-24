@@ -13,15 +13,22 @@ import javafx.stage.WindowEvent;
 import java.net.URL;
 
 /**
- * Manages system tray integration using dorkbox SystemTray.
- * Supports Linux (AppIndicator/GTK via JNA), Windows, and macOS.
+ * Manages system tray integration across platforms with a platform-specific split:
+ * <ul>
+ *   <li><b>Windows:</b> Uses {@link java.awt.SystemTray} and {@link java.awt.TrayIcon}
+ *       to support native single left-click window restore and right-click context menu.</li>
+ *   <li><b>Non-Windows:</b> Uses Dorkbox {@link dorkbox.systemTray.SystemTray} (AutoDetect backend)
+ *       to provide a working icon and menu on supported desktop environments such as Linux Mint (Cinnamon).</li>
+ * </ul>
  * <p>
  * Usage: {@code TrayUtil.init(primaryStage);}
  */
 public class TrayUtil {
 
     private final Stage stage;
-    private volatile SystemTray tray; // written on init thread, read on FX thread
+    private volatile SystemTray tray; // dorkbox tray
+    private volatile java.awt.SystemTray awtTray; // AWT tray
+    private java.awt.TrayIcon awtTrayIcon;
 
     private TrayUtil(Stage stage) {
         this.stage = stage;
@@ -40,19 +47,18 @@ public class TrayUtil {
     public static TrayUtil init(Stage stage) {
         TrayUtil instance = new TrayUtil(stage);
 
-        // Prevent JavaFX from exiting when the last window is closed
-        Platform.setImplicitExit(false);
-
-        // Hide window on close instead of exiting; the tray keeps the app alive
+        // Hide window on close only if tray is ready; otherwise fall back to exiting
         stage.setOnCloseRequest(event -> {
             if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
-                if (Platform.isImplicitExit()) {
-                    // Tray failed to init — fall back to normal exit behavior
+                boolean trayNotReady = com.bayoumi.util.OSUtil.isWindows() ? instance.awtTray == null : instance.tray == null;
+                if (Platform.isImplicitExit() || trayNotReady) {
+                    // Tray failed to init or is not ready yet — fall back to normal exit behavior
                     instance.shutdown();
                     Utility.exitProgramAction();
+                } else {
+                    stage.hide();
+                    event.consume();
                 }
-                stage.hide();
-                event.consume();
             }
         });
 
@@ -60,10 +66,13 @@ public class TrayUtil {
         Thread initThread = new Thread(() -> {
             try {
                 instance.setupTray();
-            } catch (Throwable e) {
+                // Prevent JavaFX from exiting when the last window is closed once tray is ready
+                Platform.setImplicitExit(false);
+            } catch (Exception e) {
                 Logger.error("Failed to initialize system tray",
                         e, TrayUtil.class.getName() + ".init()");
                 // If tray fails, allow normal window close to exit the app
+                instance.shutdown();
                 Platform.setImplicitExit(true);
             }
         }, "Tray-Init-Thread");
@@ -77,6 +86,76 @@ public class TrayUtil {
      * Sets up the tray icon, tooltip, and menu.
      */
     private void setupTray() throws Exception {
+        if (com.bayoumi.util.OSUtil.isWindows()) {
+            setupAwtTray();
+            Logger.info("[TrayUtil] AWT system tray initialized successfully.");
+        } else {
+            setupDorkboxTray();
+            Logger.info("[TrayUtil] Dorkbox system tray initialized successfully.");
+        }
+    }
+
+    private void setupAwtTray() throws Exception {
+        java.awt.Toolkit.getDefaultToolkit();
+
+        if (!java.awt.SystemTray.isSupported()) {
+            throw new Exception("No system tray support (AWT), application exiting.");
+        }
+
+        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
+        java.util.concurrent.atomic.AtomicReference<Exception> error = new java.util.concurrent.atomic.AtomicReference<>();
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            try {
+                awtTray = java.awt.SystemTray.getSystemTray();
+                java.awt.image.BufferedImage trayIconImage = javax.imageio.ImageIO.read(
+                    java.util.Objects.requireNonNull(TrayUtil.class.getResource("/com/bayoumi/images/logo_50x50.png")));
+
+                int trayIconWidth = new java.awt.TrayIcon(trayIconImage).getSize().width;
+                awtTrayIcon = new java.awt.TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1, java.awt.Image.SCALE_SMOOTH));
+                awtTrayIcon.setToolTip(Constants.APP_NAME + " App");
+
+                awtTrayIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+                        if (e.getButton() == java.awt.event.MouseEvent.BUTTON1) {
+                            Platform.runLater(TrayUtil.this::showStage);
+                        }
+                    }
+                });
+
+                java.awt.MenuItem openItem = new java.awt.MenuItem("Open");
+                openItem.addActionListener(event -> Platform.runLater(this::showStage));
+                openItem.setFont(java.awt.Font.decode(null).deriveFont(java.awt.Font.BOLD));
+
+                java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
+                exitItem.addActionListener(event -> {
+                    Logger.debug(event);
+                    shutdown();
+                    Platform.runLater(Utility::exitProgramAction);
+                });
+
+                java.awt.PopupMenu popup = new java.awt.PopupMenu();
+                popup.add(openItem);
+                popup.addSeparator();
+                popup.add(exitItem);
+                awtTrayIcon.setPopupMenu(popup);
+
+                awtTray.add(awtTrayIcon);
+            } catch (Exception ex) {
+                error.set(ex);
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+        if (error.get() != null) {
+            throw error.get();
+        }
+    }
+
+    private void setupDorkboxTray() throws Exception {
         Logger.debug("[TrayUtil] Calling SystemTray.get()...");
         tray = SystemTray.get();
         if (tray == null) {
@@ -93,8 +172,6 @@ public class TrayUtil {
         tray.setTooltip(Constants.APP_NAME + " App");
 
         buildMenu();
-
-        Logger.info("[TrayUtil] System tray initialized successfully.");
     }
 
     /**
@@ -119,9 +196,15 @@ public class TrayUtil {
      * Shuts down the system tray. Safe to call from any thread.
      */
     public void shutdown() {
-        SystemTray localTray = tray; // read volatile once
-        if (localTray != null) {
-            localTray.shutdown();
+        if (com.bayoumi.util.OSUtil.isWindows()) {
+            if (awtTray != null && awtTrayIcon != null) {
+                awtTray.remove(awtTrayIcon);
+            }
+        } else {
+            SystemTray localTray = tray; // read volatile once
+            if (localTray != null) {
+                localTray.shutdown();
+            }
         }
     }
 

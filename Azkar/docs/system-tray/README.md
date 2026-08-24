@@ -1,10 +1,10 @@
 # System Tray Integration
 
-> - **Status**: Implemented using [dorkbox SystemTray v3.17](https://github.com/dorkbox/SystemTray)
-> - **Library-supported platforms**: Linux, Windows, macOS
+> - **Status**: Platform-split implementation: Java AWT on Windows, [dorkbox SystemTray v3.17](https://github.com/dorkbox/SystemTray) on Linux / macOS
+> - **Implementation targets**: Linux (verified on Cinnamon), Windows, macOS
 > - **Project-verified environment**: Linux Mint (Cinnamon)
 > - **Java Version**: Oracle JDK 8
-> - **Last Updated**: July 2026
+> - **Last Updated**: August 2026
 
 ---
 
@@ -14,7 +14,7 @@
 2. [How System Trays Work on Linux](#how-system-trays-work-on-linux)
 3. [The Problem](#the-problem)
 4. [Library Comparison](#library-comparison)
-5. [Why We Chose Dorkbox](#why-we-chose-dorkbox)
+5. [Platform-Specific Architecture](#platform-specific-architecture)
 6. [Current Implementation](#current-implementation)
 7. [Known Limitations](#known-limitations)
 8. [References](#references)
@@ -24,10 +24,10 @@
 ## Overview
 
 The Azkar app runs in the system tray so users can close the main window while the app continues to run in the background. The tray icon provides:
-- **Menu → Open**: Show the main window.
+- **Left-Click (Windows)** / **Menu → Open (Linux / macOS)**: Show and bring the main window to front.
 - **Menu → Exit**: Fully close the application.
 
-The original Windows implementation used Java's built-in `java.awt.SystemTray`. On the tested Linux Mint Cinnamon environment, that implementation did not provide a usable icon or click handling. This document records the observed behavior and the current Dorkbox-based solution.
+On Windows, the application uses Java's built-in `java.awt.SystemTray` to preserve native single left-click restore and right-click context menu. On desktop environments where XEmbed tray managers are absent (such as the tested Linux Mint Cinnamon environment), `java.awt.SystemTray` does not function; Dorkbox SystemTray (using AppIndicator / StatusNotifier) is used instead.
 
 ---
 
@@ -97,36 +97,16 @@ We evaluated the following options for Java 8 system tray integration on the tar
 
 - **`java.awt.SystemTray`** did not work on the tested Linux Mint Cinnamon environment because no XEmbed tray manager was available.
 - **`FXTrayIcon`** uses AWT internally, so it did not avoid the observed XEmbed behavior.
-- **`dorkbox SystemTray 3.17`** worked with Java 8 on the tested environment, rendered the icon correctly, and provided a functional menu. The API used by this project does not expose a distinct left-click callback for the AppIndicator backend.
+- **`dorkbox SystemTray 3.17`** worked with Java 8 on the tested Linux environment, rendered the icon correctly, and provided a functional menu. The API used by this project does not expose a distinct left-click callback for the AppIndicator backend.
 
 ---
 
-## Why We Chose Dorkbox
+## Platform-Specific Architecture
 
-> [!IMPORTANT]
-> **Architectural Directive for Contributors & AI Assistants:**
-> The current project decision is to use **Dorkbox SystemTray 3.17** as the single, unified system tray backend across all supported platforms (Windows, Linux, and macOS).
-> Using one API reduces platform-specific implementation code, but every supported platform still requires testing. Click and menu behavior can vary with the backend Dorkbox selects for each operating system and desktop environment.
+To provide the best user experience on each platform, `TrayUtil` splits implementation by operating system:
 
-### Decision: Accept `dorkbox SystemTray 3.17` with menu-only interaction
-
-**Pros:**
-- ✅ Icon renders correctly on the tested Linux Mint environment
-- ✅ Menu (Open / Exit) works on the tested environment
-- ✅ Compatible with Java 8 (Oracle JDK 1.8.0_221)
-- ✅ Uses the AppIndicator support already installed on the tested Linux Mint system. Other Linux distributions or desktop environments may require an AppIndicator library or shell extension.
-- ✅ The library supports Windows and macOS, allowing the project to use one tray API across platforms
-
-**Cons:**
-- ❌ Left-click on the icon opens the menu instead of directly opening the app. User must click "Open" from the menu.
-- ❌ Dorkbox 3.17 does not expose a distinct AppIndicator click callback through the API used here, and indicator behavior varies across desktop environments.
-- ❌ Adds native-integration and logging dependencies, including JNA and SLF4J
-
-**Why not DIY?**
-Writing and maintaining a raw DBus StatusNotifierItem implementation is outside the scope of this change. The project accepts the menu-based interaction instead of adding a second tray implementation for one-click activation.
-
-**Why not upgrade Java?**
-The project is built with Oracle JDK 8 and packaged with install4j. A runtime upgrade is a separate project that affects the build and packaging pipeline; that work may revisit the tray decision.
+1. **Windows**: Uses native `java.awt.SystemTray`. This preserves the native Windows experience: single left-click instantly restores the window, while right-click displays the context popup menu (Open / Exit).
+2. **Non-Windows (Linux / macOS)**: Uses `dorkbox SystemTray 3.17` (AutoDetect). On desktop environments where XEmbed is unavailable, Dorkbox uses AppIndicator / GtkStatusIcon on Linux to render the tray icon and provide a working menu.
 
 ---
 
@@ -136,11 +116,9 @@ The project is built with Oracle JDK 8 and packaged with install4j. A runtime up
 
 ```text
 TrayUtil.java
-    └── dorkbox SystemTray 3.17 (AutoDetect)
-            └── OS/desktop-specific backend
+    ├── On Windows: java.awt.SystemTray + java.awt.TrayIcon (MouseListener for single left-click)
+    └── On non-Windows: dorkbox SystemTray 3.17 (AutoDetect backend)
 ```
-
-On the tested Linux Mint Cinnamon system, AutoDetect selected the AppIndicator path. Dorkbox may select a different native or AWT/Swing backend on other operating systems and desktop environments.
 
 ### Key Design Decisions in TrayUtil.java
 
@@ -148,16 +126,16 @@ On the tested Linux Mint Cinnamon system, AutoDetect selected the AppIndicator p
 
 2. **Background daemon thread** — Tray initialization is offloaded to a named daemon thread (`Tray-Init-Thread`) to prevent blocking the JavaFX Application Thread.
 
-3. **`volatile` tray field** — The `SystemTray` reference is declared `volatile` because it's written on the init thread and read on the JavaFX thread (in the close handler).
+3. **`volatile` tray fields** — The `tray` (Dorkbox) and `awtTray` (AWT) references are declared `volatile` because they are written on the init thread and read on the JavaFX Application Thread (in the close handler).
 
-4. **Graceful fallback** — If `SystemTray.get()` returns null (unsupported platform), `Platform.setImplicitExit(true)` is restored so closing the window exits the app normally.
+4. **Graceful fallback** — If tray initialization fails or is unsupported, `Platform.setImplicitExit(true)` is restored so closing the window exits the app normally.
 
 ### File Changes (vs. original Windows-only code)
 
 | File | Change |
 |---|---|
 | `pom.xml` | Added `com.dorkbox:SystemTray:3.17` dependency |
-| `TrayUtil.java` | Complete rewrite: AWT → dorkbox, constructor → static init |
+| `TrayUtil.java` | Platform split: AWT on Windows, Dorkbox on Linux/macOS; background thread init |
 | `Launcher.java` | `new TrayUtil(stage)` → `TrayUtil.init(stage)` |
 
 ---
@@ -169,8 +147,8 @@ On the tested Linux Mint Cinnamon environment, clicking the tray icon opens the 
 
 Applications using other tray implementations may support a distinct activation action. The limitation documented here applies to the Dorkbox 3.17 AppIndicator API used by this project.
 
-### 2. Windows behavior requires verification
-On Windows, the original AWT implementation supported left-click to open the app directly and right-click for the menu. The Dorkbox migration may change that interaction depending on the selected backend. Windows click behavior has not yet been manually verified for this change.
+### 2. Windows behavior requires verification on Windows hosts
+The Windows implementation uses `java.awt.SystemTray` with a mouse listener to restore the window on left-click and open the menu on right-click. While verified structurally and against the Java AWT specification, any Windows-specific testing requires running on a Windows environment.
 
 ### 3. SLF4J warning in console
 Dorkbox depends on SLF4J. Without an SLF4J binding configured, you'll see:

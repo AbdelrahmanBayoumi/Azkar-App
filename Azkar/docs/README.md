@@ -6,7 +6,7 @@ This directory contains technical documentation, architecture decisions, and res
 
 | Document | Description |
 |---|---|
-| [System Tray Integration](system-tray/README.md) | How the system tray works on Linux/Windows, library comparison research, and why we chose dorkbox SystemTray. |
+| [System Tray Integration](system-tray/README.md) | How the system tray works on Linux/Windows, platform split (Windows AWT / Linux Dorkbox), and library comparison research. |
 
 ## Quick Links
 
@@ -24,15 +24,14 @@ mvn -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 clean test jfx:jar
 cd ..
 ```
 
-Without explicit IDs, `install4jc` attempts to build all configured media and
-requires every platform's JRE bundle. Select the media IDs for the target
-platform explicitly:
+Running plain `install4jc production.install4j` attempts to build all configured media sets, which requires JRE bundles for all platforms.
+To build media sets for your target platform, specify `--build-ids`:
 
 ```bash
-# Linux: Unix installer and Debian archive
+# Linux: Unix installer (806) and Debian archive (807)
 install4jc --test --build-ids=806,807 production.install4j
 
-# Windows: 64-bit and 32-bit installers
+# Windows: 64-bit (60) and 32-bit (792) installers
 install4jc --test --build-ids=60,792 production.install4j
 ```
 

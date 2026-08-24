@@ -14,8 +14,11 @@ import javax.sound.sampled.Line;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.AudioSystem;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -181,6 +184,38 @@ public class AudioPlayerTest {
         await(callback);
         assertEquals(1, stopped.get());
         assertEquals(0, ended.get());
+    }
+
+    @Test
+    public void mp3FileOpensThroughSpiAsSignedPcm() throws Exception {
+        File mp3File = new File("jarFiles/audio/notification01.mp3");
+        if (!mp3File.exists()) {
+            mp3File = new File("Azkar/jarFiles/audio/notification01.mp3");
+        }
+        assertTrue("Bundled MP3 file should exist", mp3File.exists());
+
+        try (InputStream in = new BufferedInputStream(new FileInputStream(mp3File));
+             AudioInputStream rawStream = AudioSystem.getAudioInputStream(in)) {
+            AudioFormat baseFormat = rawStream.getFormat();
+            AudioFormat pcmFormat = new AudioFormat(
+                    AudioFormat.Encoding.PCM_SIGNED,
+                    baseFormat.getSampleRate(),
+                    16,
+                    baseFormat.getChannels(),
+                    baseFormat.getChannels() * 2,
+                    baseFormat.getSampleRate(),
+                    false
+            );
+            assertTrue("Conversion to signed PCM must be supported by SPI", AudioSystem.isConversionSupported(pcmFormat, baseFormat));
+            try (AudioInputStream pcmStream = AudioSystem.getAudioInputStream(pcmFormat, rawStream)) {
+                assertNotNull("Decoded PCM stream should not be null", pcmStream);
+                assertEquals(AudioFormat.Encoding.PCM_SIGNED, pcmStream.getFormat().getEncoding());
+                assertEquals(16, pcmStream.getFormat().getSampleSizeInBits());
+                byte[] buf = new byte[4096];
+                int bytesRead = pcmStream.read(buf);
+                assertTrue("Should be able to decode initial MP3 frames to PCM", bytesRead > 0);
+            }
+        }
     }
 
     private static final class FakeLine implements SourceDataLine {
