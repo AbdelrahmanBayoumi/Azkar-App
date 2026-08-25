@@ -92,10 +92,9 @@ public class AppPathManagerTest {
                 mockInstallDir, userHome, null,
                 runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
                         AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
-        AppPathManager.AssetsPathResolution resolution = AppPathManager.resolveAssetsPathWithDiagnostic(ctx);
+        String resolved = AppPathManager.resolveAssetsPath(ctx);
 
-        Assert.assertEquals(legacyJarFiles.toAbsolutePath().normalize().toString(), resolution.assetsPath);
-        Assert.assertNull(resolution.startupDiagnostic);
+        Assert.assertEquals(legacyJarFiles.toAbsolutePath().normalize().toString(), resolved);
     }
 
     @Test
@@ -119,7 +118,7 @@ public class AppPathManagerTest {
     }
 
     @Test
-    public void resolveAssetsPath_standalone_legacyDbIsDirectory_returnsCanonicalWithDiagnostic() throws IOException {
+    public void resolveAssetsPath_standalone_legacyDbIsDirectory_returnsCanonical() throws IOException {
         Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
         Files.createDirectories(legacyJarFiles.resolve("db/data.db")); // directory instead of file
 
@@ -128,12 +127,10 @@ public class AppPathManagerTest {
                 mockInstallDir, userHome, null,
                 runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
                         AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.STANDALONE_JAR));
-        AppPathManager.AssetsPathResolution resolution = AppPathManager.resolveAssetsPathWithDiagnostic(ctx);
+        String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expectedCanonical = Paths.get(userHome, ".Azkar", "jarFiles").toAbsolutePath().normalize().toString();
-        Assert.assertEquals(expectedCanonical, resolution.assetsPath);
-        Assert.assertEquals(AppPathManager.StartupDiagnostic.LEGACY_DATABASE_NOT_REGULAR_FILE,
-                resolution.startupDiagnostic);
+        Assert.assertEquals(expectedCanonical, resolved);
     }
 
     @Test
@@ -169,7 +166,7 @@ public class AppPathManagerTest {
     }
 
     @Test
-    public void resolveAssetsPath_readOnlyLegacyDb_returnsCanonicalWithDiagnostic() throws IOException {
+    public void resolveAssetsPath_readOnlyLegacyDb_returnsCanonical() throws IOException {
         Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
         Path legacyDbDir = legacyJarFiles.resolve("db");
         Path legacyDb = legacyDbDir.resolve("data.db");
@@ -188,12 +185,10 @@ public class AppPathManagerTest {
         Files.setPosixFilePermissions(legacyJarFiles, PosixFilePermissions.fromString("r-xr-xr-x"));
         try {
             Assume.assumeFalse(Files.isWritable(legacyDb));
-            AppPathManager.AssetsPathResolution resolution = AppPathManager.resolveAssetsPathWithDiagnostic(ctx);
+            String resolved = AppPathManager.resolveAssetsPath(ctx);
 
             String canonicalPath = Paths.get(userHome, ".Azkar", "jarFiles").toAbsolutePath().normalize().toString();
-            Assert.assertEquals(canonicalPath, resolution.assetsPath);
-            Assert.assertEquals(AppPathManager.StartupDiagnostic.LEGACY_DATABASE_NOT_WRITABLE,
-                    resolution.startupDiagnostic);
+            Assert.assertEquals(canonicalPath, resolved);
         } finally {
             Files.setPosixFilePermissions(legacyDb, PosixFilePermissions.fromString("rw-------"));
             Files.setPosixFilePermissions(legacyDbDir, PosixFilePermissions.fromString("rwx------"));

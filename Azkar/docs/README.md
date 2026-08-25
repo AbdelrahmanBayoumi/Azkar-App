@@ -28,9 +28,8 @@ writable user-data directory at startup:
 An existing writable `jarFiles/db/data.db` beside the application remains in
 use for compatibility with older portable installations. If that database is
 not writable, Azkar does not migrate or open it read-only; it uses the platform
-user-data directory and reports a startup warning locally and to Sentry in
-production. A selected canonical `data.db` path that exists but is not a regular
-file causes startup to fail with a clear error.
+user-data directory. A selected canonical `data.db` path that exists but is not
+a regular file causes startup to fail with a clear error.
 
 ## Installer Builds
 

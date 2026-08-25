@@ -18,7 +18,6 @@ import java.util.Locale;
 public class AppPathManager {
 
     private static String assetsPath;
-    private static StartupDiagnostic startupDiagnostic;
 
     private AppPathManager() {
     }
@@ -30,19 +29,6 @@ public class AppPathManager {
     public enum RuntimeEnvironment { DEVELOPMENT, PRODUCTION }
     public enum OperatingSystem { WINDOWS, LINUX, MAC, UNKNOWN }
     public enum DistributionMode { INSTALL4J, STANDALONE_JAR }
-
-    enum StartupDiagnostic {
-        LEGACY_DATABASE_NOT_WRITABLE(
-                "Legacy portable database is not writable; using canonical user-data directory."),
-        LEGACY_DATABASE_NOT_REGULAR_FILE(
-                "Legacy portable database path is not a regular file; using canonical user-data directory.");
-
-        private final String message;
-
-        StartupDiagnostic(String message) {
-            this.message = message;
-        }
-    }
 
     public static class RuntimeProfile {
         public final RuntimeEnvironment environment;
@@ -78,16 +64,6 @@ public class AppPathManager {
         }
     }
 
-    static class AssetsPathResolution {
-        final String assetsPath;
-        final StartupDiagnostic startupDiagnostic;
-
-        AssetsPathResolution(String assetsPath, StartupDiagnostic startupDiagnostic) {
-            this.assetsPath = assetsPath;
-            this.startupDiagnostic = startupDiagnostic;
-        }
-    }
-
     public static synchronized void init() {
         if (assetsPath != null) {
             return;
@@ -111,9 +87,7 @@ public class AppPathManager {
 
             RuntimeProfile runtimeProfile = new RuntimeProfile(env, os, distributionMode);
             AssetsPathContext ctx = new AssetsPathContext(installDir, userHome, localAppData, runtimeProfile);
-            AssetsPathResolution resolution = resolveAssetsPathWithDiagnostic(ctx);
-            assetsPath = resolution.assetsPath;
-            startupDiagnostic = resolution.startupDiagnostic;
+            assetsPath = resolveAssetsPath(ctx);
 
             Path resolvedAssetsPath = Paths.get(assetsPath);
             ensureWritableDirectory(resolvedAssetsPath);
@@ -218,13 +192,8 @@ public class AppPathManager {
      * 4. install4j launchers and non-writable standalone JARs use canonical user data.
      */
     public static String resolveAssetsPath(AssetsPathContext ctx) {
-        return resolveAssetsPathWithDiagnostic(ctx).assetsPath;
-    }
-
-    static AssetsPathResolution resolveAssetsPathWithDiagnostic(AssetsPathContext ctx) {
         if (ctx.runtimeProfile.environment == RuntimeEnvironment.DEVELOPMENT) {
-            return new AssetsPathResolution(
-                    ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize().toString(), null);
+            return ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize().toString();
         }
         Path canonicalDir = Paths.get(computeUserDataAssetsPath(
                 ctx.userHome,
@@ -233,10 +202,9 @@ public class AppPathManager {
         return resolveProductionAssetsPath(ctx, canonicalDir);
     }
 
-    private static AssetsPathResolution resolveProductionAssetsPath(AssetsPathContext ctx,
-                                                                    Path canonicalDir) {
+    private static String resolveProductionAssetsPath(AssetsPathContext ctx, Path canonicalDir) {
         if (ctx.installDir == null) {
-            return canonicalResolution(canonicalDir, null);
+            return canonicalAssetsPath(canonicalDir);
         }
 
         Path legacyDir = ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize();
@@ -246,20 +214,17 @@ public class AppPathManager {
         }
         if (ctx.runtimeProfile.distributionMode == DistributionMode.STANDALONE_JAR
                 && canUseInstallLocalDirectory(ctx.installDir, legacyDir)) {
-            return new AssetsPathResolution(legacyDir.toString(), null);
+            return legacyDir.toString();
         }
-        return canonicalResolution(canonicalDir, null);
+        return canonicalAssetsPath(canonicalDir);
     }
 
-    private static AssetsPathResolution resolveExistingLegacyDatabase(Path legacyDb, Path legacyDir,
-                                                                      Path canonicalDir) {
-        if (!Files.isRegularFile(legacyDb)) {
-            return canonicalResolution(canonicalDir, StartupDiagnostic.LEGACY_DATABASE_NOT_REGULAR_FILE);
+    private static String resolveExistingLegacyDatabase(Path legacyDb, Path legacyDir,
+                                                        Path canonicalDir) {
+        if (Files.isRegularFile(legacyDb) && isLegacyDatabaseWritable(legacyDb, legacyDir)) {
+            return legacyDir.toString();
         }
-        if (!isLegacyDatabaseWritable(legacyDb, legacyDir)) {
-            return canonicalResolution(canonicalDir, StartupDiagnostic.LEGACY_DATABASE_NOT_WRITABLE);
-        }
-        return new AssetsPathResolution(legacyDir.toString(), null);
+        return canonicalAssetsPath(canonicalDir);
     }
 
     public static String computeUserDataAssetsPath(String userHome, String localAppData, boolean isWindows) {
@@ -308,13 +273,12 @@ public class AppPathManager {
         return isDirectoryActuallyWritable(installDir);
     }
 
-    private static AssetsPathResolution canonicalResolution(Path canonicalDir,
-                                                            StartupDiagnostic diagnostic) {
+    private static String canonicalAssetsPath(Path canonicalDir) {
         Path canonicalDb = canonicalDir.resolve("db/data.db");
         if (Files.exists(canonicalDb) && !Files.isRegularFile(canonicalDb)) {
             throw new IllegalStateException("Canonical database path exists but is not a regular file");
         }
-        return new AssetsPathResolution(canonicalDir.toString(), diagnostic);
+        return canonicalDir.toString();
     }
 
     private static boolean hasText(String text) {
@@ -342,7 +306,4 @@ public class AppPathManager {
         return assetsPath;
     }
 
-    public static String getStartupWarning() {
-        return startupDiagnostic == null ? null : startupDiagnostic.message;
-    }
 }

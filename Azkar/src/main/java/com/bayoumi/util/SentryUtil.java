@@ -34,11 +34,6 @@ public class SentryUtil {
         setSentryUser();
     }
 
-    public static void captureWarning(String message) {
-        if (!Constants.RUNNING_MODE.equals(Constants.Mode.PRODUCTION) || message == null) return;
-        Sentry.captureMessage(message, SentryLevel.WARNING);
-    }
-
     private static User getSentryUser() {
         final User user = new User();
         user.setId(DatabaseManager.getInstance().getID());
