@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermissions;
 
 public class AppPathManagerTest {
 
@@ -32,7 +33,8 @@ public class AppPathManagerTest {
     public void resolveAssetsPath_production_linux_returnsUserDataDir() {
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, "/home/testuser", null,
-                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expected = Paths.get("/home/testuser/.Azkar/jarFiles").toAbsolutePath().normalize().toString();
@@ -44,7 +46,8 @@ public class AppPathManagerTest {
     public void resolveAssetsPath_development_returnsInstallDirJarFiles() {
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, "/home/testuser", null,
-                AppPathManager.RuntimeEnvironment.DEVELOPMENT, AppPathManager.OperatingSystem.LINUX);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.DEVELOPMENT,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expected = mockInstallDir.resolve("jarFiles").toAbsolutePath().normalize().toString();
@@ -57,7 +60,8 @@ public class AppPathManagerTest {
         String localAppData = "/users/testuser/appdata/local";
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, userHome, localAppData,
-                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.WINDOWS);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.WINDOWS, AppPathManager.DistributionMode.INSTALL4J));
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expected = Paths.get(localAppData, "Azkar", "jarFiles").toAbsolutePath().normalize().toString();
@@ -69,7 +73,8 @@ public class AppPathManagerTest {
         String userHome = "/users/testuser";
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, userHome, null,
-                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.WINDOWS);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.WINDOWS, AppPathManager.DistributionMode.INSTALL4J));
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         String expected = Paths.get(userHome, "AppData", "Local", "Azkar", "jarFiles").toAbsolutePath().normalize().toString();
@@ -85,14 +90,16 @@ public class AppPathManagerTest {
         String userHome = tempFolder.newFolder("freshUserHome").getAbsolutePath();
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, userHome, null,
-                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
-        String resolved = AppPathManager.resolveAssetsPath(ctx);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
+        AppPathManager.AssetsPathResolution resolution = AppPathManager.resolveAssetsPathWithDiagnostic(ctx);
 
-        Assert.assertEquals(legacyJarFiles.toAbsolutePath().normalize().toString(), resolved);
+        Assert.assertEquals(legacyJarFiles.toAbsolutePath().normalize().toString(), resolution.assetsPath);
+        Assert.assertNull(resolution.startupDiagnostic);
     }
 
     @Test
-    public void resolveAssetsPath_production_canonicalDbExists_returnsCanonicalEvenIfLegacyDbExists() throws IOException {
+    public void resolveAssetsPath_production_writableLegacyDbTakesPriorityOverCanonicalDb() throws IOException {
         Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
         Files.createDirectories(legacyJarFiles.resolve("db"));
         Files.write(legacyJarFiles.resolve("db/data.db"), new byte[]{1, 2, 3});
@@ -104,25 +111,113 @@ public class AppPathManagerTest {
 
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, customUserHome.getAbsolutePath(), null,
-                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
-        Assert.assertEquals(canonicalJarFiles.toAbsolutePath().normalize().toString(), resolved);
+        Assert.assertEquals(legacyJarFiles.toAbsolutePath().normalize().toString(), resolved);
     }
 
     @Test
-    public void resolveAssetsPath_production_legacyDbIsDirectory_returnsCanonical() throws IOException {
+    public void resolveAssetsPath_standalone_legacyDbIsDirectory_returnsCanonicalWithDiagnostic() throws IOException {
         Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
         Files.createDirectories(legacyJarFiles.resolve("db/data.db")); // directory instead of file
 
         String userHome = tempFolder.newFolder("dirUserHome").getAbsolutePath();
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
                 mockInstallDir, userHome, null,
-                AppPathManager.RuntimeEnvironment.PRODUCTION, AppPathManager.OperatingSystem.LINUX);
-        String resolved = AppPathManager.resolveAssetsPath(ctx);
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.STANDALONE_JAR));
+        AppPathManager.AssetsPathResolution resolution = AppPathManager.resolveAssetsPathWithDiagnostic(ctx);
 
         String expectedCanonical = Paths.get(userHome, ".Azkar", "jarFiles").toAbsolutePath().normalize().toString();
-        Assert.assertEquals(expectedCanonical, resolved);
+        Assert.assertEquals(expectedCanonical, resolution.assetsPath);
+        Assert.assertEquals(AppPathManager.StartupDiagnostic.LEGACY_DATABASE_NOT_REGULAR_FILE,
+                resolution.startupDiagnostic);
+    }
+
+    @Test
+    public void resolveAssetsPath_install4jWithCanonicalDb_returnsCanonical() throws IOException {
+        File userHome = tempFolder.newFolder("canonicalUserHome");
+        Path canonicalJarFiles = Paths.get(userHome.getAbsolutePath(), ".Azkar", "jarFiles");
+        Files.createDirectories(canonicalJarFiles.resolve("db"));
+        Files.write(canonicalJarFiles.resolve("db/data.db"), new byte[]{1, 2, 3});
+
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                mockInstallDir, userHome.getAbsolutePath(), null,
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
+
+        Assert.assertEquals(canonicalJarFiles.toAbsolutePath().normalize().toString(),
+                AppPathManager.resolveAssetsPath(ctx));
+    }
+
+    @Test
+    public void resolveAssetsPath_standaloneJarFirstRun_returnsInstallLocalPath() throws IOException {
+        File userHome = tempFolder.newFolder("standaloneUserHome");
+        Path canonicalJarFiles = Paths.get(userHome.getAbsolutePath(), ".Azkar", "jarFiles");
+        Files.createDirectories(canonicalJarFiles.resolve("db"));
+        Files.write(canonicalJarFiles.resolve("db/data.db"), new byte[]{1, 2, 3});
+
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                mockInstallDir, userHome.getAbsolutePath(), null,
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.STANDALONE_JAR));
+
+        Assert.assertEquals(mockInstallDir.resolve("jarFiles").toAbsolutePath().normalize().toString(),
+                AppPathManager.resolveAssetsPath(ctx));
+    }
+
+    @Test
+    public void resolveAssetsPath_readOnlyLegacyDb_returnsCanonicalWithDiagnostic() throws IOException {
+        Path legacyJarFiles = mockInstallDir.resolve("jarFiles");
+        Path legacyDbDir = legacyJarFiles.resolve("db");
+        Path legacyDb = legacyDbDir.resolve("data.db");
+        Files.createDirectories(legacyDbDir);
+        Files.write(legacyDb, new byte[]{1, 2, 3});
+        Assume.assumeTrue(Files.getFileStore(legacyDb).supportsFileAttributeView("posix"));
+
+        String userHome = tempFolder.newFolder("readOnlyLegacyUserHome").getAbsolutePath();
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                mockInstallDir, userHome, null,
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
+
+        Files.setPosixFilePermissions(legacyDb, PosixFilePermissions.fromString("r--r--r--"));
+        Files.setPosixFilePermissions(legacyDbDir, PosixFilePermissions.fromString("r-xr-xr-x"));
+        Files.setPosixFilePermissions(legacyJarFiles, PosixFilePermissions.fromString("r-xr-xr-x"));
+        try {
+            Assume.assumeFalse(Files.isWritable(legacyDb));
+            AppPathManager.AssetsPathResolution resolution = AppPathManager.resolveAssetsPathWithDiagnostic(ctx);
+
+            String canonicalPath = Paths.get(userHome, ".Azkar", "jarFiles").toAbsolutePath().normalize().toString();
+            Assert.assertEquals(canonicalPath, resolution.assetsPath);
+            Assert.assertEquals(AppPathManager.StartupDiagnostic.LEGACY_DATABASE_NOT_WRITABLE,
+                    resolution.startupDiagnostic);
+        } finally {
+            Files.setPosixFilePermissions(legacyDb, PosixFilePermissions.fromString("rw-------"));
+            Files.setPosixFilePermissions(legacyDbDir, PosixFilePermissions.fromString("rwx------"));
+            Files.setPosixFilePermissions(legacyJarFiles, PosixFilePermissions.fromString("rwx------"));
+        }
+    }
+
+    @Test
+    public void resolveAssetsPath_canonicalDbIsDirectory_throwsClearException() throws IOException {
+        File userHome = tempFolder.newFolder("invalidCanonicalUserHome");
+        Path canonicalDb = Paths.get(userHome.getAbsolutePath(), ".Azkar", "jarFiles", "db", "data.db");
+        Files.createDirectories(canonicalDb);
+
+        AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
+                mockInstallDir, userHome.getAbsolutePath(), null,
+                runtimeProfile(AppPathManager.RuntimeEnvironment.PRODUCTION,
+                        AppPathManager.OperatingSystem.LINUX, AppPathManager.DistributionMode.INSTALL4J));
+
+        try {
+            AppPathManager.resolveAssetsPath(ctx);
+            Assert.fail("Expected invalid canonical database path to fail early");
+        } catch (IllegalStateException ex) {
+            Assert.assertEquals("Canonical database path exists but is not a regular file", ex.getMessage());
+        }
     }
 
     // ===== computeUserDataAssetsPath =====
@@ -248,6 +343,26 @@ public class AppPathManagerTest {
     }
 
     @Test
+    public void detectDistributionMode_standaloneJar_returnsStandaloneJar() throws IOException {
+        Path jarPath = tempFolder.newFile("Azkar.jar").toPath();
+
+        AppPathManager.DistributionMode mode = AppPathManager.detectDistributionMode(
+                jarPath, AppPathManager.RuntimeEnvironment.PRODUCTION, null, null);
+
+        Assert.assertEquals(AppPathManager.DistributionMode.STANDALONE_JAR, mode);
+    }
+
+    @Test
+    public void detectDistributionMode_exe4jModuleProperty_returnsInstall4j() throws IOException {
+        Path jarPath = tempFolder.newFile("InstalledAzkar.jar").toPath();
+
+        AppPathManager.DistributionMode mode = AppPathManager.detectDistributionMode(
+                jarPath, AppPathManager.RuntimeEnvironment.PRODUCTION, null, "/opt/Azkar/Azkar");
+
+        Assert.assertEquals(AppPathManager.DistributionMode.INSTALL4J, mode);
+    }
+
+    @Test
     public void resolveAppInstallDir_targetClasses_returnsProjectRoot() throws IOException {
         File projectRoot = tempFolder.newFolder("DevProjectDir");
         new File(projectRoot, "pom.xml").createNewFile();
@@ -280,7 +395,8 @@ public class AppPathManagerTest {
 
         String syntheticHome = tempFolder.newFolder("syntheticHome").getAbsolutePath();
         AppPathManager.AssetsPathContext ctx = new AppPathManager.AssetsPathContext(
-                installDir, syntheticHome, null, env, os);
+                installDir, syntheticHome, null,
+                runtimeProfile(env, os, AppPathManager.DistributionMode.INSTALL4J));
         String resolved = AppPathManager.resolveAssetsPath(ctx);
 
         Assert.assertEquals(projectJarFiles.toPath().toAbsolutePath().normalize().toString(), resolved);
@@ -325,5 +441,11 @@ public class AppPathManagerTest {
 
         String content = new String(java.nio.file.Files.readAllBytes(target.toPath()));
         Assert.assertEquals("ORIGINAL CONTENT", content);
+    }
+
+    private AppPathManager.RuntimeProfile runtimeProfile(AppPathManager.RuntimeEnvironment environment,
+                                                         AppPathManager.OperatingSystem operatingSystem,
+                                                         AppPathManager.DistributionMode distributionMode) {
+        return new AppPathManager.RuntimeProfile(environment, operatingSystem, distributionMode);
     }
 }

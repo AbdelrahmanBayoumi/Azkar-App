@@ -16,6 +16,7 @@ import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.SentryUtil;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.file.AppPathManager;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.BuilderUI;
@@ -86,6 +87,10 @@ public class Launcher extends Application {
 
             // --- initialize Logger ---
             Logger.init();
+            String startupWarning = AppPathManager.getStartupWarning();
+            if (startupWarning != null) {
+                Logger.warn(startupWarning);
+            }
             Logger.info("App Launched");
             incrementPreloader();
 
@@ -123,6 +128,7 @@ public class Launcher extends Application {
             // --- initialize Sentry for error tracking ---
             try {
                 SentryUtil.init();
+                SentryUtil.captureWarning(startupWarning);
             } catch (Exception ex) {
                 Logger.debug(ex.getLocalizedMessage());
             }

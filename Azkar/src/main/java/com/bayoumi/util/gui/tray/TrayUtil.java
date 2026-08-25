@@ -99,7 +99,7 @@ public class TrayUtil {
         java.awt.Toolkit.getDefaultToolkit();
 
         if (!java.awt.SystemTray.isSupported()) {
-            throw new Exception("No system tray support (AWT), application exiting.");
+            throw new Exception("No system tray support (AWT), falling back to standard window.");
         }
 
         java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);

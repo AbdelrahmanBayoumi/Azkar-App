@@ -69,6 +69,7 @@ public class LocationsDBManager {
                     && DatabaseHelper.checkIfTablesExist(connection, "cityd")) {
                 return connection;
             } else {
+                Logger.warn("LocationsDB is missing required tables: Countries, cityd");
                 connection.close();
                 return null;
             }

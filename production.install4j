@@ -1225,8 +1225,10 @@ return true;</property>
     </linuxDeb>
   </mediaSets>
   <buildIds>
-    <mediaSet id="60" />
-    <mediaSet id="792" />
+    <mediaSet refId="60" />
+    <mediaSet refId="792" />
+    <mediaSet refId="806" />
+    <mediaSet refId="807" />
   </buildIds>
   <buildOptions verbose="true" />
 </install4j>

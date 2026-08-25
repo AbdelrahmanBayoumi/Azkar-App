@@ -9,6 +9,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 /**
  * Resolves application assets and data paths across platforms (Windows, Linux, macOS)
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 public class AppPathManager {
 
     private static String assetsPath;
+    private static StartupDiagnostic startupDiagnostic;
 
     private AppPathManager() {
     }
@@ -27,6 +29,33 @@ public class AppPathManager {
 
     public enum RuntimeEnvironment { DEVELOPMENT, PRODUCTION }
     public enum OperatingSystem { WINDOWS, LINUX, MAC, UNKNOWN }
+    public enum DistributionMode { INSTALL4J, STANDALONE_JAR }
+
+    enum StartupDiagnostic {
+        LEGACY_DATABASE_NOT_WRITABLE(
+                "Legacy portable database is not writable; using canonical user-data directory."),
+        LEGACY_DATABASE_NOT_REGULAR_FILE(
+                "Legacy portable database path is not a regular file; using canonical user-data directory.");
+
+        private final String message;
+
+        StartupDiagnostic(String message) {
+            this.message = message;
+        }
+    }
+
+    public static class RuntimeProfile {
+        public final RuntimeEnvironment environment;
+        public final OperatingSystem operatingSystem;
+        public final DistributionMode distributionMode;
+
+        public RuntimeProfile(RuntimeEnvironment environment, OperatingSystem operatingSystem,
+                              DistributionMode distributionMode) {
+            this.environment = environment;
+            this.operatingSystem = operatingSystem;
+            this.distributionMode = distributionMode;
+        }
+    }
 
     /**
      * Immutable context for path resolution, allowing deterministic unit testing.
@@ -35,19 +64,27 @@ public class AppPathManager {
         public final Path installDir;
         public final String userHome;
         public final String localAppData;
-        public final RuntimeEnvironment env;
-        public final OperatingSystem os;
+        public final RuntimeProfile runtimeProfile;
 
         public AssetsPathContext(Path installDir, String userHome, String localAppData,
-                                 RuntimeEnvironment env, OperatingSystem os) {
+                                 RuntimeProfile runtimeProfile) {
             if (userHome == null || userHome.trim().isEmpty()) {
                 throw new IllegalArgumentException("userHome parameter must not be null or empty");
             }
             this.installDir = installDir;
             this.userHome = userHome;
             this.localAppData = localAppData;
-            this.env = env;
-            this.os = os;
+            this.runtimeProfile = runtimeProfile;
+        }
+    }
+
+    static class AssetsPathResolution {
+        final String assetsPath;
+        final StartupDiagnostic startupDiagnostic;
+
+        AssetsPathResolution(String assetsPath, StartupDiagnostic startupDiagnostic) {
+            this.assetsPath = assetsPath;
+            this.startupDiagnostic = startupDiagnostic;
         }
     }
 
@@ -59,6 +96,11 @@ public class AppPathManager {
             Path rawCodeSource = getRawCodeSourceLocation();
             Path installDir = resolveAppInstallDir(rawCodeSource);
             RuntimeEnvironment env = detectEnvironment(rawCodeSource);
+            DistributionMode distributionMode = detectDistributionMode(
+                    rawCodeSource,
+                    env,
+                    System.getProperty("executablepath"),
+                    System.getProperty("exe4j.moduleName"));
 
             OperatingSystem os = com.bayoumi.util.OSUtil.isWindows() ? OperatingSystem.WINDOWS :
                                  com.bayoumi.util.OSUtil.isLinux() ? OperatingSystem.LINUX :
@@ -67,8 +109,11 @@ public class AppPathManager {
             String userHome = System.getProperty("user.home");
             String localAppData = System.getenv("LOCALAPPDATA");
 
-            AssetsPathContext ctx = new AssetsPathContext(installDir, userHome, localAppData, env, os);
-            assetsPath = resolveAssetsPath(ctx);
+            RuntimeProfile runtimeProfile = new RuntimeProfile(env, os, distributionMode);
+            AssetsPathContext ctx = new AssetsPathContext(installDir, userHome, localAppData, runtimeProfile);
+            AssetsPathResolution resolution = resolveAssetsPathWithDiagnostic(ctx);
+            assetsPath = resolution.assetsPath;
+            startupDiagnostic = resolution.startupDiagnostic;
 
             Path resolvedAssetsPath = Paths.get(assetsPath);
             ensureWritableDirectory(resolvedAssetsPath);
@@ -146,6 +191,21 @@ public class AppPathManager {
         return findDevelopmentProjectRoot(path) != null ? RuntimeEnvironment.DEVELOPMENT : RuntimeEnvironment.PRODUCTION;
     }
 
+    static DistributionMode detectDistributionMode(Path rawLocation, RuntimeEnvironment environment,
+                                                   String executablePath, String moduleName) {
+        if (environment == RuntimeEnvironment.DEVELOPMENT) {
+            return DistributionMode.INSTALL4J;
+        }
+        if (hasText(executablePath) || hasText(moduleName)) {
+            return DistributionMode.INSTALL4J;
+        }
+        if (rawLocation != null && Files.isRegularFile(rawLocation)
+                && rawLocation.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".jar")) {
+            return DistributionMode.STANDALONE_JAR;
+        }
+        return DistributionMode.INSTALL4J;
+    }
+
     public static Path getAppInstallDir() {
         return resolveAppInstallDir(getRawCodeSourceLocation());
     }
@@ -153,30 +213,53 @@ public class AppPathManager {
     /**
      * Resolves the assets path using the following decision rules:
      * 1. Development: uses {@code <projectRoot>/jarFiles} without touching user data.
-     * 2. Production: uses canonical user data path (e.g. %LOCALAPPDATA%/Azkar or ~/.Azkar),
-     *    falling back to legacy install-local data only if canonical DB does not exist
-     *    and the legacy DB is confirmed writable.
+     * 2. Existing writable install-local databases remain in place for compatibility.
+     * 3. New standalone JARs use install-local data when the JAR directory is writable.
+     * 4. install4j launchers and non-writable standalone JARs use canonical user data.
      */
     public static String resolveAssetsPath(AssetsPathContext ctx) {
-        if (ctx.env == RuntimeEnvironment.DEVELOPMENT) {
-            return ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize().toString();
+        return resolveAssetsPathWithDiagnostic(ctx).assetsPath;
+    }
+
+    static AssetsPathResolution resolveAssetsPathWithDiagnostic(AssetsPathContext ctx) {
+        if (ctx.runtimeProfile.environment == RuntimeEnvironment.DEVELOPMENT) {
+            return new AssetsPathResolution(
+                    ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize().toString(), null);
         }
-        String canonicalPath = computeUserDataAssetsPath(ctx.userHome, ctx.localAppData, ctx.os == OperatingSystem.WINDOWS);
-        if (ctx.installDir != null) {
-            Path canonicalDb = Paths.get(canonicalPath).resolve("db/data.db");
-            if (Files.exists(canonicalDb)) {
-                return canonicalPath;
-            }
-            Path legacyJarFilesDir = ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize();
-            Path legacyDb = legacyJarFilesDir.resolve("db/data.db");
-            if (Files.isRegularFile(legacyDb)
-                    && Files.isWritable(legacyDb)
-                    && isDirectoryActuallyWritable(legacyDb.getParent())
-                    && isDirectoryActuallyWritable(legacyJarFilesDir)) {
-                return legacyJarFilesDir.toString();
-            }
+        Path canonicalDir = Paths.get(computeUserDataAssetsPath(
+                ctx.userHome,
+                ctx.localAppData,
+                ctx.runtimeProfile.operatingSystem == OperatingSystem.WINDOWS));
+        return resolveProductionAssetsPath(ctx, canonicalDir);
+    }
+
+    private static AssetsPathResolution resolveProductionAssetsPath(AssetsPathContext ctx,
+                                                                    Path canonicalDir) {
+        if (ctx.installDir == null) {
+            return canonicalResolution(canonicalDir, null);
         }
-        return canonicalPath;
+
+        Path legacyDir = ctx.installDir.resolve("jarFiles").toAbsolutePath().normalize();
+        Path legacyDb = legacyDir.resolve("db/data.db");
+        if (Files.exists(legacyDb)) {
+            return resolveExistingLegacyDatabase(legacyDb, legacyDir, canonicalDir);
+        }
+        if (ctx.runtimeProfile.distributionMode == DistributionMode.STANDALONE_JAR
+                && canUseInstallLocalDirectory(ctx.installDir, legacyDir)) {
+            return new AssetsPathResolution(legacyDir.toString(), null);
+        }
+        return canonicalResolution(canonicalDir, null);
+    }
+
+    private static AssetsPathResolution resolveExistingLegacyDatabase(Path legacyDb, Path legacyDir,
+                                                                      Path canonicalDir) {
+        if (!Files.isRegularFile(legacyDb)) {
+            return canonicalResolution(canonicalDir, StartupDiagnostic.LEGACY_DATABASE_NOT_REGULAR_FILE);
+        }
+        if (!isLegacyDatabaseWritable(legacyDb, legacyDir)) {
+            return canonicalResolution(canonicalDir, StartupDiagnostic.LEGACY_DATABASE_NOT_WRITABLE);
+        }
+        return new AssetsPathResolution(legacyDir.toString(), null);
     }
 
     public static String computeUserDataAssetsPath(String userHome, String localAppData, boolean isWindows) {
@@ -212,6 +295,32 @@ public class AppPathManager {
         }
     }
 
+    private static boolean isLegacyDatabaseWritable(Path legacyDb, Path legacyDir) {
+        return Files.isWritable(legacyDb)
+                && isDirectoryActuallyWritable(legacyDb.getParent())
+                && isDirectoryActuallyWritable(legacyDir);
+    }
+
+    private static boolean canUseInstallLocalDirectory(Path installDir, Path legacyDir) {
+        if (Files.exists(legacyDir)) {
+            return Files.isDirectory(legacyDir) && isDirectoryActuallyWritable(legacyDir);
+        }
+        return isDirectoryActuallyWritable(installDir);
+    }
+
+    private static AssetsPathResolution canonicalResolution(Path canonicalDir,
+                                                            StartupDiagnostic diagnostic) {
+        Path canonicalDb = canonicalDir.resolve("db/data.db");
+        if (Files.exists(canonicalDb) && !Files.isRegularFile(canonicalDb)) {
+            throw new IllegalStateException("Canonical database path exists but is not a regular file");
+        }
+        return new AssetsPathResolution(canonicalDir.toString(), diagnostic);
+    }
+
+    private static boolean hasText(String text) {
+        return text != null && !text.trim().isEmpty();
+    }
+
     static Path findDevelopmentProjectRoot(Path current) {
         Path curr = current;
         while (curr != null) {
@@ -231,5 +340,9 @@ public class AppPathManager {
             init();
         }
         return assetsPath;
+    }
+
+    public static String getStartupWarning() {
+        return startupDiagnostic == null ? null : startupDiagnostic.message;
     }
 }
