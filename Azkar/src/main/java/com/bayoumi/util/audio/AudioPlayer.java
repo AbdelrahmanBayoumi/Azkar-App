@@ -10,9 +10,11 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ServiceConfigurationError;
 
@@ -97,17 +99,15 @@ public class AudioPlayer {
         }
     }
 
-    private void initStreamAndLine() throws Exception {
+    private void initStreamAndLine() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         AudioInputStream openedRawStream = null;
         InputStream inputStream = null;
         try {
             inputStream = new BufferedInputStream(new FileInputStream(audioFile));
             openedRawStream = AudioSystem.getAudioInputStream(inputStream);
-        } catch (Exception | LinkageError | ServiceConfigurationError e) {
+        } catch (IOException | UnsupportedAudioFileException | RuntimeException
+                 | LinkageError | ServiceConfigurationError e) {
             closeQuietly(inputStream);
-            if (e instanceof Exception) {
-                throw (Exception) e;
-            }
             throw e;
         }
 

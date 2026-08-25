@@ -2,6 +2,7 @@ package com.bayoumi.util.gui.tray;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.OSUtil;
 import com.bayoumi.util.Utility;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.Separator;
@@ -50,7 +51,7 @@ public class TrayUtil {
         // Hide window on close only if tray is ready; otherwise fall back to exiting
         stage.setOnCloseRequest(event -> {
             if (event.getEventType().equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
-                boolean trayNotReady = com.bayoumi.util.OSUtil.isWindows() ? instance.awtTray == null : instance.tray == null;
+                boolean trayNotReady = OSUtil.isWindows() ? instance.awtTray == null : instance.tray == null;
                 if (Platform.isImplicitExit() || trayNotReady) {
                     // Tray failed to init or is not ready yet — fall back to normal exit behavior
                     instance.shutdown();
@@ -86,7 +87,7 @@ public class TrayUtil {
      * Sets up the tray icon, tooltip, and menu.
      */
     private void setupTray() throws Exception {
-        if (com.bayoumi.util.OSUtil.isWindows()) {
+        if (OSUtil.isWindows()) {
             setupAwtTray();
             Logger.info("[TrayUtil] AWT system tray initialized successfully.");
         } else {
@@ -196,7 +197,7 @@ public class TrayUtil {
      * Shuts down the system tray. Safe to call from any thread.
      */
     public void shutdown() {
-        if (com.bayoumi.util.OSUtil.isWindows()) {
+        if (OSUtil.isWindows()) {
             if (awtTray != null && awtTrayIcon != null) {
                 awtTray.remove(awtTrayIcon);
             }
