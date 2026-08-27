@@ -1227,8 +1227,6 @@ return true;</property>
   <buildIds>
     <mediaSet refId="60" />
     <mediaSet refId="792" />
-    <mediaSet refId="806" />
-    <mediaSet refId="807" />
   </buildIds>
   <buildOptions verbose="true" />
 </install4j>
