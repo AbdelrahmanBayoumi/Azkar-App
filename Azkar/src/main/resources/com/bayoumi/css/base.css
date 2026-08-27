@@ -1,5 +1,5 @@
 @font-face {
-    font-family: "Tajawal-Medium";
+    font-family: "Azkar Tajawal Medium";
     src: url("../fonts/Tajawal/Tajawal-Medium.ttf");
 }
 
@@ -20,7 +20,7 @@
 
 * {
     -fx-bold-font-family: Tajawal-Bold;
-    -fx-medium-font-family: "Tajawal-Medium";
+    -fx-medium-font-family: "Azkar Tajawal Medium";
 }
 .root {
     -fx-background-color: -fx-bg;
@@ -325,7 +325,7 @@ Text {
 .tree-table-row-cell {
     -fx-border-style: solid;
     -fx-border-width: 0.25;
-    -fx-font: normal 20px "Tajawal-Medium";
+    -fx-font: normal 20px "Azkar Tajawal Medium";
 }
 
 .tree-table-row-cell .tree-table-cell {
@@ -579,7 +579,7 @@ ProgressIndicator .spinner {
 }
 
 .font-text-medium {
-    -fx-font-family: "Tajawal-Medium";
+    -fx-font-family: "Azkar Tajawal Medium";
 }
 
 /* === fonts-sizes === */
