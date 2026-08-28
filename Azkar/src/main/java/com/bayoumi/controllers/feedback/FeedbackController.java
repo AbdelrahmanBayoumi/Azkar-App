@@ -3,6 +3,7 @@ package com.bayoumi.controllers.feedback;
 import com.bayoumi.models.settings.LanguageBundle;
 import com.bayoumi.util.AppPropertiesUtil;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.OSUtil;
 import com.bayoumi.util.Utility;
 import com.bayoumi.util.web.forms.Feedback;
 import com.jfoenix.controls.JFXButton;
@@ -147,7 +148,7 @@ public class FeedbackController implements Initializable {
                         subject.getText(),
                         email.getText(),
                         details.getText(),
-                        System.getProperty("os.name"),
+                        OSUtil.getOSName(),
                         AppPropertiesUtil.getAllAppPropsAsJsonString()
                 );
                 feedback.submitFeedback();

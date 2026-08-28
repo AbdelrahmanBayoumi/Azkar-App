@@ -155,7 +155,7 @@ public class Launcher extends Application {
         try {
             final LoaderComponent popUp = Loader.getInstance().getPopUp(Locations.DownloadResources);
             ((DownloadResourcesController) popUp.getController())
-                    .setData(Constants.LOCATIONS_DB_URL, "jarFiles/db/locations.db", "locationsDBErrorInDownload", popUp.getStage(), Utility::exitProgramAction);
+                    .setData(Constants.LOCATIONS_DB_URL, Constants.assetsPath + "/db/locations.db", "locationsDBErrorInDownload", popUp.getStage(), Utility::exitProgramAction);
             popUp.showAndWait();
         } catch (Exception ex) {
             Logger.error(ex.getLocalizedMessage(), ex, getClass().getName() + ".start() => show locationsDB download");
@@ -196,11 +196,7 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) throws Exception {
         handleLocationDBError();
         // initialize tray icon
-        try {
-            new TrayUtil(primaryStage);
-        } catch (Exception ex) {
-            Logger.error(null, ex, getClass().getName() + "new TrayUtil()");
-        }
+        TrayUtil.init(primaryStage);
         // add loaded scene to primaryStage
         primaryStage.setScene(scene);
 

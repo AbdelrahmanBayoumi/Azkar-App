@@ -8,6 +8,7 @@ import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.audio.AudioPlayer;
 import com.bayoumi.util.gui.*;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
@@ -33,8 +34,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -52,7 +51,7 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
     private AzkarSettings azkarSettings;
     private NotificationSettings notificationSettings;
     private JFXButton currentFrequency;
-    private MediaPlayer MEDIA_PLAYER;
+    private AudioPlayer audioPlayer;
     private double previousValue = 50;
     private boolean isMuted = false;
     @FXML
@@ -151,10 +150,9 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
         azkarAlarmComboBox.setOnAction(event -> {
             playButton.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
             volumeBox.setDisable(azkarAlarmComboBox.getValue().equals("بدون صوت"));
-            if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-                MEDIA_PLAYER.stop();
-                MEDIA_PLAYER.dispose(); // Release the resources
-                MEDIA_PLAYER = null;   // Remove reference
+            if (audioPlayer != null && audioPlayer.isPlaying()) {
+                audioPlayer.stop();
+                audioPlayer = null;
                 playButton.setGraphic(playIcon);
                 playButton.setPadding(new Insets(5, 14, 5, 8));
             }
@@ -175,8 +173,8 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
             } else if (volumeSlider.getValue() == 0) {
                 volume.setIcon(OctIcon.MUTE);
             }
-            if (null != MEDIA_PLAYER) {
-                MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);
+            if (null != audioPlayer) {
+                audioPlayer.setVolume(azkarSettings.getVolume() / 100.0);
             }
         });
 
@@ -213,28 +211,32 @@ public class AzkarSettingsController implements Initializable, SettingsInterface
 
     @FXML
     private void play() {
-        if (MEDIA_PLAYER != null && MEDIA_PLAYER.getStatus().equals(MediaPlayer.Status.PLAYING)) {
-            MEDIA_PLAYER.stop();
-            MEDIA_PLAYER.dispose(); // Release the resources
-            MEDIA_PLAYER = null;   // Remove reference
+        if (audioPlayer != null && audioPlayer.isPlaying()) {
+            audioPlayer.stop();
+            audioPlayer = null;
             playButton.setGraphic(playIcon);
         } else {
             String fileName = azkarAlarmComboBox.getValue();
             Logger.debug(fileName);
             if (!fileName.equals("بدون صوت")) {
+                File audioFile = NotificationAudio.resolveAudioFile(fileName);
+                if (audioFile == null) {
+                    BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
+                    return;
+                }
                 try {
-                    MEDIA_PLAYER = new MediaPlayer(new Media(new File(Constants.assetsPath + "/audio/" + fileName).toURI().toString()));
+                    audioPlayer = new AudioPlayer(audioFile);
                 } catch (Exception e) {
                     Logger.error(null, e, getClass().getName() + ".play()");
                     BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
                     return;
                 }
-                MEDIA_PLAYER.setVolume(azkarSettings.getVolume() / 100.0);
-                MEDIA_PLAYER.play();
+                audioPlayer.setVolume(azkarSettings.getVolume() / 100.0);
+                audioPlayer.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
+                audioPlayer.play();
                 // playing
                 playButton.setGraphic(pauseIcon);
                 playButton.setPadding(new Insets(5, 11, 5, 11));
-                MEDIA_PLAYER.setOnEndOfMedia(() -> playButton.setGraphic(playIcon));
             }
         }
     }

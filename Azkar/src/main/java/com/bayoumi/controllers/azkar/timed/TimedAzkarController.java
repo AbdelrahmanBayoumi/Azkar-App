@@ -9,6 +9,7 @@ import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.audio.AudioPlayer;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.PopOverUtil;
 import com.bayoumi.util.gui.ScrollHandler;
@@ -32,8 +33,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -44,7 +43,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class TimedAzkarController implements Initializable {
-    private MediaPlayer mediaPlayer;
+    private AudioPlayer audioPlayer;
+    private boolean closed;
     private ResourceBundle bundle;
     private List<TimedZekrDTO> timedAzkarList;
     private Image morningImage, nightImage;
@@ -101,10 +101,9 @@ public class TimedAzkarController implements Initializable {
         playButton.setText(Utility.toUTF(bundle.getString("playAudio")));
         toggleZekrDescriptionButton.setText(Utility.toUTF(bundle.getString("toggleZekrDescription")));
     }
-
-
     public void setData(List<TimedZekrDTO> timedZekrDTOList, String type, Stage stage) {
         currentIndex = 0;
+        closed = false;
         if (type.toLowerCase().contains("morning")) {
             title.setText(Utility.toUTF(bundle.getString("morningAzkar")));
             image.setImage(morningImage);
@@ -116,7 +115,10 @@ public class TimedAzkarController implements Initializable {
         }
 
         count.requestFocus();
-        stage.setOnCloseRequest(event -> stopIfPlaying());
+        stage.setOnCloseRequest(event -> {
+            closed = true;
+            stopIfPlaying();
+        });
     }
 
     @FXML
@@ -316,21 +318,29 @@ public class TimedAzkarController implements Initializable {
             }
             progressBox.setVisible(true);
             new Thread(() -> {
-                if (FileDownloader.downloadFile(audioPath, audioFile)) {
-                    Platform.runLater(() -> playMedia(audioFile));
-                } else {
-                    Platform.runLater(() -> BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), bundle));
-                }
-                Platform.runLater(() -> progressBox.setVisible(false));
+                boolean downloadSuccess = FileDownloader.downloadFile(audioPath, audioFile);
+                Platform.runLater(() -> {
+                    if (closed || isWindowClosed()) {
+                        if (audioFile.exists() && !audioFile.delete()) {
+                            Logger.error("Failed to delete cancelled audio file.", new Exception("Failed to delete audio file."), getClass().getName() + ".onPlayAudio()");
+                        }
+                    } else {
+                        if (downloadSuccess) {
+                            playMedia(audioFile);
+                        } else {
+                            BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDownloadingAudio")), bundle);
+                        }
+                        progressBox.setVisible(false);
+                    }
+                });
             }).start();
         }
     }
 
     private void pauseOrStopMedia(File audioFile) {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.dispose();
-            mediaPlayer = null;
+        if (audioPlayer != null) {
+            audioPlayer.stop();
+            audioPlayer = null;
         }
         if (audioFile != null && audioFile.exists() && !audioFile.delete()) {
             Logger.error("Failed to delete audio file.", new Exception("Failed to delete audio file."), getClass().getName() + ".pauseOrStopMedia()");
@@ -341,42 +351,40 @@ public class TimedAzkarController implements Initializable {
     }
 
     private void playMedia(File audioFile) {
+        if (closed || isWindowClosed()) {
+            if (audioFile != null && audioFile.exists() && !audioFile.delete()) {
+                Logger.error("Failed to delete audio file after window close.", new Exception("Failed to delete audio file."), getClass().getName() + ".playMedia()");
+            }
+            return;
+        }
         try {
-            mediaPlayer = new MediaPlayer(new Media(audioFile.toURI().toString()));
+            audioPlayer = new AudioPlayer(audioFile);
         } catch (Exception e) {
             Logger.error(null, e, getClass().getName() + ".playMedia()");
             BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorPlayingAudio")), bundle);
             return;
         }
-        mediaPlayer.setVolume(100);
-        mediaPlayer.play();
-        mediaPlayer.setOnReady(() -> Logger.debug("Media is ready to play."));
-        mediaPlayer.setOnPlaying(() -> {
-            Logger.debug("Media is playing.");
-            if (isWindowClosed()) {
-                pauseOrStopMedia(audioFile);
-            }
-        });
-        mediaPlayer.setOnPaused(() -> pauseOrStopMedia(audioFile));
-        mediaPlayer.setOnStopped(() -> pauseOrStopMedia(audioFile));
-        mediaPlayer.setOnEndOfMedia(() -> pauseOrStopMedia(audioFile));
+        audioPlayer.setVolume(1.0);
+        audioPlayer.setOnEndOfMedia(() -> pauseOrStopMedia(audioFile));
+        audioPlayer.setOnStopped(() -> pauseOrStopMedia(audioFile));
+        audioPlayer.play();
 
         playButton.setGraphic(pauseIcon);
         playButton.setPadding(new Insets(5, 11, 5, 11));
         playButton.setText(Utility.toUTF(bundle.getString("stopAudio")));
     }
 
+    private boolean isWindowClosed() {
+        return progressBox == null || progressBox.getScene() == null || progressBox.getScene().getWindow() == null || !progressBox.getScene().getWindow().isShowing();
+    }
+
     private void stopIfPlaying() {
         if (isMediaPlaying()) {
-            mediaPlayer.stop();
+            audioPlayer.stop();
         }
     }
 
     private boolean isMediaPlaying() {
-        return mediaPlayer != null && mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
-    }
-
-    private boolean isWindowClosed() {
-        return !progressBox.getScene().getWindow().isShowing();
+        return audioPlayer != null && audioPlayer.isPlaying();
     }
 }
