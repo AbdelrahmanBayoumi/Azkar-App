@@ -269,6 +269,83 @@ Text {
     -fx-prompt-text-fill: -fx-primary-text;
 }
 
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-secondary-text;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.combo-box-popup .list-view .scroll-bar:horizontal,
+.combo-box-popup .list-view.adhan-combo-no-scroll .scroll-bar {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+    -fx-max-width: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-text-fill: -fx-primary-text;
+    -fx-padding: 6 8 6 8;
+    -fx-pref-width: 0;
+}
+
+.combo-box-popup .list-cell .label {
+    -fx-text-fill: -fx-primary-text;
+}
+
+.combo-box-popup .list-cell:filled:hover,
+.combo-box-popup .list-cell:filled:focused {
+    -fx-background-color: -fx-primary-light;
+}
+
+.combo-box-popup .list-cell:filled:hover .label,
+.combo-box-popup .list-cell:filled:focused .label {
+    -fx-text-fill: -fx-light-text;
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: -fx-primary;
+}
+
+.combo-box-popup .list-cell:filled:selected .label,
+.combo-box-popup .list-cell:filled:selected:hover .label {
+    -fx-text-fill: -fx-light-text;
+}
+
+.adhan-delete-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-padding: 2 4 2 4;
+    -jfx-rippler-fill: transparent;
+}
+
+.adhan-delete-btn:hover {
+    -fx-background-color: transparent;
+}
+
+.adhan-delete-btn .glyph-icon {
+    -fx-fill: -fx-reverse-secondary;
+}
+
+.combo-box-popup .list-cell:filled:hover .adhan-delete-btn .glyph-icon,
+.combo-box-popup .list-cell:filled:selected .adhan-delete-btn .glyph-icon {
+    -fx-fill: -fx-light-text;
+}
+
+.adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:hover .adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:selected .adhan-delete-btn:hover .glyph-icon,
+.combo-box-popup .list-cell:filled:focused .adhan-delete-btn:hover .glyph-icon {
+    -fx-fill: -fx-red;
+}
+
 /* ============ TextField ============ */
 .text-field-normal {
     -jfx-focus-color: -fx-primary-text;

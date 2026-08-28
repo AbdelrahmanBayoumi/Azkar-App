@@ -11,19 +11,32 @@ import com.bayoumi.util.Utility;
 import com.bayoumi.util.audio.AudioPlayer;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.PopOverUtil;
+import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -37,12 +50,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
-    private static AudioPlayer audioPlayer = null;
+    private static volatile AudioPlayer audioPlayer = null;
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
     private double previousValue = 50;
     private boolean isMuted = false;
+    private static final double ADHAN_ROW_HEIGHT = 36;
+    private static final int ADHAN_MAX_VISIBLE_ROWS = 10;
 
     // ======= FXML =======
     @FXML
@@ -69,7 +84,7 @@ public class ChooseAudioController implements Initializable {
 
     public Muezzin getValue() {
         if (audioBox == null || audioBox.getValue() == null || audioBox.getValue().equals(Muezzin.NO_SOUND)) {
-            return Muezzin.NO_SOUND;
+            return copyOfNoSound();
         }
         return audioBox.getValue();
     }
@@ -127,6 +142,8 @@ public class ChooseAudioController implements Initializable {
             }
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
+        configureAudioBoxCells();
+        audioBox.setOnShown(event -> fitAdhanPopupList());
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
@@ -178,6 +195,140 @@ public class ChooseAudioController implements Initializable {
                 BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorUploadAudio")), bundle);
             }
         }
+    }
+
+    private void configureAudioBoxCells() {
+        audioBox.setCellFactory(listView -> new ListCell<Muezzin>() {
+            private final Label nameLabel = new Label();
+            private final FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+            private final TableViewButton deleteBtn = new TableViewButton("", deleteIcon);
+            private final HBox row = new HBox(8, nameLabel, deleteBtn);
+
+            {
+                nameLabel.setMinWidth(0);
+                nameLabel.setMaxWidth(Double.MAX_VALUE);
+                HBox.setHgrow(nameLabel, Priority.ALWAYS);
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setMinWidth(0);
+                row.setMaxWidth(Double.MAX_VALUE);
+                deleteIcon.setGlyphSize(18);
+                deleteBtn.setFocusTraversable(false);
+                deleteBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+                deleteBtn.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+                deleteBtn.getStyleClass().add("adhan-delete-btn");
+                deleteBtn.setRipplerFill(Color.TRANSPARENT);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> deleteIcon.setFill(Color.web("#c91a29")));
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_EXITED, event -> deleteIcon.setFill(null));
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                    event.consume();
+                    final Muezzin item = getItem();
+                    if (item != null && item.isCustom()) {
+                        deleteAudio(item);
+                    }
+                });
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, Event::consume);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, Event::consume);
+                setPrefWidth(0);
+            }
+
+            @Override
+            protected void updateItem(Muezzin item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+                nameLabel.setText(muezzinDisplayName(item));
+                final boolean custom = item.isCustom();
+                deleteBtn.setVisible(custom);
+                deleteBtn.setManaged(custom);
+                setText(null);
+                setGraphic(row);
+            }
+        });
+    }
+
+    private void fitAdhanPopupList() {
+        if (!(audioBox.getSkin() instanceof ComboBoxListViewSkin)) {
+            return;
+        }
+        final Node popupContent = ((ComboBoxListViewSkin<?>) audioBox.getSkin()).getPopupContent();
+        if (!(popupContent instanceof ListView)) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        final ListView<Muezzin> listView = (ListView<Muezzin>) popupContent;
+        final int count = audioBox.getItems() == null ? 0 : audioBox.getItems().size();
+        final int visible = Math.max(1, Math.min(count, ADHAN_MAX_VISIBLE_ROWS));
+        final double height = visible * ADHAN_ROW_HEIGHT + 2;
+        listView.setFixedCellSize(ADHAN_ROW_HEIGHT);
+        listView.setPrefHeight(height);
+        listView.setMinHeight(height);
+        listView.setMaxHeight(height);
+        audioBox.setVisibleRowCount(visible);
+        listView.getStyleClass().removeAll("adhan-combo-no-scroll", "adhan-combo-scroll");
+        listView.getStyleClass().add(count > ADHAN_MAX_VISIBLE_ROWS ? "adhan-combo-scroll" : "adhan-combo-no-scroll");
+    }
+
+    private String muezzinDisplayName(Muezzin muezzin) {
+        if (muezzin == null) {
+            return "";
+        }
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
+            return muezzin.getArabicName();
+        }
+        return muezzin.getEnglishName();
+    }
+
+    private void deleteAudio(Muezzin target) {
+        if (target == null || !target.isCustom()) {
+            return;
+        }
+        audioBox.hide();
+        Platform.runLater(() -> {
+            final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+            if (!BuilderUI.showConfirmAlert(true, String.format(Utility.toUTF(bundle.getString("deleteAudioConfirm")), muezzinDisplayName(target)))) {
+                return;
+            }
+            final Muezzin current = audioBox.getValue();
+            final boolean deletingSelected = current != null && target.getFileName().equals(current.getFileName());
+            if (audioPlayer != null && deletingSelected) {
+                audioPlayer.stop();
+                audioPlayer = null;
+                setPlayIcon();
+            }
+            try {
+                Files.deleteIfExists(Paths.get(target.getPath()));
+            } catch (IOException e) {
+                Logger.error(null, e, getClass().getName() + ".deleteAudio()");
+                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDeleteAudio")), bundle);
+                return;
+            }
+            final String previousFileName = current == null ? null : current.getFileName();
+            setMuezzins();
+            if (deletingSelected || previousFileName == null) {
+                audioBox.setValue(fallbackMuezzin());
+            } else {
+                audioBox.setValue(Muezzin.getFromFileName(audioBox.getItems(), previousFileName));
+            }
+        });
+    }
+
+    private Muezzin fallbackMuezzin() {
+        if (audioBox.getItems() == null || audioBox.getItems().isEmpty()) {
+            return copyOfNoSound();
+        }
+        return audioBox.getItems().stream()
+                .filter(muezzin -> !muezzin.isCustom()
+                        && muezzin.getFileName() != null
+                        && !muezzin.getFileName().isEmpty())
+                .findFirst()
+                .orElseGet(ChooseAudioController::copyOfNoSound);
+    }
+
+    private static Muezzin copyOfNoSound() {
+        return new Muezzin(Muezzin.NO_SOUND.getEnglishName(), Muezzin.NO_SOUND.getArabicName(), Muezzin.NO_SOUND.getFileName());
     }
 
     @FXML
