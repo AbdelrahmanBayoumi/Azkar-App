@@ -48,7 +48,7 @@ public enum PreferencesType implements KeyValueDefault {
     // ======= Other Settings =======
     LANGUAGE("language", "ar"),
     HIJRI_OFFSET("hijri_offset", "5"),
-    ENABLE_DARK_MODE("enable_dark_mode", "false"),
+    ENABLE_DARK_MODE("enable_dark_mode", "system"),
     ENABLE_24_FORMAT("enable_24_format", "false"),
     MINIMIZED("minimized", "false"),
     AUTOMATIC_CHECK_FOR_UPDATES("automatic_check_for_updates", "true"),

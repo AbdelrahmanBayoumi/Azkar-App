@@ -1,11 +1,10 @@
 package com.bayoumi.controllers.settings.other;
 
-import com.bayoumi.Launcher;
 import com.bayoumi.controllers.settings.SettingsInterface;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
-import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.models.settings.Theme;
 import com.bayoumi.services.update.UpdateHandler;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
@@ -13,6 +12,7 @@ import com.bayoumi.util.Utility;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
 import com.bayoumi.util.gui.ScrollHandler;
+import com.bayoumi.util.gui.ThemeUtil;
 import com.bayoumi.util.gui.load.Locations;
 import com.bayoumi.util.time.HijriDate;
 import com.jfoenix.controls.JFXCheckBox;
@@ -55,14 +55,16 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private JFXToggleButton minimizeAtStartToggle, format24Toggle, darkThemeToggle;
+    private JFXToggleButton minimizeAtStartToggle, format24Toggle;
+    @FXML
+    private ComboBox<Theme> themeComboBox;
 
 
     public void updateBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         languageText.setText(Utility.toUTF(bundle.getString("language")));
         format24.setText(Utility.toUTF(bundle.getString("hour24System")));
-        darkTheme.setText(Utility.toUTF(bundle.getString("darkTheme")));
+        darkTheme.setText(Utility.toUTF(bundle.getString("theme")));
         minimizeAtStart.setText(Utility.toUTF(bundle.getString("minimizeAtStart")));
         adjustingTheHijriDateText.setText(Utility.toUTF(bundle.getString("adjustingTheHijriDateText")));
         adjustingTheHijriDateNote.setText(Utility.toUTF(bundle.getString("adjustingTheHijriDateNote")));
@@ -83,7 +85,7 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
         toggleAction(format24Toggle);
         toggleAction(minimizeAtStartToggle);
-        toggleAction(darkThemeToggle);
+        refreshThemeComboBox();
     }
 
     @Override
@@ -106,8 +108,8 @@ public class OtherSettingsController implements Initializable, SettingsInterface
 
             format24Toggle.setSelected(settings.getEnable24Format());
             minimizeAtStartToggle.setSelected(settings.getMinimized());
-
-            darkThemeToggle.setSelected(settings.getNightMode());
+            themeComboBox.setItems(FXCollections.observableArrayList(Theme.values()));
+            themeComboBox.setValue(settings.getTheme());
 
             version.setText(Constants.VERSION);
 
@@ -233,15 +235,22 @@ public class OtherSettingsController implements Initializable, SettingsInterface
     }
 
     @FXML
-    private void darkThemeSelect() {
-        toggleAction(darkThemeToggle);
-        Settings.getInstance().setNightMode(darkThemeToggle.isSelected());
-        darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
-        Launcher.homeController.changeTheme();
-        if (darkThemeToggle.isSelected()) {
-            NotificationColor.setDarkTheme();
-        } else {
-            NotificationColor.setLightTheme();
+    private void themeSelect() {
+        final Theme selected = themeComboBox.getValue();
+        if (selected == null) {
+            return;
+        }
+        ThemeUtil.applyUserTheme(selected);
+    }
+
+    private void refreshThemeComboBox() {
+        if (themeComboBox == null || bundle == null) {
+            return;
+        }
+        final Theme selected = themeComboBox.getValue();
+        themeComboBox.setConverter(Theme.stringConvertor(themeComboBox, bundle));
+        if (selected != null) {
+            themeComboBox.setValue(selected);
         }
     }
 

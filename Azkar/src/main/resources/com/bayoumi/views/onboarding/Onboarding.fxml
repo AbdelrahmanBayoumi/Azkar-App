@@ -8,6 +8,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -57,18 +58,6 @@
                            <MaterialDesignIconView glyphName="CHEVRON_DOUBLE_DOWN" size="22" />
                         </graphic>
                      </JFXCheckBox>
-                     <JFXCheckBox fx:id="darkTheme" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" onAction="#onDarkThemeChange" text="الوضع الليلي">
-                        <cursor>
-                           <Cursor fx:constant="HAND" />
-                        </cursor>
-                        <styleClass>
-                           <String fx:value="font-text-bold" />
-                           <String fx:value="_15" />
-                        </styleClass>
-                        <graphic>
-                           <MaterialDesignIconView glyphName="PALETTE" size="22" />
-                        </graphic>
-                     </JFXCheckBox>
                      <JFXCheckBox fx:id="format24" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" text="نظام 24 ساعة">
                         <cursor>
                            <Cursor fx:constant="HAND" />
@@ -81,6 +70,29 @@
                            <MaterialDesignIconView glyphName="CALENDAR_CLOCK" size="22" />
                         </graphic>
                      </JFXCheckBox>
+                  </children>
+               </HBox>
+               <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                     <Label fx:id="themeLabel" graphicTextGap="10.0" text="المظهر">
+                        <styleClass>
+                           <String fx:value="font-text-bold" />
+                           <String fx:value="_15" />
+                        </styleClass>
+                        <graphic>
+                           <MaterialDesignIconView glyphName="PALETTE" size="22" />
+                        </graphic>
+                     </Label>
+                     <ComboBox fx:id="themeComboBox" minWidth="180.0" onAction="#onThemeChange" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 1 0;">
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                        <styleClass>
+                           <String fx:value="text-field-normal" />
+                           <String fx:value="font-text-bold" />
+                           <String fx:value="_15" />
+                        </styleClass>
+                     </ComboBox>
                   </children>
                </HBox>
             </VBox>

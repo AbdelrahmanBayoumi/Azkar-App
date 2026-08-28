@@ -20,6 +20,7 @@ import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.ArabicTextSupport;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.HelperMethods;
+import com.bayoumi.util.gui.ThemeUtil;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
@@ -118,6 +119,7 @@ public class Launcher extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Locations.Home.toString()));
             scene = new Scene(loader.load());
             scene.getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
+            Settings.getInstance().syncDefaultNotificationColors();
             homeController = loader.getController();
             incrementPreloader();
             // --- initialize Sentry for error tracking ---
@@ -216,6 +218,8 @@ public class Launcher extends Application {
 
         // show VersionInstalled stage
         showVersionInstalled(isFirstTimeOpened, isNewVersion);
+
+        ThemeUtil.startSystemThemeWatcher();
 
         StartupNotification.registerStartupListener(s ->
                 SingleInstance.getInstance().openCurrentStage());

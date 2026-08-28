@@ -1,15 +1,15 @@
 package com.bayoumi.controllers.onboarding;
 
-import com.bayoumi.Launcher;
 import com.bayoumi.controllers.settings.azkar.ChooseNotificationColorController;
 import com.bayoumi.models.settings.Language;
 import com.bayoumi.models.settings.LanguageBundle;
-import com.bayoumi.models.settings.NotificationColor;
 import com.bayoumi.models.settings.Settings;
+import com.bayoumi.models.settings.Theme;
 import com.bayoumi.services.statistics.StatisticsService;
 import com.bayoumi.storage.statistics.StatisticsType;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.Utility;
+import com.bayoumi.util.gui.ThemeUtil;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
 import com.bayoumi.util.gui.load.Locations;
@@ -84,16 +84,7 @@ public class VersionInstalledController implements Initializable {
     @FXML
     private void darkThemeSelect() {
         final boolean isDark = darkTheme.isSelected();
-        Settings.getInstance().setNightMode(isDark);
-        darkTheme.getScene().getStylesheets().setAll(Settings.getInstance().getThemeFilesCSS());
-
-        Launcher.homeController.changeTheme();
-        if (isDark) {
-            NotificationColor.setDarkTheme();
-        } else {
-            NotificationColor.setLightTheme();
-        }
-
+        ThemeUtil.applyUserTheme(isDark ? Theme.DARK : Theme.LIGHT);
         updateWebViewCSS(isDark);
     }
 
