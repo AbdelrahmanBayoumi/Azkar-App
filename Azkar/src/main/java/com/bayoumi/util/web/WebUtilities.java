@@ -2,12 +2,14 @@ package com.bayoumi.util.web;
 
 import com.bayoumi.models.Query;
 import com.bayoumi.util.Logger;
+import com.fasterxml.jackson.core.type.TypeReference;
 import kong.unirest.*;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 public class WebUtilities {
 
@@ -19,6 +21,18 @@ public class WebUtilities {
             }
             Logger.debug("URL: " + getRequest.getUrl());
             return new JSONObject(getRequest.asJson().getBody().toString());
+        } catch (UnirestException ue) {
+            throw new Exception("Network error or host unreachable: " + END_POINT, ue);
+        } catch (Exception e) {
+            throw new Exception("Invalid JSON or unexpected server response from: " + END_POINT, e);
+        }
+    }
+    public static <T> List<T> getDeserializeResponse(final String END_POINT, TypeReference<List<T>> typeRef) throws Exception {
+        try {
+            GetRequest getRequest = Unirest.get(END_POINT);
+            String json = getRequest.asString().getBody();
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(json, typeRef);
         } catch (UnirestException ue) {
             throw new Exception("Network error or host unreachable: " + END_POINT, ue);
         } catch (Exception e) {
