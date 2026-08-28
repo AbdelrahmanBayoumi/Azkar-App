@@ -8,6 +8,7 @@ import com.bayoumi.storage.preferences.PreferencesType;
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
 import com.bayoumi.util.VersionComparator;
+import com.bayoumi.util.file.AppPathManager;
 import com.bayoumi.util.file.FileUtils;
 import com.bayoumi.util.gui.load.Loader;
 import com.bayoumi.util.gui.load.LoaderComponent;
@@ -104,14 +105,11 @@ public class TimedAzkarService {
 
     private static void copyAzkarFilesToAssetsPath() throws IOException {
         for (Language language : Language.values()) {
-            final Path from = Paths.get("jarFiles" + "/" + FOLDER_NAME + "/" + language.getLocale() + ".json").toAbsolutePath();
+            final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles" + "/" + FOLDER_NAME + "/" + language.getLocale() + ".json").toAbsolutePath();
             final Path to = Paths.get(Constants.assetsPath + "/" + FOLDER_NAME + "/" + language.getLocale() + ".json").toAbsolutePath();
-            if (from.equals(to)) {
-                Logger.debug("[TimedAzkarService] Skipping from: " + from + " to: " + to);
-                break;
+            if (!FileUtils.copySeedIfNotExist(from, to)) {
+                Logger.warn("[TimedAzkarService] Required azkar seed JSON missing: " + to);
             }
-            Logger.debug("[TimedAzkarService] Copying from: " + from + " to: " + to);
-            FileUtils.copyIfNotExist(from, to);
         }
     }
 

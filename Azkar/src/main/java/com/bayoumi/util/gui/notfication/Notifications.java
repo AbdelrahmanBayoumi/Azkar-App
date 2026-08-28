@@ -263,7 +263,7 @@ public class Notifications {
      */
     public Notifications action(Action... actions) {
         this.actions = actions == null ? FXCollections.observableArrayList() : FXCollections
-                .observableArrayList(actions);
+                                                                               .observableArrayList(actions);
         return this;
     }
 

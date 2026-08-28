@@ -10,10 +10,10 @@
       <variable name="Publisher" value="Abdelrahman Bayoumi" />
       <variable name="Publisher_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App" />
       <variable name="MAIN_CLASS_PATH" value="com.bayoumi.Launcher" />
-      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}\installer\icon.png" />
-      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}\installer\icon.ico" />
-      <variable name="LICENSE_AGREEMENT" value="${compiler:PARENT_DIR}\installer\EULA_" />
-      <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}\changelog\${compiler:APP_VERSION}.txt" />
+      <variable name="ICON_PNG" value="${compiler:PARENT_DIR}/installer/icon.png" />
+      <variable name="ICON_ICO" value="${compiler:PARENT_DIR}/installer/icon.ico" />
+      <variable name="LICENSE_AGREEMENT" value="${compiler:PARENT_DIR}/installer/EULA_" />
+      <variable name="CHANGELOG_FILE" value="${compiler:PARENT_DIR}/changelog/${compiler:APP_VERSION}.txt" />
       <variable name="UPDATES_XML_URL" value="https://raw.githubusercontent.com/AbdelrahmanBayoumi/Azkar-App/master/installer/updates.xml" />
       <variable name="BASE_RELEASE_URL" value="https://github.com/AbdelrahmanBayoumi/Azkar-App/releases/download/${compiler:APP_VERSION}/" />
     </variables>
@@ -387,11 +387,32 @@ return console.askYesNo(message, true);
                   </property>
                 </serializedBean>
               </formComponent>
+              <formComponent id="800" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                <serializedBean>
+                  <property name="checkboxText" type="string">Also delete user data (settings, database, audio files)</property>
+                  <property name="initiallySelected" type="boolean" value="false" />
+                  <property name="variableName" type="string">deleteUserData</property>
+                </serializedBean>
+              </formComponent>
             </formComponents>
           </screen>
           <screen id="27" beanClass="com.install4j.runtime.beans.screens.UninstallationScreen" rollbackBarrierExitCode="0">
             <actions>
               <action id="29" beanClass="com.install4j.runtime.beans.actions.UninstallFilesAction" actionElevationType="elevated" rollbackBarrierExitCode="0" />
+              <action name="Determine user data directory" id="801" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">if (Util.isWindows()) {
+    return new File(WinFileSystem.getSpecialFolder(SpecialFolder.LOCAL_APPDATA, false), "Azkar").getPath();
+} else {
+    return new File(System.getProperty("user.home"), ".Azkar").getPath();
+}</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">userDataDir</property>
+                </serializedBean>
+              </action>
               <action id="793" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" commentSet="true" comment="This is to ensure that the DB and any files added in runtime (not by installer) to be deleted when uninstalled" actionElevationType="elevated" rollbackBarrierExitCode="0">
                 <serializedBean>
                   <property name="files" type="array" class="java.io.File" length="1">
@@ -403,18 +424,20 @@ return console.askYesNo(message, true);
                   </property>
                   <property name="recursive" type="boolean" value="true" />
                 </serializedBean>
+                <condition>context.getBooleanVariable("deleteUserData")</condition>
               </action>
               <action id="798" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
                 <serializedBean>
                   <property name="files" type="array" class="java.io.File" length="1">
                     <element index="0">
                       <object class="java.io.File">
-                        <string>${compiler:env.LOCALAPPDATA}/${compiler:APP_SHORT_NAME}</string>
+                        <string>${installer:userDataDir}</string>
                       </object>
                     </element>
                   </property>
                   <property name="recursive" type="boolean" value="true" />
                 </serializedBean>
+                <condition>context.getBooleanVariable("deleteUserData")</condition>
               </action>
             </actions>
             <formComponents>
@@ -807,7 +830,7 @@ if (context.isUnattended()) {
 }
  args.add("-dir");
  args.add(installationDirectory);
- 
+
  return args.toArray(new String[args.size()]);
 </property>
                                 </object>
@@ -1194,6 +1217,16 @@ return true;</property>
     <windows name="Windows 32" id="792" mediaFileName="${compiler:sys.shortName}_${compiler:sys.platform}" jreBitType="32">
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_271" />
     </windows>
+    <unixInstaller name="Unix Installer" id="806">
+      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
+    </unixInstaller>
+    <linuxDeb name="Linux Deb Archive" id="807">
+      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
+    </linuxDeb>
   </mediaSets>
+  <buildIds>
+    <mediaSet refId="60" />
+    <mediaSet refId="792" />
+  </buildIds>
   <buildOptions verbose="true" />
 </install4j>

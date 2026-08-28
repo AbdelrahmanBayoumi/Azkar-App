@@ -66,6 +66,22 @@ public class FileUtils {
         Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
     }
 
+    /**
+     * Shared seed validation rule: when source and destination differ and source exists,
+     * copy without overwriting.
+     *
+     * @param from source path
+     * @param to   destination path
+     * @return true if destination exists after copy attempt, false otherwise
+     * @throws IOException if copy fails
+     */
+    public static boolean copySeedIfNotExist(Path from, Path to) throws IOException {
+        if (!from.equals(to) && Files.exists(from)) {
+            copyIfNotExist(from, to);
+        }
+        return Files.exists(to);
+    }
+
     public static Properties getConfig() throws Exception {
         final Properties properties = new Properties();
         try (InputStream input = FileUtils.class.getResourceAsStream("/config.properties")) {

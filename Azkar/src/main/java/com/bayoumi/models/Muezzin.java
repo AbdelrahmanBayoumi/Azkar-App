@@ -2,6 +2,7 @@ package com.bayoumi.models;
 
 import com.bayoumi.util.Constants;
 import com.bayoumi.util.Logger;
+import com.bayoumi.util.file.AppPathManager;
 import com.bayoumi.util.file.FileUtils;
 import javafx.util.StringConverter;
 
@@ -21,13 +22,20 @@ public class Muezzin {
     private final String arabicName;
 
     // Static instances
-    public static final Muezzin ABDULBASIT_ABDUSAMAD = new Muezzin("Abdulbasit Abdusamad", "عبد الباسط عبد الصمد", "adhan-abdulbasit-abdusamad.mp3");
-    public static final Muezzin ABUL_AINAIN_SHUAISHA = new Muezzin("Abul Ainain Shuaisha", "أبو العنين شعيشع", "adhan-abul-ainain-shuaisha.mp3");
-    public static final Muezzin ALI_IBN_AHMAD_MALA = new Muezzin("Ali Ibn Ahmad Mala", "علي بن أحمد ملا", "adhan-ali-ibn-ahmad-mala.mp3");
-    public static final Muezzin MAHMOUD_ALI_ALBANNA = new Muezzin("Mahmoud Ali Al Banna", "محمود علي البنا", "adhan-mahmoud-ali-al-banna.mp3");
-    public static final Muezzin MUHAMMAD_REFAAT = new Muezzin("Muhammad Refaat", "محمد رفعت", "adhan-muhammad-refaat.mp3");
-    public static final Muezzin MUSTAFA_ISMAIL = new Muezzin("Mustafa Ismail", "مصطفى إسماعيل", "adhan-mustafa-ismail.mp3");
-    public static final Muezzin NASSER_ALQATAMI = new Muezzin("Nasser Al Qatami", "ناصر القطامي", "adhan-nasser-al-qatami.mp3");
+    public static final Muezzin ABDULBASIT_ABDUSAMAD = new Muezzin("Abdulbasit Abdusamad", "عبد الباسط عبد الصمد",
+            "adhan-abdulbasit-abdusamad.mp3");
+    public static final Muezzin ABUL_AINAIN_SHUAISHA = new Muezzin("Abul Ainain Shuaisha", "أبو العنين شعيشع",
+            "adhan-abul-ainain-shuaisha.mp3");
+    public static final Muezzin ALI_IBN_AHMAD_MALA = new Muezzin("Ali Ibn Ahmad Mala", "علي بن أحمد ملا",
+            "adhan-ali-ibn-ahmad-mala.mp3");
+    public static final Muezzin MAHMOUD_ALI_ALBANNA = new Muezzin("Mahmoud Ali Al Banna", "محمود علي البنا",
+            "adhan-mahmoud-ali-al-banna.mp3");
+    public static final Muezzin MUHAMMAD_REFAAT = new Muezzin("Muhammad Refaat", "محمد رفعت",
+            "adhan-muhammad-refaat.mp3");
+    public static final Muezzin MUSTAFA_ISMAIL = new Muezzin("Mustafa Ismail", "مصطفى إسماعيل",
+            "adhan-mustafa-ismail.mp3");
+    public static final Muezzin NASSER_ALQATAMI = new Muezzin("Nasser Al Qatami", "ناصر القطامي",
+            "adhan-nasser-al-qatami.mp3");
     public static final Muezzin NO_SOUND = new Muezzin("Silent", "بدون صوت", "");
 
     // List of all instances
@@ -46,30 +54,25 @@ public class Muezzin {
         VALUES = Collections.unmodifiableList(values);
     }
 
-    public static String PARENT_PATH = "jarFiles/audio/adhan/";
+    public static final String PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
 
     static {
-        if (Constants.isAssetsPathChanged) {
-            PARENT_PATH = Constants.assetsPath + "/audio/adhan/";
-            try {
-                Muezzin.copyAdhanFilesToAssetsPath();
-            } catch (IOException e) {
-                Logger.error(e.getLocalizedMessage(), e, Muezzin.class.getName() + ".copyAdhanFilesToAssetsPath()");
-            }
+        try {
+            Muezzin.copyAdhanFilesToAssetsPath();
+        } catch (IOException e) {
+            Logger.error(e.getLocalizedMessage(), e, Muezzin.class.getName() + ".copyAdhanFilesToAssetsPath()");
         }
     }
 
     private static void copyAdhanFilesToAssetsPath() throws IOException {
         for (Muezzin muezzin : VALUES) {
-            if (muezzin.equals(NO_SOUND)) continue;
-            final Path from = Paths.get("jarFiles/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
+            if (muezzin.equals(NO_SOUND))
+                continue;
+            final Path from = AppPathManager.getAppInstallDir().resolve("jarFiles/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
             final Path to = Paths.get(Constants.assetsPath + "/audio/adhan/" + muezzin.getFileName()).toAbsolutePath();
-            if (from.equals(to)) {
-                Logger.debug("[Muezzin] Skipping from: " + from + " to: " + to);
-                break;
+            if (!FileUtils.copySeedIfNotExist(from, to)) {
+                Logger.warn("[Muezzin] Required adhan seed audio missing: " + to);
             }
-            Logger.debug("[Muezzin] Copying from: " + from + " to: " + to);
-            FileUtils.copyIfNotExist(from, to);
         }
     }
 
@@ -80,7 +83,9 @@ public class Muezzin {
 
         // Build the list of Muezzin objects
         return getAdhanFilesNames().stream()
-                .map(fileName -> muezzinMap.getOrDefault(fileName, new Muezzin(FileUtils.removeExtension(fileName), FileUtils.removeExtension(fileName), fileName)))
+                .map(fileName -> muezzinMap.getOrDefault(fileName,
+                        new Muezzin(FileUtils.removeExtension(fileName), FileUtils.removeExtension(fileName),
+                                fileName)))
                 .collect(Collectors.toList());
     }
 
@@ -124,7 +129,8 @@ public class Muezzin {
                 return muezzin;
             }
         }
-        if (!fileName.isEmpty()) return new Muezzin(fileName, fileName, fileName);
+        if (!fileName.isEmpty())
+            return new Muezzin(fileName, fileName, fileName);
         return NO_SOUND;
     }
 
