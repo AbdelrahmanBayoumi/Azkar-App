@@ -28,6 +28,26 @@ The source file is the `PangoGlyphLayout.java` shipped in the source JDK's
 `openjfx-src.zip`, with only the bounded-cache change above. Its license is in
 [`LICENSE.openjfx`](LICENSE.openjfx).
 
+## Oracle 8 and OpenJFX do not use the same text renderer
+
+Azkar sets `prism.text=t2k` and disables LCD text before JavaFX starts. Oracle
+8u221 contains the legacy T2K font factory, so that property selects T2K there.
+ZuluFX 8 does not contain the T2K classes; on Linux it uses the OpenJFX
+FreeType font factory and Pango for complex glyph layout.
+
+This explains two expected differences from the old Oracle runtime:
+
+- Unicode-mirrored ASCII brackets can face differently from Oracle/T2K while
+  still correctly enclosing RTL text.
+- The same embedded Noto Bold file has slightly different rasterization and
+  diacritic placement under T2K and FreeType.
+
+The included probes confirmed that unmodified and patched ZuluFX produce
+pixel-identical non-wrapped punctuation and Noto samples. The cache patch
+changes the stale-buffer wrapping case; it does not change font outlines,
+weight, antialiasing, or bidi metadata. Do not swap brackets in application
+data or add synthetic font weight to imitate T2K.
+
 ## Build an isolated runtime
 
 Run from the repository root. The output path must not already exist.
@@ -55,17 +75,25 @@ tools/openjfx8-arabic/verify-patched-runtime.sh \
     /tmp/azkar-zulu8-verification
 ```
 
-The verifier compiles and runs three JavaFX 8 probes:
+The verifier compiles and runs five JavaFX 8 probes:
 
 - `ArabicWrappingProbe` snapshots the affected Arabic `TextFlow` and requires
   four visual lines. Unmodified ZuluFX 8u492 produces three lines on the tested
   system, so this is a discriminating regression check.
+- `BidiPunctuationProbe` snapshots the application's real mixed Arabic,
+  numeric, ASCII-bracket, and ornate-parenthesis samples. It also asserts the
+  Java Unicode mirroring metadata used to interpret those pairs. Keep its
+  screenshot for manual comparison because pixel output differs between T2K
+  and FreeType even when the bidi result is valid.
+- `NotoRasterizationProbe` renders a fixed, diacritized sample directly from
+  the embedded Noto Bold file. It records the selected family, name, style, and
+  size and retains a screenshot for renderer comparisons.
 - `TajawalCssProbe` requires the embedded Medium font and the
   `.font-text-medium` CSS class to resolve to `Azkar Tajawal Medium`.
 - `UnicodeTextRegressionProbe` renders both Unicode ranges used by the two
   reproducers attached to JDK-8246348, guarding against its native Pango crash.
 
-The two PNGs written to the output directory are retained for manual visual
+The four PNGs written to the output directory are retained for manual visual
 inspection. Temporary compiled probe classes are deleted automatically.
 
 ## Build Azkar with the patched Java 8

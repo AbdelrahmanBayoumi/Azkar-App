@@ -35,6 +35,8 @@ mkdir -p "$output_directory"
     -Xlint:all \
     -d "$classes_directory" \
     "$script_directory/test/ArabicWrappingProbe.java" \
+    "$script_directory/test/BidiPunctuationProbe.java" \
+    "$script_directory/test/NotoRasterizationProbe.java" \
     "$script_directory/test/TajawalCssProbe.java" \
     "$script_directory/test/UnicodeTextRegressionProbe.java"
 
@@ -43,6 +45,18 @@ mkdir -p "$output_directory"
     ArabicWrappingProbe \
     "$noto_font" \
     "$output_directory/arabic-wrapping.png"
+
+"$runtime_jdk/bin/java" \
+    -cp "$classes_directory" \
+    BidiPunctuationProbe \
+    "$noto_font" \
+    "$output_directory/bidi-punctuation.png"
+
+"$runtime_jdk/bin/java" \
+    -cp "$classes_directory" \
+    NotoRasterizationProbe \
+    "$noto_font" \
+    "$output_directory/noto-rasterization.png"
 
 "$runtime_jdk/bin/java" \
     -cp "$classes_directory" \
@@ -59,4 +73,6 @@ mkdir -p "$output_directory"
 echo "JavaFX 8 Arabic verification passed."
 echo "Screenshots:"
 echo "  $output_directory/arabic-wrapping.png"
+echo "  $output_directory/bidi-punctuation.png"
+echo "  $output_directory/noto-rasterization.png"
 echo "  $output_directory/tajawal-medium.png"
