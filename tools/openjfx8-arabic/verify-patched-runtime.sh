@@ -28,6 +28,10 @@ fi
 classes_directory=$(mktemp -d)
 trap 'rm -rf "$classes_directory"' EXIT
 mkdir -p "$output_directory"
+runtime_options=(
+    -Dprism.text=native
+    -Dprism.lcdtext=true
+)
 
 "$runtime_jdk/bin/javac" \
     -source 1.8 \
@@ -41,24 +45,28 @@ mkdir -p "$output_directory"
     "$script_directory/test/UnicodeTextRegressionProbe.java"
 
 "$runtime_jdk/bin/java" \
+    "${runtime_options[@]}" \
     -cp "$classes_directory" \
     ArabicWrappingProbe \
     "$noto_font" \
     "$output_directory/arabic-wrapping.png"
 
 "$runtime_jdk/bin/java" \
+    "${runtime_options[@]}" \
     -cp "$classes_directory" \
     BidiPunctuationProbe \
     "$noto_font" \
     "$output_directory/bidi-punctuation.png"
 
 "$runtime_jdk/bin/java" \
+    "${runtime_options[@]}" \
     -cp "$classes_directory" \
     NotoRasterizationProbe \
     "$noto_font" \
     "$output_directory/noto-rasterization.png"
 
 "$runtime_jdk/bin/java" \
+    "${runtime_options[@]}" \
     -cp "$classes_directory" \
     TajawalCssProbe \
     "$css_directory/base.css" \
@@ -67,6 +75,7 @@ mkdir -p "$output_directory"
     "$output_directory/tajawal-medium.png"
 
 "$runtime_jdk/bin/java" \
+    "${runtime_options[@]}" \
     -cp "$classes_directory" \
     UnicodeTextRegressionProbe
 

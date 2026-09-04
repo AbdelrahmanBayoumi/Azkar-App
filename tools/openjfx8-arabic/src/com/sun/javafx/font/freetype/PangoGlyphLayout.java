@@ -177,7 +177,7 @@ class PangoGlyphLayout extends GlyphLayout {
             for (int i = 0; i < runsCount; i++) {
                 long pangoItem = OSPango.g_list_nth_data(runs, i);
                 if (pangoItem != 0) {
-                    pangoGlyphs[i] = OSPango.pango_shape(str, pangoItem);
+                    pangoGlyphs[i] = PangoGlyphGeometry.shape(str, pangoItem);
                     OSPango.pango_item_free(pangoItem);
                 }
             }
@@ -213,8 +213,12 @@ class PangoGlyphLayout extends GlyphLayout {
                             }
                         }
                         if (size != 0) {
+                            int positionIndex = gii << 1;
+                            pos[positionIndex] = ((float)(width + g.xOffsets[i])) /
+                                    OSPango.PANGO_SCALE;
+                            pos[positionIndex + 1] = ((float)g.yOffsets[i]) /
+                                    OSPango.PANGO_SCALE;
                             width += g.widths[i];
-                            pos[2 + (gii << 1)] = ((float)width) / OSPango.PANGO_SCALE;
                         }
                         indices[gii] = g.log_clusters[i] + ci;
                     }
@@ -222,6 +226,7 @@ class PangoGlyphLayout extends GlyphLayout {
                     gi += g.num_glyphs;
                 }
             }
+            pos[glyphCount << 1] = ((float)width) / OSPango.PANGO_SCALE;
             run.shape(glyphCount, glyphs, pos, indices);
         }
 
