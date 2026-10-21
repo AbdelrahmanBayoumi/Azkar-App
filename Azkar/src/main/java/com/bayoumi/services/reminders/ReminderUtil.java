@@ -4,11 +4,13 @@ import com.bayoumi.util.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class ReminderUtil {
     private static ReminderUtil instance = null;
     private final List<Reminder> reminderList;
+    private Date lastValidationDate;
 
     private ReminderUtil() {
         reminderList = new ArrayList<>();
@@ -31,19 +33,38 @@ public class ReminderUtil {
     }
 
     public void validate(Date date) {
-        reminderList.forEach(reminder -> {
-            if (isEqualIgnoreMillis(date, reminder.getDate())) {
+        if (lastValidationDate == null) {
+            lastValidationDate = new Date(date.getTime());
+            return;
+        }
+        if (date.before(lastValidationDate)) {
+            lastValidationDate = new Date(date.getTime());
+            return;
+        }
+
+        final Iterator<Reminder> iterator = reminderList.iterator();
+        while (iterator.hasNext()) {
+            Reminder reminder = iterator.next();
+            Date reminderDate = reminder.getDate();
+            if (!reminderDate.before(lastValidationDate) && !reminderDate.after(date)) {
+                iterator.remove();
                 Logger.debug("reminder: " + reminder);
                 reminder.getCallback().run();
             }
-        });
+        }
+        lastValidationDate = new Date(date.getTime());
     }
 
     public void clear() {
         reminderList.clear();
+        lastValidationDate = null;
     }
 
-    private boolean isEqualIgnoreMillis(Date a, Date b) {
-        return ((a.getTime() / 1000) * 1000) == ((b.getTime() / 1000) * 1000);
+    /**
+     * Clears pending reminders and starts the next validation window at {@code date}.
+     */
+    public void clear(Date date) {
+        reminderList.clear();
+        lastValidationDate = new Date(date.getTime());
     }
 }
