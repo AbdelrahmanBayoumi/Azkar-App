@@ -15,7 +15,6 @@ import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
-import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
@@ -27,11 +26,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -56,7 +53,6 @@ public class ChooseAudioController implements Initializable {
     private FontAwesomeIconView playIcon;
     private double previousValue = 50;
     private boolean isMuted = false;
-    private static final double ADHAN_ROW_HEIGHT = 36;
     private static final int ADHAN_MAX_VISIBLE_ROWS = 10;
 
     // ======= FXML =======
@@ -143,7 +139,7 @@ public class ChooseAudioController implements Initializable {
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
         configureAudioBoxCells();
-        audioBox.setOnShown(event -> fitAdhanPopupList());
+        audioBox.setVisibleRowCount(ADHAN_MAX_VISIBLE_ROWS);
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
@@ -247,28 +243,6 @@ public class ChooseAudioController implements Initializable {
                 setGraphic(row);
             }
         });
-    }
-
-    private void fitAdhanPopupList() {
-        if (!(audioBox.getSkin() instanceof ComboBoxListViewSkin)) {
-            return;
-        }
-        final Node popupContent = ((ComboBoxListViewSkin<?>) audioBox.getSkin()).getPopupContent();
-        if (!(popupContent instanceof ListView)) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        final ListView<Muezzin> listView = (ListView<Muezzin>) popupContent;
-        final int count = audioBox.getItems() == null ? 0 : audioBox.getItems().size();
-        final int visible = Math.max(1, Math.min(count, ADHAN_MAX_VISIBLE_ROWS));
-        final double height = visible * ADHAN_ROW_HEIGHT + 2;
-        listView.setFixedCellSize(ADHAN_ROW_HEIGHT);
-        listView.setPrefHeight(height);
-        listView.setMinHeight(height);
-        listView.setMaxHeight(height);
-        audioBox.setVisibleRowCount(visible);
-        listView.getStyleClass().removeAll("adhan-combo-no-scroll", "adhan-combo-scroll");
-        listView.getStyleClass().add(count > ADHAN_MAX_VISIBLE_ROWS ? "adhan-combo-scroll" : "adhan-combo-no-scroll");
     }
 
     private String muezzinDisplayName(Muezzin muezzin) {
