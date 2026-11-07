@@ -15,7 +15,6 @@ import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
-import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
@@ -30,10 +29,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Skin;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -146,8 +141,6 @@ public class ChooseAudioController implements Initializable {
         });
         configureAudioBoxCells();
         audioBox.setVisibleRowCount(ADHAN_MAX_VISIBLE_ROWS);
-        audioBox.skinProperty().addListener((observable, previousSkin, skin) -> configureDeleteShortcut(skin));
-        configureDeleteShortcut(audioBox.getSkin());
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
@@ -253,21 +246,6 @@ public class ChooseAudioController implements Initializable {
                 deleteBtn.setManaged(custom);
                 setText(null);
                 setGraphic(row);
-            }
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    private void configureDeleteShortcut(Skin<?> skin) {
-        if (!(skin instanceof ComboBoxListViewSkin)) {
-            return;
-        }
-        ListView<Muezzin> listView = ((ComboBoxListViewSkin<Muezzin>) skin).getListView();
-        listView.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            Muezzin highlighted = listView.getSelectionModel().getSelectedItem();
-            if (event.getCode() == KeyCode.DELETE && highlighted != null && highlighted.isCustom()) {
-                event.consume();
-                deleteAudio(highlighted);
             }
         });
     }
