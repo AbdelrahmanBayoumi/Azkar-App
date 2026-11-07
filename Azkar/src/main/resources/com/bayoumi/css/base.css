@@ -269,7 +269,25 @@ Text {
     -fx-prompt-text-fill: -fx-primary-text;
 }
 
-/* Keep custom audio actions within the native ComboBox row styling. */
+/* Custom Adhan rows must not restyle other ComboBox popups. */
+.list-cell.adhan-audio-cell {
+    -fx-background-color: -fx-secondary-text;
+    -fx-background-radius: 0;
+    -fx-text-fill: -fx-primary-text;
+}
+
+.list-cell.adhan-audio-cell:filled:hover,
+.list-cell.adhan-audio-cell:filled:focused {
+    -fx-background-color: -fx-primary-light;
+    -fx-text-fill: -fx-light-text;
+}
+
+.list-cell.adhan-audio-cell:filled:selected,
+.list-cell.adhan-audio-cell:filled:selected:hover {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-light-text;
+}
+
 .adhan-delete-btn,
 .adhan-delete-btn:hover {
     -fx-background-color: transparent;
