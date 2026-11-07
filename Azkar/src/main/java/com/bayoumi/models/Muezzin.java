@@ -107,6 +107,22 @@ public class Muezzin {
         return fileName;
     }
 
+    /**
+     * Built-in Adhan files and the silent option cannot be removed.
+     * Uploaded files are created with a file name that is not in {@link #VALUES}.
+     */
+    public boolean isCustom() {
+        if (fileName == null || fileName.isEmpty()) {
+            return false;
+        }
+        for (Muezzin builtIn : VALUES) {
+            if (fileName.equals(builtIn.getFileName())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String getEnglishName() {
         return englishName;
     }

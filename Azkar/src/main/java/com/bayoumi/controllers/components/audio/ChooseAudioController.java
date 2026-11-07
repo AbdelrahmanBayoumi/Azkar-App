@@ -11,6 +11,7 @@ import com.bayoumi.util.Utility;
 import com.bayoumi.util.audio.AudioPlayer;
 import com.bayoumi.util.gui.BuilderUI;
 import com.bayoumi.util.gui.PopOverUtil;
+import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
@@ -18,12 +19,22 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -37,12 +48,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChooseAudioController implements Initializable {
-    private static AudioPlayer audioPlayer = null;
+    private static volatile AudioPlayer audioPlayer = null;
     private AzkarSettings azkarSettings;
     private FontAwesomeIconView pauseIcon;
     private FontAwesomeIconView playIcon;
     private double previousValue = 50;
     private boolean isMuted = false;
+    private static final int ADHAN_MAX_VISIBLE_ROWS = 10;
 
     // ======= FXML =======
     @FXML
@@ -68,7 +80,7 @@ public class ChooseAudioController implements Initializable {
     }
 
     public Muezzin getValue() {
-        if (audioBox == null || audioBox.getValue() == null || audioBox.getValue().equals(Muezzin.NO_SOUND)) {
+        if (audioBox == null || isSilent(audioBox.getValue())) {
             return Muezzin.NO_SOUND;
         }
         return audioBox.getValue();
@@ -84,7 +96,7 @@ public class ChooseAudioController implements Initializable {
         audioBox.setValue(initialValue);
         audioBox.setItems(FXCollections.observableArrayList(items));
         audioBox.getItems().add(Muezzin.NO_SOUND);
-        playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        playButton.setDisable(isSilent(audioBox.getValue()));
         if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
             audioBox.setConverter(Muezzin.arabicConverter());
         } else {
@@ -92,7 +104,7 @@ public class ChooseAudioController implements Initializable {
         }
 
         prayerVolumeSlider.setValue(azkarSettings.getPrayerVolume());
-        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        prayerVolumeBox.setDisable(isSilent(audioBox.getValue()));
         if (azkarSettings.getPrayerVolume() == 0) {
             volume.setIcon(OctIcon.MUTE);
         } else {
@@ -106,8 +118,8 @@ public class ChooseAudioController implements Initializable {
         }
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
         Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
-        playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
-        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        playButton.setDisable(isSilent(audioBox.getValue()));
+        prayerVolumeBox.setDisable(isSilent(audioBox.getValue()));
     }
 
     @Override
@@ -120,13 +132,15 @@ public class ChooseAudioController implements Initializable {
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
         audioBox.setOnAction(event -> {
-            playButton.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
-            prayerVolumeBox.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
+            playButton.setDisable(isSilent(audioBox.getValue()));
+            prayerVolumeBox.setDisable(isSilent(audioBox.getValue()));
             if (stopIfPlaying()) {
                 setPlayIcon();
             }
             Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
         });
+        configureAudioBoxCells();
+        audioBox.setVisibleRowCount(ADHAN_MAX_VISIBLE_ROWS);
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
@@ -180,6 +194,118 @@ public class ChooseAudioController implements Initializable {
         }
     }
 
+    private void configureAudioBoxCells() {
+        audioBox.setCellFactory(listView -> new ListCell<Muezzin>() {
+            private final Label nameLabel = new Label();
+            private final FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+            private final TableViewButton deleteBtn = new TableViewButton("", deleteIcon);
+            private final HBox row = new HBox(8, nameLabel, deleteBtn);
+
+            {
+                nameLabel.textFillProperty().bind(textFillProperty());
+                deleteIcon.fillProperty().bind(textFillProperty());
+                nameLabel.setMinWidth(0);
+                nameLabel.setMaxWidth(Double.MAX_VALUE);
+                HBox.setHgrow(nameLabel, Priority.ALWAYS);
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setMinWidth(0);
+                row.setMaxWidth(Double.MAX_VALUE);
+                deleteIcon.setGlyphSize(18);
+                deleteBtn.setFocusTraversable(true);
+                deleteBtn.setOnAction(event -> deleteAudio(getItem()));
+                deleteBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+                deleteBtn.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+                deleteBtn.getStyleClass().add("adhan-delete-btn");
+                deleteBtn.setRipplerFill(Color.TRANSPARENT);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                    event.consume();
+                    final Muezzin item = getItem();
+                    if (event.getButton() == MouseButton.PRIMARY && item != null && item.isCustom()) {
+                        deleteAudio(item);
+                    }
+                });
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_RELEASED, Event::consume);
+                deleteBtn.addEventFilter(MouseEvent.MOUSE_CLICKED, Event::consume);
+                setPrefWidth(0);
+            }
+
+            @Override
+            protected void updateItem(Muezzin item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    return;
+                }
+                nameLabel.setText(muezzinDisplayName(item));
+                deleteBtn.setAccessibleText(Utility.toUTF(LanguageBundle.getInstance().getResourceBundle()
+                        .getString("deleteAudioAction")) + ": " + muezzinDisplayName(item));
+                final boolean custom = item.isCustom();
+                deleteBtn.setVisible(custom);
+                deleteBtn.setManaged(custom);
+                setText(null);
+                setGraphic(row);
+            }
+        });
+    }
+
+    private String muezzinDisplayName(Muezzin muezzin) {
+        if (muezzin == null) {
+            return "";
+        }
+        if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
+            return muezzin.getArabicName();
+        }
+        return muezzin.getEnglishName();
+    }
+
+    private void deleteAudio(Muezzin target) {
+        if (target == null || !target.isCustom()) {
+            return;
+        }
+        audioBox.hide();
+        Platform.runLater(() -> {
+            final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
+            if (!BuilderUI.showConfirmAlert(true, String.format(Utility.toUTF(bundle.getString("deleteAudioConfirm")), muezzinDisplayName(target)))) {
+                return;
+            }
+            final Muezzin current = audioBox.getValue();
+            final boolean deletingSelected = current != null && target.getFileName().equals(current.getFileName());
+            if (audioPlayer != null && deletingSelected) {
+                audioPlayer.stop();
+                audioPlayer = null;
+                setPlayIcon();
+            }
+            try {
+                Files.deleteIfExists(Paths.get(target.getPath()));
+            } catch (IOException e) {
+                Logger.error(null, e, getClass().getName() + ".deleteAudio()");
+                BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDeleteAudio")), bundle);
+                return;
+            }
+            audioBox.getItems().removeIf(muezzin -> target.getFileName().equals(muezzin.getFileName()));
+            if (deletingSelected || current == null) {
+                audioBox.setValue(fallbackMuezzin());
+            }
+        });
+    }
+
+    private Muezzin fallbackMuezzin() {
+        if (audioBox.getItems() == null || audioBox.getItems().isEmpty()) {
+            return Muezzin.NO_SOUND;
+        }
+        return audioBox.getItems().stream()
+                .filter(muezzin -> !muezzin.isCustom()
+                        && muezzin.getFileName() != null
+                        && !muezzin.getFileName().isEmpty())
+                .findFirst()
+                .orElse(Muezzin.NO_SOUND);
+    }
+
+    private static boolean isSilent(Muezzin muezzin) {
+        return muezzin == null || muezzin.getFileName() == null || muezzin.getFileName().isEmpty();
+    }
+
     @FXML
     private void play() {
         if (stopIfPlaying()) {
@@ -187,7 +313,7 @@ public class ChooseAudioController implements Initializable {
         } else {
             final Muezzin muezzin = audioBox.getValue();
             Logger.debug(muezzin);
-            if (!muezzin.equals(Muezzin.NO_SOUND)) {
+            if (!isSilent(muezzin)) {
                 try {
                     audioPlayer = new AudioPlayer(new File(muezzin.getPath()));
                 } catch (Exception e) {
