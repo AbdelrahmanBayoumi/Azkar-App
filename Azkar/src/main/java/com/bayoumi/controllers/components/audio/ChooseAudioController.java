@@ -202,7 +202,6 @@ public class ChooseAudioController implements Initializable {
             private final HBox row = new HBox(8, nameLabel, deleteBtn);
 
             {
-                getStyleClass().add("adhan-audio-cell");
                 nameLabel.textFillProperty().bind(textFillProperty());
                 deleteIcon.fillProperty().bind(textFillProperty());
                 nameLabel.setMinWidth(0);

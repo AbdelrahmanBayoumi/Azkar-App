@@ -269,23 +269,41 @@ Text {
     -fx-prompt-text-fill: -fx-primary-text;
 }
 
-/* Custom Adhan rows must not restyle other ComboBox popups. */
-.list-cell.adhan-audio-cell {
+.combo-box-popup .list-view {
     -fx-background-color: -fx-secondary-text;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
     -fx-background-radius: 0;
+    -fx-text-fill: -fx-primary-text;
+    -fx-padding: 6 8 6 8;
+}
+
+.combo-box-popup .list-cell .label {
     -fx-text-fill: -fx-primary-text;
 }
 
-.list-cell.adhan-audio-cell:filled:hover,
-.list-cell.adhan-audio-cell:filled:focused {
+.combo-box-popup .list-cell:filled:hover,
+.combo-box-popup .list-cell:filled:focused {
     -fx-background-color: -fx-primary-light;
-    -fx-text-fill: -fx-light-text;
+    -fx-text-fill: white;
 }
 
-.list-cell.adhan-audio-cell:filled:selected,
-.list-cell.adhan-audio-cell:filled:selected:hover {
+.combo-box-popup .list-cell:filled:hover .label,
+.combo-box-popup .list-cell:filled:focused .label {
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
     -fx-background-color: -fx-primary;
-    -fx-text-fill: -fx-light-text;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-cell:filled:selected .label,
+.combo-box-popup .list-cell:filled:selected:hover .label {
+    -fx-text-fill: white;
 }
 
 .adhan-delete-btn,
