@@ -15,6 +15,7 @@ import com.bayoumi.util.gui.button.TableViewButton;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.octicons.OctIcon;
@@ -29,6 +30,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Skin;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -140,6 +146,8 @@ public class ChooseAudioController implements Initializable {
         });
         configureAudioBoxCells();
         audioBox.setVisibleRowCount(ADHAN_MAX_VISIBLE_ROWS);
+        audioBox.skinProperty().addListener((observable, previousSkin, skin) -> configureDeleteShortcut(skin));
+        configureDeleteShortcut(audioBox.getSkin());
 
         PopOverUtil.init(uploadButton, Utility.toUTF(LanguageBundle.getInstance().getResourceBundle().getString("uploadNewAudioTooltip")));
 
@@ -210,7 +218,8 @@ public class ChooseAudioController implements Initializable {
                 row.setMinWidth(0);
                 row.setMaxWidth(Double.MAX_VALUE);
                 deleteIcon.setGlyphSize(18);
-                deleteBtn.setFocusTraversable(false);
+                deleteBtn.setFocusTraversable(true);
+                deleteBtn.setOnAction(event -> deleteAudio(getItem()));
                 deleteBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
                 deleteBtn.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
                 deleteBtn.getStyleClass().add("adhan-delete-btn");
@@ -218,7 +227,7 @@ public class ChooseAudioController implements Initializable {
                 deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
                     event.consume();
                     final Muezzin item = getItem();
-                    if (item != null && item.isCustom()) {
+                    if (event.getButton() == MouseButton.PRIMARY && item != null && item.isCustom()) {
                         deleteAudio(item);
                     }
                 });
@@ -236,11 +245,28 @@ public class ChooseAudioController implements Initializable {
                     return;
                 }
                 nameLabel.setText(muezzinDisplayName(item));
+                deleteBtn.setAccessibleText(Utility.toUTF(LanguageBundle.getInstance().getResourceBundle()
+                        .getString("deleteAudioAction")) + ": " + muezzinDisplayName(item));
                 final boolean custom = item.isCustom();
                 deleteBtn.setVisible(custom);
                 deleteBtn.setManaged(custom);
                 setText(null);
                 setGraphic(row);
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    private void configureDeleteShortcut(Skin<?> skin) {
+        if (!(skin instanceof ComboBoxListViewSkin)) {
+            return;
+        }
+        ListView<Muezzin> listView = ((ComboBoxListViewSkin<Muezzin>) skin).getListView();
+        listView.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            Muezzin highlighted = listView.getSelectionModel().getSelectedItem();
+            if (event.getCode() == KeyCode.DELETE && highlighted != null && highlighted.isCustom()) {
+                event.consume();
+                deleteAudio(highlighted);
             }
         });
     }
