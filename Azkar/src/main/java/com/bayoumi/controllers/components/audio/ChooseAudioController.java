@@ -205,6 +205,8 @@ public class ChooseAudioController implements Initializable {
             private final HBox row = new HBox(8, nameLabel, deleteBtn);
 
             {
+                nameLabel.textFillProperty().bind(textFillProperty());
+                deleteIcon.fillProperty().bind(textFillProperty());
                 nameLabel.setMinWidth(0);
                 nameLabel.setMaxWidth(Double.MAX_VALUE);
                 HBox.setHgrow(nameLabel, Priority.ALWAYS);
@@ -217,8 +219,6 @@ public class ChooseAudioController implements Initializable {
                 deleteBtn.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
                 deleteBtn.getStyleClass().add("adhan-delete-btn");
                 deleteBtn.setRipplerFill(Color.TRANSPARENT);
-                deleteBtn.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> deleteIcon.setFill(Color.web("#c91a29")));
-                deleteBtn.addEventFilter(MouseEvent.MOUSE_EXITED, event -> deleteIcon.setFill(null));
                 deleteBtn.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
                     event.consume();
                     final Muezzin item = getItem();
