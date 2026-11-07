@@ -79,8 +79,8 @@ public class ChooseAudioController implements Initializable {
     }
 
     public Muezzin getValue() {
-        if (audioBox == null || audioBox.getValue() == null || audioBox.getValue().equals(Muezzin.NO_SOUND)) {
-            return copyOfNoSound();
+        if (audioBox == null || isSilent(audioBox.getValue())) {
+            return Muezzin.NO_SOUND;
         }
         return audioBox.getValue();
     }
@@ -95,7 +95,7 @@ public class ChooseAudioController implements Initializable {
         audioBox.setValue(initialValue);
         audioBox.setItems(FXCollections.observableArrayList(items));
         audioBox.getItems().add(Muezzin.NO_SOUND);
-        playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        playButton.setDisable(isSilent(audioBox.getValue()));
         if (Settings.getInstance().getLanguage().equals(Language.Arabic)) {
             audioBox.setConverter(Muezzin.arabicConverter());
         } else {
@@ -103,7 +103,7 @@ public class ChooseAudioController implements Initializable {
         }
 
         prayerVolumeSlider.setValue(azkarSettings.getPrayerVolume());
-        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        prayerVolumeBox.setDisable(isSilent(audioBox.getValue()));
         if (azkarSettings.getPrayerVolume() == 0) {
             volume.setIcon(OctIcon.MUTE);
         } else {
@@ -117,8 +117,8 @@ public class ChooseAudioController implements Initializable {
         }
         audioBox.setValue(audioBox.getItems().size() > 1 ? audioBox.getItems().get(0) : Muezzin.NO_SOUND);
         Settings.getInstance().getPrayerTimeSettings().setAdhanAudio(getValue().getFileName());
-        playButton.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
-        prayerVolumeBox.setDisable(audioBox.getValue().equals(Muezzin.NO_SOUND));
+        playButton.setDisable(isSilent(audioBox.getValue()));
+        prayerVolumeBox.setDisable(isSilent(audioBox.getValue()));
     }
 
     @Override
@@ -131,8 +131,8 @@ public class ChooseAudioController implements Initializable {
         pauseIcon.setGlyphSize(30);
         pauseIcon.setStyle("-fx-fill: -fx-reverse-secondary;");
         audioBox.setOnAction(event -> {
-            playButton.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
-            prayerVolumeBox.setDisable(Muezzin.NO_SOUND.equals(audioBox.getValue()));
+            playButton.setDisable(isSilent(audioBox.getValue()));
+            prayerVolumeBox.setDisable(isSilent(audioBox.getValue()));
             if (stopIfPlaying()) {
                 setPlayIcon();
             }
@@ -279,30 +279,27 @@ public class ChooseAudioController implements Initializable {
                 BuilderUI.showOkAlert(Alert.AlertType.ERROR, Utility.toUTF(bundle.getString("errorDeleteAudio")), bundle);
                 return;
             }
-            final String previousFileName = current == null ? null : current.getFileName();
-            setMuezzins();
-            if (deletingSelected || previousFileName == null) {
+            audioBox.getItems().removeIf(muezzin -> target.getFileName().equals(muezzin.getFileName()));
+            if (deletingSelected || current == null) {
                 audioBox.setValue(fallbackMuezzin());
-            } else {
-                audioBox.setValue(Muezzin.getFromFileName(audioBox.getItems(), previousFileName));
             }
         });
     }
 
     private Muezzin fallbackMuezzin() {
         if (audioBox.getItems() == null || audioBox.getItems().isEmpty()) {
-            return copyOfNoSound();
+            return Muezzin.NO_SOUND;
         }
         return audioBox.getItems().stream()
                 .filter(muezzin -> !muezzin.isCustom()
                         && muezzin.getFileName() != null
                         && !muezzin.getFileName().isEmpty())
                 .findFirst()
-                .orElseGet(ChooseAudioController::copyOfNoSound);
+                .orElse(Muezzin.NO_SOUND);
     }
 
-    private static Muezzin copyOfNoSound() {
-        return new Muezzin(Muezzin.NO_SOUND.getEnglishName(), Muezzin.NO_SOUND.getArabicName(), Muezzin.NO_SOUND.getFileName());
+    private static boolean isSilent(Muezzin muezzin) {
+        return muezzin == null || muezzin.getFileName() == null || muezzin.getFileName().isEmpty();
     }
 
     @FXML
@@ -312,7 +309,7 @@ public class ChooseAudioController implements Initializable {
         } else {
             final Muezzin muezzin = audioBox.getValue();
             Logger.debug(muezzin);
-            if (!muezzin.equals(Muezzin.NO_SOUND)) {
+            if (!isSilent(muezzin)) {
                 try {
                     audioPlayer = new AudioPlayer(new File(muezzin.getPath()));
                 } catch (Exception e) {
