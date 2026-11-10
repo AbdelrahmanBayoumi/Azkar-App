@@ -43,6 +43,7 @@ public enum PreferencesType implements KeyValueDefault {
     ISHAA_ADJUSTMENT("isha_adjustment", "0"),
     TIMED_AZKAR_FONT_SIZE("timed_azkar_font_size", "23"),
     TIMED_AZKAR_DATA_VERSION("timed_azkar_data_version", "0.0.0"),
+    ABSOLUTE_AZKAR_DATA_VERSION("absolute_azkar_data_version","0.0.0"),
     IS_PRAYERS_REMINDER_STOPPED("is_prayers_reminder_stopped", "false"),
 
     // ======= Other Settings =======

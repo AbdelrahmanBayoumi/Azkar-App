@@ -21,12 +21,14 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
     public final static ObservableList<AbsoluteZekr> absoluteZekrObservableList = FXCollections.observableArrayList();
     private int id;
     private String text;
+    private String uuid;
     private TableViewButton edit;
     private TableViewButton delete;
 
-    public AbsoluteZekr(int id, String text) {
+    public AbsoluteZekr(int id, String text,String uuid) {
         this.id = id;
         this.text = text;
+        this.uuid=uuid;
         edit = new TableViewButton("", new FontAwesomeIconView(FontAwesomeIcon.EDIT));
         delete = new TableViewButton("", new FontAwesomeIconView(FontAwesomeIcon.TRASH));
         edit.setOnAction(this::update);
@@ -52,9 +54,9 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
     public static boolean fetchData() {
         absoluteZekrObservableList.clear();
         try {
-            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM absolute_zekr").executeQuery();
+            ResultSet res = DatabaseManager.getInstance().con.prepareStatement("SELECT * FROM absolute_zekr WHERE is_deleted=0").executeQuery();
             while (res.next()) {
-                absoluteZekrObservableList.add(new AbsoluteZekr(res.getInt(1), res.getString(2)));
+                absoluteZekrObservableList.add(new AbsoluteZekr(res.getInt(1), res.getString(2),res.getString(4)));
             }
             return true;
         } catch (Exception ex) {
@@ -62,6 +64,7 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
         }
         return false;
     }
+
 
     public void update(Event event) {
         try {
@@ -79,13 +82,14 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
         }
     }
 
+
     private void delete(Event event) {
         try {
             final ResourceBundle bundle = LanguageBundle.getInstance().getResourceBundle();
             if (BuilderUI.showConfirmAlert(true, Utility.toUTF(bundle.getString("delete")) + " " +
                     Utility.toUTF(bundle.getString("zekr")) + " " + Utility.toUTF(bundle.getString("questionMark")))) {
                 DatabaseManager.getInstance().con
-                        .prepareStatement("DELETE FROM absolute_zekr WHERE id =" + this.id)
+                        .prepareStatement("UPDATE absolute_zekr SET is_deleted = 1 WHERE id ="  + this.id)
                         .executeUpdate();
                 AbsoluteZekr.fetchData();
             }
@@ -144,5 +148,13 @@ public class AbsoluteZekr extends RecursiveTreeObject<AbsoluteZekr> {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getUUID() {
+        return uuid;
+    }
+
+    public void setUUID(String uuid) {
+        this.uuid = uuid;
     }
 }

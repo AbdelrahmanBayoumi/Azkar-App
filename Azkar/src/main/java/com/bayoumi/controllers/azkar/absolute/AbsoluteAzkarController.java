@@ -71,7 +71,7 @@ public class AbsoluteAzkarController implements Initializable {
     @FXML
     private void newZekrAddAction() {
         if (!newZekr.getText().trim().isEmpty()) {
-            AbsoluteZekr zekr = new AbsoluteZekr(0, newZekr.getText().trim());
+            AbsoluteZekr zekr = new AbsoluteZekr(0, newZekr.getText().trim(),null);
             zekr.insert();
             AbsoluteZekr.fetchData();
             newZekr.setText("");

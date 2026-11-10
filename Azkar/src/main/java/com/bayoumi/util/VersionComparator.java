@@ -1,5 +1,7 @@
 package com.bayoumi.util;
 
+import java.util.Objects;
+
 public class VersionComparator {
     public static boolean isNewerVersion(String latestVersion, String storedVersion) {
         latestVersion = stripPrefix(latestVersion, "v");
@@ -34,7 +36,9 @@ public class VersionComparator {
             return latestParts[1].compareTo(storedParts[1]) > 0;
         }
     }
-
+    public  static boolean baseVersion(String Version){
+        return Objects.equals(Version, "0.0.0");
+    }
     private static String stripPrefix(String version, String prefix) {
         if (version.startsWith(prefix)) {
             return version.substring(prefix.length());
