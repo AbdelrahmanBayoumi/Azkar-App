@@ -18,6 +18,10 @@
 # so let ProGuard skip it.
 -dontprocesskotlinmetadata
 
+# Coroutine implementations call Job's default methods through a direct superinterface.
+# ProGuard otherwise drops Job as redundant when another implemented interface extends it.
+-keep interface kotlinx.coroutines.Job
+
 # Exposed builds the entities in com.azkar.data.table.entity through
 # kotlin-reflect (`primaryConstructor` plus `callBy`), which needs our classes'
 # metadata and constructors intact. Without this it throws
@@ -40,7 +44,9 @@
 -keep class org.h2.** { *; }
 
 # Logback is configured by text (logback.xml) and its SPI (ServiceLoader).
+# The configured ConsoleAppender does not use Logback's optional JLine ANSI integration.
 -keep class ch.qos.logback.** { *; }
+-dontwarn org.jline.jansi.AnsiConsole
 
 # Ktor resolves engines and serialization formats through ServiceLoader and
 # string-named configuration keys.
