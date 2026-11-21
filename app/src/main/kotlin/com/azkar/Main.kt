@@ -11,10 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.registerSkikoComposeImplementation
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -171,14 +169,7 @@ private suspend fun prepareDesktopStartup(koin: org.koin.core.Koin): DesktopStar
     val warmUp = DatabaseWarmUp().apply { start() }
     val theme = koin.get<ThemePreferenceStore>().read()
     val typography = koin.get<TypographyStore>().read()
-    registerComposeGraphics()
     return DesktopStartup(warmUp, theme, typography)
-}
-
-/** Register Skiko before `rememberVectorPainter` builds the system-window icon. */
-@OptIn(InternalComposeUiApi::class)
-private fun registerComposeGraphics() {
-    registerSkikoComposeImplementation()
 }
 
 private fun runDesktopApplication(
@@ -300,7 +291,7 @@ private fun rememberQuitAction(
     exitApplication: () -> Unit,
 ): () -> Unit {
     val shutdownScope = rememberCoroutineScope()
-    return remember<() -> Unit>(
+    return remember(
         koin,
         startup.databaseWarmUp,
         notificationScope,

@@ -80,7 +80,10 @@ dependencies {
     implementation(project(":domain"))
 
     // Compose Multiplatform (desktop only — the JVM target is the sole target)
-    implementation(compose.desktop.currentOs)
+    implementation(libs.org.jetbrains.compose.ui)
+    implementation(libs.org.jetbrains.compose.foundation)
+    // skiko-awt's Gradle metadata strictly aligns the native runtime with the renderer.
+    runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-${installerPlatform.id}")
     implementation(libs.org.jetbrains.compose.components.resources)
     implementation(libs.org.jetbrains.compose.material3)
     implementation(libs.org.jetbrains.compose.material.icons.extended)
@@ -209,9 +212,8 @@ tasks.matching { it.name.startsWith("verifyRoborazzi") }.configureEach {
 // coordinates, which the androidx lifecycle stack in the same graph depends on
 // directly. Both land on the classpath under the same file name, so jar/dup
 // checks complain. Two more deliberate drops: the material3 1.13-alpha skew
-// drags in the JetBrains-coordinate `ui-skiko` POM, whose onlyJvm target
-// depends on the 43 MB aggregate `skiko-awt-runtime-all` (natives for every OS)
-// instead of the per-OS runtime the Compose plugin's own resolution picks.
+// pulls in `ui-skiko`, which depends on the aggregate `skiko-awt-runtime-all`
+// (natives for every OS). The runtime dependency above supplies the host's native library.
 //
 // The rules are attached PER DECLARED DEPENDENCY rather than to each
 // configuration. Configuration-level `exclude(...)` rules stay local to the
@@ -220,11 +222,8 @@ tasks.matching { it.name.startsWith("verifyRoborazzi") }.configureEach {
 // declared dependencies but not the exclusions declared next to them), so
 // config-level rules let the stubs and the aggregate jar slip back into the
 // emitted package config. Scoped per dependency, the rules travel with the
-// dependency into every resolution — including Nucleus packaging. Dropping the above
-// loses nothing anywhere: the androidx runtime ships the real classes and the
-// per-OS skiko runtimes carry the natives (shared classpath for `:app:run`,
-// OS-specific package inputs — and desktop test runtimes get the Linux
-// natives via `compose.desktop.currentOs`).
+// dependency into every resolution — including Nucleus packaging. The androidx
+// runtime supplies the Compose runtime classes.
 configurations.configureEach {
     dependencies.withType<ExternalModuleDependency>().configureEach {
         exclude(group = "org.jetbrains.compose.runtime", module = "runtime-desktop")

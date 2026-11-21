@@ -6,25 +6,25 @@ org-junit-junit-platform = "1.13.4"
 # testBalloon ships two artifacts that must always move together: the Gradle plugin
 # (`de-infix.testBalloon`), which installs a Kotlin compiler plugin, and the runtime library
 # (`testBalloon-framework-core`). Neither works alone.
-de-infix-test-balloon = "1.1.0"
-org-jetbrains-exposed = "1.5.0"
+de-infix-test-balloon = "1.2.0"
+org-jetbrains-exposed = "1.6.1"
 org-slf4j = "2.0.20"
-ch-qos-logback = "1.5.32"
+ch-qos-logback = "1.6.8"
 # kotlin-logging is the Kotlin-facing facade over the SLF4J API; logback stays the runtime
 # backend, so `logback.xml` keeps working untouched.
-io-github-oshai-kotlin-logging = "7.0.7"
-jetbrains-kotlin = "2.4.20"
-jetbrains-compose = "1.12.1"
+io-github-oshai-kotlin-logging = "7.0.14"
+jetbrains-kotlin = "2.4.21"
+jetbrains-compose = "1.13.0-beta02"
 dejavu = "0.5.1"
-roborazzi = "1.76.0"
+roborazzi = "1.79.0"
 webp-imageio = "0.3.3"
-compose-hot-reload = "1.3.0-beta01"
+compose-hot-reload = "1.3.0"
 jetbrains-coroutines = "1.11.0"
 # Collection import/export is the first place in the app that needs a machine-readable
 # document, and hand-rolling a JSON parser is not a thing worth doing: escaping, unicode
 # and malformed input are all places to get it wrong.
-jetbrains-serialization = "1.9.0"
-ktor = "3.3.3"
+jetbrains-serialization = "1.13.0"
+ktor = "3.6.1"
 # Desktop system tray. `composenativetray` draws the tray icon and the native context menu from
 # Compose and hands them to the real OS mechanism per platform -- `NSStatusItem` on macOS,
 # `Shell_NotifyIcon` on Windows, `StatusNotifierItem` over D-Bus on Linux -- which is what the JDK
@@ -39,6 +39,8 @@ nucleus-autolaunch = "2.5.18"
 nucleus = "2.5.18"
 # detekt is the Kotlin/Compose static-analysis gate; it replaces SpotBugs.
 detekt = "2.0.0-alpha.5"
+# Keep the formatting rules stable across Spotless plugin releases.
+ktlint = "1.5.0"
 # Compose Multiplatform versions its Material 3 / extended-icons artifacts independently
 # of the `org.jetbrains.compose` plugin, so they are pinned here explicitly.
 #
@@ -58,11 +60,11 @@ jetbrains-material3 = "1.13.0-alpha02"
 jetbrains-material-icons-extended = "1.7.3"
 # Navigation 3. The runtime lives under the AndroidX name and is published only to Google's
 # Maven, which is why `app/build.gradle.kts` scopes a `google()` repository to `androidx.*`.
-androidx-navigation3 = "1.2.0-beta01"
+androidx-navigation3 = "1.2.0"
 # `NavDisplay` has no AndroidX desktop artifact, so the UI half comes from JetBrains' Compose
 # Multiplatform port instead. The two releases move in lockstep and this one resolves its own
 # Compose dependencies upwards to whatever the app already pins.
-org-jetbrains-androidx-navigation3 = "1.2.0-beta01"
+org-jetbrains-androidx-navigation3 = "1.2.0"
 # Koin is the app's dependency-injection container. `koin-core` holds the DSL and the
 # definitions; `koin-compose` adds the Compose bindings (`KoinApplication`, `koinInject`)
 # used by the screens. Neither is the Android artifact, because there is no Android build here.
@@ -84,11 +86,11 @@ coil = "3.6.3"
 # purpose: it exists for `rememberFilePickerLauncher`, the callback-shaped Compose API, and this
 # app already has a `suspend () -> String?` seam for the chooser that every host supplies, so
 # adopting it would mean wrapping a function the app has rather than deleting one.
-filekit = "0.16.0"
+filekit = "0.17.1"
 
 [libraries]
 # Database Dependencies
-com-h2database-h2 = { module = "com.h2database:h2", version = "2.4.240" }
+com-h2database-h2 = { module = "com.h2database:h2", version = "2.5.252" }
 # Exposed 1.x moved every public type into the versioned `org.jetbrains.exposed.v1.*`
 # packages, so these coordinates are only source-compatible with 1.5.0+.
 org-jetbrains-exposed-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "org-jetbrains-exposed" }
@@ -109,6 +111,8 @@ com-zaxxer-hikari = { module = "com.zaxxer:HikariCP", version = "7.1.0" }
 # UI (Compose Multiplatform)
 org-jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "jetbrains-material3" }
 org-jetbrains-compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "jetbrains-material-icons-extended" }
+org-jetbrains-compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "jetbrains-compose" }
+org-jetbrains-compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "jetbrains-compose" }
 org-jetbrains-compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "jetbrains-compose" }
 org-jetbrains-compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "jetbrains-compose" }
 dev-mttmcknn-dejavu = { module = "dev.mttmcknn:dejavu", version.ref = "dejavu" }
@@ -116,7 +120,7 @@ org-jetbrains-compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:
 io-github-takahirom-roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
 io-github-takahirom-roborazzi-compose-desktop-preview-scanner-support = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop-preview-scanner-support", version.ref = "roborazzi" }
 io-github-darkxanter-webp-imageio = { module = "io.github.darkxanter:webp-imageio", version.ref = "webp-imageio" }
-io-github-sergio-sastre-composable-preview-scanner-android = { module = "io.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.9.0" }
+io-github-sergio-sastre-composable-preview-scanner-android = { module = "io.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.10.1" }
 junit-junit = { module = "junit:junit", version = "4.13.2" }
 org-junit-vintage-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version = "5.13.4" }
 org-jetbrains-kotlinx-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "jetbrains-serialization" }
@@ -187,7 +191,7 @@ org-jetbrains-kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compos
 jetbrains-compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }
 jetbrains-compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
 org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "jetbrains-kotlin" }
-com-diffplug-spotless = { id = "com.diffplug.spotless", version = "7.2.1" }
+com-diffplug-spotless = { id = "com.diffplug.spotless", version = "8.12.0" }
 dev-detekt = { id = "dev.detekt", version.ref = "detekt" }
 de-infix-test-balloon = { id = "de.infix.testBalloon", version.ref = "de-infix-test-balloon" }
 dev-nucleusframework = { id = "dev.nucleusframework", version.ref = "nucleus" }

@@ -43,7 +43,7 @@ spotless {
             "build-logic/src/test/kotlin/**/*.kt",
         )
         targetExclude("**/build/**")
-        ktlint()
+        ktlint(libs.versions.ktlint.get())
     }
 }
 
