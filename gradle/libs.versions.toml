@@ -12,7 +12,7 @@ org-slf4j = "2.0.20"
 ch-qos-logback = "1.6.8"
 # kotlin-logging is the Kotlin-facing facade over the SLF4J API; logback stays the runtime
 # backend, so `logback.xml` keeps working untouched.
-io-github-oshai-kotlin-logging = "7.0.14"
+io-github-oshai-kotlin-logging = "8.0.7"
 jetbrains-kotlin = "2.4.21"
 jetbrains-compose = "1.13.0-rc01"
 dejavu = "0.5.1"
