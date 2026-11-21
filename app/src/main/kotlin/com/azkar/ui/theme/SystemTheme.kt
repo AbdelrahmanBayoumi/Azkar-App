@@ -1,11 +1,13 @@
 package com.azkar.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import java.awt.Toolkit
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+
+// TODO: Remove the Linux fallback once CMP-10466 is fixed and verified: https://youtrack.jetbrains.com/issue/CMP-10466
 
 /**
  * The colour scheme the desktop is itself using.
@@ -24,9 +26,12 @@ enum class SystemTheme {
 }
 
 /**
- * Asks the desktop which palette it is using.
+ * Reads the Linux desktop's palette. Windows and macOS use Compose's dynamic system theme API below.
  *
- * This exists because `isSystemInDarkTheme()` cannot be trusted here. On desktop it bottoms out in
+ * On Windows and macOS, Compose Multiplatform 1.12.0 fixed dynamic `isSystemInDarkTheme()` updates,
+ * so those platforms use Compose directly.
+ *
+ * This fallback exists because on Linux `isSystemInDarkTheme()` bottoms out in
  * Skiko's `currentSystemTheme`, which on Linux loads `libdbus-1.so` at runtime and reads the
  * `color-scheme` property of `org.freedesktop.appearance`. Two things have to line up for that: the
  * unversioned library name has to be on disk, which only a `-dev` install provides, and that schema
@@ -34,48 +39,23 @@ enum class SystemTheme {
  * `org.gnome.desktop.interface`. When either is missing Skiko answers [SystemTheme.UNKNOWN] and
  * Compose reports "light" for a desktop that is plainly dark, silently and forever.
  *
- * So the platform is asked directly instead, per platform:
- *  - Windows publishes the answer as an AWT desktop property (`win.appUsableDarkBackground`);
- *  - macOS does the same (`apple.awt.application.appearance`);
- *  - everywhere else is the freedesktop desktop, where the answer lives in GNOME's own settings and,
- *    failing that, in the theme names Plasma and GTK keep in their config files.
+ * Linux's answer lives in GNOME's own settings and, failing that, in the theme names Plasma and GTK
+ * keep in their config files.
  *
- * Called once per launch rather than per frame: this can spawn a process, and the OS changing theme
- * while the window is open is answered by picking a palette explicitly, which is what the header
- * toggle does and what gets stored.
+ * Called once per composition because this can spawn a process.
  */
-fun readSystemTheme(): SystemTheme {
+fun readSystemTheme(): SystemTheme = freedesktopSystemTheme()
+
+/** The desktop's colour scheme, using Compose's dynamic API where supported. */
+@Composable
+fun rememberSystemTheme(): SystemTheme {
     val os = System.getProperty("os.name").orEmpty().lowercase()
     return when {
-        os.startsWith("windows") -> windowsSystemTheme()
-        os.contains("mac") || os.contains("darwin") -> macSystemTheme()
-        else -> freedesktopSystemTheme()
+        os.startsWith("windows") || os.contains("mac") || os.contains("darwin") ->
+            if (isSystemInDarkTheme()) SystemTheme.DARK else SystemTheme.LIGHT
+        else -> remember { readSystemTheme() }
     }
 }
-
-/** The desktop's colour scheme, resolved once for the life of the composition. */
-@Composable
-fun rememberSystemTheme(): SystemTheme = remember { readSystemTheme() }
-
-/**
- * The Windows look and feel publishes the app's own background colour, and whether that background is
- * dark is the answer. The key only exists from Windows 10 on; an older desktop says nothing.
- */
-private fun windowsSystemTheme(): SystemTheme =
-    when (val background = desktopProperty(WINDOWS_DARK_BACKGROUND)) {
-        is Boolean -> if (background) SystemTheme.DARK else SystemTheme.LIGHT
-        else -> SystemTheme.UNKNOWN
-    }
-
-/**
- * On macOS the value is the appearance name, "Dark" or "Light", and it is only set for a real
- * application rather than a bare JVM — hence the null check.
- */
-private fun macSystemTheme(): SystemTheme =
-    desktopProperty(MACOS_APPEARANCE)
-        ?.toString()
-        ?.themeNameOrNull()
-        ?: SystemTheme.UNKNOWN
 
 /**
  * GNOME first, because it is the one freedesktop desktop that states the answer outright; Plasma
@@ -113,16 +93,6 @@ private fun gtkThemeColorScheme(): SystemTheme? =
         .firstNotNullOfOrNull { settings ->
             iniValue(readTextOrNull(configFile(settings)), listOf(GTK_THEME_KEY))?.themeNameOrNull()
         }
-
-/**
- * An AWT desktop property, which is how both Windows and macOS are asked.
- *
- * The property is published by the platform look and feel, so a desktop using something else — or a
- * headless JVM behind the screenshot harness — has nothing to answer with, which is a null rather
- * than a light palette.
- */
-private fun desktopProperty(key: String): Any? =
-    runCatching { Toolkit.getDefaultToolkit().getDesktopProperty(key) }.getOrNull()
 
 /**
  * Reads the system color scheme with `gsettings`, or returns null when it cannot be run.
@@ -201,10 +171,6 @@ private fun configFile(relative: String): Path =
         )
 
 private fun readTextOrNull(file: Path): String? = runCatching { Files.readString(file) }.getOrNull()
-
-private const val WINDOWS_DARK_BACKGROUND = "win.appUsableDarkBackground"
-
-private const val MACOS_APPEARANCE = "apple.awt.application.appearance"
 
 private const val KDE_GLOBALS = "kdeglobals"
 
