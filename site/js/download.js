@@ -76,14 +76,6 @@ let screenRotationTimer;
 let screenRotationPaused = false;
 let screenProgressFrame;
 
-screenTabs.forEach((tab) => {
-  const progress = document.createElement("span");
-  progress.className = "screen-tab-progress";
-  progress.setAttribute("aria-hidden", "true");
-  progress.innerHTML = '<span class="screen-tab-progress-fill"></span>';
-  tab.append(progress);
-});
-
 document
   .querySelectorAll("img[data-light-src][data-dark-src]")
   .forEach((image) => {
