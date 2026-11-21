@@ -14,7 +14,7 @@ ch-qos-logback = "1.6.8"
 # backend, so `logback.xml` keeps working untouched.
 io-github-oshai-kotlin-logging = "7.0.14"
 jetbrains-kotlin = "2.4.21"
-jetbrains-compose = "1.13.0-beta02"
+jetbrains-compose = "1.13.0-rc01"
 dejavu = "0.5.1"
 roborazzi = "1.79.0"
 webp-imageio = "0.3.3"
