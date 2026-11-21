@@ -9,7 +9,10 @@ import org.assertj.core.api.Assertions.assertThat
  *
  * These functions are deliberately free of Compose, so the one decision every screen depends on —
  * "does this window stack or sit side by side?" — is pinned down here without a window at all.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val WindowSizeSuite by testSuite("The window size breakpoints") {
     test("the default window keeps the side-by-side layout") {
         val size = windowSizeClassFor(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)

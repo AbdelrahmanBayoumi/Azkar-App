@@ -9,6 +9,8 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val BundledAudioDefaultsSuite by testSuite("Bundled audio installation") {
     test("a failed copy leaves no partial sound and the next installation succeeds") {
         withContext(Dispatchers.IO) {

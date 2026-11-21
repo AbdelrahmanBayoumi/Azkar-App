@@ -12,7 +12,10 @@ import org.assertj.core.api.Assertions.assertThat
  * treating the two top-level destinations as a history instead of as peers, which would leave
  * `Home → Library → Home → Library` behind every pair of header clicks and give the library screen's
  * "back to home" button nothing to collapse.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val AzkarNavigatorSuite by testSuite("Moving between the top-level destinations") {
     test("the stack opens on the dashboard") {
         val navigator = AzkarNavigator(NavBackStack(AzkarDestination.Home))

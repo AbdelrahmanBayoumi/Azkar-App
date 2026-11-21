@@ -27,7 +27,10 @@ import java.io.IOException
  * failed, and it is what runs here: the repository encodes the value to JSON and the repository
  * decodes that JSON again, in memory, exactly as it does when the bytes eventually land in a file.
  * Whether they land is asked once, in [com.azkar.settings.SettingsStoreSuite].
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val NotificationPreferencesRepositorySuite by testSuite("The notification preferences") {
     test("audio defaults preserve changes made while installation is suspended") {
         withInMemorySettings { _, store, _ ->

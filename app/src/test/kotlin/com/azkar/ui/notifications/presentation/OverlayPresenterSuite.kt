@@ -217,7 +217,7 @@ val OverlayPresenterSuite by testSuite("The overlay notification presenter") {
 
     test("in reading time, a short dhikr leaves before a passage does") {
         runPresenterTest(durationMode = OverlayDurationMode.READING) { presenter, scope ->
-            val longId = presenter.present(longNotice(1))!!
+            val longId = presenter.present(longNotice())!!
             presenter.present(notice(2))
 
             // Two words ≈ 3,100 ms; the long passage has already reached the model's ceiling.
@@ -293,9 +293,9 @@ private fun notice(index: Int) =
  * A notice whose words reach far past the reading model's ceiling, so its card runs the whole way
  * to the duration cap: the other end of the scale the two-word notice sits on.
  */
-private fun longNotice(index: Int) =
+private fun longNotice() =
     NotificationNotice(
-        title = if (index == 1) "First" else "Second",
+        title = "First",
         message = List(600) { "word" }.joinToString(" "),
-        action = NotificationAction.Remembrance(index.toLong()),
+        action = NotificationAction.Remembrance(1),
     )

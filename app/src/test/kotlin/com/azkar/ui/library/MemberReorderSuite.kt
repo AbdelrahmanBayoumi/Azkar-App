@@ -39,13 +39,11 @@ private fun listOf(count: Int): MemberReorderState =
         }
     }
 
-/** The same, but [columns] tiles per row — the grid the page actually shows. */
-private fun gridOf(
-    count: Int,
-    columns: Int,
-): MemberReorderState =
+/** The same, but with two tiles per row — the grid the page actually shows. */
+private fun twoColumnGrid(): MemberReorderState =
     MemberReorderState().apply {
-        this.columns = columns
+        val count = 4
+        columns = 2
         repeat(count) { index ->
             val left = (index % columns) * (TILE_WIDTH + GAP)
             val top = (index / columns) * (TILE_HEIGHT + GAP)
@@ -70,7 +68,10 @@ private const val CELL = TILE_WIDTH + GAP
  * picture is the part that decides *where the tile lands* — which is what this class is. The pointer
  * plumbing that reaches it is thin, and it is the part a test has to work hardest to drive, so it
  * gets exactly one test in `MemberDragSuite` rather than one per rule here.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val MemberReorderSuite by testSuite("dragging a member to a new place") {
     // ---- which tile is under the pointer --------------------------------------------------------
 
@@ -220,7 +221,7 @@ val MemberReorderSuite by testSuite("dragging a member to a new place") {
     // ---- the grid ------------------------------------------------------------------------------
 
     test("a grid tile dragged sideways steps its neighbour left rather than down") {
-        val state = gridOf(count = 4, columns = 2)
+        val state = twoColumnGrid()
 
         state.begin(0, GAP)
         state.drag(Offset(CELL, 0f))
@@ -235,7 +236,7 @@ val MemberReorderSuite by testSuite("dragging a member to a new place") {
     }
 
     test("a grid tile dragged down a whole row lands on the tile below it") {
-        val state = gridOf(count = 4, columns = 2)
+        val state = twoColumnGrid()
 
         state.begin(0, GAP)
         state.drag(Offset(0f, PITCH))

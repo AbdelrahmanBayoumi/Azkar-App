@@ -10,7 +10,10 @@ import org.assertj.core.api.Assertions.assertThat
  * to be a clock and not a decoration. A clock runs one way, and the rule that keeps it running one
  * way is the whole of what this suite is about: the bar keeps the smallest fraction it has been told
  * and refuses a reading that would put time back on it.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CountdownStateSuite by testSuite("The notification card's countdown") {
     test("a card that has just arrived is all of its time") {
         val countdown = CountdownState()

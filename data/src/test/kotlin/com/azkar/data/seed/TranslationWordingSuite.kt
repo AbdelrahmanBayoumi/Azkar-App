@@ -31,7 +31,10 @@ import java.util.Locale
  *
  * The catalogue tests are deliberately pure. They are the cheapest thing here to run and the only ones
  * that catch a mistake before it has been written to a single row.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TranslationWordingSuite by testSuite("What the shipped shelves and labels are called in every language") {
     testSuite("the catalogue and the tag vocabulary agree") {
         test("every catalogue tag is a slug the vocabulary can word") {

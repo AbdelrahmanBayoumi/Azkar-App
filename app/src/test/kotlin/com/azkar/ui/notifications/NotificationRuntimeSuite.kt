@@ -64,7 +64,7 @@ val NotificationRuntimeSuite by testSuite("The notification scheduler") {
             world.clock.set(localInstantAt(QUEUE_OPENED_AFTER_SLOT))
 
             withScheduler(world, preferences) {
-                settleOnRealClock(SETTLE_MILLIS)
+                settleOnRealClock()
                 assertThat(world.publisher.notices).isEmpty()
 
                 // The next slot comes due while the scheduler is running, and is announced.
@@ -89,7 +89,7 @@ val NotificationRuntimeSuite by testSuite("The notification scheduler") {
             world.clock.set(prayerInstantAt(prayerTime(PrayerKey.MAGHRIB)).plusSeconds(60))
 
             withScheduler(world, preferences) {
-                settleOnRealClock(SETTLE_MILLIS)
+                settleOnRealClock()
                 assertThat(world.publisher.notices).isEmpty()
 
                 // And the scheduler is awake: the next prayer is announced when it comes due, which
@@ -113,7 +113,7 @@ val NotificationRuntimeSuite by testSuite("The notification scheduler") {
             world.clock.set(prayerInstantAt(prayerTime(PrayerKey.DHUHR)).minusSeconds(60))
 
             withScheduler(world, preferences) {
-                settleOnRealClock(SETTLE_MILLIS)
+                settleOnRealClock()
                 assertThat(world.publisher.notices).isEmpty()
 
                 world.clock.set(prayerInstantAt(prayerTime(PrayerKey.DHUHR)).plusSeconds(30))
@@ -139,7 +139,7 @@ val NotificationRuntimeSuite by testSuite("The notification scheduler") {
             world.clock.set(prayerInstantAt(prayerTime(PrayerKey.DHUHR)).plusSeconds(30))
 
             withScheduler(world, preferences) {
-                settleOnRealClock(SETTLE_MILLIS)
+                settleOnRealClock()
                 assertThat(world.publisher.notices).isEmpty()
 
                 // The next prayer is announced when it comes: the silence at the door is the rule
@@ -168,7 +168,7 @@ private suspend fun withScheduler(
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     try {
         world.runtime(preferences).start(scope)
-        scope.block()
+        block(scope)
     } finally {
         scope.cancel()
     }
@@ -264,8 +264,8 @@ private suspend fun RecordingPublisher.awaitNotice(
  * Every test that waits for silence follows it with a wait for a notice, so the silence is never
  * the only thing the test knows.
  */
-private suspend fun settleOnRealClock(millis: Long) {
-    withContext(Dispatchers.IO) { delay(millis.milliseconds) }
+private suspend fun settleOnRealClock() {
+    withContext(Dispatchers.IO) { delay(SETTLE_MILLIS.milliseconds) }
 }
 
 /**

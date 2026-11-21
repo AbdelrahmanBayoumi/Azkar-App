@@ -181,6 +181,8 @@ private fun SkikoComposeUiTest.handleTops(): List<Float> =
  * no exception, no log line and no failure anywhere except the card quietly staying where it was.
  */
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val MemberDragSuite by testSuite("dragging a card on the members page") {
     test("the handles are on the screen before anything is dragged") {
         dragScreen {

@@ -32,6 +32,8 @@ private val ARABIC: Locale = Locale.forLanguageTag("ar")
  * the tile away even though the write failed, a search box that answers a half-typed word.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val CollectionsStateSuite by testSuite("The collections shelf state") {
     val morning = remembrance(id = 1L, text = "Whoever says good morning")
     val evening = remembrance(id = 2L, text = "Whoever says good evening")

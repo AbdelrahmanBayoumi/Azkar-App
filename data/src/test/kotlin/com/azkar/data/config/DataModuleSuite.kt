@@ -44,7 +44,10 @@ import org.koin.mp.KoinPlatform
  * app — `LibraryBootstrapper` — is deliberately not fully wired in this module: its gate is a port
  * that `:app` implements, and a graph test has nothing to say about how that gate is stored. What is
  * under test below is the wiring, so the suite asks for the rows the same way the bootstrapper does.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val DataModuleSuite by testSuite("DataModule") {
     testFixture {
         val database = TestDatabase.bootstrapWithH2()

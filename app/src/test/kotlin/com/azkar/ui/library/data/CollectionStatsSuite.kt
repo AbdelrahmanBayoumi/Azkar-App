@@ -9,6 +9,8 @@ import de.infix.testBalloon.framework.core.testSuite
 import org.assertj.core.api.Assertions.assertThat
 import java.time.Instant
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val CollectionStatsSuite by testSuite("Collection statistics") {
     val first = remembrance(1L)
     val second = remembrance(2L)

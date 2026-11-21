@@ -3,6 +3,8 @@ package com.azkar.updates
 import de.infix.testBalloon.framework.core.testSuite
 import org.assertj.core.api.Assertions.assertThat
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val VersionComparisonSuite by testSuite("Update version ordering") {
     test("the runtime prerelease version wins over package metadata without its suffix") {
         assertThat(resolveApplicationVersion("0.1.2", "0.1.2-beta.3.1")).isEqualTo("0.1.2-beta.3.1")

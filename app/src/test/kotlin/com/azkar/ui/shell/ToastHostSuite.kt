@@ -11,6 +11,8 @@ import de.infix.testBalloon.framework.core.testSuite
 import org.assertj.core.api.Assertions.assertThat
 
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val ToastHostSuite by testSuite("The app toast") {
     test("clicking an actionable toast invokes its action") {
         var clicks = 0

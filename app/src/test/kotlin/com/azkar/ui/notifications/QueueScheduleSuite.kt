@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import java.time.LocalDateTime
 import kotlin.random.Random
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val QueueScheduleSuite by testSuite("The shared reminder queue schedule") {
     test("emits the latest elapsed slot inside a daily window") {
         val slot = QueueSchedule.dueSlot(LocalDateTime.parse("2026-10-14T10:37:00"), 8 * 60, 22 * 60, 60)

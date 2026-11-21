@@ -9,6 +9,8 @@ import java.util.Locale
 
 private val ARABIC: Locale = Locale.forLanguageTag("ar")
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val RemembranceCreateDraftSuite by testSuite("A new remembrance carries what the form collected") {
     test("the Arabic passage is required and the rejection clears when it is corrected") {
         val draft = RemembranceCreateDraft(textLocale = ARABIC)

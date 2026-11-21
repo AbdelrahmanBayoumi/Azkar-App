@@ -27,7 +27,10 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
  * SQL-shaped one. A double would have to restate `insert`'s column list to catch it, and a double
  * that drifts is the bug rather than the cure: `insert` grows a column, the double does not, and
  * the double keeps agreeing.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionServiceSuite by testSuite("Collection service creation") {
     test("a collection created with labels comes back carrying them") {
         val service = serviceOver(emptyDatabase())

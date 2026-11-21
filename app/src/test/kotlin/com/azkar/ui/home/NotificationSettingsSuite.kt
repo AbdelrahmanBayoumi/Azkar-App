@@ -34,7 +34,10 @@ import kotlin.time.Duration.Companion.milliseconds
  * problems at once: a scratch directory and a scope per test, a busy-poll for the write to land, and
  * no way to write a test whose store fails. Only the last test here genuinely needs a file, because
  * only it is about durability.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val NotificationSettingsSuite by testSuite("The notification switches") {
     test("a fresh install starts with every bell on and the master switch on") {
         withSwitches { state, _ ->
@@ -187,7 +190,7 @@ private inline fun withSwitches(block: (NotificationSettingsState, FakePreferenc
  */
 private suspend fun NotificationSettingsState.awaitFlags(
     matches: (Map<PrayerKey, Boolean>) -> Boolean = { true },
-): Map<PrayerKey, Boolean> = awaitOnRealClock(TIMEOUT_MILLIS) { snapshotFlow { flags }.first(matches) }
+): Map<PrayerKey, Boolean> = awaitOnRealClock { snapshotFlow { flags }.first(matches) }
 
 /**
  * The on-disk key for a prayer's switch.
@@ -206,7 +209,7 @@ private fun storedFlagKey(key: PrayerKey) = booleanPreferencesKey("prayer.${key.
  * timeout keeps a failure to move from hanging the run.
  */
 private suspend fun awaitFileOnDisk(file: Path) {
-    awaitOnRealClock(TIMEOUT_MILLIS) {
+    awaitOnRealClock {
         while (!file.exists()) {
             delay(FILE_POLL_MILLIS.milliseconds)
         }
@@ -214,7 +217,7 @@ private suspend fun awaitFileOnDisk(file: Path) {
 }
 
 /**
- * Runs [block] on a real clock, and gives up after [timeoutMillis].
+ * Runs [block] on a real clock, and gives up after [TIMEOUT_MILLIS].
  *
  * The suite runs inside `runTest`, whose clock is virtual: a `withTimeout` there does not wait, it
  * advances the scheduler, and a `delay` returns at once. A wait that never ends — a write that was
@@ -223,10 +226,8 @@ private suspend fun awaitFileOnDisk(file: Path) {
  *
  * Leaving the virtual clock for a real dispatcher is what makes the timeout a timeout.
  */
-private suspend fun <T> awaitOnRealClock(
-    timeoutMillis: Long,
-    block: suspend () -> T,
-): T = withContext(Dispatchers.IO) { withTimeout(timeoutMillis.milliseconds) { block() } }
+private suspend fun <T> awaitOnRealClock(block: suspend () -> T): T =
+    withContext(Dispatchers.IO) { withTimeout(TIMEOUT_MILLIS.milliseconds) { block() } }
 
 private const val TIMEOUT_MILLIS = 5_000L
 

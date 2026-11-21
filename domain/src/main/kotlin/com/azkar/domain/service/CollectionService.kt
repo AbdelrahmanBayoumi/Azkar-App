@@ -36,15 +36,6 @@ class CollectionService(
     suspend fun findById(id: Long?): RemembranceCollection? = repository.findById(id)
 
     /**
-     * Returns the collection identified by [id] as a label and a member count, or `null` when unknown.
-     *
-     * Straight through, like the reads above it. The summary exists so that a caller who wants a name
-     * and a number does not have to ask for the collection, and this is where that choice is visible:
-     * [findById] is still there for the callers that genuinely need the members.
-     */
-    suspend fun findSummary(id: Long): CollectionSummary? = repository.findSummary(id)
-
-    /**
      * Creates a collection.
      *
      * A new collection always starts empty and unpinned, so the generated wash is what the user sees
@@ -128,38 +119,6 @@ class CollectionService(
                     nameLocale = nameLocale ?: current.nameLocale,
                 ),
             )
-        }
-
-    /**
-     * Gives [id] wording in the languages it has none for, and touches nothing else.
-     *
-     * Merge rather than replace, and that is the entire difference from [rename]. A shared document
-     * that happens to name a shelf this machine already has is not asking to retranslate it — the local
-     * shelf is the user's own, and they may have named it in a second language themselves. So an
-     * import fills what is missing and leaves every language that already has an answer exactly as it
-     * was.
-     *
-     * Returns the collection unchanged when [translations] adds nothing, so the caller pays no write
-     * and no timestamp for a document that carried no new language.
-     */
-    suspend fun applyTranslations(
-        id: Long,
-        translations: Map<Locale, LocalizedPair>,
-    ): RemembranceCollection =
-        transactions.run {
-            val current = require(id)
-            val missing = translations.filterKeys { it !in current.translations }
-            if (missing.isEmpty()) {
-                current
-            } else {
-                repository.save(
-                    current.renamed(
-                        name = current.name,
-                        description = current.description,
-                        translations = current.translations + missing,
-                    ),
-                )
-            }
         }
 
     /**

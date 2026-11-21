@@ -14,7 +14,10 @@ import org.assertj.core.api.Assertions.assertThat
  * `results: List<…>` field with no default would turn into a parse failure and a "could not search"
  * message. Each of these tests is one of those shapes, read back through the same `HttpClient` stack
  * the app builds, so what is asserted is what the screen will actually get.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val GeocodingClientSuite by testSuite("The geocoding client") {
     test("a search names the place it found, with its zone") {
         runTest {
@@ -77,7 +80,7 @@ val GeocodingClientSuite by testSuite("The geocoding client") {
 
     test("a blank search never reaches the provider") {
         runTest {
-            val engine = recordingEngine("""{"results": []}""")
+            val engine = emptyResultsEngine()
             val client = GeocodingClient(testHttpClient(engine))
 
             assertThat(client.searchPlaces("   ", "en")).isEmpty()
@@ -87,7 +90,7 @@ val GeocodingClientSuite by testSuite("The geocoding client") {
 
     test("the search asks the provider in the interface language") {
         runTest {
-            val engine = recordingEngine("""{"results": []}""")
+            val engine = emptyResultsEngine()
             val client = GeocodingClient(testHttpClient(engine))
 
             client.searchPlaces("القاهرة", "ar")
@@ -105,7 +108,4 @@ private fun geocodingClient(
     status: HttpStatusCode = HttpStatusCode.OK,
 ) = GeocodingClient(testHttpClient(jsonEngine(body, status)))
 
-private fun recordingEngine(
-    body: String,
-    status: HttpStatusCode = HttpStatusCode.OK,
-): MockEngine = jsonEngine(body, status)
+private fun emptyResultsEngine(): MockEngine = jsonEngine("""{"results": []}""")

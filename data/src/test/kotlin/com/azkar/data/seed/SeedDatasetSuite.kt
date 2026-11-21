@@ -4,6 +4,8 @@ import de.infix.testBalloon.framework.core.testSuite
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val SeedDatasetSuite by testSuite("Reviewed seed library") {
     test("timed collections use explicit contexts and post-prayer excludes prayer-internal text") {
         val dataset = SeedDataset.bundled

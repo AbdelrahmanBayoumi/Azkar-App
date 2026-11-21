@@ -18,7 +18,10 @@ import java.util.Locale
  * locale, tag links, and an optional favorite. These tests walk that graph out to the database
  * and back to prove the reassembly holds — in particular that translations survive without their
  * optional explanations, while orphaned explanations are discarded.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val RemembranceAggregateMappingSuite by testSuite("Remembrance aggregate mapping") {
     exposedRepositories {
         test("save() then findById(): the whole aggregate survives the round trip") { repositories ->
@@ -36,7 +39,7 @@ val RemembranceAggregateMappingSuite by testSuite("Remembrance aggregate mapping
             assertThat(saved.grade).isEqualTo(HadithGrade.SAHIH)
             assertThat(saved.isFavorite).isTrue()
             assertThat(saved.tags.map { it.name }).containsExactlyInAnyOrder("gold", "silver")
-            assertEnglish(saved, "Seek knowledge", EXPLANATION)
+            assertEnglish(saved, "Seek knowledge")
         }
 
         test("save(): a tag already used by another remembrance is reused, not duplicated") { repositories ->
@@ -82,7 +85,7 @@ val RemembranceAggregateMappingSuite by testSuite("Remembrance aggregate mapping
                 )
             repositories.remembrances.save(updated)
 
-            assertEnglish(requireNotNull(repositories.remembrances.findById(id)), "Updated text", EXPLANATION)
+            assertEnglish(requireNotNull(repositories.remembrances.findById(id)), "Updated text")
         }
 
         test("save(): removing a locale from the aggregate deletes its rows") { repositories ->
@@ -206,11 +209,10 @@ private fun pair(text: String) = Remembrance.Translations.Pair(null, text)
 private fun assertEnglish(
     remembrance: Remembrance,
     translation: String,
-    explanation: String,
 ) {
     val resolved = requireNotNull(remembrance.translationsFor(ENGLISH))
     assertThat(resolved.translationPair.text).isEqualTo(translation)
-    assertThat(resolved.explanationPair.text).isEqualTo(explanation)
+    assertThat(resolved.explanationPair.text).isEqualTo(EXPLANATION)
 }
 
 private val ENGLISH: Locale = Locale.ENGLISH

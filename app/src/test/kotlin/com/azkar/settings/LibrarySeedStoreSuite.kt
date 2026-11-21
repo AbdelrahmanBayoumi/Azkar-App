@@ -19,7 +19,10 @@ import org.assertj.core.api.Assertions.assertThat
  * This suite used to carry its own copy of the file fixture, and that copy had the teardown the
  * shared one warns about: it cancelled the scope and *then* unlinked the directory, in that order,
  * which is a race against a reader that had not finished.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val LibrarySeedStoreSuite by testSuite("The seed bookkeeping") {
     test("a fresh install has not been seeded yet") {
         withInMemorySettings { _, store, _ ->

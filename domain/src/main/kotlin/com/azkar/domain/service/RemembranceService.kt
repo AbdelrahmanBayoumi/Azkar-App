@@ -33,10 +33,6 @@ class RemembranceService(
     /** Returns whichever remembrance comes first, or `null` when there are none. */
     suspend fun findFirst(): Remembrance? = repository.findFirst()
 
-    /** Returns the remembrances carrying a tag named [tagName], compared case-insensitively. */
-    suspend fun findByTagNameIgnoreCase(tagName: String): List<Remembrance> =
-        repository.findByTagNameIgnoreCase(tagName)
-
     /** Returns the remembrances marked as favorites. */
     suspend fun findFavorites(): List<Remembrance> = repository.findFavorites()
 

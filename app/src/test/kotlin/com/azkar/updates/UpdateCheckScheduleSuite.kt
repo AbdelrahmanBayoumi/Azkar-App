@@ -10,6 +10,8 @@ import org.assertj.core.api.Assertions.assertThat
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val UpdateCheckScheduleSuite by testSuite("Automatic update checks") {
     test("checks immediately and then at the recurring interval") {
         runTest {

@@ -13,7 +13,10 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
-/** Shipped collection content, initial user state and idempotent bootstrap. */
+/** Shipped collection content, initial user state and idempotent bootstrap. *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
+ */
+@Suppress("unused")
 val CollectionSeedSuite by testSuite("Seeding the official collections") {
     test("every shipped collection is present, official, and fully described") {
         withSeed { seeded ->

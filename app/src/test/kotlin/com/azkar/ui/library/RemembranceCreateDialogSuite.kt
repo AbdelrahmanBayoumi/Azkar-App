@@ -93,6 +93,8 @@ private fun converse(
 private const val REMEMBRANCE_CREATE_DIALOG_TAG = "remembrance-create-dialog"
 
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val RemembranceCreateDialogSuite by testSuite("The create-remembrance dialog") {
     test("the first page asks for the passage and keeps additional information collapsed") {
         converse {

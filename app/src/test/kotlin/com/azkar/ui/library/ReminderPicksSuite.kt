@@ -13,7 +13,10 @@ import java.util.Locale
  * The rule under test is that the shelf exists only while there is something in it. A shelf of the
  * app's own, sitting on the user's shelf saying nothing, is a row that costs the user a glance and
  * gives nothing back — so it appears with the first pick and leaves with the last one.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val ReminderPicksSuite by testSuite("The shelf that holds the passages the user picked") {
     val morning = remembrance(id = 1L, text = "Whoever says good morning")
     val evening = remembrance(id = 2L, text = "Whoever says good evening")

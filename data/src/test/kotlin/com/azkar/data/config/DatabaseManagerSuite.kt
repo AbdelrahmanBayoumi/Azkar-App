@@ -10,7 +10,10 @@ import org.assertj.core.api.Assertions.assertThat
  * `DataSource` to Exposed. Nothing else in the suite builds a pool — the repositories go
  * straight to a fixture's in-memory database — so a mistake in here would only surface
  * when the desktop app is launched.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val DatabaseManagerSuite by testSuite("DatabaseManager") {
     test("poolConfig treats its argument as a JDBC URL, not a properties file path") {
         val config = DatabaseManager.poolConfig(H2_URL)

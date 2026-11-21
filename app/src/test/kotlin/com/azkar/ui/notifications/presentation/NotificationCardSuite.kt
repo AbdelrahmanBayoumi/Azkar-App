@@ -195,16 +195,13 @@ private const val FITTED_CARD_TAG = "fitted-card"
  * here is that the card is measured with no slot to fall into.
  */
 @OptIn(ExperimentalTestApi::class)
-private fun fittedCardTest(
-    passage: String = ARABIC_PASSAGE,
-    block: SkikoComposeUiTest.() -> Unit,
-) {
+private fun fittedCardTest(block: SkikoComposeUiTest.() -> Unit) {
     trackedCardUiTest {
         setTrackedContent {
             AzkarTheme(uiLocale = ENGLISH) {
                 Box(modifier = Modifier.width(FITTED_CARD_WIDTH).wrapContentHeight(unbounded = true)) {
                     NotificationCard(
-                        item = passageNotice(passage = passage, position = 1, total = 3),
+                        item = passageNotice(passage = ARABIC_PASSAGE, position = 1, total = 3),
                         onOpen = {},
                         onDismiss = {},
                         onPauseChanged = {},
@@ -691,7 +688,7 @@ val NotificationCardSuite by testSuite("The overlay notification card") {
         // itself at all: the passage reaches it through a `weight`, a weight in an unbounded column
         // collapses to zero, and a card that had kept one under `FIT` would fail here as a missing
         // passage rather than as a wrong number.
-        fittedCardTest(passage = ARABIC_PASSAGE) {
+        fittedCardTest {
             onNodeWithTag(FITTED_CARD_TAG).assertIsDisplayed()
             onNodeWithText(ARABIC_PASSAGE).assertIsDisplayed()
             assertThat(onNodeWithTag(FITTED_CARD_TAG).getBoundsInRoot().width.value)

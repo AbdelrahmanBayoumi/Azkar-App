@@ -66,7 +66,10 @@ private fun PressSurface(
  *
  * The failure this guards against is not hypothetical. Screenshot-based checking cannot see it (the
  * hover fill is invisible in a still), and it was found by counting compositions, not by looking.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val RecompositionSuite by testSuite("Control recomposition budgets") {
     listOf(false, true).forEach { dark ->
         test("nav selection and press keep their visible feedback in ${if (dark) "dark" else "light"} theme") {

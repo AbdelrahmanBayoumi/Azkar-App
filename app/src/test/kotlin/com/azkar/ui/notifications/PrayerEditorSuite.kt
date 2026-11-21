@@ -27,10 +27,13 @@ import kotlin.time.Duration.Companion.milliseconds
  * dispatcher — neither of which a virtual clock can run out. So the tests wait for the state to
  * settle with [awaitUntil] instead, which is both honest about the concurrency and short enough to
  * stay well under the search's own debounce.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val PrayerEditorSuite by testSuite("The prayer location editor") {
     test("typing searches only once the user stops") {
-        withEditor(geocoding = GeocodingClient(testHttpClient(jsonEngine(searchResults("Paris"))))) { fixture ->
+        withEditor(geocoding = GeocodingClient(testHttpClient(jsonEngine(parisSearchResults())))) { fixture ->
             fixture.state.prayer.updateSearchQuery("Paris")
 
             // The debounce means a keystroke is not yet a request.
@@ -75,7 +78,7 @@ val PrayerEditorSuite by testSuite("The prayer location editor") {
     }
 
     test("clearing the field drops the suggestions without a further search") {
-        val engine = jsonEngine(searchResults("Paris"))
+        val engine = jsonEngine(parisSearchResults())
         withEditor(geocoding = GeocodingClient(testHttpClient(engine))) { fixture ->
             fixture.state.prayer.updateSearchQuery("Paris")
             awaitUntil {
@@ -186,11 +189,11 @@ private fun paris() =
         zoneId = "Europe/Paris",
     )
 
-private fun searchResults(name: String) =
+private fun parisSearchResults() =
     """
     {
       "results": [
-        { "id": 1, "name": "$name", "latitude": 48.85, "longitude": 2.35, "timezone": "Europe/Paris", "country": "France", "admin1": "Ile-de-France" }
+        { "id": 1, "name": "Paris", "latitude": 48.85, "longitude": 2.35, "timezone": "Europe/Paris", "country": "France", "admin1": "Ile-de-France" }
       ]
     }
     """.trimIndent()

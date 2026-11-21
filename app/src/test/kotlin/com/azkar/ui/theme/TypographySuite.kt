@@ -13,7 +13,10 @@ import org.assertj.core.api.Assertions.assertThat
  * `SCALE_STEPS` is asserted separately because the slider is built from it: a step list that no
  * longer spans the clamped range produces a thumb that cannot reach either end, which is not a crash
  * and so nothing else would notice.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TypographySuite by testSuite("The reader's typeface and size") {
     test("the installed families are sorted and listed once each") {
         val installed = SystemFontCatalogue.installed
@@ -80,7 +83,10 @@ val TypographySuite by testSuite("The reader's typeface and size") {
  * end. A settings file copied to a machine with a different display configuration has to arrive
  * usable, and a card the reader cannot read is worse than a card slightly smaller than they asked
  * for.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val AppTypographySuite by testSuite("The typography value") {
     test("the default is the bundled pairing at full size") {
         assertThat(AppTypography()).isEqualTo(AppTypography(family = "", scalePercent = 100))

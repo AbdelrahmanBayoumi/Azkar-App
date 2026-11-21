@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 import java.time.Duration
 import java.time.LocalDate
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val PrayerTimeCalculatorSuite by testSuite("Configured prayer time calculation") {
     test("returns ordered local prayer times for the configured location") {
         val times =

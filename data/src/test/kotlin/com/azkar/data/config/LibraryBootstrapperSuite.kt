@@ -31,7 +31,10 @@ import java.util.Locale
  * stage it the way a deleted database leaves it — the gate set, the database empty — because
  * `TestDatabase` hands back a migrated but unseeded schema, which is exactly the state a
  * recreated file is in.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val LibraryBootstrapperSuite by testSuite("Library bootstrapper") {
     test("a first run writes the dataset and marks it seeded") {
         withContext(Dispatchers.IO) {

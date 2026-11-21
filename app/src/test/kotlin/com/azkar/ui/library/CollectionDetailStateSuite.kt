@@ -22,7 +22,10 @@ import java.util.Locale
  * reader who came here to read passages, on a page whose only two remaining controls are ones that
  * change the shape of the whole grid. A "by category" *order* survives, because ordering the members
  * under the headings they already carry is not the same act as showing only one of them.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionDetailStateSuite by testSuite("The collection detail grid") {
     test("positions are stamped in the collection's own order, not the shelf's") {
         val detail = detailWith(members = listOf(1L, 2L, 3L))

@@ -14,7 +14,10 @@ import java.util.Locale
  *
  * Ordering is for stability, not quality: nothing knows which of a user's labels is most
  * characteristic, only that the leader must not move underneath them as labels are added.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionPresenterSuite by testSuite("The mark stands for the first label") {
 
     test("a collection with no labels falls back to the default mark") {
@@ -52,7 +55,10 @@ val CollectionPresenterSuite by testSuite("The mark stands for the first label")
  * resources, which is the whole point of resolving at the edge. A presenter that reached for
  * [org.jetbrains.compose.resources.getString] would not be testable here, so these two are also the
  * test that keeps it that way.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionPresenterWordingSuite by testSuite("A card is called what its translations call it") {
     val english = Locale.ENGLISH
     val arabic = Locale.forLanguageTag("ar")

@@ -14,7 +14,10 @@ import java.time.LocalDateTime
  * what the acceptance asks for and what a wall-clock read would break: minute formatting, a tick
  * landing past the prayer moment remaining nonnegative, and a holder that has not loaded its
  * resources publishing nothing rather than a half-written line.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val PrayerTrayCountdownStateSuite by testSuite("The tray countdown clock") {
     test("remaining time shows whole minutes without seconds") {
         assertThat(formatRemaining(Duration.ofSeconds(83))).isEqualTo("1m")

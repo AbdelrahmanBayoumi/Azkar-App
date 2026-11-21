@@ -113,7 +113,8 @@ internal fun PassageReminderShot() {
 
 @Composable
 internal fun CollectionDetailShot(catalogue: CollectionsCatalogue) {
-    val collectionId = requiredCollectionId(catalogue)
+    requireScreenshotCollection(catalogue)
+    val collectionId = PREVIEW_COLLECTION_ID
     val collectionReminders = remember(collectionId) { previewReminders(collectionId) }
     val detail = rememberCollectionDetailState(catalogue, collectionId, collectionReminders)
     CollectionDetailScreen(
@@ -127,7 +128,8 @@ internal fun CollectionDetailShot(catalogue: CollectionsCatalogue) {
 
 @Composable
 internal fun CollectionSessionShot(catalogue: CollectionsCatalogue) {
-    val collectionId = requiredCollectionId(catalogue)
+    requireScreenshotCollection(catalogue)
+    val collectionId = PREVIEW_COLLECTION_ID
     val collectionReminders = remember(collectionId) { previewReminders(collectionId) }
     CollectionSessionScreen(
         session = rememberCollectionSessionState(catalogue, collectionId, collectionReminders),
@@ -139,7 +141,7 @@ internal fun CollectionSessionShot(catalogue: CollectionsCatalogue) {
 
 @Composable
 internal fun RemembranceShot(catalogue: CollectionsCatalogue) {
-    val collection = catalogue.allCollections.single { it.id == requiredCollectionId(catalogue) }
+    val collection = catalogue.allCollections.single { it.id == PREVIEW_COLLECTION_ID }
     val firstMemberId =
         requireNotNull(collection.members.firstOrNull()?.id) {
             "The screenshot collection must contain a remembrance"
@@ -151,11 +153,10 @@ internal fun RemembranceShot(catalogue: CollectionsCatalogue) {
     )
 }
 
-internal fun requiredCollectionId(catalogue: CollectionsCatalogue): Long {
+private fun requireScreenshotCollection(catalogue: CollectionsCatalogue) {
     require(catalogue.allCollections.any { it.id == PREVIEW_COLLECTION_ID }) {
         "Missing screenshot collection $PREVIEW_COLLECTION_ID"
     }
-    return PREVIEW_COLLECTION_ID
 }
 
 @Composable

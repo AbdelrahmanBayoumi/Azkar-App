@@ -14,7 +14,10 @@ import org.assertj.core.api.Assertions.assertThat
  * noticed. The sign is also the one piece of this that is genuinely easy to get wrong twice: it is
  * derived from a boolean in one place and a layout direction in another, and a page that slides the
  * wrong way reads as a bug rather than as an effect.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val PageTransitionsSuite by testSuite("Moving between pages") {
     test("a step forwards arrives from the trailing edge") {
         // Left-to-right: further in means further right, so the newcomer starts to the right of

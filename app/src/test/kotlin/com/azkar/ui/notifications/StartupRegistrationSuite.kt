@@ -17,6 +17,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.time.Duration.Companion.milliseconds
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val StartupRegistrationSuite by testSuite("Native login registration") {
     test("successful enable verifies OS state and retires the legacy launcher") {
         withStartup { fixture ->

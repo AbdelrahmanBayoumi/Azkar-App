@@ -10,7 +10,10 @@ import java.time.Instant
  * A rail that quietly reshuffles is worse than no rail, so the ordering is pinned down here rather
  * than left to a reader to infer. Each test builds its own list because testBalloon runs a suite's
  * tests concurrently and nothing mutable is shared here anyway.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val HomeCollectionsSuite by testSuite("Choosing the Home rail") {
     test("a limit of zero or less offers nothing rather than everything") {
         assertThat(HomeCollections.pick(listOf(card(1L, "Morning")), 0)).isEmpty()

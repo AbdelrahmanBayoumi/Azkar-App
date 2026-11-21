@@ -8,6 +8,8 @@ import java.nio.file.Files
 import java.sql.DriverManager
 import java.util.Properties
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val LocalDatabaseServerSuite by testSuite("Local database server") {
     test("AUTO_SERVER advertises loopback and accepts a second local connection") {
         withContext(Dispatchers.IO) {

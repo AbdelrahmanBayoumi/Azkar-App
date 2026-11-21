@@ -29,10 +29,6 @@ class RecitationService(
     /** Returns the progress recorded against every member of the collection identified by [id]. */
     suspend fun findByCollection(id: Long): List<RecitationProgress> = recitations.findByCollection(id)
 
-    /** Returns the progress recorded for [remembranceId] in each collection that holds it. */
-    suspend fun findByRemembrance(remembranceId: Long): List<RecitationProgress> =
-        recitations.findByRemembrance(remembranceId)
-
     /**
      * Returns one [RecitationSummary] per named collection that has any recited members.
      *
@@ -57,16 +53,6 @@ class RecitationService(
             require(id)
             recitations.bump(id, deltas.filterValues { it != 0 })
         }
-
-    /** Overwrites one member's count, discarding whatever it was. */
-    suspend fun setCount(
-        id: Long,
-        remembranceId: Long,
-        count: Int,
-    ) = transactions.run {
-        require(id)
-        recitations.setCount(id, remembranceId, count)
-    }
 
     /** Forgets every member's progress in the collection identified by [id]. */
     suspend fun reset(id: Long): Int =

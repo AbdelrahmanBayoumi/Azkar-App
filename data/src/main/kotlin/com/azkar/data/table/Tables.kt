@@ -147,7 +147,7 @@ object TagTable : TimestampedIdTable("tag") {
 
     init {
         // Serves `findByNameIgnoreCase` directly, since the name it is handed is folded too.
-        uniqueIndex("uq_tag__name", name)
+        index("uq_tag__name", isUnique = true, name)
     }
 }
 
@@ -381,7 +381,7 @@ object CollectionTranslationTable : TimestampedIdTable("collection_translation")
 
     init {
         // One pair per locale, and the reader looks every locale up by this pair.
-        uniqueIndex("uq_ct__collection_locale", collectionId, localeCode)
+        index("uq_ct__collection_locale", isUnique = true, collectionId, localeCode)
         index("idx_ct__by_collection", isUnique = false, collectionId)
         index("idx_ct__by_locale", isUnique = false, localeCode)
 

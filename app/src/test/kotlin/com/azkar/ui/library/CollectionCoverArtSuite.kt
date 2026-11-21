@@ -44,7 +44,10 @@ private const val PHOTO_TIMEOUT_MILLIS = 10_000L
  * itself rather than the symptom, and they pair the two cases that have to stay opposite: a cover
  * that resolves reaches the screen, and one that does not leaves the wash behind rather than a
  * hole in the grid.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionCoverArtSuite by testSuite("Collection cover art") {
     test("a stored cover resolves to the file the app copied in") {
         withCovers { storage, covers ->

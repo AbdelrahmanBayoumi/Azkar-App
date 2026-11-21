@@ -17,7 +17,10 @@ import java.util.Locale
  * The last one is what keeps the app honest. A fallback that borrowed from any other available
  * language would show a reader Arabic words they did not write, under a name they cannot edit from
  * that screen, and would look like a mistranslation rather than like the absence of one.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val LocalizedPairSuite by testSuite("Reading a name out in the reader's language") {
     val english = Locale.ENGLISH
     val arabic = Locale.forLanguageTag("ar")

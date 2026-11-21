@@ -118,7 +118,6 @@ private fun HostedSwitch(
  */
 @Composable
 private fun HostedField(
-    placeholder: String,
     onReport: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -129,7 +128,7 @@ private fun HostedField(
             value = it
             onReport(it)
         },
-        placeholder = placeholder,
+        placeholder = "Search",
         modifier = modifier.fillMaxWidth(),
     )
 }
@@ -721,7 +720,6 @@ val ControlBehaviourSuite by testSuite("Control behaviour") {
             setTrackedContent {
                 Themed {
                     HostedField(
-                        placeholder = "Search",
                         onReport = { value = it },
                         modifier = Modifier.testTag("hosted-field"),
                     )

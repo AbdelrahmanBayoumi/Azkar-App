@@ -12,6 +12,8 @@ import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val ExposedRecitationRepositorySuite by testSuite("ExposedRecitationRepository") {
     seededRemembrances {
         testSuite("recording progress") {

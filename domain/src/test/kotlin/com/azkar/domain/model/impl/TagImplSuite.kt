@@ -9,7 +9,10 @@ import java.time.Instant
  * A tag is shared by every remembrance that carries it, so the two properties that matter are
  * the one that makes two tags the same tag — the trimmed, case-folded name — and the refusal to
  * build one without a name at all.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TagImplSuite by testSuite("A tag built through TagImpl") {
     test("carries no id or creation time until it is persisted") {
         val tag = TagImpl(name = "morning")
