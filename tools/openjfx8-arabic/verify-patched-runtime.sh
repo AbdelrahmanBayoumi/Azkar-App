@@ -11,10 +11,9 @@ runtime_jdk=$(realpath "$1")
 output_directory=$(realpath -m "$2")
 script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 project_directory=$(cd "$script_directory/../.." && pwd)
-font_directory="$project_directory/Azkar/src/main/resources/com/bayoumi/fonts"
-css_directory="$project_directory/Azkar/src/main/resources/com/bayoumi/css"
+resources="$project_directory/Azkar/src/main/resources"
+font_directory="$resources/com/bayoumi/fonts"
 noto_font="$font_directory/NotoNaskhArabic-Bold.ttf"
-tajawal_medium="$font_directory/Tajawal/Tajawal-Medium.ttf"
 
 if [[ ! -x "$runtime_jdk/bin/javac" ]]; then
     echo "The runtime path must be a JDK: $runtime_jdk" >&2
@@ -40,9 +39,20 @@ runtime_options=(
     -d "$classes_directory" \
     "$script_directory/test/ArabicWrappingProbe.java" \
     "$script_directory/test/BidiPunctuationProbe.java" \
+    "$script_directory/test/ComplexWrapProbe.java" \
+    "$script_directory/test/GlyphCacheClippingProbe.java" \
+    "$script_directory/test/RendererSelectionProbe.java" \
     "$script_directory/test/NotoRasterizationProbe.java" \
     "$script_directory/test/TajawalCssProbe.java" \
-    "$script_directory/test/UnicodeTextRegressionProbe.java"
+    "$script_directory/test/UnicodeTextRegressionProbe.java" \
+    "$project_directory/Azkar/src/main/java/com/bayoumi/util/OSUtil.java" \
+    "$project_directory/Azkar/src/main/java/com/bayoumi/util/gui/ArabicTextSupport.java"
+
+"$runtime_jdk/bin/java" -cp "$classes_directory" RendererSelectionProbe native
+
+"$runtime_jdk/bin/jar" cf "$classes_directory/app-resources.jar" \
+    -C "$resources" com/bayoumi/css \
+    -C "$resources" com/bayoumi/fonts
 
 "$runtime_jdk/bin/java" \
     "${runtime_options[@]}" \
@@ -50,6 +60,20 @@ runtime_options=(
     ArabicWrappingProbe \
     "$noto_font" \
     "$output_directory/arabic-wrapping.png"
+
+"$runtime_jdk/bin/java" \
+    "${runtime_options[@]}" \
+    -cp "$classes_directory" \
+    ComplexWrapProbe "$noto_font"
+
+if [[ ${AZKAR_VERIFY_ES2:-0} == 1 ]]; then
+    "$runtime_jdk/bin/java" \
+        "${runtime_options[@]}" \
+        -Dprism.order=es2 \
+        -Dprism.forceGPU=true \
+        -cp "$classes_directory" \
+        GlyphCacheClippingProbe "$noto_font"
+fi
 
 "$runtime_jdk/bin/java" \
     "${runtime_options[@]}" \
@@ -67,11 +91,8 @@ runtime_options=(
 
 "$runtime_jdk/bin/java" \
     "${runtime_options[@]}" \
-    -cp "$classes_directory" \
+    -cp "$classes_directory:$classes_directory/app-resources.jar" \
     TajawalCssProbe \
-    "$css_directory/base.css" \
-    "$css_directory/light-theme.css" \
-    "$tajawal_medium" \
     "$output_directory/tajawal-medium.png"
 
 "$runtime_jdk/bin/java" \

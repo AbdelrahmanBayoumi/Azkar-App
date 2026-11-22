@@ -12,8 +12,9 @@ if [[ ! -d "$1" ]]; then
     exit 66
 fi
 
-source_jdk=$(realpath "$1")
-output_jdk=$(realpath -m "$2")
+source_jdk=$(realpath -- "$1")
+output_parent=$(realpath -- "$(dirname -- "$2")")
+output_jdk="${output_parent%/}/$(basename -- "$2")"
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source_jfxrt="$source_jdk/jre/lib/ext/jfxrt.jar"
 native_source="$script_dir/src/native/pango_geometry.c"
@@ -23,13 +24,13 @@ if [[ ! -x "$source_jdk/bin/javac" || ! -f "$source_jfxrt" ]]; then
     exit 65
 fi
 
-java_version=$($source_jdk/bin/java -version 2>&1 | head -n 1)
+java_version=$("$source_jdk/bin/java" -version 2>&1 | head -n 1)
 if [[ "$java_version" != *'1.8.0_'* ]]; then
     echo "Expected Java 8, found: $java_version" >&2
     exit 65
 fi
 
-if [[ -e "$output_jdk" ]]; then
+if [[ -e "$output_jdk" || -L "$output_jdk" ]]; then
     echo "Output already exists: $output_jdk" >&2
     exit 73
 fi
@@ -39,12 +40,12 @@ if [[ "$output_jdk/" == "$source_jdk/"* ]]; then
 fi
 
 if ! "$source_jdk/bin/jar" tf "$source_jfxrt" \
-    | grep -Fxq 'com/sun/javafx/font/freetype/PangoGlyphLayout.class'; then
+    | grep -Fx 'com/sun/javafx/font/freetype/PangoGlyphLayout.class' > /dev/null; then
     echo "PangoGlyphLayout is missing from $source_jfxrt" >&2
     exit 65
 fi
 
-for required_command in gcc pkg-config; do
+for required_command in gcc pkg-config unzip patch; do
     if ! command -v "$required_command" >/dev/null 2>&1; then
         echo "Required build command not found: $required_command" >&2
         exit 69
@@ -65,25 +66,36 @@ if [[ ${#source_pango_libraries[@]} -ne 1 ]]; then
 fi
 source_native_dir=$(dirname "${source_pango_libraries[0]}")
 relative_native_dir=${source_native_dir#"$source_jdk/"}
+native_library=libjavafx_font_pango_geometry.so
 
-classes_dir=$(mktemp -d)
-output_owned=false
-
-cleanup() {
-    local exit_status=$?
-    rm -rf -- "$classes_dir"
-    if [[ $exit_status -ne 0 && "$output_owned" == true ]]; then
-        rm -rf -- "$output_jdk"
-    fi
-    return "$exit_status"
+require_private_patch_paths() {
+    local jdk=$1 relative
+    for relative in jre/lib/ext/jfxrt.jar "$relative_native_dir" "$relative_native_dir/$native_library"; do
+        if [[ $(realpath -m -- "$jdk/$relative") != "$jdk/$relative" ]]; then
+            echo "Refusing symlink in JavaFX patch path: $jdk/$relative" >&2
+            return 1
+        fi
+    done
 }
 
-trap cleanup EXIT
+require_private_patch_paths "$source_jdk"
+
+classes_dir=$(mktemp -d)
+trap 'rm -rf -- "$classes_dir"' EXIT
+
+for class in TextRun PrismTextLayout; do
+    unzip -p "$source_jdk/openjfx-src.zip" "com/sun/javafx/text/$class.java" > "$classes_dir/$class.java"
+done
+unzip -p "$source_jdk/openjfx-src.zip" com/sun/prism/impl/GlyphCache.java > "$classes_dir/GlyphCache.java"
+patch --batch --forward --fuzz=0 -d "$classes_dir" -p2 < "$script_dir/src/text-layout.patch"
 
 patch_sources=(
     "$script_dir/src/com/sun/javafx/font/freetype/PangoGlyphLayout.java"
     "$script_dir/src/com/sun/javafx/font/freetype/PangoGlyphString.java"
     "$script_dir/src/com/sun/javafx/font/freetype/PangoGlyphGeometry.java"
+    "$classes_dir/TextRun.java"
+    "$classes_dir/PrismTextLayout.java"
+    "$classes_dir/GlyphCache.java"
 )
 
 "$source_jdk/bin/javac" \
@@ -96,7 +108,7 @@ patch_sources=(
 
 read -r -a pango_cflags <<< "$(pkg-config --cflags pangoft2)"
 read -r -a pango_libraries <<< "$(pkg-config --libs pangoft2)"
-native_patch="$classes_dir/libjavafx_font_pango_geometry.so"
+native_patch="$classes_dir/$native_library"
 gcc \
     -std=c99 \
     -O2 \
@@ -113,19 +125,24 @@ gcc \
     -o "$native_patch" \
     "${pango_libraries[@]}"
 
-output_owned=true
-cp -a "$source_jdk" "$output_jdk"
+mkdir -- "$output_jdk"
+# Leave an incomplete output for inspection on failure. Cleanup owns only classes_dir.
+cp -a -- "$source_jdk/." "$output_jdk/"
+require_private_patch_paths "$output_jdk"
 patched_jfxrt="$output_jdk/jre/lib/ext/jfxrt.jar"
 
 "$source_jdk/bin/jar" uf "$patched_jfxrt" \
     -C "$classes_dir" com/sun/javafx/font/freetype/PangoGlyphLayout.class \
     -C "$classes_dir" 'com/sun/javafx/font/freetype/PangoGlyphLayout$Utf8Buffer.class' \
     -C "$classes_dir" com/sun/javafx/font/freetype/PangoGlyphString.class \
-    -C "$classes_dir" com/sun/javafx/font/freetype/PangoGlyphGeometry.class
+    -C "$classes_dir" com/sun/javafx/font/freetype/PangoGlyphGeometry.class \
+    -C "$classes_dir" com/sun/javafx/text/TextRun.class \
+    -C "$classes_dir" com/sun/javafx/text/PrismTextLayout.class \
+    -C "$classes_dir" com/sun/prism/impl/GlyphCache.class
 
 install -m 0755 \
     "$native_patch" \
-    "$output_jdk/$relative_native_dir/libjavafx_font_pango_geometry.so"
+    "$output_jdk/$relative_native_dir/$native_library"
 
 echo "Patched JavaFX runtime created at: $output_jdk"
 echo "Installed Pango glyph geometry bridge in: $relative_native_dir"

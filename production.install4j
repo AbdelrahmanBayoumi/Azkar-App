@@ -1218,10 +1218,10 @@ return true;</property>
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_271" />
     </windows>
     <unixInstaller name="Unix Installer" id="806">
-      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
+      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_512_azkar" />
     </unixInstaller>
-    <linuxDeb name="Linux Deb Archive" id="807">
-      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_221" />
+    <linuxDeb name="Linux Deb Archive" id="807" architectureSet="true" architecture="amd64">
+      <jreBundle jreBundleSource="preCreated" includedJre="linux-amd64-1.8.0_512_azkar" />
     </linuxDeb>
   </mediaSets>
   <buildIds>

@@ -42,20 +42,12 @@ mvn -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 clean test jfx:jar
 cd ..
 ```
 
-Running plain `install4jc production.install4j` attempts to build all configured media sets, which requires JRE bundles for all platforms.
-The project selects all four release media sets, so `--build-selected` has the
-same bundle requirement:
+Use `--build-ids` to choose media for your target platform. Running plain
+`install4jc production.install4j` builds all configured media and requires
+the corresponding JRE bundles. `--build-selected` uses the two Windows media
+selected in the project.
 
 ```bash
-install4jc --test --build-selected production.install4j
-```
-
-To build media sets for your target platform, specify `--build-ids`:
-
-```bash
-# Linux: Unix installer (806) and Debian archive (807)
-install4jc --test --build-ids=806,807 production.install4j
-
 # Windows: 64-bit (60) and 32-bit (792) installers
 install4jc --test --build-ids=60,792 production.install4j
 ```
@@ -63,3 +55,28 @@ install4jc --test --build-ids=60,792 production.install4j
 Remove `--test` to create release artifacts. Each build host must have the
 pre-created JRE bundles referenced by its selected media in
 `production.install4j`.
+
+### Linux installers
+
+Both Linux x86-64 media use `linux-amd64-1.8.0_512_azkar.tar.gz`. Build it
+from the ZuluFX 8u512 Linux x64 JDK with its matching OpenJFX sources and
+verify the patched runtime before packaging. Run these commands from the
+repository root on Linux, with install4j 8 and its `bin` directory on `PATH`.
+
+```bash
+ZULU8_JDK=/path/to/zulu-fx-8u512-jdk
+PATCHED_ZULU8=/tmp/azkar-zulu8u512-patched
+tools/openjfx8-arabic/build-patched-runtime.sh "$ZULU8_JDK" "$PATCHED_ZULU8"
+tools/openjfx8-arabic/verify-patched-runtime.sh "$PATCHED_ZULU8" /tmp/azkar-rendering-check
+
+mkdir -p "$HOME/.install4j8/jres"
+createbundle --id azkar --output "$HOME/.install4j8/jres" "$PATCHED_ZULU8/jre"
+install4jc --build-ids=806,807 production.install4j
+```
+
+The verifier needs an X display. See the [runtime patch guide](../../tools/openjfx8-arabic/README.md)
+for build dependencies and the ES2 clipping check. If install4j cannot find
+the bundle, check the filename and the pre-created JRE directory used by the
+compiler. The generated Debian archive must report `amd64` in its
+`Architecture` field. The packaged runtime uses the system's GTK, FreeType,
+Fontconfig, and Pango libraries.

@@ -26,16 +26,29 @@ import com.sun.glass.utils.NativeLibLoader;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-final class PangoGlyphGeometry {
-    static {
-        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            NativeLibLoader.loadLibrary("javafx_font_pango_geometry");
-            return null;
-        });
+public final class PangoGlyphGeometry {
+    private static final boolean AVAILABLE = loadBridge();
+
+    private static boolean loadBridge() {
+        try {
+            AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+                NativeLibLoader.loadLibrary("javafx_font_pango_geometry");
+                return null;
+            });
+            // The old bridge exposed shape(), which did not return absolute byte clusters.
+            shapeUtf8Clusters(0, 0);
+            return true;
+        } catch (UnsatisfiedLinkError unavailable) {
+            return false;
+        }
+    }
+
+    public static boolean isAvailable() {
+        return AVAILABLE;
     }
 
     private PangoGlyphGeometry() {
     }
 
-    static native PangoGlyphString shape(long text, long pangoItem);
+    static native PangoGlyphString shapeUtf8Clusters(long text, long pangoItem);
 }

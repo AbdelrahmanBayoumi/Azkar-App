@@ -23,6 +23,7 @@
 package com.sun.javafx.font.freetype;
 
 class PangoGlyphString {
+    // Keep the stock JNI fields for runtimes where the geometry library cannot load.
     int offset;
     int length;
     int num_chars;
@@ -30,7 +31,36 @@ class PangoGlyphString {
     int num_glyphs;
     int[] glyphs;
     int[] widths;
-    int[] xOffsets;
-    int[] yOffsets;
     int[] log_clusters;
+    int slot;
+    private int[] geometry;
+
+    PangoGlyphString() {
+    }
+
+    PangoGlyphString(long font, int[] geometry) {
+        this.font = font;
+        this.num_glyphs = geometry.length / 5;
+        this.geometry = geometry;
+    }
+
+    int glyphAt(int index) {
+        return geometry == null ? glyphs[index] : geometry[index];
+    }
+
+    int widthAt(int index) {
+        return geometry == null ? widths[index] : geometry[num_glyphs + index];
+    }
+
+    int xOffsetAt(int index) {
+        return geometry == null ? 0 : geometry[2 * num_glyphs + index];
+    }
+
+    int yOffsetAt(int index) {
+        return geometry == null ? 0 : geometry[3 * num_glyphs + index];
+    }
+
+    int clusterAt(int index) {
+        return geometry == null ? log_clusters[index] : geometry[4 * num_glyphs + index];
+    }
 }

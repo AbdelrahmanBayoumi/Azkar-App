@@ -1,14 +1,12 @@
 # OpenJFX 8 Arabic text patch
 
-This directory builds an isolated ZuluFX 8 runtime for Azkar on Linux. It does
-not edit the JDK passed as the source. The build script first copies that JDK to
-a new output path, then replaces the affected Pango layout classes inside the
-copied `jfxrt.jar` and adds a small glyph-geometry bridge beside the copied
-JavaFX native libraries.
+This directory builds an isolated ZuluFX 8 runtime for Azkar on Linux. The
+builder compiles against the source JDK, copies it to a new output path, then
+patches the layout and rendering classes in the copy's `jfxrt.jar`. It places
+a glyph-geometry bridge beside the copied JavaFX native libraries.
 
-The patch is currently verified against ZuluFX 8u492
-(`Zulu 8.94.0.17-CA-linux64`). Treat other ZuluFX 8 builds as unverified until
-the included probes pass on them.
+The patch targets ZuluFX 8 on Linux x86-64. Run the verifier on each JDK build
+you intend to distribute.
 
 ## Why the patch is needed
 
@@ -29,19 +27,26 @@ JavaFX 8 has a second, independent defect in the same path. Pango returns a
 width, horizontal offset, and vertical offset for every shaped glyph, but the
 JavaFX bridge retains only the width. Arabic combining marks therefore render
 at the pen position instead of their shaped positions. The patch retains the
-two offsets, applies them to each glyph, and keeps the line advance equal to
-the sum of Pango's widths.
+two offsets for drawing, and uses the logical advances for wrapping and text
+hit testing. It assembles each RTL run's Pango items in visual order, maps
+their UTF-8 cluster offsets to UTF-16, and keeps surrogate pairs intact at
+forced line breaks. Prism clips the rendered pixels of positioned glyphs so
+a mark outside the clip cannot hide a visible part of its base letter.
 
 `PangoGlyphLayout.java` and `PangoGlyphString.java` originate from the OpenJFX
 sources shipped with the JDK. `PangoGlyphGeometry.java` and
 `src/native/pango_geometry.c` form the small JNI bridge used to preserve the
 missing geometry. Their license is in [`LICENSE.openjfx`](LICENSE.openjfx).
+The builder applies [the text layout patch](src/text-layout.patch) to
+`TextRun.java`, `PrismTextLayout.java`, and `GlyphCache.java` from the input
+JDK's OpenJFX sources.
 
 ## Oracle 8 and OpenJFX do not use the same text renderer
 
-Azkar selects `prism.text=native` on Linux so JavaFX uses FreeType and Pango for
-complex glyph layout. It retains the legacy T2K selection on other operating
-systems. Oracle 8u221 contains T2K; the tested ZuluFX 8 build does not.
+Azkar selects `prism.text=native` with LCD text on Linux when the patched JNI
+bridge loads. Other runtimes keep the previous T2K preference with LCD text
+disabled. Oracle 8u221 contains T2K. ZuluFX 8 uses its available font backend
+when T2K is absent.
 
 This explains two expected differences from the old Oracle runtime:
 
@@ -50,11 +55,6 @@ This explains two expected differences from the old Oracle runtime:
 - The same embedded Noto Bold file can still have different antialiasing under
   T2K and FreeType; shaped mark positions must remain attached to their base
   letters in both renderers.
-
-The cache patch changes the stale-buffer wrapping case. The geometry patch
-changes glyph positions only; it does not change font outlines, weight,
-antialiasing, or bidi metadata. Do not swap brackets in application data or
-add synthetic font weight to imitate T2K.
 
 ## Build an isolated runtime
 
@@ -69,11 +69,16 @@ tools/openjfx8-arabic/build-patched-runtime.sh \
     "$PATCHED_ZULU8"
 ```
 
-The script requires a Java 8 JDK that contains `bin/javac`,
-`jre/lib/ext/jfxrt.jar`, one `libjavafx_font_pango.so`, and the matching JNI
-headers. The build host must provide `gcc`, `pkg-config`, and the `pangoft2`
-development metadata and headers. The script exits without replacing anything
-when the output path already exists.
+The script requires a Java 8 JDK with `bin/javac`, `jre/lib/ext/jfxrt.jar`,
+one `libjavafx_font_pango.so`, JNI headers, and its matching `openjfx-src.zip`.
+The build host needs `gcc`, `pkg-config`, `unzip`, `patch`, and the
+`pangoft2` development metadata and headers. The destination's parent must
+exist. The builder rejects symlinks in paths it needs to patch and claims the
+output directory atomically. If the copy or patch fails after that claim, the
+incomplete output remains for inspection. Use a fresh destination for retries.
+
+Run `bash tools/openjfx8-arabic/test/builder-safety.sh "$ZULU8_JDK"` to verify
+that the builder rejects a shared JRE and preserves a competing output path.
 
 ## Verify Arabic rendering
 
@@ -85,11 +90,19 @@ tools/openjfx8-arabic/verify-patched-runtime.sh \
     /tmp/azkar-zulu8-verification
 ```
 
-The verifier compiles and runs five JavaFX 8 probes:
+The verifier checks renderer selection and runs the JavaFX 8 probes below.
+Install DejaVu Sans for the mixed Arabic and emoji wrapping check. Set
+`AZKAR_VERIFY_ES2=1` on a display with OpenGL support to exercise the accelerated
+glyph cache. With Xvfb and Mesa, set `LIBGL_ALWAYS_SOFTWARE=1` to use software
+OpenGL for that check.
 
 - `ArabicWrappingProbe` snapshots the affected Arabic `TextFlow` and requires
   four visual lines. Unmodified ZuluFX 8u492 produces three lines on the tested
   system, so this is a discriminating regression check.
+- `ComplexWrapProbe` checks surrogate-pair boundaries, retained glyphs, logical
+  advances, and the wrap point in an RTL run containing an emoji.
+- `GlyphCacheClippingProbe` compares the pixels inside an accelerated clip
+  with the matching pixels in an unclipped rendering of `بَ`.
 - `BidiPunctuationProbe` snapshots the application's real mixed Arabic,
   numeric, ASCII-bracket, and ornate-parenthesis samples. It also asserts the
   Java Unicode mirroring metadata used to interpret those pairs. Keep its
@@ -100,8 +113,8 @@ The verifier compiles and runs five JavaFX 8 probes:
   offset, records the selected family, name, style, and size, and retains a
   screenshot for renderer comparisons. The unmodified tested ZuluFX fails this
   offset assertion.
-- `TajawalCssProbe` requires the embedded Medium font and the
-  `.font-text-medium` CSS class to resolve to `Azkar Tajawal Medium`.
+- `TajawalCssProbe` loads the stylesheets and font from JAR resources, then
+  checks that `.font-text-medium` resolves to `Azkar Tajawal Medium`.
 - `UnicodeTextRegressionProbe` renders both Unicode ranges used by the two
   reproducers attached to JDK-8246348, guarding against its native Pango crash.
 
@@ -116,9 +129,8 @@ JAVA_HOME="$PATCHED_ZULU8" \
     mvn -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 test
 ```
 
-For a distributable Linux runtime, package the isolated output JDK according
-to the application's release process. Review the JDK vendor's redistribution
-terms as well as [`LICENSE.openjfx`](LICENSE.openjfx) before distributing it.
+See the [Linux installer build steps](../../Azkar/docs/README.md#linux-installers)
+to package the patched ZuluFX 8u512 JRE.
 
 ## Separate Tajawal correction
 

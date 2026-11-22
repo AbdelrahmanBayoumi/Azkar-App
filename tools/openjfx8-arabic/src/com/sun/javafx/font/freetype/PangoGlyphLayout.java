@@ -88,11 +88,30 @@ class PangoGlyphLayout extends GlyphLayout {
         private final long address;
         private final int start;
         private final int end;
+        private final String text;
+        private final int[] byteToUtf16;
 
-        private Utf8Buffer(long address, int start, int end) {
-            this.address = address;
+        private Utf8Buffer(int start, int end, char[] slice) {
             this.start = start;
             this.end = end;
+            this.text = new String(slice);
+            this.byteToUtf16 = new int[text.length() * 3 + 1];
+            int byteOffset = 0;
+            for (int offset = 0; offset < text.length();) {
+                int codePoint = text.codePointAt(offset);
+                byteToUtf16[byteOffset] = offset;
+                byteOffset += utf8Length(codePoint);
+                offset += Character.charCount(codePoint);
+            }
+            byteToUtf16[byteOffset] = text.length();
+            this.address = OSPango.g_utf16_to_utf8(slice);
+        }
+
+        private int clusterIndex(PangoGlyphString shaped, int glyph) {
+            if (PangoGlyphGeometry.isAvailable()) {
+                return byteToUtf16[shaped.clusterAt(glyph)];
+            }
+            return text.offsetByCodePoints(byteToUtf16[shaped.offset], shaped.clusterAt(glyph));
         }
 
         private boolean matches(TextRun run) {
@@ -100,7 +119,13 @@ class PangoGlyphLayout extends GlyphLayout {
         }
     }
 
-    private Map<TextRun, Utf8Buffer> runUtf8 = new LinkedHashMap<>();
+    private static int utf8Length(int codePoint) {
+        if (codePoint < 0x80) return 1;
+        if (codePoint < 0x800) return 2;
+        return Character.isSupplementaryCodePoint(codePoint) ? 4 : 3;
+    }
+
+    private final Map<TextRun, Utf8Buffer> runUtf8 = new LinkedHashMap<>();
 
     public void layout(TextRun run, PGFont font, FontStrike strike, char[] text) {
         /* Create the pango font and attribute list */
@@ -146,91 +171,110 @@ class PangoGlyphLayout extends GlyphLayout {
             OSPango.pango_attr_list_insert(attrList, attr);
         }
 
-        Utf8Buffer utf8Buffer = runUtf8.get(run);
-        if (utf8Buffer != null && !utf8Buffer.matches(run)) {
-            OSPango.g_free(utf8Buffer.address);
+        try {
+            Utf8Buffer buffer = utf8Buffer(run, text);
+            if (buffer != null) {
+                long length = OSPango.g_utf8_strlen(buffer.address, -1);
+                long end = OSPango.g_utf8_offset_to_pointer(buffer.address, length);
+                long items = OSPango.pango_itemize(
+                        context, buffer.address, 0, (int)(end - buffer.address), attrList, 0);
+                if (items != 0) {
+                    shapeRun(run, font.getSize(), buffer, shapeItems(items, buffer.address, font));
+                }
+            }
+        } finally {
+            check(0, null, context, desc, attrList);
+        }
+    }
+
+    private Utf8Buffer utf8Buffer(TextRun run, char[] text) {
+        Utf8Buffer cached = runUtf8.get(run);
+        if (cached != null) {
+            if (cached.matches(run)) return cached;
+            OSPango.g_free(cached.address);
             runUtf8.remove(run);
-            utf8Buffer = null;
         }
-        if (utf8Buffer == null) {
-            int start = run.getStart();
-            int end = run.getEnd();
-            char[] runText = Arrays.copyOfRange(text, start, end);
-            long address = OSPango.g_utf16_to_utf8(runText);
-            if (check(address, "Failed allocating UTF-8 buffer.", context, desc, attrList)) {
-                return;
+        char[] slice = Arrays.copyOfRange(text, run.getStart(), run.getEnd());
+        replaceUnpairedSurrogates(slice);
+        Utf8Buffer buffer = new Utf8Buffer(run.getStart(), run.getEnd(), slice);
+        if (buffer.address == 0) return null;
+        runUtf8.put(run, buffer);
+        return buffer;
+    }
+
+    private static void replaceUnpairedSurrogates(char[] slice) {
+        for (int index = 0; index < slice.length; index++) {
+            char ch = slice[index];
+            if (Character.isHighSurrogate(ch) && index + 1 < slice.length
+                    && Character.isLowSurrogate(slice[index + 1])) {
+                index++;
+            } else if (Character.isSurrogate(ch)) {
+                slice[index] = '\uFFFD';
             }
-            utf8Buffer = new Utf8Buffer(address, start, end);
-            runUtf8.put(run, utf8Buffer);
         }
-        long str = utf8Buffer.address;
+    }
 
-        /* Itemize */
-        long utflen = OSPango.g_utf8_strlen(str,-1);
-        long end = OSPango.g_utf8_offset_to_pointer(str, utflen);
-        long runs = OSPango.pango_itemize(context, str, 0, (int)(end - str), attrList, 0);
-
-        if (runs != 0) {
-            /* Shape all PangoItem into PangoGlyphString */
-            int runsCount = OSPango.g_list_length(runs);
-            PangoGlyphString[] pangoGlyphs = new PangoGlyphString[runsCount];
-            for (int i = 0; i < runsCount; i++) {
-                long pangoItem = OSPango.g_list_nth_data(runs, i);
-                if (pangoItem != 0) {
-                    pangoGlyphs[i] = PangoGlyphGeometry.shape(str, pangoItem);
-                    OSPango.pango_item_free(pangoItem);
+    private PangoGlyphString[] shapeItems(long items, long text, PGFont font) {
+        int count = OSPango.g_list_length(items);
+        boolean composite = font.getFontResource() instanceof CompositeFontResource;
+        try {
+            PangoGlyphString[] shaped = new PangoGlyphString[count];
+            for (int index = 0; index < count; index++) {
+                long item = OSPango.g_list_nth_data(items, index);
+                if (item == 0) continue;
+                PangoGlyphString glyphs = PangoGlyphGeometry.isAvailable()
+                        ? PangoGlyphGeometry.shapeUtf8Clusters(text, item) : OSPango.pango_shape(text, item);
+                if (glyphs != null) {
+                    // The item holds a reference to the font used to identify the slot.
+                    glyphs.slot = composite ? getSlot(font, glyphs) : 0;
+                    shaped[index] = glyphs;
                 }
             }
-            OSPango.g_list_free(runs);
-
-            int glyphCount = 0;
-            for (PangoGlyphString g : pangoGlyphs) {
-                if (g != null) {
-                    glyphCount += g.num_glyphs;
-                }
+            return shaped;
+        } finally {
+            for (int index = 0; index < count; index++) {
+                long item = OSPango.g_list_nth_data(items, index);
+                if (item != 0) OSPango.pango_item_free(item);
             }
-            int[] glyphs = new int[glyphCount];
-            float[] pos = new float[glyphCount * 2 + 2];
-            int[] indices = new int[glyphCount];
-            int gi = 0;
-            int ci = rtl ? run.getLength() : 0;
-            int width = 0;
-            for (PangoGlyphString g : pangoGlyphs) {
-                if (g != null) {
-                    int slot = composite ? getSlot(font, g) : 0;
-                    if (rtl) ci -= g.num_chars;
-                    for (int i = 0; i < g.num_glyphs; i++) {
-                        int gii = gi + i;
-                        if (slot != -1) {
-                            int gg = g.glyphs[i];
+            OSPango.g_list_free(items);
+        }
+    }
 
-                            /* Ignoring any glyphs outside the GLYPHMASK range.
-                             * Note that Pango uses PANGO_GLYPH_EMPTY (0x0FFFFFFF), PANGO_GLYPH_INVALID_INPUT (0xFFFFFFFF),
-                             * and other values with special meaning.
-                             */
-                            if (0 <= gg && gg <= CompositeGlyphMapper.GLYPHMASK) {
-                                glyphs[gii] = (slot << 24) | gg;
-                            }
-                        }
-                        if (size != 0) {
-                            int positionIndex = gii << 1;
-                            pos[positionIndex] = ((float)(width + g.xOffsets[i])) /
-                                    OSPango.PANGO_SCALE;
-                            pos[positionIndex + 1] = ((float)g.yOffsets[i]) /
-                                    OSPango.PANGO_SCALE;
-                            width += g.widths[i];
-                        }
-                        indices[gii] = g.log_clusters[i] + ci;
+    private static void shapeRun(TextRun run, float size, Utf8Buffer buffer, PangoGlyphString[] items) {
+        int count = 0;
+        for (PangoGlyphString item : items) {
+            if (item != null) count += item.num_glyphs;
+        }
+        int[] glyphs = new int[count];
+        int[] clusters = new int[count];
+        float[] positions = new float[2 * (count + 1)];
+        float[] xOffsets = null;
+        int index = 0;
+        long advance = 0;
+        for (int visualIndex = 0; visualIndex < items.length; visualIndex++) {
+            // Itemization is logical; each item's glyphs are already in visual order.
+            int itemIndex = run.isLeftToRight() ? visualIndex : items.length - 1 - visualIndex;
+            PangoGlyphString item = items[itemIndex];
+            if (item == null) continue;
+            for (int glyph = 0; glyph < item.num_glyphs; glyph++, index++) {
+                int id = item.glyphAt(glyph);
+                if (item.slot != -1 && 0 <= id && id <= CompositeGlyphMapper.GLYPHMASK) {
+                    glyphs[index] = (item.slot << 24) | id;
+                }
+                clusters[index] = buffer.clusterIndex(item, glyph);
+                if (size != 0) {
+                    positions[2 * index + 1] = (float)item.yOffsetAt(glyph) / OSPango.PANGO_SCALE;
+                    int xOffset = item.xOffsetAt(glyph);
+                    if (xOffset != 0) {
+                        if (xOffsets == null) xOffsets = new float[count];
+                        xOffsets[index] = (float)xOffset / OSPango.PANGO_SCALE;
                     }
-                    if (!rtl) ci += g.num_chars;
-                    gi += g.num_glyphs;
+                    advance += item.widthAt(glyph);
+                    positions[2 * (index + 1)] = (float)advance / OSPango.PANGO_SCALE;
                 }
             }
-            pos[glyphCount << 1] = ((float)width) / OSPango.PANGO_SCALE;
-            run.shape(glyphCount, glyphs, pos, indices);
         }
-
-        check(0, null, context, desc, attrList);
+        run.shape(count, glyphs, positions, clusters, xOffsets);
     }
 
     @Override

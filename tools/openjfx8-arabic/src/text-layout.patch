@@ -1,0 +1,161 @@
+--- a/orig/PrismTextLayout.java
++++ b/revised/PrismTextLayout.java
+@@ -1139,6 +1139,13 @@
+                     if (breakOffsetInRun == 0) {
+                         breakOffsetInRun++;
+                     }
++                    // Forced character wrapping must advance past a whole UTF-16 pair.
++                    int splitOffset = breakRun.getStart() + breakOffsetInRun;
++                    if (splitOffset < breakRun.getEnd()
++                            && Character.isHighSurrogate(chars[splitOffset - 1])
++                            && Character.isLowSurrogate(chars[splitOffset])) {
++                        breakOffsetInRun++;
++                    }
+                     if (breakOffsetInRun < breakRun.getLength()) {
+                         if (runCount >= runs.length) {
+                             TextRun[] newRuns = new TextRun[runs.length + 64];
+--- a/orig/TextRun.java
++++ b/revised/TextRun.java
+@@ -35,6 +35,7 @@
+     int glyphCount;
+     int[] gids;
+     float[] positions;
++    private float[] glyphXOffsets;
+     int[] charIndices;
+     int start, length;
+     float width = -1;
+@@ -256,7 +257,7 @@
+     }
+ 
+     public int getWrapIndex(float width) {
+-        if (glyphCount == 0) return 0;
++        if (glyphCount == 0 || width <= 0) return 0;
+         if (isLeftToRight()) {
+             int gi = 0;
+             if ((flags & FLAGS_COMPACT) != 0) {
+@@ -285,15 +286,11 @@
+              * should only be used when the run has contextual shaping.
+              */
+             /* Not need to check for compact as bidi disables the simple case */
+-            int gi = 0;
+-            float runWidth = positions[glyphCount<<1];
+-            while (runWidth > width) {
+-                float glyphWidth = positions[(gi+1)<<1] - positions[gi<<1];
+-                if (runWidth - glyphWidth <= width) {
++            float runWidth = positions[glyphCount << 1];
++            for (int gi = 0; gi < glyphCount && runWidth > width; gi++) {
++                if (runWidth - positions[(gi + 1) << 1] <= width) {
+                     return getCharOffset(gi);
+                 }
+-                runWidth -= glyphWidth;
+-                gi++;
+             }
+         }
+         return 0;
+@@ -317,6 +314,12 @@
+     float cacheWidth = 0;
+     int cacheIndex = 0;
+     @Override public float getPosX(int glyphIndex) {
++        float advancePosition = getLogicalX(glyphIndex);
++        return glyphXOffsets != null && 0 <= glyphIndex && glyphIndex < glyphCount
++                ? advancePosition + glyphXOffsets[glyphIndex] : advancePosition;
++    }
++
++    private float getLogicalX(int glyphIndex) {
+         if (0 <= glyphIndex && glyphIndex <= glyphCount) {
+             if ((flags & FLAGS_COMPACT) != 0) {
+                 if (cacheIndex == glyphIndex) return cacheWidth;
+@@ -338,6 +341,10 @@
+         return glyphIndex == 0 ? 0 : getWidth();
+     }
+ 
++    public boolean hasGlyphXOffsets() {
++        return glyphXOffsets != null;
++    }
++
+     @Override public float getPosY(int glyphIndex) {
+         if ((flags & FLAGS_COMPACT) != 0) return 0;
+         if (0 <= glyphIndex && glyphIndex <= glyphCount) {
+@@ -355,10 +362,15 @@
+     }
+ 
+     public void shape(int count, int[] glyphs, float[] pos, int[] indices) {
++        shape(count, glyphs, pos, indices, null);
++    }
++
++    public void shape(int count, int[] glyphs, float[] pos, int[] indices, float[] xOffsets) {
+         this.glyphCount = count;
+         this.gids = glyphs;
+         this.positions = pos;
+         this.charIndices = indices;
++        this.glyphXOffsets = xOffsets;
+     }
+ 
+     public void shape(int count, int[] glyphs, float[] pos) {
+@@ -366,6 +378,7 @@
+         this.gids = glyphs;
+         this.positions = pos;
+         this.charIndices = null;
++        this.glyphXOffsets = null;
+         this.flags |= FLAGS_COMPACT;
+     }
+ 
+@@ -377,9 +390,9 @@
+         if (glyphCount > 0) {
+             int glyphIndex = getGlyphIndex(offset);
+             if (ltr) {
+-                return getPosX(glyphIndex + (leading ? 0 : 1));
++                return getLogicalX(glyphIndex + (leading ? 0 : 1));
+             } else {
+-                return getPosX(glyphIndex + (leading ? 1 : 0));
++                return getLogicalX(glyphIndex + (leading ? 1 : 0));
+             }
+         }
+         if (isTab()) {
+@@ -432,6 +445,7 @@
+ 
+     private void reset() {
+         positions = null;
++        glyphXOffsets = null;
+         charIndices = null;
+         gids = null;
+         width = -1;
+@@ -502,7 +516,7 @@
+     public TextRun unwrap() {
+         TextRun newRun = new TextRun(start, length, level, isComplex(),
+                                      script, span, slot, isCanonical());
+-        newRun.shape(glyphCount, gids, positions);
++        newRun.shape(glyphCount, gids, positions, charIndices, glyphXOffsets);
+         newRun.setWidth(width);
+         newRun.setMetrics(ascent, descent, leading);
+         /* do not clear SPLIT here as it is still needed for merging */
+--- a/orig/GlyphCache.java
++++ b/revised/GlyphCache.java
+@@ -35,6 +35,7 @@
+ import com.sun.javafx.geom.Point2D;
+ import com.sun.javafx.geom.transform.BaseTransform;
+ import com.sun.javafx.scene.text.GlyphList;
++import com.sun.javafx.text.TextRun;
+ import com.sun.prism.impl.packrect.RectanglePacker;
+ import com.sun.prism.Texture;
+ import com.sun.prism.impl.shape.MaskData;
+@@ -131,6 +132,10 @@
+         VertexBuffer vb = ctx.getVertexBuffer();
+ 
+         int len = gl.getGlyphCount();
++        // Positioned marks may precede a visible base with a smaller x.
++        // Let Prism's clip handle those runs without origin-based early culling.
++        boolean cullByOrigin = clip != null
++                && (!(gl instanceof TextRun) || !((TextRun) gl).hasGlyphXOffsets());
+         Color currentColor = null;
+         Point2D pt = new Point2D();
+ 
+@@ -147,7 +152,7 @@
+             int subPixel = strike.getQuantizedPosition(pt);
+             GlyphData data = getCachedGlyph(gc, subPixel);
+             if (data != null) {
+-                if (clip != null) {
++                if (cullByOrigin) {
+                     // Always check clipping using user space.
+                     if (x + gl.getPosX(gi) > clip.getMaxX()) break;
+                     if (x + gl.getPosX(gi + 1) < clip.getMinX()) continue;
