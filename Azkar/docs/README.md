@@ -7,6 +7,7 @@ This directory contains technical documentation, architecture decisions, and res
 | Document | Description |
 |---|---|
 | [System Tray Integration](system-tray/README.md) | How the system tray works on Linux/Windows, platform split (Windows AWT / Linux Dorkbox), and library comparison research. |
+| [Arabic rendering on Linux](linux-arabic-rendering.md) | Fixes, verification results, installer smoke tests, and release checks. |
 
 ## Quick Links
 
