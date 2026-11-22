@@ -29,6 +29,7 @@ import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.settingsAudioTitle
 import com.azkar.generated.resources.settingsClose
 import com.azkar.generated.resources.settingsCloseKey
+import com.azkar.generated.resources.settingsDesktopPrayerTitle
 import com.azkar.generated.resources.settingsGroupGeneral
 import com.azkar.generated.resources.settingsGroupPrayer
 import com.azkar.generated.resources.settingsGroupReminders
@@ -142,6 +143,7 @@ enum class SettingsSection(
     REMINDER_CARD(SettingsGroup.REMINDERS),
     PRAYER_CALCULATION(SettingsGroup.PRAYER),
     PRAYER_LOCATION(SettingsGroup.PRAYER),
+    PRAYER_PANEL(SettingsGroup.PRAYER),
     AUDIO(SettingsGroup.PRAYER),
 }
 
@@ -158,6 +160,7 @@ fun settingsSectionLabel(section: SettingsSection): String =
         SettingsSection.REMINDER_SCHEDULE -> stringResource(Res.string.settingsNotificationsScheduleTitle)
         SettingsSection.PRAYER_LOCATION -> stringResource(Res.string.settingsPrayerLocationTitle)
         SettingsSection.PRAYER_CALCULATION -> stringResource(Res.string.settingsPrayerCalculationTitle)
+        SettingsSection.PRAYER_PANEL -> stringResource(Res.string.settingsDesktopPrayerTitle)
         SettingsSection.AUDIO -> stringResource(Res.string.settingsAudioTitle)
     }
 
@@ -172,7 +175,10 @@ fun settingsGroupLabel(group: SettingsGroup): String =
 
 /** The blocks filed under one family, in reading order. */
 val SettingsGroup.sections: List<SettingsSection>
-    get() = SettingsSection.entries.filter { it.group == this }
+    get() =
+        SettingsSection.entries.filter {
+            it.group == this && (it != SettingsSection.PRAYER_PANEL || DesktopPrayerPanel.current != null)
+        }
 
 /**
  * One block: its name, a sentence about it, the rule under both, and everything it holds.

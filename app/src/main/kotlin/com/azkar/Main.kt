@@ -2,6 +2,7 @@ package com.azkar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,13 +44,13 @@ import com.azkar.ui.notifications.presentation.OverlayNotificationPresenter
 import com.azkar.ui.notifications.presentation.OverlayTheme
 import com.azkar.ui.shell.AzkarApp
 import com.azkar.ui.shell.AzkarAppState
+import com.azkar.ui.shell.DesktopPrayerSurfaces
 import com.azkar.ui.shell.NotificationPriority
-import com.azkar.ui.shell.ReminderTray
 import com.azkar.ui.shell.ThemePreferenceStore
+import com.azkar.ui.shell.TrayMenuActions
 import com.azkar.ui.shell.TypographyStore
 import com.azkar.ui.shell.rememberAzkarAppState
 import com.azkar.ui.shell.rememberAzkarDarkTheme
-import com.azkar.ui.shell.rememberPrayerTrayCountdown
 import com.azkar.ui.shell.rememberToastController
 import com.azkar.ui.shell.trayAvailable
 import com.azkar.ui.theme.AppTypography
@@ -186,10 +187,26 @@ private fun runDesktopApplication(
 private fun rememberStartedAtLogin(args: Array<String>): Boolean =
     remember(args) {
         "--start-hidden" in args ||
+            "--nucleus-autostart" in args ||
             runCatching { AutoLaunch.wasStartedAtLogin(args) }
                 .onFailure { logger.warn(it) { "Unable to detect a login launch" } }
                 .getOrDefault(false)
     }
+
+@Composable
+private fun rememberMainWindowVisibility(
+    trayAvailable: Boolean,
+    startedAtLogin: Boolean,
+    proofOfConcept: Boolean,
+    updateNotificationPreview: Boolean,
+): MutableState<Boolean> {
+    val visibility = remember { mutableStateOf(!(startedAtLogin && trayAvailable)) }
+    LaunchedEffect(trayAvailable, proofOfConcept, updateNotificationPreview, startedAtLogin) {
+        // The harness verifies notifications with the main window hidden.
+        visibility.value = !proofOfConcept && !(startedAtLogin && trayAvailable)
+    }
+    return visibility
+}
 
 @Composable
 private fun DesktopApplicationRoot(
@@ -200,7 +217,14 @@ private fun DesktopApplicationRoot(
 ) {
     val trayAvailable = trayAvailable()
     val startedAtLogin = rememberStartedAtLogin(args)
-    var windowVisible by remember { mutableStateOf(!(startedAtLogin && trayAvailable)) }
+    val proofOfConcept = OVERLAY_PROOF_OF_CONSENT_FLAG in args
+    val updateNotificationPreview = UPDATE_NOTIFICATION_PREVIEW_FLAG in args
+    var windowVisible by rememberMainWindowVisibility(
+        trayAvailable,
+        startedAtLogin,
+        proofOfConcept,
+        updateNotificationPreview,
+    )
     val composeScope = rememberCoroutineScope()
     val actionRouter = remember { koin.get<NotificationActionRouter>() }
     // A notification activation, a tray click and an overlay card all arrive on somebody else's
@@ -222,24 +246,13 @@ private fun DesktopApplicationRoot(
         )
 
     val preferences = remember { koin.get<NotificationPreferencesRepository>() }
-    // Only the queue's on/off flag is read here, and only so the tray menu can say which of "pause"
-    // and "resume" it is offering. It is a `by` rather than a subscription because the tray is a
-    // menu that is built when it opens: nothing in it is on screen to be wrong about for long.
-    val queue by preferences.queue.collectAsState()
     val runtime = remember { koin.get<NotificationRuntime>() }
     val dispatcher = koin.get<NotificationPublisher>()
     val overlay = koin.get<OverlayNotificationPresenter>()
     val notificationScope = koin.get<CoroutineScope>(named("notificationScope"))
-    val proofOfConcept = OVERLAY_PROOF_OF_CONSENT_FLAG in args
-    val updateNotificationPreview = UPDATE_NOTIFICATION_PREVIEW_FLAG in args
     NotificationRuntimeLifecycle(runtime, notificationScope, proofOfConcept || updateNotificationPreview)
     val quitAction = rememberQuitAction(koin, startup, notificationScope, dispatcher, exitApplication)
     UpdateFeature(koin, appState, actionRouter, updateNotificationPreview)
-    LaunchedEffect(trayAvailable, proofOfConcept, updateNotificationPreview, startedAtLogin) {
-        // The harness starts hidden whatever the tray says: "a reminder with no window at all" is
-        // the state being verified, and a tray icon would be the only other surface on screen.
-        windowVisible = !proofOfConcept && !(startedAtLogin && trayAvailable)
-    }
 
     // The overlay is its own window, created once and hidden when there is nothing to say. It is
     // composed beside the main window rather than inside it, so a reminder still arrives while the
@@ -250,33 +263,23 @@ private fun DesktopApplicationRoot(
         OverlayProofOfConcept(dispatcher)
     }
     if (trayAvailable) {
-        // Remembered on the last published action, so clicking the icon opens whatever was last
-        // announced — and so the tray icon is not re-rendered on every recomposition of anything.
-        val latestAction = dispatcher.latestAction
-        val openLatest = remember(latestAction) { { actionRouter.dispatch(latestAction) } }
-        ReminderTray(
-            primaryAction = openLatest,
-            onOpenApp = showWindow,
-            remindersPaused = !queue.enabled,
-            onToggleReminders = {
-                composeScope.launch { preferences.updateQueue { it.copy(enabled = !it.enabled) } }
-            },
-            onQuit = { quitAction() },
-            // Derived at the root so the tooltip keeps ticking while the window is hidden; a
-            // locale or location change rebuilds it and the old ticker dies with its effect.
-            countdown = rememberPrayerTrayCountdown(appState.locale),
+        DesktopPrayerSurfaces(
+            appState = appState,
+            dispatcher = dispatcher,
+            actionRouter = actionRouter,
+            preferences = preferences,
+            menuActions =
+                TrayMenuActions(
+                    openApp = showWindow,
+                    quit = quitAction,
+                    panelHidden = { windowVisible = false },
+                ),
         )
     }
 
-    // Closing the window hides it whenever there is somewhere to bring it back from. Without a tray
-    // there is not, so the close is taken at face value and the app leaves — the alternative is a
-    // running process with no way to show or stop it, which is worse than not hiding at all.
-    fun hideOrQuit() {
-        if (trayAvailable) windowVisible = false else quitAction()
-    }
     MainWindow(
         visible = windowVisible,
-        onCloseRequest = ::hideOrQuit,
+        onCloseRequest = { if (trayAvailable) windowVisible = false else quitAction() },
         appState = appState,
         actionRouter = actionRouter,
     )

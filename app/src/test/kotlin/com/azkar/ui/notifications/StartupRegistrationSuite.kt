@@ -163,6 +163,28 @@ val StartupRegistrationSuite by testSuite("Native login registration") {
         assertThat(registration.state().getOrThrow()).isEqualTo(AutoLaunchState.UNSUPPORTED)
         assertThat(registration.setEnabled(true).isFailure).isTrue()
         assertThat(registration.migrateLegacyRegistration(wasEnabled = true).isSuccess).isTrue()
+
+        withStartupEditor(registration = registration) { _, preferences, editor ->
+            editor.refreshStartOnLogin()
+            assertThat(editor.canChangeStartup).isFalse()
+            assertThat(editor.notice).isEqualTo(StartupNotice.DevelopmentBuild)
+
+            editor.setStartOnLogin(true)
+            awaitStartupChange(editor)
+            assertThat(editor.notice).isEqualTo(StartupNotice.DevelopmentBuild)
+            assertThat(preferences.startOnLogin.value).isFalse()
+        }
+    }
+
+    test("an installed build reports an unsupported login manager without a development notice") {
+        withStartupEditor { fixture, _, editor ->
+            fixture.state = AutoLaunchState.UNSUPPORTED
+
+            editor.refreshStartOnLogin()
+
+            assertThat(editor.canChangeStartup).isFalse()
+            assertThat(editor.notice).isEqualTo(StartupNotice.Unsupported)
+        }
     }
 
     test("settings display the OS state even when the saved preference disagrees") {
@@ -243,6 +265,7 @@ private suspend fun withStartup(block: suspend (StartupFixture) -> Unit) =
     }
 
 private suspend fun withStartupEditor(
+    registration: StartupRegistration? = null,
     block: suspend (
         StartupFixture,
         NotificationPreferencesRepository,
@@ -253,7 +276,8 @@ private suspend fun withStartupEditor(
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         try {
             val preferences = NotificationPreferencesRepository(SettingsStore(FakePreferencesDataStore(), scope))
-            val state = NotificationSettingsState(scope, preferences, startupRegistration = fixture.registration)
+            val activeRegistration = registration ?: fixture.registration
+            val state = NotificationSettingsState(scope, preferences, startupRegistration = activeRegistration)
             block(fixture, preferences, state.notifications)
         } finally {
             scope.cancel()

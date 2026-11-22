@@ -1,6 +1,7 @@
 package com.azkar.ui.notifications
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.azkar.settings.SettingsStore
 import com.azkar.ui.home.PrayerKey
@@ -30,6 +31,9 @@ class NotificationPreferencesRepository(
     private val _queue = MutableStateFlow(ReminderQueueConfig())
     private val _queueProgress = MutableStateFlow(ReminderQueueProgress())
     private val _prayerLocation = MutableStateFlow(PrayerLocationSettings())
+    private val windowsTaskbarPositionState = MutableStateFlow<Int?>(null)
+    private val gnomePrayerExtensionState = MutableStateFlow(true)
+    private val _desktopPrayerEnabled = MutableStateFlow(DEFAULT_DESKTOP_PRAYER_ENABLED)
     private val _prayerProgress = MutableStateFlow(PrayerNotificationProgress())
     private val _prayerFlags = MutableStateFlow(PrayerKey.entries.associateWith { true })
     private val _startOnLogin = MutableStateFlow(false)
@@ -39,6 +43,9 @@ class NotificationPreferencesRepository(
     val queue: StateFlow<ReminderQueueConfig> = _queue.asStateFlow()
     val queueProgress: StateFlow<ReminderQueueProgress> = _queueProgress.asStateFlow()
     val prayerLocation: StateFlow<PrayerLocationSettings> = _prayerLocation.asStateFlow()
+    internal val windowsTaskbarPosition = windowsTaskbarPositionState.asStateFlow()
+    internal val gnomePrayerExtensionEnabled = gnomePrayerExtensionState.asStateFlow()
+    val desktopPrayerEnabled: StateFlow<Boolean> = _desktopPrayerEnabled.asStateFlow()
     val prayerProgress: StateFlow<PrayerNotificationProgress> = _prayerProgress.asStateFlow()
     val prayerFlags: StateFlow<Map<PrayerKey, Boolean>> = _prayerFlags.asStateFlow()
 
@@ -63,6 +70,9 @@ class NotificationPreferencesRepository(
                 _queue.value = decode(stored[QUEUE_KEY], ReminderQueueConfig())
                 _queueProgress.value = decode(stored[QUEUE_PROGRESS_KEY], ReminderQueueProgress())
                 _prayerLocation.value = decode(stored[PRAYER_LOCATION_KEY], PrayerLocationSettings())
+                _desktopPrayerEnabled.value = stored[DESKTOP_PRAYER_KEY] ?: DEFAULT_DESKTOP_PRAYER_ENABLED
+                gnomePrayerExtensionState.value = stored[GNOME_PRAYER_EXTENSION_KEY] ?: true
+                windowsTaskbarPositionState.value = stored[WINDOWS_TASKBAR_POSITION_KEY]?.takeIf { it in 0..100 }
                 _prayerProgress.value = decode(stored[PRAYER_PROGRESS_KEY], PrayerNotificationProgress())
                 _prayerFlags.value = PrayerKey.entries.associateWith { key -> stored[prayerKey(key)] ?: true }
                 _startOnLogin.value = stored[START_ON_LOGIN_KEY] ?: false
@@ -77,6 +87,9 @@ class NotificationPreferencesRepository(
         _queue.value = decode(stored[QUEUE_KEY], ReminderQueueConfig())
         _queueProgress.value = decode(stored[QUEUE_PROGRESS_KEY], ReminderQueueProgress())
         _prayerLocation.value = decode(stored[PRAYER_LOCATION_KEY], PrayerLocationSettings())
+        _desktopPrayerEnabled.value = stored[DESKTOP_PRAYER_KEY] ?: DEFAULT_DESKTOP_PRAYER_ENABLED
+        gnomePrayerExtensionState.value = stored[GNOME_PRAYER_EXTENSION_KEY] ?: true
+        windowsTaskbarPositionState.value = stored[WINDOWS_TASKBAR_POSITION_KEY]?.takeIf { it in 0..100 }
         _prayerProgress.value = decode(stored[PRAYER_PROGRESS_KEY], PrayerNotificationProgress())
         _prayerFlags.value = PrayerKey.entries.associateWith { key -> stored[prayerKey(key)] ?: true }
         _startOnLogin.value = stored[START_ON_LOGIN_KEY] ?: false
@@ -152,6 +165,24 @@ class NotificationPreferencesRepository(
     ) {
         _prayerFlags.value += (key to enabled)
         settings.edit { this[prayerKey(key)] = enabled }
+    }
+
+    internal suspend fun setWindowsTaskbarPosition(position: Int?) {
+        settings.edit {
+            if (position == null) {
+                remove(WINDOWS_TASKBAR_POSITION_KEY)
+            } else {
+                this[WINDOWS_TASKBAR_POSITION_KEY] = position.coerceIn(0, 100)
+            }
+        }
+    }
+
+    internal suspend fun setGnomePrayerExtensionEnabled(enabled: Boolean) {
+        settings.edit { this[GNOME_PRAYER_EXTENSION_KEY] = enabled }
+    }
+
+    suspend fun setDesktopPrayerEnabled(enabled: Boolean) {
+        settings.edit { this[DESKTOP_PRAYER_KEY] = enabled }
     }
 
     suspend fun updatePresentation(transform: (NotificationPresentationSettings) -> NotificationPresentationSettings) =
@@ -240,30 +271,34 @@ class NotificationPreferencesRepository(
         }
     }
 
-    private fun ReminderQueueConfig.validated(): ReminderQueueConfig =
-        copy(
-            collectionIds = collectionIds.filter { it > 0 }.distinct(),
-            windowStartMinute = windowStartMinute.coerceIn(0, 1439),
-            windowEndMinute =
-                windowEndMinute.coerceIn(0, 1439).let { end ->
-                    if (end == windowStartMinute) (end + 1) % 1440 else end
-                },
-            intervalMinutes = intervalMinutes.coerceIn(5, 1440),
-            activeDays = activeDays.ifEmpty { ReminderQueueConfig.ALL_DAYS },
-            defaultDropChance = defaultDropChance.coerceIn(0, 100),
-            collectionDropChances = collectionDropChances.mapValues { it.value.coerceIn(0, 100) },
-        )
-
-    private fun prayerKey(key: PrayerKey) = booleanPreferencesKey("prayer.${key.id}.enabled")
-
     private companion object {
+        const val DEFAULT_DESKTOP_PRAYER_ENABLED = true
         val logger = KotlinLogging.logger {}
         val QUEUE_KEY = stringPreferencesKey("notifications.queue.v1")
         val QUEUE_PROGRESS_KEY = stringPreferencesKey("notifications.queue.progress.v1")
         val PRAYER_LOCATION_KEY = stringPreferencesKey("prayer.location.v1")
+        val WINDOWS_TASKBAR_POSITION_KEY = intPreferencesKey("prayer.desktop.windows.position")
+        val GNOME_PRAYER_EXTENSION_KEY = booleanPreferencesKey("prayer.desktop.gnome.extension.enabled")
+        val DESKTOP_PRAYER_KEY = booleanPreferencesKey("prayer.desktop.enabled")
         val PRAYER_PROGRESS_KEY = stringPreferencesKey("prayer.notification.progress.v1")
         val START_ON_LOGIN_KEY = booleanPreferencesKey("notifications.startOnLogin.enabled")
         val PRESENTATION_KEY = stringPreferencesKey("notifications.presentation.v1")
         val AUDIO_KEY = stringPreferencesKey("audio.preferences.v1")
     }
 }
+
+private fun prayerKey(key: PrayerKey) = booleanPreferencesKey("prayer.${key.id}.enabled")
+
+private fun ReminderQueueConfig.validated(): ReminderQueueConfig =
+    copy(
+        collectionIds = collectionIds.filter { it > 0 }.distinct(),
+        windowStartMinute = windowStartMinute.coerceIn(0, 1439),
+        windowEndMinute =
+            windowEndMinute.coerceIn(0, 1439).let { end ->
+                if (end == windowStartMinute) (end + 1) % 1440 else end
+            },
+        intervalMinutes = intervalMinutes.coerceIn(5, 1440),
+        activeDays = activeDays.ifEmpty { ReminderQueueConfig.ALL_DAYS },
+        defaultDropChance = defaultDropChance.coerceIn(0, 100),
+        collectionDropChances = collectionDropChances.mapValues { it.value.coerceIn(0, 100) },
+    )

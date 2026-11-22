@@ -32,6 +32,35 @@ import java.io.IOException
  */
 @Suppress("unused")
 val NotificationPreferencesRepositorySuite by testSuite("The notification preferences") {
+    test("the desktop prayer display defaults to on and a saved off setting survives restart") {
+        withInMemorySettings { scope, store, dataStore ->
+            val preferences = NotificationPreferencesRepository(store) { "/notification.mp3" to "/prayer.mp3" }
+            assertThat(preferences.desktopPrayerEnabled.value).isTrue()
+            preferences.refresh()
+            assertThat(preferences.desktopPrayerEnabled.value).isTrue()
+
+            preferences.setDesktopPrayerEnabled(false)
+            val nextLaunch = NotificationPreferencesRepository(SettingsStore(dataStore, scope))
+            nextLaunch.refresh()
+            assertThat(nextLaunch.desktopPrayerEnabled.value).isFalse()
+        }
+    }
+
+    test("the Windows taskbar position can be saved and reset to automatic") {
+        withInMemorySettings { scope, store, dataStore ->
+            val preferences = NotificationPreferencesRepository(store) { "/notification.mp3" to "/prayer.mp3" }
+            preferences.setWindowsTaskbarPosition(74)
+
+            val nextLaunch = NotificationPreferencesRepository(SettingsStore(dataStore, scope))
+            nextLaunch.refresh()
+            assertThat(nextLaunch.windowsTaskbarPosition.value).isEqualTo(74)
+
+            preferences.setWindowsTaskbarPosition(null)
+            nextLaunch.refresh()
+            assertThat(nextLaunch.windowsTaskbarPosition.value).isNull()
+        }
+    }
+
     test("audio defaults preserve changes made while installation is suspended") {
         withInMemorySettings { _, store, _ ->
             val started = CompletableDeferred<Unit>()

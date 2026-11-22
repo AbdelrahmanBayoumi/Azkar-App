@@ -15,6 +15,7 @@ import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.settingsLanguageBody
 import com.azkar.generated.resources.settingsLanguageHeader
 import com.azkar.generated.resources.settingsNotificationStartupFailed
+import com.azkar.generated.resources.settingsStartupDevelopmentBuild
 import com.azkar.generated.resources.settingsStartupDisabledByUser
 import com.azkar.generated.resources.settingsStartupHint
 import com.azkar.generated.resources.settingsStartupManagedByPolicy
@@ -162,6 +163,7 @@ internal fun StartupNoticeText(
         when (notice) {
             StartupNotice.DisabledByUser -> stringResource(Res.string.settingsStartupDisabledByUser)
             StartupNotice.ManagedByPolicy -> stringResource(Res.string.settingsStartupManagedByPolicy)
+            StartupNotice.DevelopmentBuild -> stringResource(Res.string.settingsStartupDevelopmentBuild)
             StartupNotice.Unsupported -> stringResource(Res.string.settingsStartupUnsupported)
             is StartupNotice.Unavailable ->
                 stringResource(Res.string.settingsNotificationStartupFailed) +

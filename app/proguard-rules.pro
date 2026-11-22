@@ -61,6 +61,17 @@
 # members such as Properties.Set that the portal client resolves by name.
 -keep class org.freedesktop.dbus.** { *; }
 
+# The GNOME prayer indicator exposes D-Bus methods, properties, and menu tuples by reflection.
+-keep interface com.azkar.ui.shell.GnomePrayer* extends org.freedesktop.dbus.interfaces.DBusInterface { *; }
+-keep interface com.azkar.ui.shell.GnomeShellPanelService extends org.freedesktop.dbus.interfaces.DBusInterface { *; }
+-keep class com.azkar.ui.shell.GnomePrayer* extends org.freedesktop.dbus.Container { *; }
+-keep class com.azkar.ui.shell.GnomePrayerMenu$LayoutUpdated { *; }
+
+# The HWND class uses a method handle to its native window procedure.
+-keepclassmembers class com.azkar.ui.shell.WindowsTaskbarWidget {
+    private long windowProc(java.lang.foreign.MemorySegment, int, long, long);
+}
+
 # AutoLaunch selects the macOS backend by class name; JNI calls back into its bridges.
 -keep class dev.nucleusframework.autolaunch.** { *; }
 -keep class dev.nucleusframework.servicemanagement.** { *; }

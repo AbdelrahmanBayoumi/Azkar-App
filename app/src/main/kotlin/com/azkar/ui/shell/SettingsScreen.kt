@@ -249,11 +249,13 @@ private fun LazyListScope.settingsSections(
                             location = notificationValues.prayerLocation,
                             settings = notificationState,
                         )
-                    SettingsSection.PRAYER_CALCULATION ->
+                    SettingsSection.PRAYER_CALCULATION -> {
                         SettingsPrayerCalculationSection(
                             location = notificationValues.prayerLocation,
                             settings = notificationState,
                         )
+                    }
+                    SettingsSection.PRAYER_PANEL -> DesktopPrayerPanelSetting()
                     SettingsSection.AUDIO ->
                         SettingsAudioSection(
                             audio = notificationValues.audio,

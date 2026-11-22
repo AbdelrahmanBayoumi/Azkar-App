@@ -61,6 +61,8 @@ sealed interface StartupNotice {
 
     data object ManagedByPolicy : StartupNotice
 
+    data object DevelopmentBuild : StartupNotice
+
     data object Unsupported : StartupNotice
 
     /** The platform call failed, or the host has no login manager to call. */

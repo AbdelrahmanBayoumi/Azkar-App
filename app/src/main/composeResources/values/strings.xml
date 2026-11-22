@@ -53,6 +53,8 @@
     <string name="sourceExample">[Authentic hadith] - [Narrated by Bukhari &amp; Muslim] - [Sahih Bukhari - 3559]</string>
     <!-- Prayer times section -->
     <string name="todayPrayerTimes">Today's Prayer Times</string>
+    <string name="desktopPrayerTomorrowTime">%1$s tomorrow</string>
+    <string name="desktopPrayerCloseSchedule">Close</string>
     <string name="nextPrayerIn">Next prayer in:</string>
     <string name="nextPrayerLabel">Next prayer</string>
     <string name="prayerTimesLocation">Prayer times for %1$s</string>
@@ -299,6 +301,7 @@
     <string name="settingsStartupHint">Whether Azkar opens itself when you sign in.</string>
     <string name="settingsStartupDisabledByUser">Startup was disabled in system settings. Enable it there to allow Azkar to start at login.</string>
     <string name="settingsStartupManagedByPolicy">Startup is managed by your system administrator.</string>
+    <string name="settingsStartupDevelopmentBuild">This development build of Azkar doesn’t support startup at sign-in. Install Azkar to use this setting.</string>
     <string name="settingsStartupUnsupported">Startup is unavailable in this environment. Use the installed app with a supported login session.</string>
     <string name="settingsStartupOpenSystemSettings">Open system settings</string>
     <string name="settingsThemeHeader">Theme</string>
@@ -596,6 +599,15 @@
     <string name="settingsPrayerLocationHint">The place every prayer time is calculated from.</string>
     <string name="settingsPrayerPerPrayerHint">Each prayer is turned on or off from the home screen.</string>
     <string name="settingsPrayerCalculationTitle">Calculation</string>
+    <string name="settingsDesktopPrayer">Show next prayer on the desktop</string>
+    <string name="settingsDesktopPrayerGnomeHint">Show prayer times in the GNOME top bar. After installing the bundled extension, you may need to sign out and back in.</string>
+    <string name="settingsDesktopPrayerExtension">Use the GNOME extension</string>
+    <string name="settingsDesktopPrayerExtensionHint">Use the native top-bar widget when available. Turn this off to use the standard indicator.</string>
+    <string name="settingsDesktopPrayerTitle">Prayer Panel</string>
+    <string name="settingsDesktopPrayerTaskbar">Show on the taskbar</string>
+    <string name="settingsDesktopPrayerPosition">Taskbar position</string>
+    <string name="settingsDesktopPrayerPositionHint">Right-click the widget to move it. Select Automatic to restore its default position.</string>
+    <string name="settingsDesktopPrayerWindowsHint">Show the prayer time and countdown in the Windows taskbar. Turn this off to use the system tray.</string>
     <string name="settingsPrayerCalculationHint">The convention that turns that place into prayer times.</string>
     <string name="settingsPrayerCityLabel">City or place</string>
     <string name="settingsPrayerSearchLabel">Search for a city</string>
@@ -677,4 +689,11 @@
     <string name="settingsAudioStopPreview">Stop preview</string>
     <string name="settingsAudioVolume">Volume</string>
     <string name="settingsAudioFailed">Unable to play this audio file. Check that it exists and uses a supported audio format.</string>
+    <string name="taskbarPositionTitle">Taskbar position</string>
+    <string name="taskbarPositionAutomatic">Automatic</string>
+    <string name="taskbarPositionManual">Manual</string>
+    <string name="taskbarPositionTip">Drag the widget to move it.</string>
+    <string name="trayMenuHidePanel">Hide panel</string>
+    <string name="trayMenuShowPanel">Show panel</string>
+    <string name="trayPanelHiddenMessage">Azkar is still running in the system tray. Right-click its icon and select Show panel to bring it back.</string>
 </resources>

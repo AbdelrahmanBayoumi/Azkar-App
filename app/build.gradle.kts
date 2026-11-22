@@ -129,6 +129,8 @@ dependencies {
     // `dev.nucleusframework.composenativetray.**`) -- JNA resolves its native functions by
     // reflection at call time, so a shrinking build would break the tray silently at runtime.
     implementation(libs.dev.nucleusframework.compose.native.tray)
+    implementation(libs.dbus.java.core)
+    runtimeOnly(libs.dbus.java.unix.socket)
     implementation(libs.dev.nucleusframework.autolaunch)
     implementation(libs.dev.nucleusframework.updater.runtime)
 
@@ -379,6 +381,23 @@ val collectProguardRules =
         }
     }
 
+if (installerPlatform.os == "linux") {
+    val linuxIcon = rootProject.layout.projectDirectory.file("assets/icons/azkar.png")
+    val shellExtension = layout.projectDirectory.dir("src/desktopResources/linux/gnome")
+    tasks.withType<Sync>().configureEach {
+        if (name == "prepareAppResources") {
+            from(linuxIcon) {
+                into("gnome/azkar-prayers@azkar.app")
+            }
+        }
+    }
+    tasks.matching { it.name in setOf("createDistributable", "createReleaseDistributable") }.configureEach {
+        // Nucleus 2.5.18 treats appResourcesDir as internal on the jpackage task.
+        inputs.dir(shellExtension).withPathSensitivity(PathSensitivity.RELATIVE)
+        inputs.file(linuxIcon).withPathSensitivity(PathSensitivity.NONE)
+    }
+}
+
 nucleus.application {
     mainClass = desktopMainClass
     jvmArgs(
@@ -401,7 +420,12 @@ nucleus.application {
         }
     }
     nativeDistributions {
+        appResourcesRootDir.set(layout.projectDirectory.dir("src/desktopResources"))
         modules("java.sql", "java.naming")
+        if (installerPlatform.os == "linux") {
+            // The session D-Bus transport reads the Unix UID for SASL EXTERNAL authentication.
+            modules("jdk.security.auth")
+        }
         val fullVersion = project.version.toString()
         val isDev = fullVersion.contains("-beta.")
         val nativePackageVersion = fullVersion.substringBefore("-beta")
@@ -433,6 +457,8 @@ nucleus.application {
             debMaintainer = "Azkar <support@azkar.app>"
             debPackageVersion = fullVersion
             rpmPackageVersion = nativePackageVersion
+            afterInstall.set(rootProject.file("packaging/linux/gnome-extension-after-install.sh"))
+            afterRemove.set(rootProject.file("packaging/linux/gnome-extension-after-remove.sh"))
         }
         windows {
             iconFile.set(project.file("../assets/icons/azkar.ico"))

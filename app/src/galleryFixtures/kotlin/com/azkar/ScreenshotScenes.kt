@@ -42,6 +42,7 @@ import com.azkar.ui.theme.AzkarTheme
 import com.azkar.ui.theme.LocalWindowSizeClass
 import com.azkar.ui.theme.windowSizeClassFor
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Locale
 
 @Composable
@@ -50,7 +51,7 @@ internal fun HomeShot(onReady: () -> Unit = {}) {
     LaunchedEffect(prayerTimes) {
         prayerTimes.start()
         prayerTimes.stop()
-        prayerTimes.tick(LocalDateTime.of(2026, 2, 20, 10, 0))
+        prayerTimes.tick(LocalDateTime.of(2026, 2, 20, 10, 0).atZone(ZoneId.of(prayerTimes.location.zoneId)))
     }
     if (prayerTimes.snapshot.rows.isEmpty()) return
     SideEffect(onReady)
