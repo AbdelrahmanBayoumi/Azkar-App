@@ -621,6 +621,7 @@
     <string name="settingsPrayerPanelMenu">تخطيط قائمة اللوحة</string>
     <string name="settingsStandardPrayerPanelMenu">تخطيط قائمة اللوحة العادية</string>
     <string name="settingsPrayerTrayMenu">تخطيط قائمة علبة النظام</string>
+    <string name="settingsStandardPrayerPanelMenuHint">يعرض التخطيط المختصر إجراءات القائمة، ويضيف التخطيط الموسّع مواقيت الصلاة لهذا اليوم.</string>
     <string name="settingsPrayerPanelMenuHint">يعرض التخطيط المختصر الصلاة القادمة، ويعرض التخطيط الموسّع مواقيت الصلاة لهذا اليوم.</string>
     <string name="settingsPrayerPanelMenuCompact">مختصر</string>
     <string name="settingsPrayerPanelMenuExtended">موسّع</string>

@@ -18,6 +18,7 @@ import com.azkar.generated.resources.settingsPrayerPanelMenuExtended
 import com.azkar.generated.resources.settingsPrayerPanelMenuHint
 import com.azkar.generated.resources.settingsPrayerTrayMenu
 import com.azkar.generated.resources.settingsStandardPrayerPanelMenu
+import com.azkar.generated.resources.settingsStandardPrayerPanelMenuHint
 import com.azkar.ui.components.AzkarToggleSwitch
 import com.azkar.ui.components.SelectRow
 import com.azkar.ui.notifications.DesktopPlatform
@@ -193,11 +194,12 @@ private fun PrayerMenuLayoutSetting(
     label: StringResource,
 ) {
     val panel = surface == PrayerMenuSurface.PANEL
+    val hint = if (panel) Res.string.settingsStandardPrayerPanelMenuHint else Res.string.settingsPrayerPanelMenuHint
     val layout by (if (panel) preferences.prayerPanelMenuLayout else preferences.prayerTrayMenuLayout).collectAsState()
     val scope = rememberCoroutineScope()
     SelectRow(
         label = stringResource(label),
-        hint = stringResource(Res.string.settingsPrayerPanelMenuHint),
+        hint = stringResource(hint),
         selected = layout,
         options = PrayerMenuLayout.entries,
         optionLabel = {

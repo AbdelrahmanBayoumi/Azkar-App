@@ -608,6 +608,7 @@
     <string name="settingsPrayerPanelMenu">Panel menu layout</string>
     <string name="settingsStandardPrayerPanelMenu">Standard panel menu layout</string>
     <string name="settingsPrayerTrayMenu">System tray menu layout</string>
+    <string name="settingsStandardPrayerPanelMenuHint">Compact shows menu actions. Extended also shows today’s prayer schedule.</string>
     <string name="settingsPrayerPanelMenuHint">Compact shows the next prayer. Extended shows today’s prayer schedule.</string>
     <string name="settingsPrayerPanelMenuCompact">Compact</string>
     <string name="settingsPrayerPanelMenuExtended">Extended</string>
