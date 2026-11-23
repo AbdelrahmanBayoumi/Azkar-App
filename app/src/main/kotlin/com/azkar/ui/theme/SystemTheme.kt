@@ -7,7 +7,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 
-// TODO: Remove the Linux fallback once CMP-10466 is fixed and verified: https://youtrack.jetbrains.com/issue/CMP-10466
+// The Linux fallback tracks the unresolved Compose issue https://youtrack.jetbrains.com/issue/CMP-10466
 
 /**
  * The colour scheme the desktop is itself using.
