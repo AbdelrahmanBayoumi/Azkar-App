@@ -1,5 +1,6 @@
 import azkar.buildlogic.AzkarInstallerPlatform
 import azkar.buildlogic.macPackageVersion
+import groovy.json.JsonOutput
 import org.gradle.api.artifacts.ExternalModuleDependency
 import java.util.jar.JarFile
 
@@ -423,6 +424,7 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
     }
     val iconShape = Regex("<(path|line|rect|circle|polyline|polygon|ellipse) ")
     val shellExtension = layout.projectDirectory.dir("src/desktopResources/linux/gnome")
+    val extensionVersion = version.toString()
     val extensionSource = layout.projectDirectory.dir("src/gnomeExtension")
     val extensionOutput = layout.buildDirectory.dir("generated/gnomeExtension")
     val extensionWorkspace = layout.buildDirectory.dir("gnomeExtension")
@@ -455,6 +457,11 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
     tasks.withType<Sync>().configureEach {
         if (name == "prepareAppResources") {
             inputs.property("gnomeSymbolicIconFormat", "stroke-mask")
+            inputs.property("gnomeExtensionVersion", extensionVersion)
+            filesMatching("gnome/azkar-prayers@azkar.app/metadata.json") {
+                val versionName = JsonOutput.toJson(extensionVersion)
+                filter { line: String -> line.replace("\"version-name\": \"development\"", "\"version-name\": $versionName") }
+            }
             from(panelIcons) {
                 into("gnome/azkar-prayers@azkar.app")
                 rename { it.removeSuffix(".svg") + "-symbolic.svg" }
@@ -479,6 +486,7 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
     }
     tasks.matching { it.name in setOf("createDistributable", "createReleaseDistributable") }.configureEach {
         // Nucleus 2.5.18 treats appResourcesDir as internal on the jpackage task.
+        inputs.property("gnomeExtensionVersion", extensionVersion)
         inputs.dir(shellExtension).withPathSensitivity(PathSensitivity.RELATIVE)
         inputs.files(compileGnomeExtension).withPathSensitivity(PathSensitivity.RELATIVE)
         inputs.files(panelIcons).withPathSensitivity(PathSensitivity.RELATIVE)
