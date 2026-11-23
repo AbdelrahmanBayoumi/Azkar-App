@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+extension=$(realpath "$1")
+output=$(realpath -m "$2")
+script_dir=$(dirname "$(realpath "$0")")
+scratch=$(mktemp -d)
+trap 'rm -rf -- "$scratch"' EXIT
+export XDG_DATA_HOME="$scratch/data" XDG_CONFIG_HOME="$scratch/config" XDG_CACHE_HOME="$scratch/cache"
+export GSETTINGS_BACKEND=memory XDG_CURRENT_DESKTOP=GNOME
+export AZKAR_CAPTURE_OUTPUT="$scratch"
+uuid=azkar-prayers@azkar.app
+staged="$XDG_DATA_HOME/gnome-shell/extensions/$uuid"
+mkdir -p "$staged"
+cp -Lr "$extension/." "$staged/"
+mv "$staged/extension.js" "$staged/panel.js"
+cp "$script_dir/capture-gnome-panel.mjs" "$staged/extension.js"
+
+dbus-run-session -- bash -eu -c '
+    gnome-shell --headless --wayland --virtual-monitor=1280x720 --wayland-display="azkar-preview-$$" &
+    shell=$!
+    trap '\''kill "$shell" 2>/dev/null || true; wait "$shell" 2>/dev/null || true'\'' EXIT
+    for ((i=0; i<100; i++)); do
+        kill -0 "$shell"
+        if gnome-extensions info "$1" >/dev/null 2>&1; then break; fi
+        sleep .2
+    done
+    gnome-extensions enable "$1"
+    for ((i=0; i<100; i++)); do
+        kill -0 "$shell"
+        if [[ -f "$AZKAR_CAPTURE_OUTPUT/done" ]]; then exit 0; fi
+        if [[ -f "$AZKAR_CAPTURE_OUTPUT/error" ]]; then cat "$AZKAR_CAPTURE_OUTPUT/error" >&2; exit 1; fi
+        sleep .2
+    done
+    echo "Timed out capturing GNOME prayer menus" >&2
+    exit 1
+' capture-gnome-panel "$uuid"
+
+mkdir -p "$output"
+cp "$scratch/gnome-prayer-schedule.png" "$scratch/gnome-prayer-actions.png" "$output/"

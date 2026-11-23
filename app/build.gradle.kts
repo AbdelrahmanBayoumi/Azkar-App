@@ -168,6 +168,7 @@ dependencies {
     testImplementation(libs.io.github.takahirom.roborazzi.compose.desktop)
     testImplementation(libs.io.github.takahirom.roborazzi.compose.desktop.preview.scanner.support)
     testImplementation(libs.io.github.darkxanter.webp.imageio)
+    // Keep the scanner core ABI compatible with Roborazzi's preview adapter.
     testImplementation(libs.io.github.sergio.sastre.composable.preview.scanner.android)
     testImplementation(libs.junit.junit)
 
@@ -400,6 +401,19 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
                     run.allJvmArgs +
                     listOf("-cp", run.classpath.asPath, desktopMainClass) +
                     run.args.orEmpty(),
+            )
+        }
+    }
+    tasks.register<Exec>("captureGnomePanelPreviews") {
+        group = "verification"
+        description = "Capture the GNOME prayer menus in an isolated Shell session."
+        val resources = tasks.named<Sync>("prepareAppResources")
+        dependsOn(resources)
+        doFirst {
+            commandLine(
+                rootProject.file("scripts/dev/capture-gnome-panel"),
+                resources.get().destinationDir.resolve("gnome/azkar-prayers@azkar.app"),
+                layout.projectDirectory.dir("src/previewImages").asFile,
             )
         }
     }

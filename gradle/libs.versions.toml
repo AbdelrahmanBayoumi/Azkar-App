@@ -121,8 +121,8 @@ dev-mttmcknn-dejavu = { module = "dev.mttmcknn:dejavu", version.ref = "dejavu" }
 org-jetbrains-compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "jetbrains-compose" }
 io-github-takahirom-roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
 io-github-takahirom-roborazzi-compose-desktop-preview-scanner-support = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop-preview-scanner-support", version.ref = "roborazzi" }
+io-github-sergio-sastre-composable-preview-scanner-android = { module = "io.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.9.0" }
 io-github-darkxanter-webp-imageio = { module = "io.github.darkxanter:webp-imageio", version.ref = "webp-imageio" }
-io-github-sergio-sastre-composable-preview-scanner-android = { module = "io.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.10.1" }
 junit-junit = { module = "junit:junit", version = "4.13.2" }
 org-junit-vintage-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version = "5.13.4" }
 org-jetbrains-kotlinx-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "jetbrains-serialization" }

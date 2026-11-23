@@ -78,6 +78,15 @@ can still use direct `@Preview` plus `AzkarThemePreview(width = ..., height = ..
 
 Preview annotations remain available for IDE rendering.
 
+Capture the GNOME extension's schedule and actions menus on Linux with GNOME Shell installed:
+
+```bash
+./gradlew :app:captureGnomePanelPreviews
+```
+
+The task uses the bundled extension and fixture prayer data in an isolated GNOME Shell session.
+It writes `gnome-prayer-schedule.png` and `gnome-prayer-actions.png` to `app/src/previewImages/`.
+
 ## Project layout
 
 | Path | Responsibility |

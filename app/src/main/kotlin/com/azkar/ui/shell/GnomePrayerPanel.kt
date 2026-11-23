@@ -131,6 +131,30 @@ internal data class GnomePrayerContent(
         get() = if (panelVisible) panelLayout else tray.menu.trayLayout
 }
 
+internal fun GnomePrayerContent.menuEntries(): List<Pair<Int, TrayMenuEntry?>> {
+    val menu = tray.menu
+    // AppIndicator caches the widget type by ID. Keep action and separator IDs stable.
+    val schedule = menu.schedule.takeIf { layout == PrayerMenuLayout.EXTENDED }.orEmpty()
+    return buildList {
+        val actionEntries =
+            listOf(menu.countdown, null, menu.openApp, menu.panelVisibility, menu.reminders, null, menu.quit)
+        if (schedule.isNotEmpty()) {
+            val separatorId = actionEntries.size + 1
+            schedule.forEachIndexed { index, entry -> add(separatorId + 1 + index to entry) }
+            add(separatorId to null)
+        }
+        actionEntries.forEachIndexed { index, entry ->
+            val visible =
+                when (index) {
+                    0, 1 -> !panelVisible && schedule.isEmpty()
+                    3 -> entry != null && (!panelVisible || layout == PrayerMenuLayout.EXTENDED)
+                    else -> true
+                }
+            if (visible) add(index + 1 to entry)
+        }
+    }
+}
+
 internal suspend fun publishGnomePrayerStatus(
     states: Flow<GnomePrayerContent>,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -355,35 +379,14 @@ internal class GnomePrayerMenuItem(
         content: GnomePrayerContent,
         revision: Long,
     ): MenuSnapshot {
-        val menu = content.tray.menu
-        // AppIndicator caches the widget type by ID. A separator must never reuse an action's ID.
-        val entries =
-            listOf(
-                menu.countdown,
-                null,
-                menu.openApp,
-                menu.panelVisibility,
-                menu.reminders,
-                null,
-                menu.quit,
-            )
-        val schedule = menu.schedule.takeIf { content.layout == PrayerMenuLayout.EXTENDED }.orEmpty()
-        val includeVisibility = !content.panelVisible || content.layout == PrayerMenuLayout.EXTENDED
-        val visibleEntries =
-            entries.withIndex().filter { (index, entry) ->
-                when (index) {
-                    0, 1 -> !content.panelVisible && schedule.isEmpty()
-                    3 -> includeVisibility && entry != null
-                    else -> true
-                }
-            }
-        val items = visibleEntries.map { (index, entry) -> menuNode(content, index + 1, entry) }
+        val visibleEntries = content.menuEntries()
+        val items = visibleEntries.map { (id, entry) -> menuNode(content, id, entry) }
         val actions =
             visibleEntries
-                .mapNotNull { (index, entry) ->
-                    entry?.takeIf { it.isEnabled }?.let { index + 1 to it }
+                .mapNotNull { (id, entry) ->
+                    entry?.takeIf { it.isEnabled }?.let { id to it }
                 }.toMap()
-        return MenuSnapshot(content, revision, scheduleNodes(content, schedule, entries.size) + items, actions)
+        return MenuSnapshot(content, revision, items, actions)
     }
 
     private fun menuNode(
@@ -404,17 +407,6 @@ internal class GnomePrayerMenuItem(
                 )
             }
         return GnomePrayerMenuNode(id, properties, emptyList())
-    }
-
-    private fun scheduleNodes(
-        content: GnomePrayerContent,
-        schedule: List<TrayMenuEntry>,
-        actionCount: Int,
-    ): List<GnomePrayerMenuNode> {
-        if (schedule.isEmpty()) return emptyList()
-        // Allocate a fixed separator ID so changes in the number of schedule rows cannot reuse it.
-        val rows = schedule.mapIndexed { index, entry -> menuNode(content, actionCount + 2 + index, entry) }
-        return rows + menuNode(content, actionCount + 1, null)
     }
 
     private fun iconBytes(

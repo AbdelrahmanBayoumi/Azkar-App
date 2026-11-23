@@ -99,7 +99,7 @@ internal fun renderWindowsTaskbar(
         }
 
 @Composable
-private fun WindowsTaskbarSummary(
+internal fun WindowsTaskbarSummary(
     content: WindowsTaskbarContent,
     dark: Boolean,
     highlighted: Boolean,

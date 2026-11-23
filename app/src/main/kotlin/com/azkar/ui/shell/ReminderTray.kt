@@ -240,7 +240,7 @@ private fun rememberTrayContent(
 }
 
 @Composable
-private fun prayerTraySchedule(
+internal fun prayerTraySchedule(
     status: DesktopPrayerStatus?,
     readOnly: () -> Unit,
 ): List<TrayMenuEntry> {
