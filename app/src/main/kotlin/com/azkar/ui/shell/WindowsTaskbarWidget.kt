@@ -17,6 +17,8 @@ import java.lang.invoke.MethodHandles
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
 internal data class WindowsTaskbarContent(
     val name: String,
@@ -25,6 +27,7 @@ internal data class WindowsTaskbarContent(
     val locale: Locale,
     val typography: AppTypography,
     val scheduleOpen: Boolean = false,
+    val menuOpen: Boolean = false,
 )
 
 private val logger = KotlinLogging.logger {}
@@ -73,6 +76,7 @@ internal class WindowsTaskbarWidget(
     private var scheduleWasOpenOnPress = false
     private var frame: Frame? = null
     private var attempted: Frame? = null
+    private var retryAt = TimeSource.Monotonic.markNow()
 
     init {
         runCatching {
@@ -96,9 +100,8 @@ internal class WindowsTaskbarWidget(
         }
         if (window != NULL && frame?.slot?.taskbar != slot.taskbar) detach()
         val placed = dragSlot(slot)
-        val next = Frame(placed, content, hovered || content.scheduleOpen || moveEnabled())
-        if (next == frame || next == attempted) return
-        attempted = next
+        val next = Frame(placed, content, hovered || content.scheduleOpen || content.menuOpen || moveEnabled())
+        if (next == frame || (next == attempted && retryAt.hasNotPassedNow())) return
         // Offscreen Compose shares the desktop UI thread. Only the finished pixels cross to Win32.
         if (frame?.renderState != next.renderState) {
             pixels = withContext(Dispatchers.Main) { renderWindowsTaskbar(content, placed, next.highlighted) }
@@ -108,6 +111,8 @@ internal class WindowsTaskbarWidget(
             attempted = null
         } else {
             detach()
+            attempted = next
+            retryAt = TimeSource.Monotonic.markNow() + 1.seconds
             logger.debug { "The Windows taskbar did not accept the prayer widget" }
         }
     }

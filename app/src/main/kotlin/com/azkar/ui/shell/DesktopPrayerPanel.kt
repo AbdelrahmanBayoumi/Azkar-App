@@ -11,11 +11,7 @@ import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.settingsDesktopPrayer
 import com.azkar.generated.resources.settingsDesktopPrayerExtension
 import com.azkar.generated.resources.settingsDesktopPrayerExtensionHint
-import com.azkar.generated.resources.settingsDesktopPrayerPosition
-import com.azkar.generated.resources.settingsDesktopPrayerPositionHint
 import com.azkar.generated.resources.settingsDesktopPrayerTaskbar
-import com.azkar.generated.resources.taskbarPositionAutomatic
-import com.azkar.ui.components.AzkarOutlinedButton
 import com.azkar.ui.components.AzkarToggleSwitch
 import com.azkar.ui.notifications.DesktopPlatform
 import com.azkar.ui.notifications.NotificationPreferencesRepository
@@ -123,7 +119,6 @@ internal fun DesktopPrayerPanelSetting() {
             )
         },
     )
-    if (panel is WindowsPrayerPanel && enabled) WindowsPrayerPositionSetting(preferences)
     if (panel is GnomePrayerPanel && enabled) {
         val extensionEnabled by preferences.gnomePrayerExtensionEnabled.collectAsState()
         SettingsSectionBlock(
@@ -140,23 +135,4 @@ internal fun DesktopPrayerPanelSetting() {
             },
         )
     }
-}
-
-@Composable
-private fun WindowsPrayerPositionSetting(preferences: NotificationPreferencesRepository) {
-    val position by preferences.windowsTaskbarPosition.collectAsState()
-    val scope = rememberCoroutineScope()
-    SettingsSectionBlock(
-        title = stringResource(Res.string.settingsDesktopPrayerPosition),
-        subtitle = stringResource(Res.string.settingsDesktopPrayerPositionHint),
-        modifier = Modifier.padding(top = AzkarSpacing.md),
-        headingAction = {
-            if (position != null) {
-                AzkarOutlinedButton(
-                    text = stringResource(Res.string.taskbarPositionAutomatic),
-                    onClick = { scope.launch { preferences.setWindowsTaskbarPosition(null) } },
-                )
-            }
-        },
-    )
 }

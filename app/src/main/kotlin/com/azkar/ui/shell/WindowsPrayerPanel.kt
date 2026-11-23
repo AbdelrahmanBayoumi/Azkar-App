@@ -33,6 +33,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -82,7 +84,7 @@ internal class WindowsPrayerPanel(
             scope.launch { preferences.setWindowsTaskbarPosition(selected) }
         }
         val theme = OverlayTheme(rememberAzkarDarkTheme(appState.themePreference), appState.locale, appState.typography)
-        val content = status.value?.taskbarContent(theme, popups.schedule != null || popups.menu != null)
+        val content = status.value?.taskbarContent(theme, popups.schedule != null, popups.menu != null)
         val present =
             rememberWindowsTaskbarWidget(
                 content = content,
@@ -129,7 +131,8 @@ internal class WindowsPrayerPanel(
 private fun DesktopPrayerStatus.taskbarContent(
     theme: OverlayTheme,
     scheduleOpen: Boolean,
-) = WindowsTaskbarContent(prayerName, timeLabel, remainingLabel, theme.locale, theme.typography, scheduleOpen)
+    menuOpen: Boolean,
+) = WindowsTaskbarContent(prayerName, timeLabel, remainingLabel, theme.locale, theme.typography, scheduleOpen, menuOpen)
 
 private fun positionMenuHeight(menu: PrayerTrayMenuContent): Int =
     POSITION_TOOLTIP_HEIGHT + POSITION_ACTION_HEIGHT * menu.actions.size + 4
@@ -195,7 +198,7 @@ private fun rememberWindowsTaskbarWidget(
     val currentActions by rememberUpdatedState(actions)
     LaunchedEffect(Unit) {
         try {
-            runCatching {
+            flow<Unit> {
                 coroutineScope {
                     launch(ioDispatcher) {
                         while (isActive) {
@@ -228,10 +231,14 @@ private fun rememberWindowsTaskbarWidget(
                         ),
                     )
                 }
-            }.onFailure { failure ->
-                if (failure is CancellationException) throw failure
+            }.retryWhen { failure, _ ->
+                if (failure !is Exception || failure is CancellationException) return@retryWhen false
+                active.value = false
+                slot.value = null
                 logger.warn(failure) { "Unable to place the prayer widget in the Windows taskbar" }
-            }
+                delay(2.seconds)
+                true
+            }.collect {}
         } finally {
             slot.value = null
             active.value = false

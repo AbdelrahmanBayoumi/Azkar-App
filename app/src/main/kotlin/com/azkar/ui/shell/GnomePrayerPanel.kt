@@ -79,7 +79,12 @@ internal class GnomePrayerPanel : DesktopPrayerPanel(Res.string.settingsDesktopP
         val extensionAvailable =
             extensionEnabled &&
                 mode != DesktopPrayerPanelMode.DISABLED &&
-                rememberGnomeShellPrayerPanel(status.value, trayContent, mode == DesktopPrayerPanelMode.HIDDEN)
+                rememberGnomeShellPrayerPanel(
+                    status.value,
+                    trayContent,
+                    mode == DesktopPrayerPanelMode.HIDDEN,
+                    rememberAzkarDarkTheme(appState.themePreference),
+                )
         if (!extensionAvailable) {
             val content =
                 rememberGnomePrayerContent(

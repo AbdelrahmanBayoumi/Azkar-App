@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.desktopPrayerCloseSchedule
 import com.azkar.generated.resources.taskbarPositionAutomatic
@@ -14,6 +16,8 @@ import com.azkar.generated.resources.taskbarPositionManual
 import com.azkar.generated.resources.taskbarPositionTip
 import com.azkar.generated.resources.title
 import com.azkar.generated.resources.todayPrayerTimes
+import com.azkar.ui.theme.DarkAzkarColors
+import com.azkar.ui.theme.LightAzkarColors
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,7 +48,7 @@ import java.io.IOException
 
 private val logger = KotlinLogging.logger {}
 private const val PANEL_BUS = "com.azkar.PrayerPanel"
-private const val EXTENSION_BUS = "com.azkar.PrayerPanelExtension"
+private const val EXTENSION_BUS = "com.azkar.PrayerPanelExtension.Ready1"
 private const val PANEL_PATH = "/com/azkar/PrayerPanel"
 private const val PANEL_INTERFACE = "com.azkar.PrayerPanel1"
 private const val SNAPSHOT_PROPERTY = "Snapshot"
@@ -54,9 +58,21 @@ internal fun rememberGnomeShellPrayerPanel(
     prayer: DesktopPrayerStatus?,
     tray: ReminderTrayContent,
     hidden: Boolean,
+    darkTheme: Boolean,
 ): Boolean {
     val connected = remember { MutableStateFlow(false) }
-    val frames by rememberUpdatedState(ShellPanelFrame(shellPanelSnapshot(prayer, tray, hidden), tray.menu))
+    val palette =
+        remember(darkTheme) {
+            val colors = if (darkTheme) DarkAzkarColors else LightAzkarColors
+            ShellPalette(
+                colors.cardBackground.cssHex(),
+                colors.textPrimary.cssHex(),
+                colors.border.cssHex(),
+                colors.highlight.cssHex(),
+                colors.primaryStrong.cssHex(),
+            )
+        }
+    val frames by rememberUpdatedState(ShellPanelFrame(shellPanelSnapshot(prayer, tray, hidden, palette), tray.menu))
     LaunchedEffect(Unit) {
         try {
             publishShellPanel(snapshotFlow { frames }, connected)
@@ -72,8 +88,10 @@ private fun shellPanelSnapshot(
     prayer: DesktopPrayerStatus?,
     tray: ReminderTrayContent,
     hidden: Boolean,
+    palette: ShellPalette,
 ): ShellPanelSnapshot =
     ShellPanelSnapshot(
+        palette = palette,
         hidden = hidden,
         appName = stringResource(Res.string.title),
         prayer = prayer?.prayerName.orEmpty(),
@@ -98,8 +116,26 @@ private fun shellPanelSnapshot(
         dragHint = stringResource(Res.string.taskbarPositionTip),
     )
 
+private fun Color.cssHex() =
+    "#" +
+        toArgb()
+            .toUInt()
+            .toString(16)
+            .padStart(8, '0')
+            .takeLast(6)
+
+@Serializable
+private data class ShellPalette(
+    val surface: String,
+    val text: String,
+    val border: String,
+    val highlight: String,
+    val accent: String,
+)
+
 @Serializable
 private data class ShellPanelSnapshot(
+    val palette: ShellPalette,
     val hidden: Boolean,
     val appName: String,
     val prayer: String,
@@ -138,6 +174,12 @@ internal interface GnomeShellPanelService : DBusInterface {
 
     @DBusMemberName("RunAction")
     fun runAction(action: String)
+
+    @DBusMemberName("LogEvent")
+    fun logEvent(
+        level: String,
+        message: String,
+    )
 }
 
 private suspend fun publishShellPanel(
@@ -181,6 +223,17 @@ private suspend fun watchShellPanel(
     changes.trySend(Unit)
     for (ignored in changes) {
         val owner = runCatching { daemon.GetNameOwner(EXTENSION_BUS) }.getOrNull()
+        if (service.extensionOwner != owner) {
+            logger.info {
+                if (owner !=
+                    null
+                ) {
+                    "GNOME prayer panel extension connected"
+                } else {
+                    "GNOME prayer panel extension disconnected"
+                }
+            }
+        }
         service.extensionOwner = owner
         connected.value = owner != null
     }
@@ -198,6 +251,19 @@ private class ShellPanelService(
     override fun getObjectPath(): String = PANEL_PATH
 
     override fun getSnapshot(): String = Json.encodeToString(frame.snapshot)
+
+    override fun logEvent(
+        level: String,
+        message: String,
+    ) {
+        val owner = extensionOwner ?: return
+        if (AbstractConnection.getCallInfo()?.source != owner) return
+        val line = message.take(1_024).map { if (it.isISOControl()) ' ' else it }.joinToString("")
+        when (level) {
+            "info" -> logger.info { "[Azkar Prayer Panel] $line" }
+            "error" -> logger.error { "[Azkar Prayer Panel] $line" }
+        }
+    }
 
     override fun runAction(action: String) {
         val owner = extensionOwner ?: return

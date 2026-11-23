@@ -167,6 +167,22 @@ jobs:
         with:
           cache-disabled: true
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.4.5'
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          package_json_file: app/src/gnomeExtension/package.json
+
+      - name: Check GNOME extension
+        working-directory: app/src/gnomeExtension
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          bun run check
+
       - name: Install native test dependencies
         run: sudo apt-get update && sudo apt-get install -y libgl1
 

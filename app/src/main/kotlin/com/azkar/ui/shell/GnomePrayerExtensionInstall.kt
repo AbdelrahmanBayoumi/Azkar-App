@@ -13,7 +13,23 @@ private const val EXTENSION_UUID = "azkar-prayers@azkar.app"
 private const val EXTENSION_DIRECTORY = "gnome-shell/extensions/$EXTENSION_UUID"
 private const val BUNDLE_MARKER = ".azkar-bundle"
 private const val METADATA = "metadata.json"
-private val extensionFiles = listOf("extension.js", "stylesheet.css", "azkar.png", METADATA)
+private val extensionFiles =
+    listOf("panelState.js", "extension.js", "stylesheet.css", "azkar.png", METADATA) +
+        listOf(
+            "bell",
+            "bell-off",
+            "calendar",
+            "house",
+            "moon",
+            "sun",
+            "sunrise",
+            "sunset",
+            "x",
+            "auto-awesome",
+            "open-with",
+            "visibility",
+            "visibility-off",
+        ).map { "$it-symbolic.svg" }
 
 internal fun provisionGnomePrayerExtension() {
     runCatching {

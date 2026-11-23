@@ -605,8 +605,6 @@
     <string name="settingsDesktopPrayerExtensionHint">Use the native top-bar widget when available. Turn this off to use the standard indicator.</string>
     <string name="settingsDesktopPrayerTitle">Prayer Panel</string>
     <string name="settingsDesktopPrayerTaskbar">Show on the taskbar</string>
-    <string name="settingsDesktopPrayerPosition">Taskbar position</string>
-    <string name="settingsDesktopPrayerPositionHint">Right-click the widget to move it. Select Automatic to restore its default position.</string>
     <string name="settingsDesktopPrayerWindowsHint">Show the prayer time and countdown in the Windows taskbar. Turn this off to use the system tray.</string>
     <string name="settingsPrayerCalculationHint">The convention that turns that place into prayer times.</string>
     <string name="settingsPrayerCityLabel">City or place</string>

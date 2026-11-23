@@ -618,8 +618,6 @@
     <string name="settingsDesktopPrayerExtensionHint">استخدم أداة الشريط العلوي الأصلية عند توفرها. أوقف هذا الخيار لاستخدام المؤشر العادي.</string>
     <string name="settingsDesktopPrayerTitle">لوحة الصلاة</string>
     <string name="settingsDesktopPrayerTaskbar">إظهار في شريط المهام</string>
-    <string name="settingsDesktopPrayerPosition">الموضع في شريط المهام</string>
-    <string name="settingsDesktopPrayerPositionHint">انقر بزر الفأرة الأيمن على الأداة لنقلها. اختر تلقائي لاستعادة موضعها الافتراضي.</string>
     <string name="settingsDesktopPrayerWindowsHint">اعرض وقت الصلاة والوقت المتبقي في شريط مهام ويندوز. أوقف هذا الخيار لاستخدام علبة النظام.</string>
     <string name="settingsPrayerCalculationHint">الطريقة التي يحوّل بها ذلك المكان إلى أوقات صلاة.</string>
     <string name="settingsPrayerCityLabel">المدينة أو المكان</string>
