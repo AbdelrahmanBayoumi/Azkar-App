@@ -38,6 +38,7 @@ import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.asr
 import com.azkar.generated.resources.nextPrayerLabel
 import com.azkar.generated.resources.title
+import com.azkar.generated.resources.todayPrayerTimes
 import com.azkar.generated.resources.trayMenuHidePanel
 import com.azkar.generated.resources.trayMenuOpen
 import com.azkar.generated.resources.trayMenuPause
@@ -53,6 +54,7 @@ import com.azkar.ui.notifications.NotificationAction
 import com.azkar.ui.notifications.NotificationActionRouter
 import com.azkar.ui.notifications.NotificationNotice
 import com.azkar.ui.notifications.NotificationPreferencesRepository
+import com.azkar.ui.notifications.PrayerMenuLayout
 import com.azkar.ui.notifications.presentation.NotificationPublisher
 import com.azkar.ui.theme.AzkarVariantsPreview
 import dev.nucleusframework.composenativetray.menu.api.TrayMenuBuilder
@@ -144,7 +146,9 @@ internal fun DesktopPrayerSurfaces(
             )
         }
     val panel = DesktopPrayerPanel.current
-    var panelHidden by remember { mutableStateOf(false) }
+    val gnomeDisplay = if (panel is GnomePrayerPanel) preferences.gnomePrayerDisplay.collectAsState().value else null
+    // Hide applies to the selected surface. Selecting a different surface starts it visible.
+    var panelHidden by remember(gnomeDisplay) { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val visibility =
         panelVisibilityAction(panelHidden) { hidden ->
@@ -183,6 +187,9 @@ private fun rememberTrayContent(
     menuActions: TrayMenuActions,
 ): ReminderTrayContent {
     val queue by preferences.queue.collectAsState()
+    val trayLayout by preferences.prayerTrayMenuLayout.collectAsState()
+    val displayLayout = if (prayerTrayLayoutAvailable) trayLayout else PrayerMenuLayout.COMPACT
+    val readOnly = remember { {} }
     val scope = rememberCoroutineScope()
     val openLabel = stringResource(Res.string.trayMenuOpen)
     val pauseLabel =
@@ -206,7 +213,7 @@ private fun rememberTrayContent(
                 TrayMenuEntry(
                     status?.countdownLabel ?: stringResource(Res.string.nextPrayerLabel),
                     AzkarIcons.Clock,
-                    remember { {} },
+                    readOnly,
                     isEnabled = false,
                 ),
             openApp = TrayMenuEntry(openLabel, AzkarIcons.Home, actions.openApp),
@@ -221,6 +228,8 @@ private fun rememberTrayContent(
             quit = TrayMenuEntry(quitLabel, ActionIcons.dismiss, actions.quit),
             iconRenderProperties = menuIconRenderProperties,
             remindersPaused = !queue.enabled,
+            trayLayout = displayLayout,
+            schedule = prayerTraySchedule(status, readOnly),
         )
     return ReminderTrayContent(
         tooltip = status?.countdownLabel ?: stringResource(Res.string.title),
@@ -228,6 +237,26 @@ private fun rememberTrayContent(
         primaryAction = activate,
         menu = menu,
     )
+}
+
+@Composable
+private fun prayerTraySchedule(
+    status: DesktopPrayerStatus?,
+    readOnly: () -> Unit,
+): List<TrayMenuEntry> {
+    val prayers = status?.today.orEmpty()
+    if (prayers.isEmpty()) return emptyList()
+    val heading =
+        TrayMenuEntry(stringResource(Res.string.todayPrayerTimes), AzkarIcons.Calendar, readOnly, isEnabled = false)
+    return listOf(heading) +
+        prayers.map { prayer ->
+            TrayMenuEntry(
+                "${prayer.name} · ${prayer.value}",
+                prayer.key.desktopPrayerIcon(),
+                readOnly,
+                isEnabled = false,
+            )
+        }
 }
 
 internal data class ReminderTrayContent(
@@ -252,12 +281,17 @@ internal data class PrayerTrayMenuContent(
     val iconRenderProperties: IconRenderProperties,
     val panelVisibility: TrayMenuEntry? = null,
     val remindersPaused: Boolean = false,
+    val trayLayout: PrayerMenuLayout = PrayerMenuLayout.COMPACT,
+    val schedule: List<TrayMenuEntry> = emptyList(),
 ) {
     val actions = listOfNotNull(openApp, panelVisibility, reminders, quit)
 
     // Null entries are separators in both native menu implementations.
     val actionEntries = actions.flatMap { if (it == quit) listOf(null, it) else listOf(it) }
-    val entries = listOf(countdown, null) + actionEntries
+    val entries = summary(trayLayout) + listOf(null) + actionEntries
+
+    fun summary(layout: PrayerMenuLayout): List<TrayMenuEntry> =
+        if (layout == PrayerMenuLayout.EXTENDED && schedule.isNotEmpty()) schedule else listOf(countdown)
 }
 
 private fun TrayMenuBuilder.addPrayerTrayMenu(menu: PrayerTrayMenuContent) {

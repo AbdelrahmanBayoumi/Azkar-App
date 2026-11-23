@@ -1,15 +1,22 @@
 package com.azkar.ui.shell
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.ui.graphics.Color
+import com.azkar.ui.notifications.DesktopPlatform
+import com.azkar.ui.notifications.PrayerMenuLayout
 import com.azkar.ui.theme.AppTypography
+import com.sun.jna.platform.win32.WinDef.HWND
 import de.infix.testBalloon.framework.core.testSuite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.assertj.core.api.Assertions.assertThat
+import org.freedesktop.dbus.types.UInt32
+import org.freedesktop.dbus.types.Variant
 import java.awt.Dimension
 import java.awt.Insets
 import java.awt.Point
 import java.awt.Rectangle
-import java.lang.foreign.MemorySegment
 import java.util.Locale
 
 @Suppress("unused")
@@ -37,6 +44,89 @@ val DesktopPrayerPanelSuite by testSuite("The desktop prayer panel") {
         assertThat(isGnomePrayerPanelSupported("KDE", fedora)).isFalse()
         assertThat(isGnomePrayerPanelSupported("", fedora)).isFalse()
         assertThat(isGnomePrayerPanelSupported("GNOME", "ID=rhel\nID_LIKE=fedora")).isFalse()
+    }
+
+    test("AppIndicator keeps reminder and quit buttons at stable IDs across context menu layouts") {
+        withContext(Dispatchers.Main) {
+            val clicks = mutableListOf<String>()
+
+            fun action(label: String) = TrayMenuEntry(label, Icons.Filled.Close, { clicks.add(label) })
+            val trayMenu =
+                PrayerTrayMenuContent(
+                    countdown = action("Dhuhr in 2 hours").copy(isEnabled = false),
+                    openApp = action("Open Azkar"),
+                    reminders = action("Pause reminders"),
+                    quit = action("Quit"),
+                    iconRenderProperties = trayIconRenderProperties(DesktopPlatform.LINUX),
+                    panelVisibility = action("Hide panel"),
+                )
+            val menuWithSchedule =
+                trayMenu.copy(
+                    schedule =
+                        listOf(action("Today's prayer times"), action("Dhuhr · 11:30 AM")).map {
+                            it.copy(isEnabled = false)
+                        },
+                )
+            val panel =
+                GnomePrayerContent(
+                    label = "Dhuhr",
+                    tray = ReminderTrayContent("Azkar", Icons.Filled.Close, {}, menuWithSchedule),
+                    menuTint = Color.White,
+                    panelVisible = true,
+                    panelLayout = PrayerMenuLayout.EXTENDED,
+                )
+            val tray =
+                panel.copy(
+                    panelVisible = false,
+                    label = "",
+                    tray = panel.tray.copy(menu = menuWithSchedule.copy(panelVisibility = action("Show panel"))),
+                )
+            val extendedTray =
+                tray.copy(
+                    tray = tray.tray.copy(menu = tray.tray.menu.copy(trayLayout = PrayerMenuLayout.EXTENDED)),
+                )
+            assertThat(panel.layout).isEqualTo(PrayerMenuLayout.EXTENDED)
+            assertThat(tray.layout).isEqualTo(PrayerMenuLayout.COMPACT)
+            assertThat(extendedTray.layout).isEqualTo(PrayerMenuLayout.EXTENDED)
+            val compactPanel = panel.copy(panelLayout = PrayerMenuLayout.COMPACT, tray = extendedTray.tray)
+            assertThat(compactPanel.layout).isEqualTo(PrayerMenuLayout.COMPACT)
+            val layouts = listOf(panel, compactPanel, tray, extendedTray)
+            for (content in layouts) {
+                val menu = GnomePrayerMenuItem(content)
+                val nodes =
+                    menu
+                        .getLayout(0, -1, emptyList())
+                        .item.children
+                        .map { it.value as GnomePrayerMenuNode }
+                assertThat(nodes.map { it.id }).doesNotHaveDuplicates()
+                val summary =
+                    when {
+                        content.layout == PrayerMenuLayout.EXTENDED -> "Today's prayer times"
+                        content.panelVisible -> "Open Azkar"
+                        else -> "Dhuhr in 2 hours"
+                    }
+                if (content.panelVisible) {
+                    assertThat(nodes.map { it.id }).doesNotContain(1, 2)
+                }
+                assertThat(nodes.first().properties["label"]?.value).isEqualTo(summary)
+                if (!content.panelVisible) {
+                    assertThat(nodes.map { it.properties["label"]?.value }).contains("Show panel")
+                    assertThat(
+                        content.tray.menu.entries
+                            .filterNotNull()
+                            .first()
+                            .label,
+                    ).isEqualTo(summary)
+                }
+                val buttons = nodes.filter { it.properties["label"]?.value in listOf("Pause reminders", "Quit") }
+                assertThat(buttons.map { it.id }).containsExactly(5, 7)
+                for (button in buttons) {
+                    assertThat(button.properties["type"]?.value).isEqualTo("standard")
+                    menu.event(button.id, "clicked", Variant(""), UInt32(0))
+                }
+            }
+            assertThat(clicks).containsExactlyElementsOf(layouts.flatMap { listOf("Pause reminders", "Quit") })
+        }
     }
 
     test("the widget fits between Widgets and the centered taskbar controls") {
@@ -111,7 +201,7 @@ val DesktopPrayerPanelSuite by testSuite("The desktop prayer panel") {
                 val width = windowsPixels(148, dpi)
                 val height = windowsPixels(40, dpi)
                 val rtl = text == arabic
-                val slot = WindowsTaskbarSlot(MemorySegment.NULL, Rectangle(width, height), dpi, dark = !rtl)
+                val slot = WindowsTaskbarSlot(HWND(), Rectangle(width, height), dpi, dark = !rtl)
                 val pixels = renderWindowsTaskbar(text, slot, highlighted = false)
                 assertThat(pixels).hasSize(width * height * 4)
                 assertThat(pixels[3].toInt()).isZero()

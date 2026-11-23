@@ -160,6 +160,7 @@ dependencies {
     implementation(libs.io.coil.kt.coil3.coil.compose)
     implementation(libs.io.github.vinceglb.filekit.dialogs)
     implementation(libs.io.github.vinceglb.filekit.coil)
+    implementation(libs.jna.platform)
 
     // `runTest` supplies virtual time and a deterministic scheduler, which is what makes the
     // library's debounced search assertable without a real 180 ms wait.

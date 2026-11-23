@@ -1,24 +1,29 @@
 package com.azkar.ui.shell
 
+import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.WinDef.HWND
 import java.awt.Rectangle
 import java.lang.foreign.Arena
 import java.lang.foreign.FunctionDescriptor
+import java.lang.foreign.Linker
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.MemorySegment.NULL
+import java.lang.foreign.SymbolLookup
 import java.lang.foreign.ValueLayout.ADDRESS
 import java.lang.foreign.ValueLayout.JAVA_BYTE
 import java.lang.foreign.ValueLayout.JAVA_INT
 import java.lang.foreign.ValueLayout.JAVA_SHORT
+import java.lang.invoke.MethodHandle
 import java.util.UUID
 
 /** UI Automation calls stay on a COM MTA thread that owns no windows. */
 internal class WindowsTaskbarAutomation private constructor(
     private val automation: AutomationObject,
 ) {
-    fun controls(taskbar: MemorySegment): List<Rectangle> =
+    fun controls(taskbar: HWND): List<Rectangle> =
         Arena.ofConfined().use { arena ->
             automation
-                .objectResult(arena, 6, taskbar)
+                .objectResult(arena, 6, MemorySegment.ofAddress(Pointer.nativeValue(taskbar.pointer)))
                 ?.use { root ->
                     // ElementFromHandle
                     automation.objectResult(arena, 18)?.use { condition ->
@@ -195,4 +200,20 @@ private fun Arena.guid(text: String): MemorySegment {
         )
     }
     return buffer
+}
+
+private fun MemorySegment.asRectangle(): Rectangle {
+    val left = get(JAVA_INT, 0)
+    val top = get(JAVA_INT, 4)
+    return Rectangle(left, top, get(JAVA_INT, 8) - left, get(JAVA_INT, 12) - top)
+}
+
+private object Win32 {
+    val linker: Linker = Linker.nativeLinker()
+    private val ole by lazy { SymbolLookup.libraryLookup("ole32.dll", Arena.global()) }
+
+    fun ole32(
+        name: String,
+        signature: FunctionDescriptor,
+    ): MethodHandle = linker.downcallHandle(ole.findOrThrow(name), signature)
 }

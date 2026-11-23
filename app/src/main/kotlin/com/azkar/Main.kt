@@ -2,11 +2,13 @@ package com.azkar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -209,6 +211,22 @@ private fun rememberMainWindowVisibility(
 }
 
 @Composable
+private fun rememberShowWindow(
+    visible: MutableState<Boolean>,
+    activation: MutableIntState,
+): () -> Unit {
+    val scope = rememberCoroutineScope()
+    return remember(visible, activation, scope) {
+        {
+            scope.launch {
+                visible.value = true
+                activation.intValue++
+            }
+        }
+    }
+}
+
+@Composable
 private fun DesktopApplicationRoot(
     args: Array<String>,
     koin: org.koin.core.Koin,
@@ -219,19 +237,20 @@ private fun DesktopApplicationRoot(
     val startedAtLogin = rememberStartedAtLogin(args)
     val proofOfConcept = OVERLAY_PROOF_OF_CONSENT_FLAG in args
     val updateNotificationPreview = UPDATE_NOTIFICATION_PREVIEW_FLAG in args
-    var windowVisible by rememberMainWindowVisibility(
-        trayAvailable,
-        startedAtLogin,
-        proofOfConcept,
-        updateNotificationPreview,
-    )
-    val composeScope = rememberCoroutineScope()
+    val windowVisibility =
+        rememberMainWindowVisibility(
+            trayAvailable,
+            startedAtLogin,
+            proofOfConcept,
+            updateNotificationPreview,
+        )
     val actionRouter = remember { koin.get<NotificationActionRouter>() }
+    val windowActivation = remember { mutableIntStateOf(0) }
     // A notification activation, a tray click and an overlay card all arrive on somebody else's
     // thread, so showing the window is handed to the composition's scope rather than written from
     // there. The router runs this half before the navigation half, so a reminder that arrives before
     // the tree has ever composed still brings the window up.
-    val showWindow: () -> Unit = { composeScope.launch { windowVisible = true } }
+    val showWindow = rememberShowWindow(windowVisibility, windowActivation)
     SideEffect {
         actionRouter.setBeforeNavigate { showWindow() }
     }
@@ -272,14 +291,15 @@ private fun DesktopApplicationRoot(
                 TrayMenuActions(
                     openApp = showWindow,
                     quit = quitAction,
-                    panelHidden = { windowVisible = false },
+                    panelHidden = { windowVisibility.value = false },
                 ),
         )
     }
 
     MainWindow(
-        visible = windowVisible,
-        onCloseRequest = { if (trayAvailable) windowVisible = false else quitAction() },
+        visible = windowVisibility.value,
+        activation = windowActivation.intValue,
+        onCloseRequest = { if (trayAvailable) windowVisibility.value = false else quitAction() },
         appState = appState,
         actionRouter = actionRouter,
     )
@@ -535,6 +555,7 @@ private fun UpdateNotificationPreview(
 @Composable
 private fun MainWindow(
     visible: Boolean,
+    activation: Int,
     onCloseRequest: () -> Unit,
     appState: AzkarAppState,
     actionRouter: NotificationActionRouter,
@@ -554,6 +575,13 @@ private fun MainWindow(
         title = windowTitle(appState.locale),
         icon = rememberVectorPainter(AzkarIcons.Brand),
     ) {
+        LaunchedEffect(activation) {
+            if (activation != 0) {
+                windowState.isMinimized = false
+                window.toFront()
+                window.requestFocus()
+            }
+        }
         AzkarApp(state = appState, actionRouter = actionRouter)
     }
 }

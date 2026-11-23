@@ -177,7 +177,7 @@ fun settingsGroupLabel(group: SettingsGroup): String =
 val SettingsGroup.sections: List<SettingsSection>
     get() =
         SettingsSection.entries.filter {
-            it.group == this && (it != SettingsSection.PRAYER_PANEL || DesktopPrayerPanel.current != null)
+            it.group == this && (it != SettingsSection.PRAYER_PANEL || prayerTrayLayoutAvailable)
         }
 
 /**

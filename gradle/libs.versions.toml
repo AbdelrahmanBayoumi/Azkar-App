@@ -88,6 +88,7 @@ coil = "3.6.3"
 # app already has a `suspend () -> String?` seam for the chooser that every host supplies, so
 # adopting it would mean wrapping a function the app has rather than deleting one.
 filekit = "0.17.1"
+jna = "5.19.1"
 
 [libraries]
 # Database Dependencies
@@ -167,6 +168,7 @@ io-insert-koin-koin-compose = { module = "io.insert-koin:koin-compose", version.
 # from these, so `coil-compose` is named here as well to make the dependency explicit.
 io-github-vinceglb-filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
 io-github-vinceglb-filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "filekit" }
+jna-platform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 io-coil-kt-coil3-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
 # Testing (they are used in the BuildSrc just not by the plugin called by name don't remove)

@@ -1,19 +1,35 @@
 package com.azkar.ui.shell
 
 import com.azkar.ui.theme.AppTypography
+import com.sun.jna.Native
+import com.sun.jna.Pointer
+import com.sun.jna.Structure
+import com.sun.jna.platform.win32.GDI32
+import com.sun.jna.platform.win32.Kernel32
+import com.sun.jna.platform.win32.User32
+import com.sun.jna.platform.win32.WinDef.HBITMAP
+import com.sun.jna.platform.win32.WinDef.HCURSOR
+import com.sun.jna.platform.win32.WinDef.HDC
+import com.sun.jna.platform.win32.WinDef.HINSTANCE
+import com.sun.jna.platform.win32.WinDef.HWND
+import com.sun.jna.platform.win32.WinDef.LPARAM
+import com.sun.jna.platform.win32.WinDef.LRESULT
+import com.sun.jna.platform.win32.WinDef.POINT
+import com.sun.jna.platform.win32.WinDef.WPARAM
+import com.sun.jna.platform.win32.WinGDI
+import com.sun.jna.platform.win32.WinGDI.BITMAPINFO
+import com.sun.jna.platform.win32.WinUser
+import com.sun.jna.platform.win32.WinUser.BLENDFUNCTION
+import com.sun.jna.platform.win32.WinUser.MSG
+import com.sun.jna.platform.win32.WinUser.SIZE
+import com.sun.jna.platform.win32.WinUser.WNDCLASSEX
+import com.sun.jna.platform.win32.WinUser.WindowProc
+import com.sun.jna.ptr.PointerByReference
+import com.sun.jna.win32.StdCallLibrary
+import com.sun.jna.win32.W32APIOptions
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.foreign.Arena
-import java.lang.foreign.FunctionDescriptor
-import java.lang.foreign.MemorySegment
-import java.lang.foreign.MemorySegment.NULL
-import java.lang.foreign.ValueLayout.ADDRESS
-import java.lang.foreign.ValueLayout.JAVA_BYTE
-import java.lang.foreign.ValueLayout.JAVA_INT
-import java.lang.foreign.ValueLayout.JAVA_LONG
-import java.lang.foreign.ValueLayout.JAVA_SHORT
-import java.lang.invoke.MethodHandles
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
@@ -48,6 +64,8 @@ private const val WS_EX_LAYERED = 0x00080000
 private const val SW_SHOWNOACTIVATE = 4
 private const val SWP_NOACTIVATE = 0x0010
 private const val PM_REMOVE = 1
+private const val IDC_SIZEWE = 32644L
+private const val IDC_HAND = 32649L
 
 /** Created and destroyed on the same thread that dispatches the child window's messages. */
 internal class WindowsTaskbarWidget(
@@ -56,22 +74,23 @@ internal class WindowsTaskbarWidget(
     private val moveEnabled: () -> Boolean,
     private val onMoveFinished: (Int?) -> Unit,
 ) : AutoCloseable {
-    private val arena = Arena.ofConfined()
-    private val instance = getModuleHandle.invokeExact(NULL) as MemorySegment
-    private val className = arena.wideString("AzkarPrayerWidget${nextClassId.incrementAndGet()}")
-    private val message = arena.allocate(48, 8) // MSG on x64
-    private val mouseTracking =
-        arena.allocate(24, 8).apply {
-            // TRACKMOUSEEVENT on x64
-            set(JAVA_INT, 0, 24)
-            set(JAVA_INT, 4, TME_LEAVE)
+    private val user32 = User32.INSTANCE
+    private val instance = Kernel32.INSTANCE.GetModuleHandle(null)
+    private val className = "AzkarPrayerWidget${nextClassId.incrementAndGet()}"
+    private val message = MSG()
+    private val mouseTracking = WidgetMouseTracking().apply { dwFlags = TME_LEAVE }
+    private val cursorPoint = POINT()
+    private val moveCursor = taskbarUser32.LoadCursor(null, Pointer.createConstant(IDC_SIZEWE))
+
+    // Windows stores the callback address until the class is unregistered.
+    private val procedure =
+        WindowProc { handle, code, wParam, lParam ->
+            windowProc(handle, code, wParam, lParam)
         }
-    private val cursorPoint = arena.allocate(8, 4)
-    private val moveCursor = loadCursor.invokeExact(NULL, MemorySegment.ofAddress(32644)) as MemorySegment // IDC_SIZEWE
     private var dragOffset: Double? = null
     private var dragStart = 0
     private var pixels = ByteArray(0)
-    private var window = NULL
+    private var window: HWND? = null
     private var hovered = false
     private var scheduleWasOpenOnPress = false
     private var frame: Frame? = null
@@ -79,12 +98,7 @@ internal class WindowsTaskbarWidget(
     private var retryAt = TimeSource.Monotonic.markNow()
 
     init {
-        runCatching {
-            register()
-        }.onFailure { failure ->
-            arena.close()
-            throw failure
-        }
+        register()
     }
 
     val isAttached: Boolean get() = frame != null
@@ -98,7 +112,7 @@ internal class WindowsTaskbarWidget(
             attempted = null
             return
         }
-        if (window != NULL && frame?.slot?.taskbar != slot.taskbar) detach()
+        if (window != null && frame?.slot?.taskbar != slot.taskbar) detach()
         val placed = dragSlot(slot)
         val next = Frame(placed, content, hovered || content.scheduleOpen || content.menuOpen || moveEnabled())
         if (next == frame || (next == attempted && retryAt.hasNotPassedNow())) return
@@ -119,12 +133,12 @@ internal class WindowsTaskbarWidget(
 
     private fun cursorAlongBar(layout: WindowsTaskbarLayout): Int? =
         WindowsTaskbar.withScreenDpi {
-            if ((getCursorPos.invokeExact(cursorPoint) as Int) == 0) return@withScreenDpi null
-            cursorPoint.get(JAVA_INT, if (layout.vertical) 4L else 0L)
+            if (!user32.GetCursorPos(cursorPoint)) return@withScreenDpi null
+            if (layout.vertical) cursorPoint.y else cursorPoint.x
         }
 
     private fun dragSlot(slot: WindowsTaskbarSlot): WindowsTaskbarSlot {
-        if (moveEnabled() && (getAsyncKeyState.invokeExact(VK_ESCAPE) as Short) < 0) {
+        if (moveEnabled() && user32.GetAsyncKeyState(VK_ESCAPE) < 0) {
             dragOffset = null
             onMoveFinished(null)
             return slot
@@ -146,7 +160,7 @@ internal class WindowsTaskbarWidget(
                 100,
             )
         val moved = cursor != dragStart
-        if ((getAsyncKeyState.invokeExact(VK_LBUTTON) as Short) >= 0) {
+        if (user32.GetAsyncKeyState(VK_LBUTTON) >= 0) {
             dragOffset = null
             onMoveFinished(percent.takeIf { moved })
         }
@@ -155,8 +169,8 @@ internal class WindowsTaskbarWidget(
     }
 
     fun pump() {
-        while ((peekMessage.invokeExact(message, NULL, 0, 0, PM_REMOVE) as Int) != 0) {
-            dispatchMessage.invokeExact(message) as Long
+        while (user32.PeekMessage(message, null, 0, 0, PM_REMOVE)) {
+            user32.DispatchMessage(message)
         }
     }
 
@@ -168,77 +182,64 @@ internal class WindowsTaskbarWidget(
             val slot = next.slot
             val bounds = slot.bounds
             val title = "${next.content.name}, ${next.content.time}, ${next.content.remaining}"
-            Arena.ofConfined().use { scratch ->
-                val caption = scratch.wideString(title)
-                if (window == NULL) {
-                    // Create a real child with Explorer's DPI context. SetParent can reset the
-                    // child process's DPI awareness when crossing process boundaries.
-                    window =
-                        createWindow.invokeExact(
-                            WS_EX_LAYERED,
-                            className,
-                            caption,
-                            WS_CHILD,
-                            bounds.x,
-                            bounds.y,
-                            bounds.width,
-                            bounds.height,
-                            slot.taskbar,
-                            NULL,
-                            instance,
-                            NULL,
-                        ) as MemorySegment
-                    if (window == NULL) return@use false
-                }
-                setWindowText.invokeExact(window, caption) as Int
-                val positioned =
-                    setWindowPos.invokeExact(
-                        window,
-                        NULL,
+            // Match Explorer’s DPI context when creating the child window.
+            val hwnd =
+                window ?: user32
+                    .CreateWindowEx(
+                        WS_EX_LAYERED,
+                        className,
+                        title,
+                        WS_CHILD,
                         bounds.x,
                         bounds.y,
                         bounds.width,
                         bounds.height,
-                        SWP_NOACTIVATE,
-                    ) as Int
-                if (positioned == 0 || !paintWidget(window, bounds.width, bounds.height, pixels)) return@use false
-                showWindow.invokeExact(window, SW_SHOWNOACTIVATE) as Int
-                true
-            }
+                        slot.taskbar,
+                        null,
+                        instance,
+                        null,
+                    )?.also { window = it } ?: return@withParentDpi false
+            taskbarUser32.SetWindowText(hwnd, title)
+            val positioned =
+                user32.SetWindowPos(
+                    hwnd,
+                    null,
+                    bounds.x,
+                    bounds.y,
+                    bounds.width,
+                    bounds.height,
+                    SWP_NOACTIVATE,
+                )
+            if (!positioned || !paintWidget(hwnd, bounds.width, bounds.height, pixels)) return@withParentDpi false
+            user32.ShowWindow(hwnd, SW_SHOWNOACTIVATE)
+            true
         }
 
     private fun register() {
-        val procedure =
-            MethodHandles
-                .lookup()
-                .findVirtual(WindowsTaskbarWidget::class.java, "windowProc", windowProc.toMethodType())
-                .bindTo(this)
-        // WNDCLASSEXW on x64. The other optional handles remain zero.
-        val wndClass = arena.allocate(80, 8)
-        wndClass.set(JAVA_INT, 0, 80)
-        wndClass.set(ADDRESS, 8, Win32.linker.upcallStub(procedure, windowProc, arena))
-        wndClass.set(ADDRESS, 24, instance)
-        val handCursor = loadCursor.invokeExact(NULL, MemorySegment.ofAddress(32649)) as MemorySegment // IDC_HAND
-        wndClass.set(ADDRESS, 40, handCursor)
-        wndClass.set(ADDRESS, 64, className)
-        val atom = registerClass.invokeExact(wndClass) as Short
-        check(atom.toInt() != 0) { "Unable to register the taskbar widget window" }
+        val wndClass =
+            WNDCLASSEX().apply {
+                lpfnWndProc = procedure
+                hInstance = instance
+                hCursor = taskbarUser32.LoadCursor(null, Pointer.createConstant(IDC_HAND))
+                lpszClassName = className
+            }
+        check(user32.RegisterClassEx(wndClass).toInt() != 0) { "Unable to register the taskbar widget window" }
     }
 
     private fun handleSetCursor(
-        handle: MemorySegment,
-        wParam: Long,
-        lParam: Long,
-    ): Long {
-        if (!moveEnabled()) return defWindowProc.invokeExact(handle, WM_SETCURSOR, wParam, lParam) as Long
-        setCursor.invokeExact(moveCursor) as MemorySegment
-        return 1L
+        handle: HWND,
+        wParam: WPARAM,
+        lParam: LPARAM,
+    ): LRESULT {
+        if (!moveEnabled()) return user32.DefWindowProc(handle, WM_SETCURSOR, wParam, lParam)
+        taskbarUser32.SetCursor(moveCursor)
+        return LRESULT(1)
     }
 
-    private fun trackHover(handle: MemorySegment) {
+    private fun trackHover(handle: HWND) {
         if (handle != window || hovered) return
-        mouseTracking.set(ADDRESS, 8, handle)
-        hovered = (trackMouseEvent.invokeExact(mouseTracking) as Int) != 0
+        mouseTracking.hwndTrack = handle
+        hovered = taskbarUser32.TrackMouseEvent(mouseTracking)
     }
 
     private fun handleLeftPress() {
@@ -265,72 +266,72 @@ internal class WindowsTaskbarWidget(
     }
 
     private fun windowProc(
-        handle: MemorySegment,
+        handle: HWND,
         code: Int,
-        wParam: Long,
-        lParam: Long,
-    ): Long {
+        wParam: WPARAM,
+        lParam: LPARAM,
+    ): LRESULT {
         // Exceptions must never cross the upcall boundary.
         return runCatching {
             when (code) {
                 WM_SETCURSOR -> handleSetCursor(handle, wParam, lParam)
-                WM_MOUSEACTIVATE -> MA_NOACTIVATE
+                WM_MOUSEACTIVATE -> LRESULT(MA_NOACTIVATE)
                 WM_MOUSEMOVE -> {
                     trackHover(handle)
-                    0L
+                    LRESULT(0)
                 }
                 WM_MOUSELEAVE -> {
                     if (handle == window) hovered = false
-                    0L
+                    LRESULT(0)
                 }
                 WM_LBUTTONDOWN -> {
                     handleLeftPress()
-                    0L
+                    LRESULT(0)
                 }
                 WM_LBUTTONUP -> {
                     if (!moveEnabled()) frame?.slot?.let { onClick(scheduleWasOpenOnPress, it) }
                     scheduleWasOpenOnPress = false
-                    0L
+                    LRESULT(0)
                 }
                 WM_RBUTTONUP -> {
                     handleRightRelease()
-                    0L
+                    LRESULT(0)
                 }
                 WM_NCDESTROY -> {
                     if (handle == window) {
-                        window = NULL
+                        window = null
                         hovered = false
                         scheduleWasOpenOnPress = false
                         frame = null
                         attempted = null
                     }
-                    defWindowProc.invokeExact(handle, code, wParam, lParam) as Long
+                    user32.DefWindowProc(handle, code, wParam, lParam)
                 }
-                else -> defWindowProc.invokeExact(handle, code, wParam, lParam) as Long
+                else -> user32.DefWindowProc(handle, code, wParam, lParam)
             }
         }.getOrElse {
             logger.warn(it) { "Unable to handle a Windows prayer widget event" }
-            0L
+            LRESULT(0)
         }
     }
 
     private fun detach() {
         val previous = window
         dragOffset = null
-        window = NULL
+        window = null
         hovered = false
         scheduleWasOpenOnPress = false
         frame = null
-        if (previous != NULL) destroyWindow.invokeExact(previous) as Int
+        if (previous != null) user32.DestroyWindow(previous)
     }
 
     override fun close() {
         detach()
-        // The class and its WndProc must be gone before the upcall's memory can be released.
-        check((unregisterClass.invokeExact(className, instance) as Int) != 0) {
+        check(user32.UnregisterClass(className, instance)) {
             "Unable to unregister the taskbar widget window"
         }
-        arena.close()
+        java.lang.ref.Reference
+            .reachabilityFence(procedure)
     }
 
     private data class Frame(
@@ -351,164 +352,110 @@ internal class WindowsTaskbarWidget(
 
     companion object {
         private val nextClassId = AtomicInteger()
-        private val windowProc = FunctionDescriptor.of(JAVA_LONG, ADDRESS, JAVA_INT, JAVA_LONG, JAVA_LONG)
-        private val getModuleHandle = Win32.kernel32("GetModuleHandleW", FunctionDescriptor.of(ADDRESS, ADDRESS))
-        private val registerClass = Win32.user32("RegisterClassExW", FunctionDescriptor.of(JAVA_SHORT, ADDRESS))
-        private val unregisterClass =
-            Win32.user32("UnregisterClassW", FunctionDescriptor.of(JAVA_INT, ADDRESS, ADDRESS))
-        private val defWindowProc =
-            Win32.user32(
-                "DefWindowProcW",
-                FunctionDescriptor.of(
-                    JAVA_LONG,
-                    ADDRESS,
-                    JAVA_INT,
-                    JAVA_LONG,
-                    JAVA_LONG,
-                ),
-            )
-        private val destroyWindow = Win32.user32("DestroyWindow", FunctionDescriptor.of(JAVA_INT, ADDRESS))
-        private val showWindow = Win32.user32("ShowWindow", FunctionDescriptor.of(JAVA_INT, ADDRESS, JAVA_INT))
-        private val setWindowText = Win32.user32("SetWindowTextW", FunctionDescriptor.of(JAVA_INT, ADDRESS, ADDRESS))
-        private val loadCursor = Win32.user32("LoadCursorW", FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS))
-        private val getCursorPos = Win32.user32("GetCursorPos", FunctionDescriptor.of(JAVA_INT, ADDRESS))
-        private val getAsyncKeyState = Win32.user32("GetAsyncKeyState", FunctionDescriptor.of(JAVA_SHORT, JAVA_INT))
-        private val setCursor = Win32.user32("SetCursor", FunctionDescriptor.of(ADDRESS, ADDRESS))
-        private val trackMouseEvent = Win32.user32("TrackMouseEvent", FunctionDescriptor.of(JAVA_INT, ADDRESS))
-        private val setWindowPos =
-            Win32.user32(
-                "SetWindowPos",
-                FunctionDescriptor.of(
-                    JAVA_INT,
-                    ADDRESS,
-                    ADDRESS,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                ),
-            )
-        private val createWindow =
-            Win32.user32(
-                "CreateWindowExW",
-                FunctionDescriptor.of(
-                    ADDRESS,
-                    JAVA_INT,
-                    ADDRESS,
-                    ADDRESS,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                    ADDRESS,
-                    ADDRESS,
-                    ADDRESS,
-                    ADDRESS,
-                ),
-            )
-        private val peekMessage =
-            Win32.user32(
-                "PeekMessageW",
-                FunctionDescriptor.of(
-                    JAVA_INT,
-                    ADDRESS,
-                    ADDRESS,
-                    JAVA_INT,
-                    JAVA_INT,
-                    JAVA_INT,
-                ),
-            )
-        private val dispatchMessage = Win32.user32("DispatchMessageW", FunctionDescriptor.of(JAVA_LONG, ADDRESS))
     }
 }
 
 private fun paintWidget(
-    hwnd: MemorySegment,
+    hwnd: HWND,
     width: Int,
     height: Int,
     pixels: ByteArray,
-): Boolean =
-    Arena.ofConfined().use { arena ->
-        val dc = bitmapDc.invokeExact(NULL) as MemorySegment
-        if (dc == NULL) return false
-        try {
-            val header = arena.allocate(40, 4) // BITMAPINFOHEADER, 32-bit BI_RGB
-            header.set(JAVA_INT, 0, 40)
-            header.set(JAVA_INT, 4, width)
-            header.set(JAVA_INT, 8, -height)
-            header.set(JAVA_SHORT, 12, 1)
-            header.set(JAVA_SHORT, 14, 32)
-            val bits = arena.allocate(ADDRESS)
-            val bitmap = dib.invokeExact(dc, header, 0, bits, NULL, 0) as MemorySegment
-            if (bitmap == NULL) return false
-            try {
-                bits.get(ADDRESS, 0).reinterpret(pixels.size.toLong()).copyFrom(MemorySegment.ofArray(pixels))
-                val previous = selectObject.invokeExact(dc, bitmap) as MemorySegment
-                if (previous == NULL) return false
-                try {
-                    updateLayer(hwnd, dc, arena, width, height)
-                } finally {
-                    selectObject.invokeExact(dc, previous) as MemorySegment
-                }
-            } finally {
-                deleteObject.invokeExact(bitmap) as Int
-            }
-        } finally {
-            deleteDc.invokeExact(dc) as Int
-        }
-    }
-
-private fun updateLayer(
-    hwnd: MemorySegment,
-    dc: MemorySegment,
-    arena: Arena,
-    width: Int,
-    height: Int,
 ): Boolean {
-    val source = arena.allocate(8, 4) // POINT(0,0)
-    val size = arena.allocate(8, 4)
-    size.set(JAVA_INT, 0, width)
-    size.set(JAVA_INT, 4, height)
-    val blend = arena.allocate(4)
-    blend.set(JAVA_BYTE, 2, (-1).toByte()) // full source opacity
-    blend.set(JAVA_BYTE, 3, 1) // AC_SRC_ALPHA
-    return (updateLayer.invokeExact(hwnd, NULL, NULL, size, dc, source, 0, blend, 2) as Int) != 0 // ULW_ALPHA
+    val gdi = GDI32.INSTANCE
+    val dc = gdi.CreateCompatibleDC(null) ?: return false
+    val painted: Boolean
+    try {
+        val info =
+            BITMAPINFO().apply {
+                bmiHeader.biWidth = width
+                bmiHeader.biHeight = -height
+                bmiHeader.biPlanes = 1
+                bmiHeader.biBitCount = 32
+                bmiHeader.biCompression = WinGDI.BI_RGB
+            }
+        val bits = PointerByReference()
+        val bitmap = gdi.CreateDIBSection(dc, info, WinGDI.DIB_RGB_COLORS, bits, null, 0)
+        if (bitmap == null) {
+            painted = false
+        } else {
+            try {
+                bits.value.write(0, pixels, 0, pixels.size)
+                painted = updateWidgetLayer(hwnd, dc, bitmap, SIZE(width, height))
+            } finally {
+                gdi.DeleteObject(bitmap)
+            }
+        }
+    } finally {
+        gdi.DeleteDC(dc)
+    }
+    return painted
 }
 
-private val bitmapDc by lazy { Win32.gdi32("CreateCompatibleDC", FunctionDescriptor.of(ADDRESS, ADDRESS)) }
-private val deleteDc by lazy { Win32.gdi32("DeleteDC", FunctionDescriptor.of(JAVA_INT, ADDRESS)) }
-private val dib by lazy {
-    Win32.gdi32(
-        "CreateDIBSection",
-        FunctionDescriptor.of(
-            ADDRESS,
-            ADDRESS,
-            ADDRESS,
-            JAVA_INT,
-            ADDRESS,
-            ADDRESS,
-            JAVA_INT,
-        ),
-    )
+private fun updateWidgetLayer(
+    hwnd: HWND,
+    dc: HDC,
+    bitmap: HBITMAP,
+    size: SIZE,
+): Boolean {
+    val gdi = GDI32.INSTANCE
+    val previous = gdi.SelectObject(dc, bitmap) ?: return false
+    try {
+        val blend =
+            BLENDFUNCTION().apply {
+                SourceConstantAlpha = 0xff.toByte()
+                AlphaFormat = WinUser.AC_SRC_ALPHA.toByte()
+            }
+        return User32.INSTANCE.UpdateLayeredWindow(hwnd, null, null, size, dc, POINT(), 0, blend, WinUser.ULW_ALPHA)
+    } finally {
+        gdi.SelectObject(dc, previous)
+    }
 }
-private val selectObject by lazy { Win32.gdi32("SelectObject", FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS)) }
-private val deleteObject by lazy { Win32.gdi32("DeleteObject", FunctionDescriptor.of(JAVA_INT, ADDRESS)) }
-private val updateLayer by lazy {
-    Win32.user32(
-        "UpdateLayeredWindow",
-        FunctionDescriptor.of(
-            JAVA_INT,
-            ADDRESS,
-            ADDRESS,
-            ADDRESS,
-            ADDRESS,
-            ADDRESS,
-            ADDRESS,
-            JAVA_INT,
-            ADDRESS,
-            JAVA_INT,
-        ),
-    )
+
+// These APIs are absent from jna-platform's User32 interface.
+// JNA uses the exact Win32 method names to resolve the exported symbols.
+@Suppress("FunctionNaming", "ktlint:standard:function-naming")
+internal interface TaskbarUser32 : StdCallLibrary {
+    fun SetWindowText(
+        window: HWND,
+        text: String,
+    ): Boolean
+
+    fun LoadCursor(
+        instance: HINSTANCE?,
+        resource: Pointer,
+    ): HCURSOR?
+
+    fun SetCursor(cursor: HCURSOR?): HCURSOR?
+
+    fun TrackMouseEvent(event: WidgetMouseTracking): Boolean
+
+    fun ClientToScreen(
+        window: HWND,
+        point: POINT,
+    ): Boolean
+
+    fun GetDpiForWindow(window: HWND): Int
+
+    fun GetWindowDpiAwarenessContext(window: HWND): Pointer?
+
+    fun SetThreadDpiAwarenessContext(context: Pointer?): Pointer?
+}
+
+@Structure.FieldOrder("cbSize", "dwFlags", "hwndTrack", "dwHoverTime")
+internal class WidgetMouseTracking : Structure() {
+    @JvmField var cbSize: Int = 0
+
+    @JvmField var dwFlags: Int = 0
+
+    @JvmField var hwndTrack: HWND? = null
+
+    @JvmField var dwHoverTime: Int = 0
+
+    init {
+        cbSize = size()
+    }
+}
+
+internal val taskbarUser32 by lazy {
+    Native.load("user32", TaskbarUser32::class.java, W32APIOptions.UNICODE_OPTIONS)
 }

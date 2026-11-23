@@ -43,6 +43,42 @@ val NotificationPreferencesRepositorySuite by testSuite("The notification prefer
             val nextLaunch = NotificationPreferencesRepository(SettingsStore(dataStore, scope))
             nextLaunch.refresh()
             assertThat(nextLaunch.desktopPrayerEnabled.value).isFalse()
+            assertThat(nextLaunch.gnomePrayerDisplay.value).isEqualTo(GnomePrayerDisplay.TRAY)
+        }
+    }
+
+    test("GNOME defaults to the extension and restores one saved display choice") {
+        withInMemorySettings { scope, store, dataStore ->
+            val preferences = NotificationPreferencesRepository(store) { "/notification.mp3" to "/prayer.mp3" }
+            preferences.refresh()
+            assertThat(preferences.gnomePrayerDisplay.value).isEqualTo(GnomePrayerDisplay.EXTENSION)
+
+            val nextLaunch = NotificationPreferencesRepository(SettingsStore(dataStore, scope))
+            for (display in listOf(GnomePrayerDisplay.PANEL, GnomePrayerDisplay.TRAY, GnomePrayerDisplay.EXTENSION)) {
+                preferences.setGnomePrayerDisplay(display)
+                nextLaunch.refresh()
+                assertThat(nextLaunch.gnomePrayerDisplay.value).isEqualTo(display)
+            }
+        }
+    }
+
+    test("panel and tray menu layouts default independently and survive restart") {
+        withInMemorySettings { scope, store, dataStore ->
+            val preferences = NotificationPreferencesRepository(store) { "/notification.mp3" to "/prayer.mp3" }
+            preferences.refresh()
+            assertThat(preferences.prayerPanelMenuLayout.value).isEqualTo(PrayerMenuLayout.EXTENDED)
+            assertThat(preferences.prayerTrayMenuLayout.value).isEqualTo(PrayerMenuLayout.COMPACT)
+            preferences.setPrayerMenuLayout(PrayerMenuSurface.TRAY, PrayerMenuLayout.EXTENDED)
+
+            val nextLaunch = NotificationPreferencesRepository(SettingsStore(dataStore, scope))
+            nextLaunch.refresh()
+            assertThat(nextLaunch.prayerPanelMenuLayout.value).isEqualTo(PrayerMenuLayout.EXTENDED)
+            assertThat(nextLaunch.prayerTrayMenuLayout.value).isEqualTo(PrayerMenuLayout.EXTENDED)
+
+            preferences.setPrayerMenuLayout(PrayerMenuSurface.PANEL, PrayerMenuLayout.COMPACT)
+            nextLaunch.refresh()
+            assertThat(nextLaunch.prayerPanelMenuLayout.value).isEqualTo(PrayerMenuLayout.COMPACT)
+            assertThat(nextLaunch.prayerTrayMenuLayout.value).isEqualTo(PrayerMenuLayout.EXTENDED)
         }
     }
 

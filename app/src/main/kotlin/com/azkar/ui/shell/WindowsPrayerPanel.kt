@@ -75,6 +75,7 @@ internal class WindowsPrayerPanel(
         if (mode != DesktopPrayerPanelMode.VISIBLE) return false
         val popups = remember { WindowsPrayerPopups() }
         val preferences = koinInject<NotificationPreferencesRepository>()
+        val menuContent = tray.menu
         val position = remember { MutableStateFlow(preferences.windowsTaskbarPosition.value) }
         LaunchedEffect(preferences) {
             preferences.windowsTaskbarPosition.collect { position.value = it }
@@ -107,7 +108,8 @@ internal class WindowsPrayerPanel(
                         },
                         onContextMenu = { slot ->
                             popups.schedule = null
-                            popups.menu = popupAtWidget(slot, theme.typography.scale, positionMenuHeight(tray.menu))
+                            val height = POSITION_TOOLTIP_HEIGHT + POSITION_ACTION_HEIGHT * menuContent.actions.size + 4
+                            popups.menu = popupAtWidget(slot, theme.typography.scale, height)
                         },
                     ),
                 ioDispatcher = ioDispatcher,
@@ -122,7 +124,7 @@ internal class WindowsPrayerPanel(
                     }
                 }
             }
-            popups.PositionWindow(theme, tray.menu, position, savePosition)
+            popups.PositionWindow(theme, menuContent, position, savePosition)
         }
         return present
     }
@@ -133,9 +135,6 @@ private fun DesktopPrayerStatus.taskbarContent(
     scheduleOpen: Boolean,
     menuOpen: Boolean,
 ) = WindowsTaskbarContent(prayerName, timeLabel, remainingLabel, theme.locale, theme.typography, scheduleOpen, menuOpen)
-
-private fun positionMenuHeight(menu: PrayerTrayMenuContent): Int =
-    POSITION_TOOLTIP_HEIGHT + POSITION_ACTION_HEIGHT * menu.actions.size + 4
 
 private class WindowsPrayerPopups {
     var schedule by mutableStateOf<Rectangle?>(null)
@@ -151,7 +150,7 @@ private class WindowsPrayerPopups {
     @Composable
     fun PositionWindow(
         theme: OverlayTheme,
-        trayMenu: PrayerTrayMenuContent,
+        content: PrayerTrayMenuContent,
         position: MutableStateFlow<Int?>,
         savePosition: (Int?) -> Unit,
     ) {
@@ -161,7 +160,7 @@ private class WindowsPrayerPopups {
         WindowsTaskbarPopup(bounds, stringResource(Res.string.taskbarPositionTitle), theme, dismiss) {
             WindowsTaskbarPositionMenu(
                 manual = displayedPosition != null,
-                menu = trayMenu,
+                content = content,
                 onDismiss = dismiss,
                 onMove = {
                     dismiss()

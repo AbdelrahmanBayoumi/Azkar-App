@@ -193,12 +193,13 @@ private fun VerticalTaskbarSummary(
 @Composable
 internal fun WindowsTaskbarPositionMenu(
     manual: Boolean,
-    menu: PrayerTrayMenuContent,
+    content: PrayerTrayMenuContent,
     onDismiss: () -> Unit,
     onMove: () -> Unit,
     onAutomatic: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
+    val menu = content
     var hoveredLabel by remember { mutableStateOf<String?>(null) }
     Column(Modifier.fillMaxSize()) {
         Box(
@@ -223,9 +224,9 @@ internal fun WindowsTaskbarPositionMenu(
             border = BorderStroke(1.dp, colors.outlineVariant),
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                menu.actions.filterNot { it == menu.quit }.forEach { entry ->
-                    TaskbarMenuItem(entry, onDismiss)
-                }
+                TaskbarMenuItem(menu.openApp, onDismiss)
+                menu.panelVisibility?.let { TaskbarMenuItem(it, onDismiss) }
+                TaskbarMenuItem(menu.reminders, onDismiss)
                 HorizontalDivider()
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TaskbarMenuItem(menu.quit, onDismiss, Modifier.weight(1f))

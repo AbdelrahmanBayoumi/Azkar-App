@@ -55,6 +55,8 @@
 # JNA discovers native symbols via string lookups on interfaces
 # (tray / Linux bus glue), so keep its infrastructure whole.
 -keep class com.sun.jna.** { *; }
+-keep interface com.azkar.ui.shell.TaskbarUser32 { *; }
+-keep class com.azkar.ui.shell.WidgetMouseTracking { *; }
 
 # FileKit's Linux file picker calls dbus-java APIs reflectively. Keeping only the
 # ServiceLoader transport provider is not enough: ProGuard otherwise removes

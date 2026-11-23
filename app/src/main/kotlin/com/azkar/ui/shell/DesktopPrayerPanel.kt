@@ -10,11 +10,21 @@ import androidx.compose.ui.Modifier
 import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.settingsDesktopPrayer
 import com.azkar.generated.resources.settingsDesktopPrayerExtension
-import com.azkar.generated.resources.settingsDesktopPrayerExtensionHint
+import com.azkar.generated.resources.settingsDesktopPrayerStandardPanel
 import com.azkar.generated.resources.settingsDesktopPrayerTaskbar
+import com.azkar.generated.resources.settingsDesktopPrayerTray
+import com.azkar.generated.resources.settingsPrayerPanelMenuCompact
+import com.azkar.generated.resources.settingsPrayerPanelMenuExtended
+import com.azkar.generated.resources.settingsPrayerPanelMenuHint
+import com.azkar.generated.resources.settingsPrayerTrayMenu
+import com.azkar.generated.resources.settingsStandardPrayerPanelMenu
 import com.azkar.ui.components.AzkarToggleSwitch
+import com.azkar.ui.components.SelectRow
 import com.azkar.ui.notifications.DesktopPlatform
+import com.azkar.ui.notifications.GnomePrayerDisplay
 import com.azkar.ui.notifications.NotificationPreferencesRepository
+import com.azkar.ui.notifications.PrayerMenuLayout
+import com.azkar.ui.notifications.PrayerMenuSurface
 import com.azkar.ui.theme.AzkarSpacing
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -35,7 +45,12 @@ internal sealed class DesktopPrayerPanel(
         hidden: Boolean,
     ): Boolean {
         val preferences = koinInject<NotificationPreferencesRepository>()
-        val enabled by preferences.desktopPrayerEnabled.collectAsState()
+        val enabled =
+            if (this is GnomePrayerPanel) {
+                preferences.gnomePrayerDisplay.collectAsState().value != GnomePrayerDisplay.TRAY
+            } else {
+                preferences.desktopPrayerEnabled.collectAsState().value
+            }
         val mode =
             when {
                 !enabled -> DesktopPrayerPanelMode.DISABLED
@@ -101,38 +116,99 @@ internal fun isGnomePrayerPanelSupported(
     }
 }
 
+internal val prayerTrayLayoutAvailable: Boolean
+    get() = DesktopPlatform.current == DesktopPlatform.WINDOWS || DesktopPlatform.current == DesktopPlatform.LINUX
+
 @Composable
 internal fun DesktopPrayerPanelSetting() {
-    val panel = DesktopPrayerPanel.current ?: return
+    val panel = DesktopPrayerPanel.current
     val preferences = koinInject<NotificationPreferencesRepository>()
-    val enabled by preferences.desktopPrayerEnabled.collectAsState()
+    when (panel) {
+        is GnomePrayerPanel -> {
+            val display by preferences.gnomePrayerDisplay.collectAsState()
+            GnomePrayerDisplaySetting(panel, preferences, display)
+            when (display) {
+                GnomePrayerDisplay.PANEL ->
+                    PrayerMenuLayoutSetting(
+                        preferences,
+                        PrayerMenuSurface.PANEL,
+                        Res.string.settingsStandardPrayerPanelMenu,
+                    )
+                GnomePrayerDisplay.TRAY ->
+                    PrayerMenuLayoutSetting(preferences, PrayerMenuSurface.TRAY, Res.string.settingsPrayerTrayMenu)
+                GnomePrayerDisplay.EXTENSION -> Unit
+            }
+            return
+        }
+        is WindowsPrayerPanel -> {
+            val enabled by preferences.desktopPrayerEnabled.collectAsState()
+            val scope = rememberCoroutineScope()
+            SettingsSectionBlock(
+                title = stringResource(Res.string.settingsDesktopPrayerTaskbar),
+                subtitle = stringResource(panel.settingHint),
+                headingAction = {
+                    AzkarToggleSwitch(
+                        checked = enabled,
+                        onCheckedChange = { checked -> scope.launch { preferences.setDesktopPrayerEnabled(checked) } },
+                    )
+                },
+            )
+        }
+        null -> Unit
+    }
+    if (prayerTrayLayoutAvailable) {
+        PrayerMenuLayoutSetting(preferences, PrayerMenuSurface.TRAY, Res.string.settingsPrayerTrayMenu)
+    }
+}
+
+@Composable
+private fun GnomePrayerDisplaySetting(
+    panel: GnomePrayerPanel,
+    preferences: NotificationPreferencesRepository,
+    display: GnomePrayerDisplay,
+) {
     val scope = rememberCoroutineScope()
-    val title =
-        if (panel is WindowsPrayerPanel) Res.string.settingsDesktopPrayerTaskbar else Res.string.settingsDesktopPrayer
-    SettingsSectionBlock(
-        title = stringResource(title),
-        subtitle = stringResource(panel.settingHint),
-        headingAction = {
-            AzkarToggleSwitch(
-                checked = enabled,
-                onCheckedChange = { checked -> scope.launch { preferences.setDesktopPrayerEnabled(checked) } },
+    SelectRow(
+        label = stringResource(Res.string.settingsDesktopPrayer),
+        hint = stringResource(panel.settingHint),
+        selected = display,
+        options = GnomePrayerDisplay.entries,
+        optionLabel = {
+            stringResource(
+                when (it) {
+                    GnomePrayerDisplay.EXTENSION -> Res.string.settingsDesktopPrayerExtension
+                    GnomePrayerDisplay.PANEL -> Res.string.settingsDesktopPrayerStandardPanel
+                    GnomePrayerDisplay.TRAY -> Res.string.settingsDesktopPrayerTray
+                },
             )
         },
+        onSelect = { scope.launch { preferences.setGnomePrayerDisplay(it) } },
     )
-    if (panel is GnomePrayerPanel && enabled) {
-        val extensionEnabled by preferences.gnomePrayerExtensionEnabled.collectAsState()
-        SettingsSectionBlock(
-            title = stringResource(Res.string.settingsDesktopPrayerExtension),
-            subtitle = stringResource(Res.string.settingsDesktopPrayerExtensionHint),
-            modifier = Modifier.padding(top = AzkarSpacing.md),
-            headingAction = {
-                AzkarToggleSwitch(
-                    checked = extensionEnabled,
-                    onCheckedChange = { checked ->
-                        scope.launch { preferences.setGnomePrayerExtensionEnabled(checked) }
-                    },
-                )
-            },
-        )
-    }
+}
+
+@Composable
+private fun PrayerMenuLayoutSetting(
+    preferences: NotificationPreferencesRepository,
+    surface: PrayerMenuSurface,
+    label: StringResource,
+) {
+    val panel = surface == PrayerMenuSurface.PANEL
+    val layout by (if (panel) preferences.prayerPanelMenuLayout else preferences.prayerTrayMenuLayout).collectAsState()
+    val scope = rememberCoroutineScope()
+    SelectRow(
+        label = stringResource(label),
+        hint = stringResource(Res.string.settingsPrayerPanelMenuHint),
+        selected = layout,
+        options = PrayerMenuLayout.entries,
+        optionLabel = {
+            stringResource(
+                when (it) {
+                    PrayerMenuLayout.COMPACT -> Res.string.settingsPrayerPanelMenuCompact
+                    PrayerMenuLayout.EXTENDED -> Res.string.settingsPrayerPanelMenuExtended
+                },
+            )
+        },
+        onSelect = { scope.launch { preferences.setPrayerMenuLayout(surface, it) } },
+        modifier = Modifier.padding(top = AzkarSpacing.md),
+    )
 }

@@ -15,9 +15,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.settingsDesktopPrayerGnomeHint
-import com.azkar.generated.resources.todayPrayerTimes
 import com.azkar.ui.notifications.DesktopPlatform
+import com.azkar.ui.notifications.GnomePrayerDisplay
 import com.azkar.ui.notifications.NotificationPreferencesRepository
+import com.azkar.ui.notifications.PrayerMenuLayout
 import dev.nucleusframework.composenativetray.utils.ComposableIconUtils
 import dev.nucleusframework.composenativetray.utils.IconRenderProperties
 import dev.nucleusframework.composenativetray.utils.isMenuBarInDarkMode
@@ -47,7 +48,6 @@ import org.freedesktop.dbus.interfaces.Properties
 import org.freedesktop.dbus.messages.DBusSignal
 import org.freedesktop.dbus.types.UInt32
 import org.freedesktop.dbus.types.Variant
-import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import java.nio.ByteBuffer
 import javax.imageio.ImageIO
@@ -75,9 +75,10 @@ internal class GnomePrayerPanel : DesktopPrayerPanel(Res.string.settingsDesktopP
                 tray
             }
         val preferences = koinInject<NotificationPreferencesRepository>()
-        val extensionEnabled by preferences.gnomePrayerExtensionEnabled.collectAsState()
+        val display by preferences.gnomePrayerDisplay.collectAsState()
+        val menuLayout by preferences.prayerPanelMenuLayout.collectAsState()
         val extensionAvailable =
-            extensionEnabled &&
+            display == GnomePrayerDisplay.EXTENSION &&
                 mode != DesktopPrayerPanelMode.DISABLED &&
                 rememberGnomeShellPrayerPanel(
                     status.value,
@@ -90,8 +91,8 @@ internal class GnomePrayerPanel : DesktopPrayerPanel(Res.string.settingsDesktopP
                 rememberGnomePrayerContent(
                     status.value,
                     trayContent,
-                    showSchedule =
-                        mode == DesktopPrayerPanelMode.VISIBLE,
+                    panelVisible = mode == DesktopPrayerPanelMode.VISIBLE,
+                    panelLayout = menuLayout,
                 )
             LaunchedEffect(Unit) {
                 publishGnomePrayerStatus(snapshotFlow { content.value })
@@ -106,40 +107,29 @@ internal class GnomePrayerPanel : DesktopPrayerPanel(Res.string.settingsDesktopP
 private fun rememberGnomePrayerContent(
     prayer: DesktopPrayerStatus?,
     tray: ReminderTrayContent,
-    showSchedule: Boolean,
-): State<GnomePrayerContent> {
-    val title = stringResource(Res.string.todayPrayerTimes)
-    val rows =
-        prayer?.takeIf { showSchedule }?.today.orEmpty().map {
-            GnomePrayerScheduleRow("${it.name} · ${it.value}", it.key.desktopPrayerIcon())
-        }
-    val schedule = rows.takeIf { it.isNotEmpty() }?.let { GnomePrayerSchedule(title, it) }
-    return rememberUpdatedState(
+    panelVisible: Boolean,
+    panelLayout: PrayerMenuLayout,
+): State<GnomePrayerContent> =
+    rememberUpdatedState(
         GnomePrayerContent(
-            label = prayer?.takeIf { showSchedule }?.panelLabel.orEmpty(),
+            label = prayer?.takeIf { panelVisible }?.panelLabel.orEmpty(),
             tray = tray,
             menuTint = if (isMenuBarInDarkMode()) Color.White else Color.Black,
-            schedule = schedule,
+            panelVisible = panelVisible,
+            panelLayout = panelLayout,
         ),
     )
-}
 
 internal data class GnomePrayerContent(
     val label: String,
     val tray: ReminderTrayContent,
     val menuTint: Color,
-    val schedule: GnomePrayerSchedule?,
-)
-
-internal data class GnomePrayerSchedule(
-    val title: String,
-    val rows: List<GnomePrayerScheduleRow>,
-)
-
-internal data class GnomePrayerScheduleRow(
-    val label: String,
-    val icon: ImageVector,
-)
+    val panelVisible: Boolean,
+    val panelLayout: PrayerMenuLayout,
+) {
+    val layout: PrayerMenuLayout
+        get() = if (panelVisible) panelLayout else tray.menu.trayLayout
+}
 
 internal suspend fun publishGnomePrayerStatus(
     states: Flow<GnomePrayerContent>,
@@ -342,7 +332,7 @@ internal class GnomePrayerMenuProperties(
     @field:Position(1) val properties: Map<String, Variant<*>>,
 ) : Struct()
 
-private class GnomePrayerMenuItem(
+internal class GnomePrayerMenuItem(
     initial: GnomePrayerContent,
 ) : GnomePrayerMenu {
     private val root = GnomePrayerMenuNode(0, mapOf("children-display" to Variant("submenu")), emptyList())
@@ -366,53 +356,65 @@ private class GnomePrayerMenuItem(
         revision: Long,
     ): MenuSnapshot {
         val menu = content.tray.menu
-        val trayItems =
-            menu.entries.mapIndexed { index, entry ->
-                val properties =
-                    if (entry == null) {
-                        mapOf("type" to Variant("separator"))
-                    } else {
-                        mapOf(
-                            "label" to Variant(entry.label),
-                            "enabled" to Variant(entry.isEnabled),
-                            "icon-data" to Variant(iconBytes(entry.icon, content.menuTint, menu.iconRenderProperties)),
-                        )
-                    }
-                GnomePrayerMenuNode(index + 1, properties, emptyList())
+        // AppIndicator caches the widget type by ID. A separator must never reuse an action's ID.
+        val entries =
+            listOf(
+                menu.countdown,
+                null,
+                menu.openApp,
+                menu.panelVisibility,
+                menu.reminders,
+                null,
+                menu.quit,
+            )
+        val schedule = menu.schedule.takeIf { content.layout == PrayerMenuLayout.EXTENDED }.orEmpty()
+        val includeVisibility = !content.panelVisible || content.layout == PrayerMenuLayout.EXTENDED
+        val visibleEntries =
+            entries.withIndex().filter { (index, entry) ->
+                when (index) {
+                    0, 1 -> !content.panelVisible && schedule.isEmpty()
+                    3 -> includeVisibility && entry != null
+                    else -> true
+                }
             }
-        val actions = if (content.label.isBlank()) trayItems else trayItems.drop(2)
-        return MenuSnapshot(content, revision, scheduleNodes(content, trayItems.size) + actions)
+        val items = visibleEntries.map { (index, entry) -> menuNode(content, index + 1, entry) }
+        val actions =
+            visibleEntries
+                .mapNotNull { (index, entry) ->
+                    entry?.takeIf { it.isEnabled }?.let { index + 1 to it }
+                }.toMap()
+        return MenuSnapshot(content, revision, scheduleNodes(content, schedule, entries.size) + items, actions)
+    }
+
+    private fun menuNode(
+        content: GnomePrayerContent,
+        id: Int,
+        entry: TrayMenuEntry?,
+    ): GnomePrayerMenuNode {
+        val properties =
+            if (entry == null) {
+                mapOf("type" to Variant("separator"))
+            } else {
+                mapOf(
+                    "type" to Variant("standard"),
+                    "label" to Variant(entry.label),
+                    "enabled" to Variant(entry.isEnabled),
+                    "icon-data" to
+                        Variant(iconBytes(entry.icon, content.menuTint, content.tray.menu.iconRenderProperties)),
+                )
+            }
+        return GnomePrayerMenuNode(id, properties, emptyList())
     }
 
     private fun scheduleNodes(
         content: GnomePrayerContent,
+        schedule: List<TrayMenuEntry>,
         actionCount: Int,
     ): List<GnomePrayerMenuNode> {
-        val schedule = content.schedule ?: return emptyList()
-        // Action IDs stay the same when the schedule is added or updated.
-        val heading =
-            GnomePrayerMenuNode(
-                actionCount + 1,
-                mapOf("label" to Variant(schedule.title), "enabled" to Variant(false)),
-                emptyList(),
-            )
-        val rows =
-            schedule.rows.mapIndexed { index, row ->
-                val icon =
-                    iconBytes(row.icon, content.menuTint, content.tray.menu.iconRenderProperties)
-                GnomePrayerMenuNode(
-                    actionCount + index + 2,
-                    mapOf(
-                        "label" to Variant(row.label),
-                        "enabled" to Variant(false),
-                        "icon-data" to Variant(icon),
-                    ),
-                    emptyList(),
-                )
-            }
-        val divider =
-            GnomePrayerMenuNode(actionCount + rows.size + 2, mapOf("type" to Variant("separator")), emptyList())
-        return listOf(heading) + rows + divider
+        if (schedule.isEmpty()) return emptyList()
+        // Allocate a fixed separator ID so changes in the number of schedule rows cannot reuse it.
+        val rows = schedule.mapIndexed { index, entry -> menuNode(content, actionCount + 2 + index, entry) }
+        return rows + menuNode(content, actionCount + 1, null)
     }
 
     private fun iconBytes(
@@ -473,16 +475,13 @@ private class GnomePrayerMenuItem(
         timestamp: UInt32,
     ) {
         if (event != "clicked") return
-        snapshot.content.tray.menu.entries
-            .getOrNull(id - 1)
-            ?.takeIf { it.isEnabled }
-            ?.onClick
-            ?.invoke()
+        snapshot.actions[id]?.onClick?.invoke()
     }
 
     private data class MenuSnapshot(
         val content: GnomePrayerContent,
         val revision: Long,
         val items: List<GnomePrayerMenuNode>,
+        val actions: Map<Int, TrayMenuEntry>,
     )
 }
