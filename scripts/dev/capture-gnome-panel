@@ -16,10 +16,10 @@ cp -Lr "$extension/." "$staged/"
 mv "$staged/extension.js" "$staged/panel.js"
 cp "$script_dir/capture-gnome-panel.mjs" "$staged/extension.js"
 
-dbus-run-session -- bash -eu -c '
+dbus-run-session -- bash -eu -s -- "$uuid" <<'SESSION'
     gnome-shell --headless --wayland --virtual-monitor=1280x720 --wayland-display="azkar-preview-$$" &
     shell=$!
-    trap '\''kill "$shell" 2>/dev/null || true; wait "$shell" 2>/dev/null || true'\'' EXIT
+    trap 'kill "$shell" 2>/dev/null || true; wait "$shell" 2>/dev/null || true' EXIT
     for ((i=0; i<100; i++)); do
         kill -0 "$shell"
         if gnome-extensions info "$1" >/dev/null 2>&1; then break; fi
@@ -34,7 +34,7 @@ dbus-run-session -- bash -eu -c '
     done
     echo "Timed out capturing GNOME prayer menus" >&2
     exit 1
-' capture-gnome-panel "$uuid"
+SESSION
 
 mkdir -p "$output"
 cp "$scratch/gnome-prayer-schedule.png" "$scratch/gnome-prayer-actions.png" "$output/"

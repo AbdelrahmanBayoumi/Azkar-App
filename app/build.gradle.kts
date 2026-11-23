@@ -419,48 +419,61 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
         }
     }
     val linuxIcon = rootProject.layout.projectDirectory.file("assets/icons/azkar.png")
-    val panelIcons = fileTree(rootProject.file("assets/icons/lucide")) {
-        include("bell.svg", "bell-off.svg", "calendar.svg", "house.svg", "moon.svg", "sun.svg", "sunrise.svg", "sunset.svg")
-    }
+    val panelIcons =
+        fileTree(rootProject.file("assets/icons/lucide")) {
+            include(
+                "bell.svg",
+                "bell-off.svg",
+                "calendar.svg",
+                "house.svg",
+                "moon.svg",
+                "sun.svg",
+                "sunrise.svg",
+                "sunset.svg",
+            )
+        }
     val iconShape = Regex("<(path|line|rect|circle|polyline|polygon|ellipse) ")
     val shellExtension = layout.projectDirectory.dir("src/desktopResources/linux/gnome")
     val extensionVersion = version.toString()
     val extensionSource = layout.projectDirectory.dir("src/gnomeExtension")
     val extensionOutput = layout.buildDirectory.dir("generated/gnomeExtension")
     val extensionWorkspace = layout.buildDirectory.dir("gnomeExtension")
-    val compileGnomeExtension = tasks.register<Exec>("compileGnomeExtension") {
-        val source = extensionSource.asFile.absolutePath
-        val workspace = extensionWorkspace.get().asFile.absolutePath
-        val output = extensionOutput.get().asFile.absolutePath
-        commandLine(
-            "bash",
-            "-ec",
-            """
-            rm -rf -- "$2" "$3"
-            mkdir -p "$2"
-            cp "$1"/*.ts "$1"/tsconfig.json "$1"/package.json "$1"/pnpm-lock.yaml "$2/"
-            cd "$2"
-            pnpm install --frozen-lockfile --ignore-scripts
-            bun run build --outDir "$3"
-            """.trimIndent(),
-            "compile-gnome-extension",
-            source,
-            workspace,
-            output,
-        )
-        inputs
-            .files(fileTree(extensionSource) { include("*.ts", "tsconfig.json", "package.json", "pnpm-lock.yaml") })
-            .withPathSensitivity(PathSensitivity.RELATIVE)
-        outputs.dir(extensionOutput)
-        localState.register(extensionWorkspace)
-    }
+    val compileGnomeExtension =
+        tasks.register<Exec>("compileGnomeExtension") {
+            val source = extensionSource.asFile.absolutePath
+            val workspace = extensionWorkspace.get().asFile.absolutePath
+            val output = extensionOutput.get().asFile.absolutePath
+            commandLine(
+                "bash",
+                "-ec",
+                """
+                rm -rf -- "$2" "$3"
+                mkdir -p "$2"
+                cp "$1"/*.ts "$1"/tsconfig.json "$1"/package.json "$1"/pnpm-lock.yaml "$2/"
+                cd "$2"
+                pnpm install --frozen-lockfile --ignore-scripts
+                bun run build --outDir "$3"
+                """.trimIndent(),
+                "compile-gnome-extension",
+                source,
+                workspace,
+                output,
+            )
+            inputs
+                .files(fileTree(extensionSource) { include("*.ts", "tsconfig.json", "package.json", "pnpm-lock.yaml") })
+                .withPathSensitivity(PathSensitivity.RELATIVE)
+            outputs.dir(extensionOutput)
+            localState.register(extensionWorkspace)
+        }
     tasks.withType<Sync>().configureEach {
         if (name == "prepareAppResources") {
             inputs.property("gnomeSymbolicIconFormat", "stroke-mask")
             inputs.property("gnomeExtensionVersion", extensionVersion)
             filesMatching("gnome/azkar-prayers@azkar.app/metadata.json") {
                 val versionName = JsonOutput.toJson(extensionVersion)
-                filter { line: String -> line.replace("\"version-name\": \"development\"", "\"version-name\": $versionName") }
+                filter { line: String ->
+                    line.replace("\"version-name\": \"development\"", "\"version-name\": $versionName")
+                }
             }
             from(panelIcons) {
                 into("gnome/azkar-prayers@azkar.app")
@@ -472,10 +485,12 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
                         "</svg>" ->
                             """  </mask>
                             |  <rect width="24" height="24" style="stroke: none" mask="url(#outline)"/>
-                            |</svg>""".trimMargin()
-                        else -> iconShape.replace(line) { match ->
-                            """${match.value}style="fill: none !important; stroke: #fff !important" """
-                        }
+                            |</svg>
+                            """.trimMargin()
+                        else ->
+                            iconShape.replace(line) { match ->
+                                """${match.value}style="fill: none !important; stroke: #fff !important" """
+                            }
                     }
                 }
             }
