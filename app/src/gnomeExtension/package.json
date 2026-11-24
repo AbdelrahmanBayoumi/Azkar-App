@@ -2,6 +2,7 @@
   "name": "azkar-gnome-extension",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.21.0",
   "scripts": {
     "build": "bun --bun tsc",
     "typecheck": "bun --bun tsc --noEmit",
