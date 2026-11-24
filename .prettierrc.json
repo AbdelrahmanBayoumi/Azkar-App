@@ -1,0 +1,21 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "app/src/gnomeExtension/**/*.ts",
+        "app/src/desktopResources/linux/gnome/azkar-prayers@azkar.app/stylesheet.css"
+      ],
+      "options": {
+        "printWidth": 120,
+        "singleQuote": true,
+        "tabWidth": 4
+      }
+    },
+    {
+      "files": "app/src/gnomeExtension/*.json",
+      "options": {
+        "printWidth": 120
+      }
+    }
+  ]
+}

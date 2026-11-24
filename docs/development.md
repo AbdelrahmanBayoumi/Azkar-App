@@ -52,10 +52,35 @@ Render the download page and README images independently of tests:
 ```
 
 `app/src/gallery/kotlin/com/azkar/Gallery.kt` renders six scenes in both themes directly into
-`site/images/` using Roborazzi's Compose Desktop capture API. Gallery-only fixtures live under
+`site/public/images/` using Roborazzi's Compose Desktop capture API. Gallery-only fixtures live under
 `app/src/galleryFixtures/`. The generator uses Compose's UI-test renderer without running a test
 suite. The release workflow uploads these freshly rendered images and publishes them to the site;
 the README uses the same hosted files.
+
+## TypeScript workspace
+
+The download site and GNOME extension share Bun, pnpm, TypeScript, ESLint, and Prettier.
+From the repository root, install once and check both packages:
+
+```bash
+pnpm install --frozen-lockfile --ignore-scripts
+bun run check
+```
+
+Use `pnpm --filter azkar-download-site run build` to render the React installer and gallery
+components into static HTML and build the browser bundle. Run `bun run dev` from the repo root to
+build and serve the page at `http://127.0.0.1:3000/download.html`. GitHub Pages publishes the built files.
+
+The browser tests build and serve the site automatically. Install Chromium once after
+installing workspace dependencies, then run the suite.
+
+```bash
+pnpm --filter azkar-download-site exec bun --bun playwright install --only-shell chromium
+pnpm --filter azkar-download-site run test:browser
+```
+
+Gradle builds the GNOME extension on Linux. Use `pnpm --filter azkar-gnome-extension run check`
+for the extension checks alone.
 
 ## Preview images
 

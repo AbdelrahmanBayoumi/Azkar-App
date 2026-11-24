@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="site/images/azkar.png" alt="Azkar app icon" width="88">
+  <img src="site/public/images/azkar.png" alt="Azkar app icon" width="88">
   <h1>Azkar</h1>
   <p>A desktop companion for daily adhkar and prayer times. Read, keep your place, and receive reminders from the passages you choose—on Windows, macOS, and Linux.</p>
   <p>

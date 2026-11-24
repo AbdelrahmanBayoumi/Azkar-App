@@ -1,0 +1,28 @@
+{
+  "name": "azkar-download-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run build && bun src/serve.ts",
+    "build": "bun src/build.tsx",
+    "typecheck": "bun --bun tsc --noEmit",
+    "test": "bun test ./tests",
+    "lint": "bun --bun eslint . --max-warnings 0",
+    "format": "bun --bun prettier --write 'src/**/*.{ts,tsx}' 'tests/**/*.ts' 'e2e/**/*.ts' playwright.config.ts '*.json' 'src/**/*.html' 'public/**/*.css' 'public/**/*.js'",
+    "format:check": "bun --bun prettier --check 'src/**/*.{ts,tsx}' 'tests/**/*.ts' 'e2e/**/*.ts' playwright.config.ts '*.json' 'src/**/*.html' 'public/**/*.css' 'public/**/*.js'",
+    "check": "bun run typecheck && bun run lint && bun run format:check && bun run test",
+    "test:browser": "bun --bun playwright test"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "@types/bun": "1.4.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0"
+  }
+}

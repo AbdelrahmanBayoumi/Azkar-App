@@ -196,6 +196,22 @@ fun buildChannel(
     Files.writeString(pages.resolve("$channel-version.txt"), "${packages.version}\n")
 }
 
+fun copyWebsite(
+    website: Path,
+    pages: Path,
+) {
+    val required = listOf("download.html", "css/download.css", "js/theme.js", "js/download.js")
+    required.forEach { asset ->
+        require(Files.isRegularFile(website.resolve(asset))) { "Website asset missing: $asset. Run bun run build in site/." }
+    }
+    listOf("css", "js", "images").forEach { directory ->
+        copyDirectory(website.resolve(directory), pages.resolve(directory))
+    }
+    val downloadPage = website.resolve("download.html")
+    Files.copy(downloadPage, pages.resolve("download.html"), REPLACE_EXISTING)
+    Files.copy(downloadPage, pages.resolve("index.html"), REPLACE_EXISTING)
+}
+
 fun publish(
     assets: Path,
     pages: Path,
@@ -211,17 +227,11 @@ fun publish(
     require(channels.isNotEmpty()) { "No repository packages" }
     // Validate both channels before writing any output.
     val packages = channels.associateWith { channelPackages(it, assets.resolve(it)) }
+    val workspace = System.getenv("GITHUB_WORKSPACE") ?: error("GITHUB_WORKSPACE is required")
+    copyWebsite(Path.of(workspace, "site", "build"), pages)
     Files.createDirectories(pages.resolve("keys"))
     Files.copy(publicKey, pages.resolve("keys/azkar-repo.asc"), REPLACE_EXISTING)
     packages.forEach { (channel, files) -> buildChannel(channel, files, pages, keyId, passphrase) }
-    val workspace = System.getenv("GITHUB_WORKSPACE") ?: error("GITHUB_WORKSPACE is required")
-    val website = Path.of(workspace, "site")
-    copyDirectory(website, pages)
-    val downloadPage = website.resolve("download.html")
-    Files.copy(downloadPage, pages.resolve("index.html"), REPLACE_EXISTING)
-    listOf("css/download.css", "js/theme.js", "js/download.js").forEach { asset ->
-        require(Files.isRegularFile(pages.resolve(asset))) { "Website asset missing from Pages output: $asset" }
-    }
     Files.writeString(pages.resolve(".nojekyll"), "")
     val size = Files.walk(pages).use { it.filter(Files::isRegularFile).mapToLong(Files::size).sum() }
     require(size < 900L * 1024 * 1024) { "Repository site approaches the Pages 1 GB limit: $size bytes" }
@@ -259,6 +269,20 @@ fun selfTest() {
         check(runCatching { channelPackages("dev", dev) }.isFailure)
         Files.writeString(stable.resolve("azkar-1.2.2-linux-x64.deb"), "old package")
         check(runCatching { channelPackages("stable", stable) }.isFailure)
+        val website = root.resolve("website")
+        val pages = Files.createDirectories(root.resolve("pages"))
+        val publicFiles = listOf("download.html", "css/download.css", "js/theme.js", "js/download.js", "images/preview.webp")
+        (publicFiles + listOf("src/download.ts", "node_modules/dependency/index.js", "package.json")).forEach { name ->
+            val file = website.resolve(name)
+            Files.createDirectories(file.parent)
+            Files.writeString(file, name)
+        }
+        copyWebsite(website, pages)
+        check(publicFiles.all { Files.readString(pages.resolve(it)) == it })
+        check(Files.readString(pages.resolve("index.html")) == "download.html")
+        check(listOf("src", "node_modules", "package.json").none { Files.exists(pages.resolve(it)) })
+        Files.delete(website.resolve("js/download.js"))
+        check(runCatching { copyWebsite(website, pages) }.isFailure)
         println("Repository input self-tests passed")
     } finally {
         Files.walk(root).use { paths -> paths.sorted(Comparator.reverseOrder()).forEach(Files::delete) }
