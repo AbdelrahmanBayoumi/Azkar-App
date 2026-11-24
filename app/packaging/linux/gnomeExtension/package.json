@@ -8,8 +8,8 @@
     "typecheck": "bun --bun tsc --noEmit",
     "test": "bun test",
     "lint": "bun --bun eslint . --max-warnings 0",
-    "format": "bun --bun prettier --write \"*.{ts,json}\" \"tests/**/*.ts\" ../desktopResources/linux/gnome/azkar-prayers@azkar.app/stylesheet.css",
-    "format:check": "bun --bun prettier --check \"*.{ts,json}\" \"tests/**/*.ts\" ../desktopResources/linux/gnome/azkar-prayers@azkar.app/stylesheet.css",
+    "format": "bun --bun prettier --write \"*.{ts,json}\" \"tests/**/*.ts\" resources/stylesheet.css",
+    "format:check": "bun --bun prettier --check \"*.{ts,json}\" \"tests/**/*.ts\" resources/stylesheet.css",
     "check": "bun run typecheck && bun run lint && bun run format:check && bun run test"
   },
   "devDependencies": {
