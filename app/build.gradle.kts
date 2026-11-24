@@ -276,7 +276,7 @@ tasks.register<JavaExec>("captureDownloadScreenshots") {
     mainClass.set("com.azkar.GalleryKt")
     classpath = gallery.runtimeClasspath
     dependsOn(tasks.named("galleryClasses"))
-    args(rootProject.file("site/images").absolutePath)
+    args(rootProject.file("site/public/images").absolutePath)
     jvmArgs("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow")
     systemProperty("roborazzi.test.record", "true")
     systemProperty(
@@ -438,6 +438,9 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
     val extensionSource = layout.projectDirectory.dir("src/gnomeExtension")
     val extensionOutput = layout.buildDirectory.dir("generated/gnomeExtension")
     val extensionWorkspace = layout.buildDirectory.dir("gnomeExtension")
+    val workspaceRoot = rootProject.layout.projectDirectory
+    val toolingInputs =
+        listOf("package.json", "pnpm-workspace.yaml", "pnpm-lock.yaml", "site/package.json").map(workspaceRoot::file)
     val compileGnomeExtension =
         tasks.register<Exec>("compileGnomeExtension") {
             val source = extensionSource.asFile.absolutePath
@@ -448,19 +451,22 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
                 "-ec",
                 """
                 rm -rf -- "$2" "$3"
-                mkdir -p "$2"
-                cp "$1"/*.ts "$1"/tsconfig.json "$1"/package.json "$1"/pnpm-lock.yaml "$2/"
+                mkdir -p "$2/app/src/gnomeExtension" "$2/site"
+                cp "$4/package.json" "$4/pnpm-workspace.yaml" "$4/pnpm-lock.yaml" "$2/"
+                cp "$4/site/package.json" "$2/site/"
+                cp "$1"/*.ts "$1"/tsconfig.json "$1"/package.json "$2/app/src/gnomeExtension/"
                 cd "$2"
-                pnpm install --frozen-lockfile --ignore-scripts
-                bun run build --outDir "$3"
+                pnpm --filter azkar-tooling --filter azkar-gnome-extension install --frozen-lockfile --ignore-scripts
+                pnpm --filter azkar-gnome-extension run build --outDir "$3"
                 """.trimIndent(),
                 "compile-gnome-extension",
                 source,
                 workspace,
                 output,
+                workspaceRoot.asFile.absolutePath,
             )
             inputs
-                .files(fileTree(extensionSource) { include("*.ts", "tsconfig.json", "package.json", "pnpm-lock.yaml") })
+                .files(toolingInputs, fileTree(extensionSource) { include("*.ts", "tsconfig.json", "package.json") })
                 .withPathSensitivity(PathSensitivity.RELATIVE)
             outputs.dir(extensionOutput)
             localState.register(extensionWorkspace)

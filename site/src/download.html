@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F8FAFC" />
+    <link rel="icon" type="image/png" href="images/azkar.png" />
+    <meta
+      name="description"
+      content="Download Azkar for Windows, macOS, or Linux. Choose your installer and find Linux setup instructions."
+    />
+    <title>Download Azkar for Windows, macOS, and Linux</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Azkar" />
+    <meta
+      property="og:title"
+      content="Azkar — Make room for remembrance in your day"
+    />
+    <meta
+      property="og:description"
+      content="Daily adhkar, prayer times, and gentle reminders for Windows, macOS, and Linux."
+    />
+    <meta property="og:url" content="https://jamhour1g.github.io/Azkar-App/" />
+    <meta
+      property="og:image"
+      content="https://jamhour1g.github.io/Azkar-App/images/social-preview.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Azkar desktop app for daily adhkar, prayer times, and gentle reminders."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Azkar — Make room for remembrance in your day"
+    />
+    <meta
+      name="twitter:description"
+      content="Daily adhkar, prayer times, and gentle reminders for Windows, macOS, and Linux."
+    />
+    <meta
+      name="twitter:image"
+      content="https://jamhour1g.github.io/Azkar-App/images/social-preview.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/download.css" />
+    <script type="module" src="js/download.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header id="top">
+      <div class="shell header-row">
+        <a class="brand" href="#top"
+          ><img
+            src="images/azkar.png"
+            width="256"
+            height="256"
+            alt=""
+          />Azkar</a
+        >
+        <nav class="header-nav" aria-label="Main navigation">
+          <a href="#downloads"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/download.svg#icon" /></svg
+            >Download</a
+          >
+          <a class="header-screenshots" href="#showcase-title"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/image.svg#icon" /></svg
+            >Screenshots</a
+          >
+          <a class="header-features" href="#features"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/sliders.svg#icon" /></svg
+            >Features</a
+          >
+        </nav>
+        <button
+          class="theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-label="Switch to dark theme"
+          title="Switch to dark theme"
+        >
+          <svg id="theme-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <use href="images/icons/moon.svg#icon" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell" id="main-content" tabindex="-1">
+      <section aria-labelledby="page-title">
+        <div class="download-layout">
+          <div class="hero">
+            <div class="download-intro">
+              <h1 id="page-title">Daily remembrance, right on your desktop.</h1>
+              <p class="intro">
+                Read adhkar, follow prayer times, and set gentle reminders.
+                Choose your platform to find its installer.
+              </p>
+              <div id="installer-root"><!-- installers --></div>
+            </div>
+            <figure class="hero-preview">
+              <img
+                data-light-src="images/screen-home-light.webp"
+                data-dark-src="images/screen-home-dark.webp"
+                width="1440"
+                height="900"
+                fetchpriority="high"
+                decoding="async"
+                loading="eager"
+                alt="Azkar Home with daily remembrance and the prayer schedule"
+              />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="promo" aria-labelledby="showcase-title">
+        <div class="showcase-heading">
+          <h2 class="section-title" id="showcase-title">
+            <svg
+              class="section-heading-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <use href="images/icons/showcase.svg#icon" /></svg
+            >See Azkar in action
+          </h2>
+          <p class="section-note">
+            Find your next remembrance, settle into reading, or keep a reminder
+            close. Explore the screens below.
+          </p>
+        </div>
+        <div id="gallery-root"><!-- gallery --></div>
+      </section>
+
+      <section
+        class="feature-catalogue"
+        id="features"
+        aria-labelledby="feature-catalogue-title"
+      >
+        <h2 id="feature-catalogue-title">
+          <svg
+            class="section-heading-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <use href="images/icons/grid.svg#icon" /></svg
+          >Explore Azkar features
+        </h2>
+        <p>
+          Read, build a daily routine, and keep the passages that matter to you
+          within reach.
+        </p>
+        <div
+          class="feature-index"
+          role="tablist"
+          aria-label="Azkar feature categories"
+        >
+          <button
+            class="feature-tab"
+            id="tab-feature-reading"
+            type="button"
+            role="tab"
+            aria-controls="panel-feature-reading"
+            aria-selected="true"
+            tabindex="0"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/book.svg#icon" /></svg
+            ><span
+              ><span class="feature-tab-title">Read &amp; recite</span
+              ><span class="feature-tab-description"
+                >Text, translation &amp; progress</span
+              ></span
+            >
+          </button>
+          <button
+            class="feature-tab"
+            id="tab-feature-organize"
+            type="button"
+            role="tab"
+            aria-controls="panel-feature-organize"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/library-category.svg#icon" /></svg
+            ><span
+              ><span class="feature-tab-title">Organize your library</span
+              ><span class="feature-tab-description"
+                >Collections, covers &amp; tags</span
+              ></span
+            >
+          </button>
+          <button
+            class="feature-tab"
+            id="tab-feature-reminders"
+            type="button"
+            role="tab"
+            aria-controls="panel-feature-reminders"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/bell.svg#icon" /></svg
+            ><span
+              ><span class="feature-tab-title">Reminders &amp; prayer</span
+              ><span class="feature-tab-description"
+                >Your queue &amp; prayer schedule</span
+              ></span
+            >
+          </button>
+          <button
+            class="feature-tab"
+            id="tab-feature-personalize"
+            type="button"
+            role="tab"
+            aria-controls="panel-feature-personalize"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/adjustments.svg#icon" /></svg
+            ><span
+              ><span class="feature-tab-title">Make it yours</span
+              ><span class="feature-tab-description"
+                >Language, type &amp; appearance</span
+              ></span
+            >
+          </button>
+        </div>
+        <div class="feature-groups">
+          <section
+            class="feature-group"
+            id="panel-feature-reading"
+            role="tabpanel"
+            aria-labelledby="tab-feature-reading"
+            tabindex="0"
+          >
+            <h3 id="feature-reading-title">
+              Keep your place in your daily reading.
+            </h3>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="library-features"
+            >
+              <h4 id="library-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/search.svg#icon" /></svg
+                >Find a passage when you need it
+              </h4>
+              <ul>
+                <li>
+                  <strong>A library ready to explore</strong> Browse the bundled
+                  adhkar by collection, topic, or search.
+                </li>
+                <li>
+                  <strong>Understand what you read</strong> Keep Arabic,
+                  translations, explanations, and source references together
+                  where available.
+                </li>
+                <li>
+                  <strong>Keep useful passages handy</strong> Save favorites and
+                  copy text to return to or share later.
+                </li>
+              </ul>
+            </section>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="session-features"
+            >
+              <h4 id="session-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/play.svg#icon" /></svg
+                >Build a recitation routine
+              </h4>
+              <ul>
+                <li>
+                  <strong>Read one passage at a time</strong> Move through a
+                  collection in a focused recitation session.
+                </li>
+                <li>
+                  <strong>Track your repetitions</strong> See your progress
+                  through each collection as you recite.
+                </li>
+                <li>
+                  <strong>Return to your place</strong> Resume a session,
+                  revisit a passage, skip ahead, or start the collection again.
+                </li>
+              </ul>
+            </section>
+          </section>
+          <section
+            class="feature-group"
+            id="panel-feature-organize"
+            role="tabpanel"
+            aria-labelledby="tab-feature-organize"
+            tabindex="0"
+            hidden
+          >
+            <h3 id="feature-organize-title">
+              Bring your own adhkar into your daily routine.
+            </h3>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="remembrance-features"
+            >
+              <h4 id="remembrance-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/collection.svg#icon" /></svg
+                >Make room for what you read
+              </h4>
+              <ul>
+                <li>
+                  <strong>Create your own collections</strong> Bring existing
+                  passages together or add your own remembrances.
+                </li>
+                <li>
+                  <strong>Keep the meaning and source</strong> Add and edit
+                  text, translations, explanations, and references for your own
+                  passages.
+                </li>
+                <li>
+                  <strong>Make a collection recognizable</strong> Choose a cover
+                  image and arrange its passages in the order you prefer.
+                </li>
+              </ul>
+            </section>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="collection-features"
+            >
+              <h4 id="collection-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/bookmark.svg#icon" /></svg
+                >Find your way back quickly
+              </h4>
+              <ul>
+                <li>
+                  <strong>Put regular collections first</strong> Pin them,
+                  change their order, or show them on Home.
+                </li>
+                <li>
+                  <strong>Keep related passages together</strong> Use tags to
+                  find topics across your library.
+                </li>
+                <li>
+                  <strong>Keep your library tidy</strong> Rename tags, check
+                  where they are used, and restore deleted tags when needed.
+                </li>
+              </ul>
+            </section>
+          </section>
+          <section
+            class="feature-group"
+            id="panel-feature-reminders"
+            role="tabpanel"
+            aria-labelledby="tab-feature-reminders"
+            tabindex="0"
+            hidden
+          >
+            <h3 id="feature-reminders-title">
+              Keep remembrance close while you get on with your day.
+            </h3>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="schedule-features"
+            >
+              <h4 id="schedule-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/prayer.svg#icon" /></svg
+                >Reminders from your own library
+              </h4>
+              <ul>
+                <li>
+                  <strong>Choose what you want to remember</strong> Use
+                  collections or individual passages as reminder sources.
+                </li>
+                <li>
+                  <strong>Fit reminders around your day</strong> Choose an
+                  interval, weekdays, and a daily time window, or keep them
+                  running continuously.
+                </li>
+                <li>
+                  <strong>Keep the selection fresh</strong> Follow library
+                  order, randomize your queue, or give some passages more
+                  weight.
+                </li>
+                <li>
+                  <strong>Stay in control</strong> Favorite a passage from its
+                  reminder card, pause reminders from the tray, and choose a
+                  comfortable card size and reading duration.
+                </li>
+              </ul>
+            </section>
+            <section class="feature-subgroup" aria-labelledby="prayer-features">
+              <h4 id="prayer-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/clock.svg#icon" /></svg
+                >Know when your next prayer is due
+              </h4>
+              <ul>
+                <li>
+                  <strong>See today’s prayer times</strong> Home shows your
+                  schedule and a countdown to the next prayer.
+                </li>
+                <li>
+                  <strong>Choose the alerts you need</strong> Turn individual
+                  prayer alerts on or off directly from Home.
+                </li>
+                <li>
+                  <strong>Use your local schedule</strong> Find your city or
+                  enter a location, with calculation settings available when you
+                  need them.
+                </li>
+              </ul>
+            </section>
+          </section>
+          <section
+            class="feature-group"
+            id="panel-feature-personalize"
+            role="tabpanel"
+            aria-labelledby="tab-feature-personalize"
+            tabindex="0"
+            hidden
+          >
+            <h3 id="feature-personalize-title">
+              Read comfortably. Keep your desktop clear.
+            </h3>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="appearance-features"
+            >
+              <h4 id="appearance-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/adjustments.svg#icon" /></svg
+                >A reading experience that fits you
+              </h4>
+              <ul>
+                <li>
+                  <strong>English and Arabic</strong> Switch the interface
+                  language, with right-to-left layout for Arabic.
+                </li>
+                <li>
+                  <strong>Light, dark, or system theme</strong> Choose the
+                  appearance that feels comfortable on your screen.
+                </li>
+                <li>
+                  <strong>Text you can read comfortably</strong> Adjust text
+                  size and typeface, and see the result in a live preview.
+                </li>
+                <li>
+                  <strong>Your preferred reminder language</strong> Choose
+                  reminder text independently of the interface language.
+                </li>
+              </ul>
+            </section>
+            <section
+              class="feature-subgroup"
+              aria-labelledby="desktop-features"
+            >
+              <h4 id="desktop-features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="images/icons/monitor.svg#icon" /></svg
+                >Ready when you need it
+              </h4>
+              <ul>
+                <li>
+                  <strong>Keep reminders running in the background</strong>
+                  Close the main window and reach Azkar through the system tray.
+                </li>
+                <li>
+                  <strong>Start with your desktop</strong> Enable start at
+                  sign-in on supported installed desktop environments.
+                </li>
+                <li>
+                  <strong>Free and open source</strong> Use Azkar on Windows,
+                  macOS, and Linux, with preferences stored on your device.
+                </li>
+              </ul>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="shell">
+        <div class="footer-layout">
+          <div class="footer-about">
+            <a class="footer-brand" href="#top" aria-label="Azkar, back to top">
+              <img
+                src="images/azkar.png"
+                width="256"
+                height="256"
+                alt=""
+              />Azkar
+            </a>
+            <p>A desktop companion for remembrance and prayer times.</p>
+          </div>
+          <nav aria-labelledby="footer-explore-title">
+            <h2 class="footer-nav-title" id="footer-explore-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="images/icons/compass.svg#icon" /></svg
+              >Explore
+            </h2>
+            <ul class="footer-links">
+              <li>
+                <a href="#downloads"
+                  ><svg
+                    class="footer-link-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <use href="images/icons/download.svg#icon" /></svg
+                  >Downloads</a
+                >
+              </li>
+              <li>
+                <a href="#showcase-title"
+                  ><svg
+                    class="footer-link-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <use href="images/icons/image.svg#icon" /></svg
+                  >App screenshots</a
+                >
+              </li>
+              <li>
+                <a href="#features"
+                  ><svg
+                    class="footer-link-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <use href="images/icons/sliders.svg#icon" /></svg
+                  >Features</a
+                >
+              </li>
+            </ul>
+          </nav>
+          <nav aria-labelledby="footer-project-title">
+            <h2 class="footer-nav-title" id="footer-project-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="images/icons/folder.svg#icon" /></svg
+              >Project
+            </h2>
+            <ul class="footer-links">
+              <li>
+                <a href="https://github.com/jamhour1g/Azkar-App/releases"
+                  ><svg
+                    class="footer-link-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <use href="images/icons/tag.svg#icon" /></svg
+                  >All releases</a
+                >
+              </li>
+              <li>
+                <a href="https://github.com/jamhour1g/Azkar-App"
+                  ><svg
+                    class="footer-link-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <use href="images/icons/code.svg#icon" /></svg
+                  >Source code</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/jamhour1g/Azkar-App/blob/HEAD/LICENSE"
+                  ><svg
+                    class="footer-link-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <use href="images/icons/file-check.svg#icon" /></svg
+                  >Code license (MIT)</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>Free and open source.</p>
+          <a class="footer-top-link" href="#top"
+            >Back to top<svg viewBox="0 0 24 24" aria-hidden="true">
+              <use href="images/icons/arrow-up.svg#icon" /></svg
+          ></a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

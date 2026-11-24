@@ -9,7 +9,7 @@ target/
 build
 
 # Generated Compose screenshots used by the download page and README.
-site/images/screen-*.webp
+site/public/images/screen-*.webp
 
 ### IntelliJ IDEA ###
 .idea
@@ -64,3 +64,6 @@ defaults.conf
 
 ### Codex ###
 .codex/
+
+# JavaScript workspace dependencies
+/node_modules/
