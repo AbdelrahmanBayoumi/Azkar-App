@@ -8,7 +8,10 @@ export default defineConfig(
     "site/test-results/",
   ]),
   {
-    files: ["app/packaging/linux/gnomeExtension/*.ts", "site/src/**/*.{ts,tsx}"],
+    files: [
+      "app/packaging/linux/gnomeExtension/*.ts",
+      "site/src/**/*.{ts,tsx}",
+    ],
     extends: [tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
