@@ -1,10 +1,10 @@
-import { expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToString } from "react-dom/server";
-import { Gallery } from "../src/download/gallery.js";
-import { Installers } from "../src/download/installers.js";
-import { detectPlatform } from "../src/download/platforms.js";
-import { tabIndexForKey } from "../src/download/ui.js";
+import { expect, test } from "vitest";
+import { Gallery } from "../../src/download/gallery.js";
+import { Installers } from "../../src/download/installers.js";
+import { detectPlatform } from "../../src/download/platforms.js";
+import { tabIndexForKey } from "../../src/download/ui.js";
 
 test("static installer markup retains fallback download links", () => {
   const html = renderToString(createElement(Installers));
@@ -13,8 +13,9 @@ test("static installer markup retains fallback download links", () => {
     'href="https://github.com/jamhour1g/Azkar-App/releases"',
   );
   expect(html).toContain('aria-controls="panel-linux"');
-  expect(html).toContain('id="apt-commands"');
-  expect(html).toContain('id="dnf-commands"');
+  expect(html).toContain("Install from the terminal");
+  expect(html).toContain("install.sh | sh");
+  expect(html).not.toContain("Install from the signed repository");
 });
 
 test("static gallery markup includes captions and accessible tab targets", () => {

@@ -200,7 +200,8 @@ fun copyWebsite(
     website: Path,
     pages: Path,
 ) {
-    val required = listOf("download.html", "css/download.css", "js/theme.js", "js/download.js")
+    val installers = listOf("install.sh", "install.ps1")
+    val required = listOf("download.html", "css/download.css", "js/theme.js", "js/download.js") + installers
     required.forEach { asset ->
         require(
             Files.isRegularFile(website.resolve(asset)),
@@ -210,6 +211,7 @@ fun copyWebsite(
         copyDirectory(website.resolve(directory), pages.resolve(directory))
     }
     val downloadPage = website.resolve("download.html")
+    installers.forEach { name -> Files.copy(website.resolve(name), pages.resolve(name), REPLACE_EXISTING) }
     Files.copy(downloadPage, pages.resolve("download.html"), REPLACE_EXISTING)
     Files.copy(downloadPage, pages.resolve("index.html"), REPLACE_EXISTING)
 }
@@ -274,7 +276,8 @@ fun selfTest() {
         val website = root.resolve("website")
         val pages = Files.createDirectories(root.resolve("pages"))
         val publicFiles =
-            listOf("download.html", "css/download.css", "js/theme.js", "js/download.js", "images/preview.webp")
+            listOf("download.html", "css/download.css", "js/theme.js", "js/download.js", "images/preview.webp") +
+                listOf("install.sh", "install.ps1")
         (publicFiles + listOf("src/download.ts", "node_modules/dependency/index.js", "package.json")).forEach { name ->
             val file = website.resolve(name)
             Files.createDirectories(file.parent)

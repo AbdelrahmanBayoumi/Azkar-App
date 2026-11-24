@@ -67,16 +67,25 @@ pnpm install --frozen-lockfile --ignore-scripts
 bun run check
 ```
 
-Use `pnpm --filter azkar-download-site run build` to render the React installer and gallery
-components into static HTML and build the browser bundle. Run `bun run dev` from the repo root to
-build and serve the page at `http://127.0.0.1:3000/download.html`. GitHub Pages publishes the built files.
+Run `bun run dev` from the repository root to start Vite at `http://127.0.0.1:5173/`.
+React and stylesheet changes show up in the browser as you edit.
 
-The browser tests build and serve the site automatically. Install Chromium once after
-installing workspace dependencies, then run the suite.
+Run `bun run build` from the repository root to install the locked dependencies, capture
+the screenshot gallery, and build the site into `site/build/`. Vite bundles the frontend
+and the build pre-renders the React sections into static HTML.
+
+Run `bun run build:site` to build with the available dependencies and gallery images.
+The Release workflow uses this command after fetching images from its screenshot job.
+
+From the repository root, run `bun run preview` to build and serve the static site with
+Vite, or `bun run test:site` to run the Vitest suite under `site/tests/unit/`.
+
+The browser tests under `site/tests/e2e/` build and serve the production output automatically.
+Install Chromium once after installing workspace dependencies, then run the suite.
 
 ```bash
-pnpm --filter azkar-download-site exec bun --bun playwright install --only-shell chromium
-pnpm --filter azkar-download-site run test:browser
+bun --cwd site --bun playwright install --only-shell chromium
+bun run test:browser
 ```
 
 Gradle builds the GNOME extension on Linux. Use `pnpm --filter azkar-gnome-extension run check`

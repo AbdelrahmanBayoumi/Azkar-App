@@ -4,10 +4,10 @@ const port = 4173;
 const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: "./tests/e2e",
   use: { baseURL },
   webServer: {
-    command: "bun run dev",
+    command: "bun run preview",
     env: { PORT: String(port) },
     url: `${baseURL}/download.html`,
   },

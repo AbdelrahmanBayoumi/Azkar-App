@@ -24,8 +24,7 @@ export default defineConfig(
     files: [
       "app/packaging/linux/gnomeExtension/tests/**/*.ts",
       "site/tests/**/*.ts",
-      "site/e2e/**/*.ts",
-      "site/playwright.config.ts",
+      "site/*.config.ts",
     ],
     extends: [tseslint.configs.recommended],
   },

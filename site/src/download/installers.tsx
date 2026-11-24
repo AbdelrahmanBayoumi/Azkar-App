@@ -1,9 +1,9 @@
 import { Tabs } from "@base-ui/react/tabs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   findInstaller,
-  selectStableRelease,
-  type StableRelease,
+  selectDownloadRelease,
+  type Release,
 } from "./releases.js";
 import {
   detectPlatform,
@@ -11,7 +11,7 @@ import {
   type Installer,
   type Platform,
 } from "./platforms.js";
-import { RepositorySetup } from "./repository-setup.js";
+import { TerminalCommand } from "./terminal-command.js";
 import { Icon } from "./ui.js";
 
 const releasesPage = "https://github.com/jamhour1g/Azkar-App/releases";
@@ -20,7 +20,7 @@ const releasesApi =
 
 type ReleaseResult =
   | { status: "loading" | "error" | "missing" }
-  | { status: "available"; release: StableRelease };
+  | { status: "stable" | "dev"; release: Release };
 
 interface ReleaseStatus {
   message: string;
@@ -31,18 +31,23 @@ interface ReleaseStatus {
 function releaseStatus(result: ReleaseResult): ReleaseStatus {
   switch (result.status) {
     case "loading":
-      return { message: "Checking for a stable release…" };
+      return { message: "Checking for releases…" };
     case "error":
       return {
-        message: "Could not check for stable installers.",
+        message: "Could not check for releases.",
         href: releasesPage,
       };
     case "missing":
+      return { message: "Azkar isn’t available to download yet." };
+    case "dev":
       return {
-        message: "No stable release is available yet.",
-        href: releasesPage,
+        message: `Azkar ${result.release.tag_name} is available as a preview. The first stable version is still to come.`,
+        href:
+          result.release.html_url ||
+          `${releasesPage}/tag/${result.release.tag_name}`,
+        linkLabel: "Release notes",
       };
-    case "available": {
+    case "stable": {
       const { release } = result;
       const incomplete = platforms.some(({ installers }) =>
         installers.some(({ suffix }) => !findInstaller(release.assets, suffix)),
@@ -65,10 +70,12 @@ function InstallerLink({
   installer,
   release,
   primary,
+  fallbackHref = releasesPage,
 }: {
   installer: Installer;
-  release: StableRelease | undefined;
+  release: Release | undefined;
   primary: boolean;
+  fallbackHref?: string;
 }) {
   const asset = release && findInstaller(release.assets, installer.suffix);
   const label = asset ? installer.label : installer.fallback;
@@ -77,7 +84,7 @@ function InstallerLink({
     <a
       className={className}
       id={`${installer.id}-download`}
-      href={asset?.browser_download_url ?? releasesPage}
+      href={asset?.browser_download_url ?? fallbackHref}
       data-asset={installer.id}
       aria-description={
         asset && release ? `Version ${release.tag_name}` : undefined
@@ -92,26 +99,75 @@ function InstallerLink({
   );
 }
 
+function TerminalInstall({
+  platform,
+  devOnly,
+  open,
+  onOpenChange,
+}: {
+  platform: Platform["id"];
+  devOnly: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const site = "https://jamhour1g.github.io/Azkar-App";
+  const command =
+    platform === "windows"
+      ? `irm ${site}/install.ps1 | iex`
+      : `curl -fsSL ${site}/install.sh | sh`;
+
+  return (
+    <details
+      className="terminal-install"
+      open={open}
+      onToggle={(event) => {
+        const nextOpen = event.currentTarget.open;
+        if (nextOpen !== open) onOpenChange(nextOpen);
+      }}
+    >
+      <summary>Install from the terminal</summary>
+      <div className="detail-body">
+        <p>
+          {devOnly
+            ? "Run this command and choose Dev when prompted."
+            : "Choose Stable, Dev, or Cancel when prompted."}
+          {platform === "linux" &&
+            " Sets up APT on Debian and Ubuntu or DNF on Fedora for future updates. Other x86-64 distributions get an AppImage."}
+        </p>
+        <TerminalCommand
+          command={command}
+          label={platform === "windows" ? "PowerShell" : "Shell"}
+        />
+      </div>
+    </details>
+  );
+}
+
 export function Installers() {
   const [selected, setSelected] = useState<Platform["id"]>("linux");
-  const [linuxHost, setLinuxHost] = useState(false);
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const platformDetected = useRef(false);
   const [result, setResult] = useState<ReleaseResult>({ status: "loading" });
-  const release = result.status === "available" ? result.release : undefined;
+  const release = "release" in result ? result.release : undefined;
+  const devOnly = result.status === "dev";
   const status = releaseStatus(result);
 
   useEffect(() => {
-    const visitor: Navigator & { userAgentData?: { platform?: string } } =
-      navigator;
-    const platform = [
-      visitor.userAgentData?.platform,
-      visitor.platform,
-      visitor.userAgent,
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-    setSelected(detectPlatform(platform));
-    setLinuxHost(/linux/.test(platform) && !/android/.test(platform));
+    // Fast Refresh reruns effects while preserving the selected tab.
+    if (!platformDetected.current) {
+      platformDetected.current = true;
+      const visitor: Navigator & { userAgentData?: { platform?: string } } =
+        navigator;
+      const platform = [
+        visitor.userAgentData?.platform,
+        visitor.platform,
+        visitor.userAgent,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      setSelected(detectPlatform(platform));
+    }
 
     const request = new AbortController();
     async function loadRelease(): Promise<void> {
@@ -122,11 +178,11 @@ export function Installers() {
         });
         if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
         const payload: unknown = await response.json();
-        const stable = selectStableRelease(payload);
+        const available = selectDownloadRelease(payload);
         if (request.signal.aborted) return;
         setResult(
-          stable
-            ? { status: "available", release: stable }
+          available
+            ? { status: available.channel, release: available.release }
             : { status: "missing" },
         );
       } catch {
@@ -163,65 +219,77 @@ export function Installers() {
           {status.linkLabel ?? "Browse all releases"}
         </a>
       </p>
-      <Tabs.List
-        className="platform-tabs"
-        aria-label="Platform"
-        activateOnFocus
-      >
-        {platforms.map(({ id, label }) => (
-          <Tabs.Tab
-            key={id}
-            className="platform-tab"
-            id={`tab-${id}`}
-            value={id}
-            aria-controls={`panel-${id}`}
+      {result.status !== "missing" && (
+        <>
+          <Tabs.List
+            className="platform-tabs"
+            aria-label="Platform"
+            activateOnFocus
           >
-            {label}
-          </Tabs.Tab>
-        ))}
-      </Tabs.List>
-      <div className="platform-list">
-        {platforms.map(({ id, label, detail, note, icon, installers }) => (
-          <Tabs.Panel
-            className={id === "linux" ? "platform platform-linux" : "platform"}
-            id={`panel-${id}`}
-            key={id}
-            value={id}
-            keepMounted
-            aria-labelledby={`tab-${id}`}
-          >
-            <h3 className="platform-name">
-              <Icon name={icon} className="platform-icon" />
-              {label}
-            </h3>
-            <p className="platform-detail">{detail}</p>
-            <div className="platform-actions">
-              {installers.map((installer, index) => (
-                <InstallerLink
-                  key={installer.id}
-                  installer={installer}
-                  release={release}
-                  primary={index === 0}
+            {platforms.map(({ id, label }) => (
+              <Tabs.Tab
+                key={id}
+                className="platform-tab"
+                id={`tab-${id}`}
+                value={id}
+                aria-controls={`panel-${id}`}
+              >
+                {label}
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+          <div className="platform-list">
+            {platforms.map(({ id, label, detail, note, icon, installers }) => (
+              <Tabs.Panel
+                className={
+                  id === "linux" ? "platform platform-linux" : "platform"
+                }
+                id={`panel-${id}`}
+                key={id}
+                value={id}
+                keepMounted
+                aria-labelledby={`tab-${id}`}
+              >
+                <h3 className="platform-name">
+                  <Icon name={icon} className="platform-icon" />
+                  {label}
+                </h3>
+                <p className="platform-detail">{detail}</p>
+                <div className="platform-actions">
+                  {installers.map((installer, index) => (
+                    <InstallerLink
+                      key={installer.id}
+                      installer={installer}
+                      release={release}
+                      primary={index === 0}
+                      fallbackHref={devOnly ? status.href : undefined}
+                    />
+                  ))}
+                </div>
+                <p className="platform-note">
+                  {note}
+                  {id === "linux" && (
+                    <span
+                      className="platform-version"
+                      id="linux-version-line"
+                      hidden={result.status !== "stable"}
+                    >
+                      Latest stable:{" "}
+                      <span id="linux-version">{release?.tag_name}</span>
+                    </span>
+                  )}
+                </p>
+                <TerminalInstall
+                  platform={id}
+                  devOnly={devOnly}
+                  open={terminalOpen}
+                  onOpenChange={setTerminalOpen}
                 />
-              ))}
-            </div>
-            <p className="platform-note">
-              {note}
-              {id === "linux" && (
-                <span
-                  className="platform-version"
-                  id="linux-version-line"
-                  hidden={!release}
-                >
-                  Latest stable:{" "}
-                  <span id="linux-version">{release?.tag_name}</span>
-                </span>
-              )}
-            </p>
-            {id === "linux" && <RepositorySetup visible={linuxHost} />}
-          </Tabs.Panel>
-        ))}
-      </div>
+              </Tabs.Panel>
+            ))}
+          </div>
+        </>
+      )}
     </Tabs.Root>
   );
 }

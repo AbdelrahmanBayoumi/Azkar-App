@@ -270,7 +270,7 @@ jobs:
       - name: Build the download site
         run: |
           pnpm --filter azkar-tooling --filter azkar-download-site install --frozen-lockfile --ignore-scripts
-          pnpm --filter azkar-download-site run build
+          bun run build:site
 
       - name: Prepare release assets and merge architecture manifests
         env:

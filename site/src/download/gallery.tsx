@@ -1,5 +1,6 @@
 import { useEffect, useState, type FocusEvent } from "react";
 import { screens, type Screen } from "./screens.js";
+import { TerminalCommand } from "./terminal-command.js";
 import { activeTheme } from "./theme.js";
 import { Icon, useTabNavigation } from "./ui.js";
 
@@ -115,15 +116,13 @@ export function Gallery() {
       <div
         className="screenshot-warning"
         id="screenshot-warning"
-        role="status"
-        aria-live="polite"
         hidden={!missing}
       >
         <Icon name="info" />
         <p>
-          A screenshot image could not be loaded. For a local preview, run{" "}
-          <code>./gradlew :app:captureDownloadScreenshots</code> and rebuild the
-          site.
+          <span role="status">Screenshot unavailable.</span> Run{" "}
+          <TerminalCommand command="./gradlew :app:captureDownloadScreenshots" />{" "}
+          from the project root, then rebuild the site.
         </p>
       </div>
       <div

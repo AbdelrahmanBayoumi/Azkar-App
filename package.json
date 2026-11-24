@@ -3,7 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "cd site && bun run dev",
+    "dev": "bun run --cwd site dev",
+    "build": "pnpm install --frozen-lockfile --ignore-scripts && ./gradlew :app:captureDownloadScreenshots && bun run build:site",
+    "build:site": "bun run --cwd site build",
+    "preview": "bun run --cwd site preview",
+    "test:site": "bun run --cwd site test",
+    "test:browser": "bun run --cwd site test:browser",
     "check": "bun --bun prettier --check package.json pnpm-workspace.yaml eslint.config.mjs .prettierrc.json && pnpm -r run check",
     "format": "bun --bun prettier --write package.json pnpm-workspace.yaml eslint.config.mjs .prettierrc.json && pnpm -r run format"
   },

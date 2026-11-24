@@ -182,8 +182,8 @@ jobs:
 
       - name: Test the built download site in Chromium
         run: |
-          pnpm --filter azkar-download-site exec bun --bun playwright install --with-deps --only-shell chromium
-          pnpm --filter azkar-download-site run test:browser
+          bun --cwd site --bun playwright install --with-deps --only-shell chromium
+          bun run test:browser
 
       - name: Install native test dependencies
         run: sudo apt-get update && sudo apt-get install -y libgl1

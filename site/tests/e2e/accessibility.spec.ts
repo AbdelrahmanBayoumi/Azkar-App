@@ -8,11 +8,22 @@ for (const colorScheme of ["light", "dark"] as const) {
     await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
     await page.route(
       "https://api.github.com/repos/jamhour1g/Azkar-App/releases**",
-      (route) => route.fulfill({ json: [] }),
+      (route) =>
+        route.fulfill({
+          json: [
+            {
+              tag_name: "v1.2.4-beta.2",
+              draft: false,
+              prerelease: true,
+              published_at: "2026-11-24T12:00:00Z",
+              assets: [],
+            },
+          ],
+        }),
     );
     await page.goto("/download.html");
     await expect(
-      page.getByText("No stable release is available yet."),
+      page.getByRole("link", { name: "Release notes" }),
     ).toBeVisible();
 
     const results = await new AxeBuilder({ page })
