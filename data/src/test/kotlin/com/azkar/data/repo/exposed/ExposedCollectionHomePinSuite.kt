@@ -29,19 +29,22 @@ import java.time.OffsetDateTime
  *    see it jump to the top of the shelf's recently-updated ordering.
  *
  * And one thing worth pinning down that lives in the seed: re-seeding must not quietly undo a pin.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val ExposedCollectionHomePinSuite by testSuite("ExposedCollectionRepository: the Home rail") {
     seededCollections {
         testSuite("pinning a collection to Home") {
             test("a newly created collection is not on the Home screen") { repositories ->
-                val collectionId = newCollection(repositories, "Morning copy")
+                val collectionId = newCollection(repositories)
 
                 assertThat(homeStamp(repositories, collectionId)).isNull()
                 assertThat(repositories.collections.findById(collectionId)?.isOnHome).isFalse()
             }
 
             test("pinning stamps the collection and the read reports it") { repositories ->
-                val collectionId = newCollection(repositories, "Morning copy")
+                val collectionId = newCollection(repositories)
 
                 repositories.collections.setHomePinned(collectionId, pinned = true)
 
@@ -50,7 +53,7 @@ val ExposedCollectionHomePinSuite by testSuite("ExposedCollectionRepository: the
             }
 
             test("taking it off clears the stamp rather than leaving a stale one") { repositories ->
-                val collectionId = newCollection(repositories, "Morning copy")
+                val collectionId = newCollection(repositories)
                 repositories.collections.setHomePinned(collectionId, pinned = true)
 
                 repositories.collections.setHomePinned(collectionId, pinned = false)
@@ -72,7 +75,7 @@ val ExposedCollectionHomePinSuite by testSuite("ExposedCollectionRepository: the
             test("the rail returns most recently pinned first") { repositories ->
                 val morningId = morningCollectionId(repositories)
                 val eveningId = eveningCollectionId(repositories)
-                val customId = newCollection(repositories, "Morning copy")
+                val customId = newCollection(repositories)
 
                 // Written raw with three explicitly different stamps, because three calls into
                 // `now()` a few microseconds apart would order by luck rather than by the column.
@@ -85,7 +88,7 @@ val ExposedCollectionHomePinSuite by testSuite("ExposedCollectionRepository: the
             }
 
             test("the rail leaves out everything that was never pinned") { repositories ->
-                val customId = newCollection(repositories, "Morning copy")
+                val customId = newCollection(repositories)
                 repositories.collections.setHomePinned(customId, pinned = true)
 
                 assertThat(repositories.collections.findAll().size).isGreaterThan(1)
@@ -93,7 +96,7 @@ val ExposedCollectionHomePinSuite by testSuite("ExposedCollectionRepository: the
             }
 
             test("pinning does not move updated_at, so the shelf order does not shift under it") { repositories ->
-                val collectionId = newCollection(repositories, "Morning copy")
+                val collectionId = newCollection(repositories)
                 val before = repositories.collections.findById(collectionId)?.updatedAt
 
                 repositories.collections.setHomePinned(collectionId, pinned = true)
@@ -136,10 +139,8 @@ val ExposedCollectionHomePinSuite by testSuite("ExposedCollectionRepository: the
 }
 
 /** Creates a custom collection and returns its generated id, failing the test if there is none. */
-private suspend fun newCollection(
-    repositories: ExposedRepositories,
-    name: String,
-): Long = requireNotNull(repositories.collections.save(RemembranceCollectionImpl(name = name)).id)
+private suspend fun newCollection(repositories: ExposedRepositories): Long =
+    requireNotNull(repositories.collections.save(RemembranceCollectionImpl(name = "Morning copy")).id)
 
 /**
  * The failure [block] raised, or `null` when it did not raise one.

@@ -22,7 +22,10 @@ import org.assertj.core.api.Assertions.assertThat
  * information — so `%method` renders as `[?]` in the lines these tests assert on. Production loggers
  * use `KotlinLogging.logger {}`, which passes the callsite, and that is the only reason `%method`
  * is in the pattern at all.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val LoggingPatternSuite by testSuite("The shipped log pattern") {
     test("a structured payload reaches the rendered line, not just the event") {
         val logs =

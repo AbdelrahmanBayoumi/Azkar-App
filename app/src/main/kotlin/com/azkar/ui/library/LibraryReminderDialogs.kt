@@ -215,6 +215,7 @@ private fun windowValue(
 /** The days the queue runs on, in the order of the week rather than the order of the set. */
 @Composable
 private fun activeDaysLabel(activeDays: Set<DayOfWeek>): String =
+    @Suppress("SimplifiableCallChain")
     DayOfWeek.entries
         .filter { day -> day in activeDays }
         .map { day -> activeDayLabel(day) }

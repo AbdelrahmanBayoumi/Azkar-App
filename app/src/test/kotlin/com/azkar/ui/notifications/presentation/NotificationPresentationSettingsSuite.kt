@@ -26,6 +26,8 @@ import java.util.Locale
  */
 private val json = Json { ignoreUnknownKeys = true }
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val NotificationPresentationSettingsSuite by testSuite("The notification presentation settings") {
     test("they survive a trip through the store") {
         val settings =

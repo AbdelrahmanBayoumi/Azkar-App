@@ -13,7 +13,10 @@ import org.assertj.core.api.Assertions.assertThat
  * somewhere else entirely, and the library showed a different order again — so the same app could
  * promise one thing and do another. These are the rules that make the shelf's order the queue's
  * order, and the rules that make a passage picked on its own a source like any other.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val QueueSourcesSuite by testSuite("Choosing what the queue recites") {
     val morning = remembrance(id = 1L, text = "Whoever says good morning")
     val evening = remembrance(id = 2L, text = "Whoever says good evening")

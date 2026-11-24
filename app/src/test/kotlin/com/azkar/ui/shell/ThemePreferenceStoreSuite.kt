@@ -19,7 +19,10 @@ import org.assertj.core.api.Assertions.assertThat
  * them through the same code. The question that *is* about the disk — does a value survive a
  * restart, and what happens when the file is corrupt — has its own home, in
  * [com.azkar.settings.SettingsStoreSuite], and is asked there.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val ThemePreferenceStoreSuite by testSuite("The stored colour preference") {
     test("a fresh install follows the system") {
         withInMemorySettings { _, store, _ ->

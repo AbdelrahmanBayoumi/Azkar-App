@@ -2,7 +2,7 @@
 
 You can test your Compose app with well-established approaches and patterns.
 
-### Test in isolation
+## Test in isolation
 
 [`ComposeTestRule`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/junit4/ComposeTestRule) lets you start an activity displaying any composable:
 your full application, a single screen, or a small element. It's also a good
@@ -12,7 +12,7 @@ independently, allowing for easier and more focused UI testing.
 This doesn't mean you should *only* create unit UI tests. UI tests scoping
 larger parts of your UI are also very important.
 
-### Access the activity and resources after setting your own content
+## Access the activity and resources after setting your own content
 
 Oftentimes you need to set the content under test using
 `composeTestRule.setContent` and you also need to access activity resources, for
@@ -23,58 +23,68 @@ the activity already calls it.
 A common pattern to achieve this is to create an `AndroidComposeTestRule` using
 an empty activity such as [`ComponentActivity`](https://developer.android.com/reference/androidx/activity/ComponentActivity).
 
-    class MyComposeTest {
+```kotlin
+class MyComposeTest {
 
-        @get:Rule
-        val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-        @Test
-        fun myTest() {
-            // Start the app
-            composeTestRule.setContent {
-                MyAppTheme {
-                    MainScreen(uiState = exampleUiState, /*...*/)
-                }
+    @Test
+    fun myTest() {
+        // Start the app
+        composeTestRule.setContent {
+            MyAppTheme {
+                MainScreen(uiState = exampleUiState, /*...*/)
             }
-            val continueLabel = composeTestRule.activity.getString(R.string.next)
-            composeTestRule.onNodeWithText(continueLabel).performClick()
         }
+        val continueLabel = composeTestRule.activity.getString(R.string.next)
+        composeTestRule.onNodeWithText(continueLabel).performClick()
     }
+}
+```
 
 Note that `ComponentActivity` needs to be added to your app's
 `AndroidManifest.xml` file. Enable that by adding this dependency to your
 module:
 
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
+```kotlin
+debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
+```
 
-### Custom semantics properties
+## Custom semantics properties
 
 You can create custom [semantics](https://developer.android.com/develop/ui/compose/testing/semantics) properties to expose information to tests.
 To do this, define a new `SemanticsPropertyKey` and make it available using the
 `SemanticsPropertyReceiver`.
 
-    // Creates a semantics property of type Long.
-    val PickedDateKey = SemanticsPropertyKey<Long>("PickedDate")
-    var SemanticsPropertyReceiver.pickedDate by PickedDateKey
+```kotlin
+// Creates a semantics property of type Long.
+val PickedDateKey = SemanticsPropertyKey<Long>("PickedDate")
+var SemanticsPropertyReceiver.pickedDate by PickedDateKey
+```
 
 Now use that property in the `semantics` modifier:
 
-    val datePickerValue by remember { mutableStateOf(0L) }
-    MyCustomDatePicker(
-        modifier = Modifier.semantics { pickedDate = datePickerValue }
-    )
+```kotlin
+val datePickerValue by remember { mutableStateOf(0L) }
+MyCustomDatePicker(
+    modifier = Modifier.semantics { pickedDate = datePickerValue }
+)
+```
 
 From tests, use `SemanticsMatcher.expectValue` to assert the value of the
 property:
 
-    composeTestRule
-        .onNode(SemanticsMatcher.expectValue(PickedDateKey, 1445378400)) // 2015-10-21
-        .assertExists()
+```kotlin
+composeTestRule
+    .onNode(SemanticsMatcher.expectValue(PickedDateKey, 1445378400)) // 2015-10-21
+    .assertExists()
+```
 
 > [!WARNING]
 > **Warning:** You should only use custom Semantics properties when it's hard to match a specific item using the given finders and matchers. Using custom Semantics properties to expose visual properties such as colors, font size or rounded corner radius is not recommended, as it can pollute production code and wrong implementations can lead to bugs that are hard to find.
 
-### Verify state restoration
+## Verify state restoration
 
 Verify that the state of your Compose elements is correctly restored when the
 activity or process is recreated. Perform such checks without relying on
@@ -83,28 +93,30 @@ activity recreation with the [`StateRestorationTester`](https://developer.androi
 This class lets you simulate the recreation of a composable. It's especially
 useful to verify the implementation of [`rememberSaveable`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/saveable/rememberSaveable.composable#rememberSaveable(kotlin.Array,androidx.compose.runtime.saveable.Saver,kotlin.String,kotlin.Function0)).
 
+```kotlin
 
-    class MyStateRestorationTests {
+class MyStateRestorationTests {
 
-        @get:Rule
-        val composeTestRule = createComposeRule()
+    @get:Rule
+    val composeTestRule = createComposeRule()
 
-        @Test
-        fun onRecreation_stateIsRestored() {
-            val restorationTester = StateRestorationTester(composeTestRule)
+    @Test
+    fun onRecreation_stateIsRestored() {
+        val restorationTester = StateRestorationTester(composeTestRule)
 
-            restorationTester.setContent { MainScreen() }
+        restorationTester.setContent { MainScreen() }
 
-            // TODO: Run actions that modify the state
+        // TODO: Run actions that modify the state
 
-            // Trigger a recreation
-            restorationTester.emulateSavedInstanceStateRestore()
+        // Trigger a recreation
+        restorationTester.emulateSavedInstanceStateRestore()
 
-            // TODO: Verify that state has been correctly restored.
-        }
+        // TODO: Verify that state has been correctly restored.
     }
+}
+```
 
-### Test different device configurations
+## Test different device configurations
 
 Android apps need to adapt to many changing conditions: window sizes, locales,
 font sizes, dark and light themes, and more. Most of these conditions are
@@ -169,6 +181,106 @@ composeTestRule.setContent {
 ```
 
 <br />
+
+## Custom failure handling in tests
+
+Debugging UI tests often requires inspecting the screen state and composition
+hierarchy when an assertion fails.
+
+Compose provides a native failure handling pipeline to streamline diagnostics.
+You can automatically capture screenshots and UI hierarchies upon failure, or
+register custom handlers to forward crash telemetry to external tools.
+
+> [!NOTE]
+> **Note:** The APIs associated with the failure handler pipeline ([`TestFailurePolicy`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailurePolicy), [`TestFailureHandler`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailureHandler), and [`FailureContext`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/FailureContext)) are included in [`androidx.compose.ui:ui-test:1.13.0-alpha01+`](https://developer.android.com/jetpack/androidx/releases/compose-ui#1.13.0-alpha01) and [`androidx.compose.ui:ui-test-junit4:1.13.0-alpha01+`](https://developer.android.com/jetpack/androidx/releases/compose-ui#1.13.0-alpha01).
+
+### Configure failure handling
+
+To configure failure handling, pass a [`TestFailurePolicy`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailurePolicy) object to
+[`ComposeUiTestConfig`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/ComposeUiTestConfig).
+
+#### Capture built-in failure artifacts
+
+To capture screenshots and UI hierarchies upon test failure, set the
+[`screenshotCaptureMode`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailurePolicy#screenshotCaptureMode()) and [`uiHierarchyCaptureMode`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailurePolicy#uiHierarchyCaptureMode()) properties in
+`TestFailurePolicy`.
+
+
+```kotlin
+class MyComposeTest {
+    private val customConfig = ComposeUiTestConfig(
+        failurePolicy = TestFailurePolicy(
+            screenshotCaptureMode = TestFailurePolicy.CaptureMode.Enabled,
+            uiHierarchyCaptureMode = TestFailurePolicy.CaptureMode.Enabled
+        )
+    )
+
+    @Test
+    fun myFirstTest() = runComposeUiTest(config = customConfig) {
+        // ...
+    }
+}
+```
+
+<br />
+
+### Use a custom failure handler
+
+To define custom behavior for test failures, add a
+[`TestFailureHandler`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailureHandler) to the [`failureHandlers` list](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/TestFailurePolicy#failureHandlers()). Each handler
+receives a [`FailureContext`](https://developer.android.com/reference/kotlin/androidx/compose/ui/test/FailureContext) object that contains the original error and a
+list of artifacts generated by the preceding pipeline handlers.
+
+
+```kotlin
+class MyComposeTestWithHandler {
+    private val customConfig = ComposeUiTestConfig(
+        failurePolicy = TestFailurePolicy(
+            screenshotCaptureMode = TestFailurePolicy.CaptureMode.Enabled,
+            failureHandlers = listOf(
+                TestFailureHandler { context ->
+                    val screenshot = context.artifacts.firstOrNull {
+                        it.type == FailureArtifact.Type.Screenshot
+                    }
+                    // ...
+                }
+            )
+        )
+    )
+
+    @get:Rule
+    val rule = createComposeRule(config = customConfig)
+
+    // ...
+}
+```
+
+<br />
+
+### Configure captures for an entire test suite
+
+You can enable failure artifact captures for an entire test suite by passing
+instrumentation runner arguments in your module's `build.gradle` file. This
+eliminates the need to update individual test files.
+
+```kotlin
+// build.gradle.kts
+android {
+    defaultConfig {
+        // ...
+        testInstrumentationRunnerArguments["androidx.compose.ui.test.failure.isUiHierarchyCaptureEnabled"] = "true"
+        testInstrumentationRunnerArguments["androidx.compose.ui.test.failure.isScreenshotCaptureEnabled"] = "true"
+    }
+}
+```
+
+#### Configuration precedence
+
+The framework evaluates both the local `TestFailurePolicy` and the suite-level
+runner arguments:
+
+- If you explicitly set a mode to `CaptureMode.Enabled`/`Disabled` in your test `failurePolicy`, this overrides the runner argument.
+- If you set a mode to `CaptureMode.Unspecified` (or leave `failurePolicy` as `null`), the framework falls back to the runner argument.
 
 ## Additional Resources
 

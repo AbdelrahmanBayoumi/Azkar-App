@@ -14,7 +14,10 @@ private const val MIN_WIDTH = 190
  * is now a plain grid inside a column that scrolls, so it has to work both out for itself, and this
  * is the arithmetic it does — the same arithmetic the collection's members are laid out with, which
  * is why the narrowest cell is a parameter here rather than a constant of this file's.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionShelfSuite by testSuite("Laying the collection cards out") {
     test("a 1440dp window's shelf fits seven cards, where the rail left room for five") {
         // The window less the pane's own inset. The rail used to take 300dp and a 14dp gutter off

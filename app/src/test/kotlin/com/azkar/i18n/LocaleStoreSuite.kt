@@ -19,7 +19,10 @@ import java.util.Locale
  * copy of a file. The question being asked is "does the choice come back?", and the in-memory store
  * answers it in full; whether a value survives a restart on disk is asked once, in
  * [com.azkar.settings.SettingsStoreSuite].
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val LocaleStoreSuite by testSuite("The stored language") {
     test("a fresh install falls back") {
         withInMemorySettings { _, store, _ ->

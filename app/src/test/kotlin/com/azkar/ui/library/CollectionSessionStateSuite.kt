@@ -15,7 +15,10 @@ import java.util.Locale
  * screen after a tap, what "skip" means at the end of a shelf, and that the counts roll back when the
  * write fails. A stored cursor would pass most of these by construction, which is exactly why they are
  * worth writing down.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionSessionStateSuite by testSuite("The recitation session") {
     test("a session starts on the first member that has not been recited") {
         val session = sessionWith(members = listOf(1L, 2L, 3L), recited = setOf(2L))

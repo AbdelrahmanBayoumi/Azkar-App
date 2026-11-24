@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,9 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,24 +38,32 @@ import com.azkar.generated.resources.Res
 import com.azkar.generated.resources.asr
 import com.azkar.generated.resources.nextPrayerLabel
 import com.azkar.generated.resources.title
+import com.azkar.generated.resources.todayPrayerTimes
+import com.azkar.generated.resources.trayMenuHidePanel
 import com.azkar.generated.resources.trayMenuOpen
 import com.azkar.generated.resources.trayMenuPause
 import com.azkar.generated.resources.trayMenuQuit
 import com.azkar.generated.resources.trayMenuResume
+import com.azkar.generated.resources.trayMenuShowPanel
 import com.azkar.generated.resources.trayNextPrayerCountdown
+import com.azkar.generated.resources.trayPanelHiddenMessage
 import com.azkar.ui.components.ActionIcons
 import com.azkar.ui.components.AzkarIcons
 import com.azkar.ui.notifications.DesktopPlatform
+import com.azkar.ui.notifications.NotificationAction
+import com.azkar.ui.notifications.NotificationActionRouter
+import com.azkar.ui.notifications.NotificationNotice
+import com.azkar.ui.notifications.NotificationPreferencesRepository
+import com.azkar.ui.notifications.PrayerMenuLayout
+import com.azkar.ui.notifications.presentation.NotificationPublisher
 import com.azkar.ui.theme.AzkarVariantsPreview
 import dev.nucleusframework.composenativetray.menu.api.TrayMenuBuilder
 import dev.nucleusframework.composenativetray.tray.api.NativeTray
 import dev.nucleusframework.composenativetray.utils.IconRenderProperties
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import java.awt.GraphicsEnvironment
-import kotlin.time.Duration.Companion.milliseconds
 import com.azkar.ui.notifications.trayAvailable as isTrayAvailable
 
 private val logger = KotlinLogging.logger {}
@@ -67,7 +81,7 @@ internal fun trayIconSize(platform: DesktopPlatform): TrayIconSize =
         DesktopPlatform.UNKNOWN -> TrayIconSize(32, 32)
     }
 
-private fun trayIconRenderProperties(platform: DesktopPlatform): IconRenderProperties {
+internal fun trayIconRenderProperties(platform: DesktopPlatform): IconRenderProperties {
     val iconSize = trayIconSize(platform)
     return IconRenderProperties(
         sceneWidth = TRAY_ICON_RENDER_SIZE,
@@ -79,10 +93,10 @@ private fun trayIconRenderProperties(platform: DesktopPlatform): IconRenderPrope
     )
 }
 
-private data class TrayMenuActions(
+internal data class TrayMenuActions(
     val openApp: () -> Unit,
-    val toggleReminders: () -> Unit,
     val quit: () -> Unit,
+    val panelHidden: () -> Unit,
 )
 
 /**
@@ -112,117 +126,178 @@ private data class TrayMenuActions(
  * library removes it when the composition goes away, without a teardown step having to get it right.
  */
 @Composable
-fun ReminderTray(
-    primaryAction: () -> Unit,
-    onOpenApp: () -> Unit,
-    remindersPaused: Boolean,
-    onToggleReminders: () -> Unit,
-    onQuit: () -> Unit,
-    countdown: PrayerTrayCountdownState? = null,
+internal fun DesktopPrayerSurfaces(
+    appState: AzkarAppState,
+    dispatcher: NotificationPublisher,
+    actionRouter: NotificationActionRouter,
+    preferences: NotificationPreferencesRepository,
+    menuActions: TrayMenuActions,
 ) {
-    val tooltip = countdown?.tooltipText?.takeIf { it.isNotEmpty() } ?: stringResource(Res.string.title)
-    val menuPrayerName =
-        countdown?.nextPrayerName?.takeIf { it.isNotEmpty() }
-            ?: stringResource(Res.string.nextPrayerLabel)
-    val menuPrayerLine = countdown?.tooltipText?.takeIf { it.isNotEmpty() } ?: menuPrayerName
-    PrayerTrayCountdownTicker(countdown)
-    PrayerTrayNativeHost(
-        primaryAction = primaryAction,
-        tooltip = tooltip,
-        menuPrayerLine = menuPrayerLine,
-        remindersPaused = remindersPaused,
-        menuActions = TrayMenuActions(onOpenApp, onToggleReminders, onQuit),
+    val prayerStatus = rememberDesktopPrayerStatus(appState.locale)
+    val latestAction = dispatcher.latestAction
+    val openLatest = remember(latestAction, actionRouter) { { actionRouter.dispatch(latestAction) } }
+    val tray = rememberTrayContent(prayerStatus.value, openLatest, preferences, menuActions)
+    val hiddenNotice =
+        key(appState.locale) {
+            NotificationNotice(
+                stringResource(Res.string.title),
+                stringResource(Res.string.trayPanelHiddenMessage),
+                NotificationAction.OpenApp,
+            )
+        }
+    val panel = DesktopPrayerPanel.current
+    val gnomeDisplay = if (panel is GnomePrayerPanel) preferences.gnomePrayerDisplay.collectAsState().value else null
+    // Hide applies to the selected surface. Selecting a different surface starts it visible.
+    var panelHidden by remember(gnomeDisplay) { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val visibility =
+        panelVisibilityAction(panelHidden) { hidden ->
+            scope.launch {
+                if (panelHidden != hidden) {
+                    panelHidden = hidden
+                    if (hidden) {
+                        menuActions.panelHidden()
+                        dispatcher.publish(hiddenNotice)
+                    }
+                }
+            }
+        }
+    val trayWithVisibility = tray.copy(menu = tray.menu.copy(panelVisibility = visibility))
+    val panelReplacesTray =
+        panel?.Mount(prayerStatus, appState, trayWithVisibility, hidden = panelHidden) ?: false
+    if (!panelReplacesTray) PrayerTrayNativeRegistration(if (panelHidden) trayWithVisibility else tray)
+}
+
+@Composable
+private fun panelVisibilityAction(
+    hidden: Boolean,
+    onVisibilityChanged: (Boolean) -> Unit,
+): TrayMenuEntry =
+    TrayMenuEntry(
+        stringResource(if (hidden) Res.string.trayMenuShowPanel else Res.string.trayMenuHidePanel),
+        if (hidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+        onClick = { onVisibilityChanged(!hidden) },
+    )
+
+@Composable
+private fun rememberTrayContent(
+    status: DesktopPrayerStatus?,
+    primaryAction: () -> Unit,
+    preferences: NotificationPreferencesRepository,
+    menuActions: TrayMenuActions,
+): ReminderTrayContent {
+    val queue by preferences.queue.collectAsState()
+    val trayLayout by preferences.prayerTrayMenuLayout.collectAsState()
+    val displayLayout = if (prayerTrayLayoutAvailable) trayLayout else PrayerMenuLayout.COMPACT
+    val readOnly = remember { {} }
+    val scope = rememberCoroutineScope()
+    val openLabel = stringResource(Res.string.trayMenuOpen)
+    val pauseLabel =
+        stringResource(if (!queue.enabled) Res.string.trayMenuResume else Res.string.trayMenuPause)
+    val quitLabel = stringResource(Res.string.trayMenuQuit)
+    val menuIconRenderProperties = remember { trayMenuIconRenderProperties() }
+    val currentMenuActions by rememberUpdatedState(menuActions)
+    val currentPrimaryAction by rememberUpdatedState(primaryAction)
+    val actions =
+        remember {
+            TrayMenuActions(
+                openApp = { currentMenuActions.openApp() },
+                quit = { currentMenuActions.quit() },
+                panelHidden = { currentMenuActions.panelHidden() },
+            )
+        }
+    val activate = remember { { currentPrimaryAction() } }
+    val menu =
+        PrayerTrayMenuContent(
+            countdown =
+                TrayMenuEntry(
+                    status?.countdownLabel ?: stringResource(Res.string.nextPrayerLabel),
+                    AzkarIcons.Clock,
+                    readOnly,
+                    isEnabled = false,
+                ),
+            openApp = TrayMenuEntry(openLabel, AzkarIcons.Home, actions.openApp),
+            reminders =
+                TrayMenuEntry(
+                    pauseLabel,
+                    if (!queue.enabled) AzkarIcons.Bell else AzkarIcons.BellOff,
+                    onClick = {
+                        scope.launch { preferences.updateQueue { it.copy(enabled = !it.enabled) } }
+                    },
+                ),
+            quit = TrayMenuEntry(quitLabel, ActionIcons.dismiss, actions.quit),
+            iconRenderProperties = menuIconRenderProperties,
+            remindersPaused = !queue.enabled,
+            trayLayout = displayLayout,
+            schedule = prayerTraySchedule(status, readOnly),
+        )
+    return ReminderTrayContent(
+        tooltip = status?.countdownLabel ?: stringResource(Res.string.title),
+        icon = AzkarIcons.Brand,
+        primaryAction = activate,
+        menu = menu,
     )
 }
 
 @Composable
-private fun PrayerTrayCountdownTicker(countdown: PrayerTrayCountdownState?) {
-    LaunchedEffect(countdown) {
-        val state = countdown ?: return@LaunchedEffect
-        val startFailure = runCatching { state.start() }.exceptionOrNull()
-        if (startFailure is CancellationException) throw startFailure
-        if (startFailure != null) {
-            logger.error(startFailure) { "Unable to start prayer tray countdown ticker" }
-            return@LaunchedEffect
+internal fun prayerTraySchedule(
+    status: DesktopPrayerStatus?,
+    readOnly: () -> Unit,
+): List<TrayMenuEntry> {
+    val prayers = status?.today.orEmpty()
+    if (prayers.isEmpty()) return emptyList()
+    val heading =
+        TrayMenuEntry(stringResource(Res.string.todayPrayerTimes), AzkarIcons.Calendar, readOnly, isEnabled = false)
+    return listOf(heading) +
+        prayers.map { prayer ->
+            TrayMenuEntry(
+                "${prayer.name} · ${prayer.value}",
+                prayer.key.desktopPrayerIcon(),
+                readOnly,
+                isEnabled = false,
+            )
         }
-        logger.info { "Prayer tray countdown ticker is running" }
-        var previousTickFailed = false
-        while (true) {
-            delay(COUNTDOWN_TICK_MS.milliseconds)
-            val tickFailure = runCatching { state.tick() }.exceptionOrNull()
-            if (tickFailure is CancellationException) throw tickFailure
-            if (tickFailure != null && !previousTickFailed) {
-                logger.error(tickFailure) { "Prayer tray countdown update failed; retrying" }
-            } else if (tickFailure == null && previousTickFailed) {
-                logger.info { "Prayer tray countdown recovered" }
-            }
-            previousTickFailed = tickFailure != null
-        }
-    }
-    DisposableEffect(countdown) {
-        onDispose {
-            if (countdown != null) logger.debug { "Prayer tray countdown ticker stopped" }
-        }
-    }
 }
 
-@Composable
-private fun PrayerTrayNativeHost(
-    primaryAction: () -> Unit,
-    tooltip: String,
-    menuPrayerLine: String,
-    remindersPaused: Boolean,
-    menuActions: TrayMenuActions,
-) {
-    val openLabel = stringResource(Res.string.trayMenuOpen)
-    val pauseLabel =
-        stringResource(if (remindersPaused) Res.string.trayMenuResume else Res.string.trayMenuPause)
-    val quitLabel = stringResource(Res.string.trayMenuQuit)
-    val menuIconRenderProperties = trayMenuIconRenderProperties()
-    val tray = remember { NativeTray() }
-    val currentMenuActions by rememberUpdatedState(menuActions)
-    val menuKey = "$menuPrayerLine|$openLabel|$pauseLabel|$quitLabel"
-    val menu =
-        PrayerTrayMenuContent(
-            countdown = TrayMenuEntry(menuPrayerLine, AzkarIcons.Clock, {}, isEnabled = false),
-            openApp = TrayMenuEntry(openLabel, AzkarIcons.Home, { currentMenuActions.openApp() }),
-            reminders =
-                TrayMenuEntry(
-                    pauseLabel,
-                    if (remindersPaused) AzkarIcons.Bell else AzkarIcons.BellOff,
-                    { currentMenuActions.toggleReminders() },
-                ),
-            quit = TrayMenuEntry(quitLabel, ActionIcons.dismiss, { currentMenuActions.quit() }),
-            iconRenderProperties = menuIconRenderProperties,
-        )
-    val currentMenu by rememberUpdatedState<TrayMenuBuilder.() -> Unit> {
-        addPrayerTrayMenu(menu)
-    }
-    PrayerTrayNativeRegistration(tray, primaryAction, tooltip, menuKey, currentMenu)
-}
+internal data class ReminderTrayContent(
+    val tooltip: String,
+    val icon: ImageVector,
+    val primaryAction: () -> Unit,
+    val menu: PrayerTrayMenuContent,
+)
 
-private data class TrayMenuEntry(
+internal data class TrayMenuEntry(
     val label: String,
     val icon: ImageVector,
     val onClick: () -> Unit,
     val isEnabled: Boolean = true,
 )
 
-private data class PrayerTrayMenuContent(
+internal data class PrayerTrayMenuContent(
     val countdown: TrayMenuEntry,
     val openApp: TrayMenuEntry,
     val reminders: TrayMenuEntry,
     val quit: TrayMenuEntry,
     val iconRenderProperties: IconRenderProperties,
-)
+    val panelVisibility: TrayMenuEntry? = null,
+    val remindersPaused: Boolean = false,
+    val trayLayout: PrayerMenuLayout = PrayerMenuLayout.COMPACT,
+    val schedule: List<TrayMenuEntry> = emptyList(),
+) {
+    val actions = listOfNotNull(openApp, panelVisibility, reminders, quit)
+
+    // Null entries are separators in both native menu implementations.
+    val actionEntries = actions.flatMap { if (it == quit) listOf(null, it) else listOf(it) }
+    val entries = summary(trayLayout) + listOf(null) + actionEntries
+
+    fun summary(layout: PrayerMenuLayout): List<TrayMenuEntry> =
+        if (layout == PrayerMenuLayout.EXTENDED && schedule.isNotEmpty()) schedule else listOf(countdown)
+}
 
 private fun TrayMenuBuilder.addPrayerTrayMenu(menu: PrayerTrayMenuContent) {
-    addPrayerTrayMenuEntry(menu.countdown, menu.iconRenderProperties)
-    Divider()
-    addPrayerTrayMenuEntry(menu.openApp, menu.iconRenderProperties)
-    addPrayerTrayMenuEntry(menu.reminders, menu.iconRenderProperties)
-    Divider()
-    addPrayerTrayMenuEntry(menu.quit, menu.iconRenderProperties)
+    menu.entries.forEach { entry ->
+        if (entry == null) Divider() else addPrayerTrayMenuEntry(entry, menu.iconRenderProperties)
+    }
 }
 
 private fun TrayMenuBuilder.addPrayerTrayMenuEntry(
@@ -240,26 +315,16 @@ private fun TrayMenuBuilder.addPrayerTrayMenuEntry(
 }
 
 @Composable
-private fun PrayerTrayNativeRegistration(
-    tray: NativeTray,
-    primaryAction: () -> Unit,
-    tooltip: String,
-    menuKey: String,
-    menuContent: TrayMenuBuilder.() -> Unit,
-) {
-    val currentPrimaryAction by rememberUpdatedState(primaryAction)
-    val currentMenu by rememberUpdatedState(menuContent)
+internal fun TrayBrandIcon(icon: ImageVector) {
+    Image(imageVector = icon, contentDescription = null, modifier = Modifier.fillMaxSize())
+}
+
+@Composable
+private fun PrayerTrayNativeRegistration(content: ReminderTrayContent) {
+    val tray = remember { NativeTray() }
     var hasSubmittedTray by remember(tray) { mutableStateOf(false) }
-    // Keep the colored vector instead of the monochrome ImageVector tray overload.
-    val iconContent: @Composable () -> Unit = {
-        Image(
-            imageVector = AzkarIcons.Brand,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-        )
-    }
     val iconRenderProperties = trayIconRenderProperties(DesktopPlatform.current)
-    LaunchedEffect(tray, tooltip, menuKey) {
+    LaunchedEffect(tray, content) {
         if (hasSubmittedTray) {
             logger.debug { "Updating prayer tray menu" }
         } else {
@@ -268,11 +333,11 @@ private fun PrayerTrayNativeRegistration(
         val updateFailure =
             runCatching {
                 tray.updateComposable(
-                    iconContent = iconContent,
+                    iconContent = { TrayBrandIcon(content.icon) },
                     iconRenderProperties = iconRenderProperties,
-                    tooltip = tooltip,
-                    primaryAction = { currentPrimaryAction() },
-                    menuContent = currentMenu,
+                    tooltip = content.tooltip,
+                    primaryAction = content.primaryAction,
+                    menuContent = { addPrayerTrayMenu(content.menu) },
                 )
             }.exceptionOrNull()
         if (updateFailure != null) {
@@ -353,8 +418,6 @@ private fun ReminderTrayActionIconsContent() {
     }
 }
 
-/** One tooltip tick per second, read off the wall clock the moment it lands. */
-private const val COUNTDOWN_TICK_MS = 1_000L
 private const val TRAY_ICON_RENDER_SIZE = 192
 private const val TRAY_ICON_RENDER_DENSITY = 2f
 

@@ -258,7 +258,10 @@ private fun taggedSet(vararg names: String): Set<com.azkar.domain.model.Tag> =
  * written against changes, a translation nobody has touched is no longer a claim about anything. The
  * rule here is that an untouched box goes and a rewritten one stays, and that it does not matter
  * which of the two the user did first.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionEditorTranslationsSuite by testSuite("The languages a dialog carries alongside the name") {
     val arabic = Locale.forLanguageTag("ar")
     val english = Locale.ENGLISH
@@ -507,7 +510,10 @@ val CollectionEditorTranslationsSuite by testSuite("The languages a dialog carri
  * interface. Every version of this that asked the interface the question offered a second English box
  * for a name that was already English and offered nothing for Arabic, which is the language the reader
  * was actually looking at.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val MissingLanguagesSuite by testSuite("Which languages a name can still be written in") {
     val arabic = Locale.forLanguageTag("ar")
     val english = Locale.ENGLISH

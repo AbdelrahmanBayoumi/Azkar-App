@@ -45,7 +45,7 @@ jobs:
       - name: Set up Kotlin compiler for release metadata
         uses: fwilhe2/setup-kotlin@b325539ca8f6e1d9ee04efed06f49bdbf5426dbb # v2.1
         with:
-          version: '2.4.20'
+          version: '2.4.21'
       - name: Select Dev release batch
         id: batch
         env:
@@ -102,7 +102,7 @@ jobs:
       - name: Set up Kotlin compiler
         uses: fwilhe2/setup-kotlin@b325539ca8f6e1d9ee04efed06f49bdbf5426dbb # v2.1
         with:
-          version: '2.4.20'
+          version: '2.4.21'
       - name: Test release validation scripts
         run: |
           ./scripts/release/merge_nucleus_release.main.kts self-test
@@ -152,6 +152,18 @@ jobs:
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
         with:
           cache-read-only: true
+      - name: Set up Bun
+        if: runner.os == 'Linux'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.4.5'
+
+      - name: Set up pnpm
+        if: runner.os == 'Linux'
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          package_json_file: app/src/gnomeExtension/package.json
+
       - name: Install Linux packaging tools
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y rpm libgl1
@@ -239,7 +251,7 @@ jobs:
       - name: Set up Kotlin compiler
         uses: fwilhe2/setup-kotlin@b325539ca8f6e1d9ee04efed06f49bdbf5426dbb # v2.1
         with:
-          version: '2.4.20'
+          version: '2.4.21'
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: packages-*

@@ -25,6 +25,8 @@ import org.assertj.core.api.Assertions.assertThat
 import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val AudioPreviewResponsivenessSuite by testSuite("Audio preview UI responsiveness") {
     test("an asynchronous playback error is shown in the settings card") {
         var reportError: ((Throwable) -> Unit)? = null

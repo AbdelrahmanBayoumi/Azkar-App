@@ -1,7 +1,7 @@
-@file:DependsOn("io.ktor:ktor-client-cio-jvm:3.3.3")
-@file:DependsOn("io.ktor:ktor-client-content-negotiation-jvm:3.3.3")
-@file:DependsOn("io.ktor:ktor-serialization-kotlinx-json-jvm:3.3.3")
-@file:DependsOn("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.9.0")
+@file:DependsOn("io.ktor:ktor-client-cio-jvm:3.6.1")
+@file:DependsOn("io.ktor:ktor-client-content-negotiation-jvm:3.6.1")
+@file:DependsOn("io.ktor:ktor-serialization-kotlinx-json-jvm:3.6.1")
+@file:DependsOn("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.13.0")
 @file:DependsOn("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0")
 @file:Import("release-rules.main.kts")
 

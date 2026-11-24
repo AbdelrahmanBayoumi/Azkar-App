@@ -49,14 +49,4 @@ data class CollectionSummary(
 
     /** The name to draw when the interface is in [locale]. See [RemembranceCollection.displayName]. */
     fun displayName(locale: Locale): String = translations.displayName(locale, name)
-
-    /**
-     * The prose to draw when the interface is in [locale], or `null` when this language has none.
-     *
-     * Null rather than the canonical prose, and the same rule as
-     * [RemembranceCollection.displayDescription]: a translated name above untranslated prose reads
-     * as one unedited mistake, while an absent line reads as the line not having been written yet.
-     */
-    fun displayDescription(locale: Locale): String? =
-        translations.displayDescription(locale, description.ifBlank { null })
 }

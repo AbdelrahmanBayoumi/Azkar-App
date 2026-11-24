@@ -20,7 +20,10 @@ import org.assertj.core.api.Assertions.assertThat
  * file. The question being asked is "does the choice come back?", and the in-memory store answers it
  * in full; whether a value survives a restart on disk is asked once, in
  * [com.azkar.settings.SettingsStoreSuite].
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TypographyStoreSuite by testSuite("The reader's typography") {
     test("a fresh install reads as the bundled pairing at full size") {
         withInMemorySettings { _, store, _ ->

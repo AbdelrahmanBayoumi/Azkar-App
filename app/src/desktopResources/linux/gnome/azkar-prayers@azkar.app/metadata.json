@@ -1,0 +1,8 @@
+{
+    "uuid": "azkar-prayers@azkar.app",
+    "name": "Azkar Prayer Panel",
+    "description": "Shows Azkar's prayer countdown and schedule in the GNOME top bar.",
+    "shell-version": ["46", "47", "48", "49", "50", "51"],
+    "url": "https://azkar.app",
+    "version-name": "development"
+}

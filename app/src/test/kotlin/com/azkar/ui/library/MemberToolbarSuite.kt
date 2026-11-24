@@ -68,6 +68,8 @@ private fun trackedToolbarTest(block: SkikoComposeUiTest.() -> Unit) {
  * that is present but wrong is invisible to every other test in the app.
  */
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val MemberToolbarSuite by testSuite("the members toolbar") {
     /**
      * The row's labels, as they are written in `values/strings.xml` rather than as they sound.

@@ -125,6 +125,8 @@ private fun SkikoComposeUiTest.advance() {
 }
 
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val CollectionEditorDialogSuite by testSuite("The create-collection dialog") {
 
     test("the first page is the name and nothing else") {

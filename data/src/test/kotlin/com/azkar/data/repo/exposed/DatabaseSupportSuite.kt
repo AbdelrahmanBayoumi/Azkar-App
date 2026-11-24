@@ -21,7 +21,10 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
  * only that `guarded` catches `ExposedSQLException` and nothing about whether Exposed raises one
  * for a statement that cannot run. Asking H2 for a table that is not there produces the genuine
  * article, driver cause and all.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val DatabaseSupportSuite by testSuite("DatabaseSupport") {
     // One schema for the whole suite. Nothing here writes a row, so nothing has to be reset.
     val migratedDatabase = testFixture { TestDatabase.bootstrapWithH2() }

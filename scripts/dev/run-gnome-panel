@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Gradle supplies its normal JVM arguments and the staged extension directory.
+: "${WAYLAND_DISPLAY:?Start runGnomePanel from a Wayland desktop}"
+if [[ ${1:-} != --inside-session ]]; then
+    exec dbus-run-session -- "$0" --inside-session "$@"
+fi
+shift
+export XDG_DATA_HOME
+XDG_DATA_HOME=$(mktemp -d)
+shell_pid=
+cleanup() {
+    if [[ -n $shell_pid ]]; then
+        kill "$shell_pid" 2>/dev/null || true
+        wait "$shell_pid" 2>/dev/null || true
+    fi
+    rm -rf -- "$XDG_DATA_HOME"
+}
+trap cleanup EXIT
+export XDG_CURRENT_DESKTOP=GNOME GSETTINGS_BACKEND=memory
+uuid=${AZKAR_EXTENSION##*/}
+mkdir -p "$XDG_DATA_HOME/gnome-shell/extensions"
+ln -s "$AZKAR_EXTENSION" "$XDG_DATA_HOME/gnome-shell/extensions/$uuid"
+
+mode=--nested
+if (( $(gnome-shell --version | awk '{print int($3)}') >= 49 )); then
+    mode=--devkit
+fi
+display=azkar-dev-$$
+gnome-shell "$mode" --wayland --wayland-display="$display" &
+shell_pid=$!
+for ((i=0; i<100; i++)); do
+    kill -0 "$shell_pid" || exit 1
+    if gnome-extensions info "$uuid" >/dev/null 2>&1; then break; fi
+    sleep 0.2
+done
+gnome-extensions enable "$uuid"
+WAYLAND_DISPLAY="$display" "$@"

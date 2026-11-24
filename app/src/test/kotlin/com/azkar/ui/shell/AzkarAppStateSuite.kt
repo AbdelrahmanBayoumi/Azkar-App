@@ -17,7 +17,10 @@ import java.util.Locale
  *
  * [AzkarAppState] takes its persistence as a constructor argument precisely so these can assert on
  * the write without touching the real `settings.preferences_pb`.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val AzkarAppStateSuite by testSuite("Switching the application language") {
     test("a switch updates the shell state and the JVM default together") {
         withRestoredLocale {
@@ -86,7 +89,10 @@ private fun withRestoredLocale(block: () -> Unit) {
  *
  * Both persistence callbacks are constructor arguments for the same reason the language suite can
  * assert on its write: the real ones touch `settings.preferences_pb`.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val AzkarAppThemeSuite by testSuite("Switching the application theme") {
     test("choosing a theme moves the palette and stores the choice") {
         val persisted = mutableListOf<ThemePreference>()
@@ -167,7 +173,10 @@ val AzkarAppThemeSuite by testSuite("Switching the application theme") {
     }
 }
 
-/** A saved face and scale are installed before the first themed composition begins. */
+/** A saved face and scale are installed before the first themed composition begins. *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
+ */
+@Suppress("unused")
 val AzkarAppTypographySuite by testSuite("Restoring the application typography") {
     test("the stored face and scale are the initial app state without being rewritten") {
         val persisted = mutableListOf<AppTypography>()

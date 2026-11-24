@@ -12,7 +12,10 @@ import java.util.Locale
  * spelling rather than against the parser's own table: if a locale ever starts writing its meridiem
  * differently, this is the test that notices, rather than a reader discovering that the typed field
  * has quietly stopped accepting the afternoons.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val AzkarClockSuite by testSuite("Every clock the app prints, and the typed half of the time picker") {
     val english = Locale.ENGLISH
     val arabic = Locale.forLanguageTag("ar")

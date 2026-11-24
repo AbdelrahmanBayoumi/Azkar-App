@@ -1,0 +1,106 @@
+.azkar-prayer-summary {
+    spacing: 7px;
+}
+
+.azkar-prayer-countdown {
+    border-radius: 6px;
+    background-color: rgba(125, 161, 208, 0.23);
+    font-weight: bold;
+    padding: 1px 5px;
+}
+
+.azkar-prayer-schedule {
+    min-width: 248px;
+}
+
+.azkar-prayer-schedule .azkar-prayer-schedule-header {
+    border-bottom: 1px solid rgba(125, 161, 208, 0.25);
+    border-radius: 0;
+    spacing: 6px;
+    padding: 6px 10px 9px;
+    margin-bottom: 4px;
+}
+
+.azkar-prayer-schedule .azkar-prayer-row {
+    border-radius: 8px;
+    padding: 7px 10px;
+    spacing: 9px;
+}
+
+.azkar-prayer-row .azkar-prayer-time {
+    font-weight: 600;
+    font-feature-settings: 'tnum';
+}
+
+.azkar-prayer-menu .azkar-prayer-heading {
+    font-weight: bold;
+}
+
+.azkar-prayer-menu .azkar-prayer-next {
+    background-color: #344d70;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.azkar-prayer-next .azkar-prayer-time {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.azkar-prayer-icon-button {
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.azkar-prayer-icon-button:hover,
+.azkar-prayer-icon-button:focus,
+.azkar-prayer-position-selected,
+.azkar-prayer-quit:hover,
+.azkar-prayer-quit:focus {
+    background-color: rgba(125, 161, 208, 0.28);
+}
+
+.azkar-prayer-quit-label {
+    spacing: 8px;
+}
+
+.azkar-prayer-quit {
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.azkar-prayer-tooltip {
+    color: white;
+    background-color: rgba(24, 29, 38, 0.96);
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.azkar-prayer-position-controls {
+    border-radius: 16px;
+    border: 1px solid rgba(125, 161, 208, 0.28);
+    padding: 2px;
+}
+
+.azkar-prayer-position-controls .azkar-prayer-icon-button {
+    border-radius: 12px;
+    padding: 5px 8px;
+}
+
+.azkar-prayer-actions {
+    min-width: 248px;
+}
+
+.azkar-prayer-actions .popup-menu-item,
+.azkar-prayer-action-footer {
+    padding: 8px 10px;
+    font-weight: 600;
+}
+
+.azkar-prayer-action-footer {
+    spacing: 8px;
+}
+
+.azkar-prayer-action-footer .azkar-prayer-quit {
+    padding-left: 0;
+}

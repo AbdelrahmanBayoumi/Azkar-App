@@ -53,6 +53,8 @@
     <string name="sourceExample">[حديث صحيح] - [رواه البخاري ومسلم]</string>
     <!-- Prayer times section -->
     <string name="todayPrayerTimes">مواقيت الصلاة اليوم</string>
+    <string name="desktopPrayerTomorrowTime">%1$s غدًا</string>
+    <string name="desktopPrayerCloseSchedule">إغلاق</string>
     <string name="nextPrayerIn">متبقي على الصلاة:</string>
     <string name="nextPrayerLabel">الصلاة القادمة</string>
     <string name="prayerTimesLocation">مواقيت الصلاة في %1$s</string>
@@ -297,6 +299,7 @@
     <string name="settingsStartupHint">هل يفتح أذكار نفسه عند تسجيل دخولك.</string>
     <string name="settingsStartupDisabledByUser">تم تعطيل بدء التشغيل في إعدادات النظام. فعّله من هناك للسماح لأذكار بالعمل عند تسجيل الدخول.</string>
     <string name="settingsStartupManagedByPolicy">يتحكم مسؤول النظام في إعداد بدء التشغيل.</string>
+    <string name="settingsStartupDevelopmentBuild">لا تدعم نسخة التطوير هذه من أذكار التشغيل التلقائي عند تسجيل الدخول. ثبّت أذكار لاستخدام هذا الإعداد.</string>
     <string name="settingsStartupUnsupported">بدء التشغيل غير متاح في هذه البيئة. استخدم التطبيق المثبّت مع جلسة تسجيل دخول مدعومة.</string>
     <string name="settingsStartupOpenSystemSettings">فتح إعدادات النظام</string>
     <string name="settingsThemeHeader">السمة</string>
@@ -609,6 +612,21 @@
     <string name="settingsPrayerLocationHint">المكان الذي تُحسب منه كل أوقات الصلاة.</string>
     <string name="settingsPrayerPerPrayerHint">يُفعَّل أو يُعطَّل كل وقت من الشاشة الرئيسية.</string>
     <string name="settingsPrayerCalculationTitle">الحساب</string>
+    <string name="settingsDesktopPrayer">عرض مواقيت الصلاة باستخدام</string>
+    <string name="settingsDesktopPrayerGnomeHint">عند اختيار إضافة جنوم، يستخدم أذكار اللوحة العادية إلى أن تصبح الإضافة متاحة. قد تحتاج إلى تسجيل الخروج والدخول مجددًا بعد تثبيت الإضافة.</string>
+    <string name="settingsDesktopPrayerExtension">إضافة جنوم</string>
+    <string name="settingsDesktopPrayerStandardPanel">اللوحة العادية</string>
+    <string name="settingsDesktopPrayerTray">علبة النظام فقط</string>
+    <string name="settingsDesktopPrayerTitle">لوحة الصلاة</string>
+    <string name="settingsPrayerPanelMenu">تخطيط قائمة اللوحة</string>
+    <string name="settingsStandardPrayerPanelMenu">تخطيط قائمة اللوحة العادية</string>
+    <string name="settingsPrayerTrayMenu">تخطيط قائمة علبة النظام</string>
+    <string name="settingsStandardPrayerPanelMenuHint">يعرض التخطيط المختصر إجراءات القائمة، ويضيف التخطيط الموسّع مواقيت الصلاة لهذا اليوم.</string>
+    <string name="settingsPrayerPanelMenuHint">يعرض التخطيط المختصر الصلاة القادمة، ويعرض التخطيط الموسّع مواقيت الصلاة لهذا اليوم.</string>
+    <string name="settingsPrayerPanelMenuCompact">مختصر</string>
+    <string name="settingsPrayerPanelMenuExtended">موسّع</string>
+    <string name="settingsDesktopPrayerTaskbar">إظهار في شريط المهام</string>
+    <string name="settingsDesktopPrayerWindowsHint">اعرض وقت الصلاة والوقت المتبقي في شريط مهام ويندوز. أوقف هذا الخيار لاستخدام علبة النظام.</string>
     <string name="settingsPrayerCalculationHint">الطريقة التي يحوّل بها ذلك المكان إلى أوقات صلاة.</string>
     <string name="settingsPrayerCityLabel">المدينة أو المكان</string>
     <string name="settingsPrayerSearchLabel">ابحث عن مدينة</string>
@@ -694,4 +712,11 @@
     <string name="settingsAudioStopPreview">إيقاف المعاينة</string>
     <string name="settingsAudioVolume">مستوى الصوت</string>
     <string name="settingsAudioFailed">تعذر تشغيل الملف الصوتي. تأكد من وجوده وأن صيغته مدعومة.</string>
+    <string name="taskbarPositionTitle">موضع أذكار في شريط المهام</string>
+    <string name="taskbarPositionAutomatic">تلقائي</string>
+    <string name="taskbarPositionManual">يدوي</string>
+    <string name="taskbarPositionTip">اسحب أذكار لتغيير موضعه.</string>
+    <string name="trayMenuHidePanel">إخفاء اللوحة</string>
+    <string name="trayMenuShowPanel">إظهار اللوحة</string>
+    <string name="trayPanelHiddenMessage">لا يزال أذكار يعمل في علبة النظام. انقر بزر الماوس الأيمن على أيقونته واختر إظهار اللوحة لإعادتها.</string>
 </resources>

@@ -90,6 +90,6 @@ private fun previewLibraryRemembrances() =
 
 /** Progress for every member in [PREVIEW_COLLECTION_ID]'s default collection. */
 internal fun previewCompletedCollectionProgress(): List<RecitationProgress> =
-    (listOf(101L, 102L, 103L, 104L) + (900_000L..900_049L)).map { id ->
+    (listOf(101L, 102L, 103L, 104L) + (900_000L..900_049L).toList()).map { id ->
         RecitationProgress(remembranceId = id, repeatCount = 1, lastRecitedAt = previewFixtureInstant())
     }

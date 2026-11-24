@@ -1,0 +1,23 @@
+{
+  "name": "azkar-gnome-extension",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun ./node_modules/typescript/bin/tsc",
+    "typecheck": "bun ./node_modules/typescript/bin/tsc --noEmit",
+    "test": "bun test",
+    "lint": "bun ./node_modules/eslint/bin/eslint.js . --max-warnings 0",
+    "format": "bun ./node_modules/prettier/bin/prettier.cjs --config .prettierrc.json --write \"**/*.{ts,json,mjs}\" ../desktopResources/linux/gnome/azkar-prayers@azkar.app/stylesheet.css",
+    "format:check": "bun ./node_modules/prettier/bin/prettier.cjs --config .prettierrc.json --check \"**/*.{ts,json,mjs}\" ../desktopResources/linux/gnome/azkar-prayers@azkar.app/stylesheet.css",
+    "check": "bun run typecheck && bun run lint && bun run format:check && bun run test"
+  },
+  "devDependencies": {
+    "@girs/gjs": "4.9.0",
+    "@girs/gnome-shell": "46.0.2",
+    "eslint": "10.15.0",
+    "prettier": "3.10.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0"
+  },
+  "packageManager": "pnpm@12.21.0"
+}

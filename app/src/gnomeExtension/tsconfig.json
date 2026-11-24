@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "lib": ["ES2022"],
+    "types": ["@girs/gnome-shell/ambient", "@girs/gnome-shell/extensions/global", "@girs/gjs/dom"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "outDir": "./dist"
+  },
+  "include": ["*.ts"]
+}

@@ -18,7 +18,10 @@ import java.util.Locale
  * The bundled dataset is loaded by a resource file rather than by a migration, so nothing else in
  * the suite would notice if it stopped loading. The counts here are deliberately coarse: the
  * point is that the rows landed at all, not that the dataset matches a snapshot.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val SeedDataSuite by testSuite("Seed data") {
     // Migrated and seeded once for the whole suite and deliberately never reset — the seeded rows
     // are precisely what is under test, so every test in here reads the same database. The dataset

@@ -21,7 +21,10 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
  * This suite therefore opens a new pool and connection for every migration instead of sharing one,
  * which is what a process restart looks like to Exposed. That is why it does not share the
  * [TestDatabase] fixture: [TestDatabase.reset] assumes a connection it already holds.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val SchemaMigrationSuite by testSuite("Migrating a database that already exists") {
     test("migrating again succeeds, which is what every start after the first does") {
         withMigratedDatabase { name ->
@@ -54,7 +57,7 @@ val SchemaMigrationSuite by testSuite("Migrating a database that already exists"
 
             // The filter that protects the engine-owned index must not reach across and drop one we
             // declared ourselves, or the index on remembrance.is_favorite would quietly disappear.
-            assertThat(indexNamesOn(name, "remembrance")).contains("idx_remembrance__is_favorite")
+            assertThat(remembranceIndexNames(name)).contains("idx_remembrance__is_favorite")
         }
     }
 
@@ -126,17 +129,12 @@ private fun countRows(
         }
     }
 
-/** The index names H2 holds on [table], read the same way a fresh start would see them. */
-private fun indexNamesOn(
-    name: String,
-    table: String,
-): Set<String> =
+/** The index names H2 holds on the remembrance table, read the same way a fresh start would see them. */
+private fun remembranceIndexNames(name: String): Set<String> =
     withConnection(name) { database ->
         transaction(database) {
             val names = mutableSetOf<String>()
-            // `TABLE_NAME` is a string comparison, not an identifier, so it matches the case the
-            // name is stored in — which is why the callers pass it lower case.
-            exec("SELECT INDEX_NAME FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME = '$table'") { resultSet ->
+            exec("SELECT INDEX_NAME FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME = 'remembrance'") { resultSet ->
                 while (resultSet.next()) names += resultSet.getString(1)
             }
             names

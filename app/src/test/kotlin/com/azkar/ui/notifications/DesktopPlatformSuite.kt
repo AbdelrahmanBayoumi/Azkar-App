@@ -3,6 +3,8 @@ package com.azkar.ui.notifications
 import de.infix.testBalloon.framework.core.testSuite
 import org.assertj.core.api.Assertions.assertThat
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val DesktopPlatformSuite by testSuite("Desktop platform detection") {
     test("recognizes the supported operating system names") {
         assertThat(desktopPlatform("Windows 11")).isEqualTo(DesktopPlatform.WINDOWS)

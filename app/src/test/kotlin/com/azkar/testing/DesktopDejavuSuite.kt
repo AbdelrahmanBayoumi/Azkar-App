@@ -26,6 +26,8 @@ private fun TrackingProbe(
 }
 
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val DesktopDejavuSuite by testSuite("Desktop recomposition tracker") {
     test("custom-size tests reset the tracker and detect a real recomposition twice") {
         repeat(2) {

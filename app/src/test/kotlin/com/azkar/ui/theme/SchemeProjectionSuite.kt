@@ -30,7 +30,10 @@ import java.util.Locale
  * [AzkarColors.textPrimary] is near-black, so the pair must come out dark-on-light, and on the dark
  * page it is near-white, so the pair must come out light-on-dark. A projection that merely copied one
  * value into both slots would pass a "did you set it" test and still put dark ink on a dark chip.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val SchemeProjectionSuite by testSuite("The Material scheme the app hands to its controls") {
     test("the inverse pair inverts with the page, so an overlay is legible on either") {
         runRecompositionTrackingUiTest {

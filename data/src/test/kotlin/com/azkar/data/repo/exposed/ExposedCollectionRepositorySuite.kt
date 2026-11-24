@@ -28,7 +28,10 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
  * The reference fixture seeds the two tags the catalogue names — `morning` and `evening`, stored
  * folded while the catalogue spells them `Morning` and `Evening`, which is what keeps the tag match
  * honest — so the shelf comes up with two populated shipped collections and the rest empty.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository") {
     seededCollections {
         testSuite("seeded membership") {
@@ -165,7 +168,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("addMembers() appends in the order given") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
 
                 val added = repositories.collections.addMembers(collection, listOf(3L, 1L, 2L))
 
@@ -179,7 +182,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("addMembers() counts only the ids that were not already members") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L))
 
                 val added = repositories.collections.addMembers(collection, listOf(2L, 3L))
@@ -194,13 +197,13 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("addMembers() of nothing is a no-op rather than an error") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
 
                 assertThat(repositories.collections.addMembers(collection, emptyList())).isZero()
             }
 
             test("removeMembers() closes the gap a removal leaves behind") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L, 3L))
 
                 val removed = repositories.collections.removeMembers(collection, listOf(2L))
@@ -218,7 +221,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("removing an id that is not a member reports zero and changes nothing") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L))
 
                 val removed = repositories.collections.removeMembers(collection, listOf(3L))
@@ -235,7 +238,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             test(
                 "re-adding a removed member appends it at the end rather than reclaiming its old slot",
             ) { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L, 3L))
                 repositories.collections.removeMembers(collection, listOf(1L))
 
@@ -255,7 +258,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("re-adding an existing member adds nothing and leaves its position alone") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L))
 
                 val added = repositories.collections.addMembers(collection, listOf(1L))
@@ -265,7 +268,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("moveMember() renumbers the whole run rather than swapping two rows") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L, 3L))
 
                 repositories.collections.moveMember(collection, fromIndex = 0, toIndex = 2)
@@ -280,7 +283,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("moveMember() ignores an out-of-range or no-op index") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L))
 
                 repositories.collections.moveMember(collection, fromIndex = 0, toIndex = 9)
@@ -296,7 +299,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("deleteById() takes the membership with it") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L))
 
                 repositories.collections.deleteById(collection)
@@ -314,7 +317,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("a deleted remembrance drops out of the shelf and leaves the cover alone") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.addMembers(collection, listOf(1L, 2L))
                 repositories.collections.setCoverImage(collection, "cover.png")
 
@@ -330,7 +333,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
 
         testSuite("cover, pin and recency") {
             test("setCoverImage() stores a name, and clearing it takes the name away") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
 
                 repositories.collections.setCoverImage(collection, "cover.png")
                 assertThat(repositories.collections.findById(collection)?.coverImagePath).isEqualTo("cover.png")
@@ -343,7 +346,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
                 // The repository stores the name and nothing else. Whether a file still sits behind it
                 // is the cover storage's business, and a name with no file is exactly what a user who
                 // deleted the picture leaves behind — a normal row, not a broken one.
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
 
                 repositories.collections.setCoverImage(collection, "gone.png")
 
@@ -351,7 +354,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("setPinned() stamps and clears, and isPinned follows the stamp") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
 
                 repositories.collections.setPinned(collection, true)
                 assertThat(repositories.collections.findById(collection)?.isPinned).isTrue()
@@ -361,7 +364,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("setTags() replaces the labels rather than adding to them") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 repositories.collections.setTags(collection, listOf(TagImpl(name = "Morning"), TagImpl(name = "sleep")))
 
                 assertThat(
@@ -386,7 +389,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
                 // "sleep" and "SLEEP" resolve to the same tag row. Without de-duplicating the
                 // resolved ids the composite primary key of collection_tag would be asked to hold
                 // one link twice, which is a constraint violation rather than a duplicate chip.
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
 
                 repositories.collections.setTags(
                     collection,
@@ -397,7 +400,7 @@ val ExposedCollectionRepositorySuite by testSuite("ExposedCollectionRepository")
             }
 
             test("touchLastOpened() moves last_opened_at but not updated_at") { repositories ->
-                val collection = newCollection(repositories, "Mine")
+                val collection = newCollection(repositories)
                 val before = repositories.collections.findById(collection)
                 assertThat(before?.lastOpenedAt).describedAs("insert() stamps it").isNotNull()
 
@@ -464,10 +467,8 @@ private suspend fun collectionNamed(
 private fun RemembranceCollection.requireId(): Long = requireNotNull(id) { "Unsaved collection" }
 
 /** Creates a custom collection and returns its generated id, failing the test if there is none. */
-private suspend fun newCollection(
-    repositories: ExposedRepositories,
-    name: String,
-): Long = requireNotNull(repositories.collections.save(RemembranceCollectionImpl(name = name)).id)
+private suspend fun newCollection(repositories: ExposedRepositories): Long =
+    requireNotNull(repositories.collections.save(RemembranceCollectionImpl(name = "Mine")).id)
 
 /**
  * The failure [block] raised, or `null` when it did not raise one.

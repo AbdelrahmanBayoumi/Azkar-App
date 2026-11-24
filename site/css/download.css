@@ -1,21 +1,21 @@
 :root {
   color-scheme: light;
-  --ink: #0f172a;
-  --muted: #5b6b82;
-  --blue: #3b82f6;
-  --blue-strong: #2563eb;
-  --on-blue: #fff;
-  --blue-soft: #e8f1ff;
-  --paper: #f8fafc;
-  --surface: #fff;
-  --line: #e2e8f0;
-  --focus: #92400e;
-  --scroll-thumb: #64748b;
-  --code: #0f1a2b;
+  --ink: light-dark(#0f172a, #e8edf7);
+  --muted: light-dark(#5b6b82, #9aa8c4);
+  --blue: light-dark(#3b82f6, #60a5fa);
+  --blue-strong: light-dark(#2563eb, #93c5fd);
+  --on-blue: light-dark(#fff, #0b1220);
+  --blue-soft: light-dark(#e8f1ff, #1b2942);
+  --paper: light-dark(#f8fafc, #0b1220);
+  --surface: light-dark(#fff, #121b2e);
+  --line: light-dark(#e2e8f0, #22304c);
+  --focus: light-dark(#92400e, #fcd34d);
+  --scroll-thumb: light-dark(#64748b, #475569);
+  --code: light-dark(#0f1a2b, #0b1220);
   --code-text: #e8edf7;
-  --code-track: #22304c;
+  --code-track: light-dark(#22304c, #1b2942);
   --code-thumb: #475569;
-  --code-thumb-hover: #64748b;
+  --code-thumb-hover: light-dark(#64748b, #60a5fa);
   --hero-image-width: min(100%, 40vw, 80rem, 100vh);
   --feature-image-width: min(100%, max(42rem, 65vw), 104rem, 131vh);
   font:
@@ -35,44 +35,10 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --ink: #e8edf7;
-  --muted: #9aa8c4;
-  --blue: #60a5fa;
-  --blue-strong: #93c5fd;
-  --on-blue: #0b1220;
-  --blue-soft: #1b2942;
-  --paper: #0b1220;
-  --surface: #121b2e;
-  --line: #22304c;
-  --focus: #fcd34d;
-  --scroll-thumb: #475569;
-  --code: #0b1220;
-  --code-text: #e8edf7;
-  --code-track: #1b2942;
-  --code-thumb: #475569;
-  --code-thumb-hover: #60a5fa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] {
-    color-scheme: dark;
-    --ink: #e8edf7;
-    --muted: #9aa8c4;
-    --blue: #60a5fa;
-    --blue-strong: #93c5fd;
-    --on-blue: #0b1220;
-    --blue-soft: #1b2942;
-    --paper: #0b1220;
-    --surface: #121b2e;
-    --line: #22304c;
-    --focus: #fcd34d;
-    --scroll-thumb: #475569;
-    --code: #0b1220;
-    --code-text: #e8edf7;
-    --code-track: #1b2942;
-    --code-thumb: #475569;
-    --code-thumb-hover: #60a5fa;
-  }
+:root[data-theme="system"] {
+  color-scheme: light dark;
 }
 
 * {
@@ -957,8 +923,8 @@ summary::after {
   flex: 0 0 auto;
   width: 0.55rem;
   height: 0.55rem;
-  border-right: 1.5px solid var(--blue);
-  border-bottom: 1.5px solid var(--blue);
+  border-right: 2px solid var(--blue);
+  border-bottom: 2px solid var(--blue);
   content: "";
   transform: rotate(45deg) translate(-2px, -2px);
 }

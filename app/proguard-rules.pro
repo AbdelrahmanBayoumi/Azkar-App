@@ -18,6 +18,10 @@
 # so let ProGuard skip it.
 -dontprocesskotlinmetadata
 
+# Coroutine implementations call Job's default methods through a direct superinterface.
+# ProGuard otherwise drops Job as redundant when another implemented interface extends it.
+-keep interface kotlinx.coroutines.Job
+
 # Exposed builds the entities in com.azkar.data.table.entity through
 # kotlin-reflect (`primaryConstructor` plus `callBy`), which needs our classes'
 # metadata and constructors intact. Without this it throws
@@ -40,7 +44,9 @@
 -keep class org.h2.** { *; }
 
 # Logback is configured by text (logback.xml) and its SPI (ServiceLoader).
+# The configured ConsoleAppender does not use Logback's optional JLine ANSI integration.
 -keep class ch.qos.logback.** { *; }
+-dontwarn org.jline.jansi.AnsiConsole
 
 # Ktor resolves engines and serialization formats through ServiceLoader and
 # string-named configuration keys.
@@ -49,11 +55,24 @@
 # JNA discovers native symbols via string lookups on interfaces
 # (tray / Linux bus glue), so keep its infrastructure whole.
 -keep class com.sun.jna.** { *; }
+-keep interface com.azkar.ui.shell.TaskbarUser32 { *; }
+-keep class com.azkar.ui.shell.WidgetMouseTracking { *; }
 
 # FileKit's Linux file picker calls dbus-java APIs reflectively. Keeping only the
 # ServiceLoader transport provider is not enough: ProGuard otherwise removes
 # members such as Properties.Set that the portal client resolves by name.
 -keep class org.freedesktop.dbus.** { *; }
+
+# The GNOME prayer indicator exposes D-Bus methods, properties, and menu tuples by reflection.
+-keep interface com.azkar.ui.shell.GnomePrayer* extends org.freedesktop.dbus.interfaces.DBusInterface { *; }
+-keep interface com.azkar.ui.shell.GnomeShellPanelService extends org.freedesktop.dbus.interfaces.DBusInterface { *; }
+-keep class com.azkar.ui.shell.GnomePrayer* extends org.freedesktop.dbus.Container { *; }
+-keep class com.azkar.ui.shell.GnomePrayerMenu$LayoutUpdated { *; }
+
+# The HWND class uses a method handle to its native window procedure.
+-keepclassmembers class com.azkar.ui.shell.WindowsTaskbarWidget {
+    private long windowProc(java.lang.foreign.MemorySegment, int, long, long);
+}
 
 # AutoLaunch selects the macOS backend by class name; JNI calls back into its bridges.
 -keep class dev.nucleusframework.autolaunch.** { *; }

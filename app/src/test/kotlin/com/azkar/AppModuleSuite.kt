@@ -76,7 +76,10 @@ import kotlin.reflect.KClass
  * classpath, and the database itself is `DatabaseManager`'s, opened under `~/.azkar`. The stubbing
  * stops at the ports `dataModule` registers — that is the seam between the two halves — so below it
  * every definition is the production one and above it every definition is `appModule`'s.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val AppModuleSuite by testSuite("AppModule") {
     testFixture { StubbedGraph.start() } closeWith {
         close()

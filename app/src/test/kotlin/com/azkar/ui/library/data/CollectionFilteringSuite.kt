@@ -23,7 +23,10 @@ import java.util.Locale
  * decisions rather than consequences: that a pinned collection stays at the top whatever sort is
  * chosen, and that a cross-collection hit is reported once per collection rather than once per
  * remembrance. Both are easy to "simplify" later into something that looks equivalent and is not.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionFilteringSuite by testSuite("Narrowing, ordering and searching the shelf") {
     val morning = remembrance(id = 1L, text = "Whoever says good morning")
     val evening = remembrance(id = 2L, text = "Whoever says good evening")
@@ -919,7 +922,10 @@ val CollectionFilteringSuite by testSuite("Narrowing, ordering and searching the
  * The rule is that a translated row is reachable in *every* language, not only in its own. Someone
  * reading the English interface still searches for the Arabic word they remember off a card, and
  * someone reading the Arabic one still pastes the English name a colleague sent them.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TranslatedShelfSuite by testSuite("Searching and sorting a shelf that has been translated") {
     val arabic = Locale.forLanguageTag("ar")
     val english = Locale.ENGLISH

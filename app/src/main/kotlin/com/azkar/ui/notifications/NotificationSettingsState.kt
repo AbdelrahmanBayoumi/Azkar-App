@@ -363,6 +363,14 @@ class NotificationSettingsState(
         val canChangeStartup: Boolean
             get() = !isUpdatingStartup && startupState in setOf(AutoLaunchState.ENABLED, AutoLaunchState.DISABLED)
 
+        private val unsupportedStartupNotice: StartupNotice
+            get() =
+                if (startupRegistration?.isDevelopmentBuild == true) {
+                    StartupNotice.DevelopmentBuild
+                } else {
+                    StartupNotice.Unsupported
+                }
+
         /** Re-read after returning from system settings; the OS owns this setting. */
         suspend fun refreshStartOnLogin() {
             if (isUpdatingStartup) return
@@ -393,7 +401,7 @@ class NotificationSettingsState(
                     AutoLaunchState.DISABLED_BY_POLICY,
                     AutoLaunchState.ENABLED_BY_POLICY,
                     -> StartupNotice.ManagedByPolicy
-                    AutoLaunchState.UNSUPPORTED -> StartupNotice.Unsupported
+                    AutoLaunchState.UNSUPPORTED -> unsupportedStartupNotice
                     else -> null
                 }
         }
@@ -527,7 +535,7 @@ class NotificationSettingsState(
                                 when ((failure as? StartupRegistrationException)?.result) {
                                     AutoLaunchResult.BLOCKED_BY_USER -> StartupNotice.DisabledByUser
                                     AutoLaunchResult.BLOCKED_BY_POLICY -> StartupNotice.ManagedByPolicy
-                                    AutoLaunchResult.UNSUPPORTED -> StartupNotice.Unsupported
+                                    AutoLaunchResult.UNSUPPORTED -> unsupportedStartupNotice
                                     else -> StartupNotice.Unavailable(failure.message)
                                 }
                         }

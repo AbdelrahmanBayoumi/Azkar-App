@@ -106,6 +106,7 @@ java {
 }
 
 spotless {
+    val ktlintVersion = libs.findVersion("ktlint").get().requiredVersion
     // The repository stores LF and checks out LF — `.gitattributes` says so — so the formatter
     // asks for LF as well. Left to its default, Spotless takes the line endings from git's
     // configuration, which differs between a Linux and a Windows machine, and the two then
@@ -118,13 +119,13 @@ spotless {
     kotlin {
         target("src/**/*.kt")
         targetExclude("**/build/**")
-        ktlint()
+        ktlint(ktlintVersion)
     }
 
     kotlinGradle {
         target("*.gradle.kts")
         targetExclude("**/build/**")
-        ktlint()
+        ktlint(ktlintVersion)
     }
 }
 

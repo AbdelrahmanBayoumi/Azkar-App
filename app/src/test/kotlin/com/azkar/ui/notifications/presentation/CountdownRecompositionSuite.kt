@@ -24,6 +24,8 @@ import org.assertj.core.api.Assertions.assertThat
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val CountdownRecompositionSuite by testSuite("Notification countdown recomposition") {
     test("sampling a draining countdown does not recompose the rule") {
         runRecompositionTrackingUiTest {

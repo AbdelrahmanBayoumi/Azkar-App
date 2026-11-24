@@ -10,7 +10,10 @@ import org.assertj.core.api.Assertions.assertThat
  * The look-ahead is a promise about the future, and a promise the library cannot keep is worse than
  * no promise. These are the rules that keep it honest: the runtime's own cycle is asked first, the
  * library's order is the fallback, and a stale answer is never shown.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val QueuePreviewSuite by testSuite("Peeking at what the queue will say") {
     val morning = remembrance(id = 1L, text = "Whoever says good morning")
     val evening = remembrance(id = 2L, text = "Whoever says good evening")

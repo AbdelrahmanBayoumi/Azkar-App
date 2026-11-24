@@ -26,7 +26,10 @@ import org.assertj.core.api.Assertions.assertThat
  *
  * The fake below stands in for the database, so these tests are about ordering and nothing else. It
  * keeps just enough of a table to answer the lookups the service makes.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TagServiceSuite by testSuite("Tag names") {
     testSuite("create") {
         test("saves a tag the name is free for") {

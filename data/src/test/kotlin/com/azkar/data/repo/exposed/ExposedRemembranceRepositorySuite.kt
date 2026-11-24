@@ -13,7 +13,10 @@ import java.util.Locale
 /**
  * The query surface of the remembrance repository, exercised against a fixed three-row fixture
  * so every assertion can name the ids it expects instead of counting rows.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val ExposedRemembranceRepositorySuite by testSuite(
     "ExposedRemembranceRepository – repository behavior against an in-memory H2 DB",
 ) {

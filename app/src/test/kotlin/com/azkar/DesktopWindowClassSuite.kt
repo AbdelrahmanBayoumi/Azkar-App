@@ -22,7 +22,10 @@ import java.lang.reflect.Modifier
  *
  * `azkar.desktop.mainClass` is the value the build script hands the packager, so these
  * assertions run against the string the package will carry rather than a copy of it.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val DesktopWindowClassSuite by testSuite("The Linux desktop entry") {
     test("the packaged entry point is the class the launcher starts") {
         val entryPoint = Class.forName(packagedMainClass())

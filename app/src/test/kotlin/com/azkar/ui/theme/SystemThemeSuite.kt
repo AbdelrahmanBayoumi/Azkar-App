@@ -10,7 +10,10 @@ import org.assertj.core.api.Assertions.assertThat
  * deserves pinning down: what GNOME prints, what Plasma and GTK write, and the one value that means
  * "no preference" rather than "light". That last one is the trap — treating `'default'` as light
  * would silently contradict a desktop that is dark through some other route.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val SystemThemeSuite by testSuite("Reading the desktop's theme") {
     test("GNOME's quoted values are read as the palette they name") {
         assertThat("'prefer-dark'".gsettingsColorScheme()).isEqualTo(SystemTheme.DARK)
@@ -63,6 +66,8 @@ private val kdeConfig =
     ColorScheme=BreezeLight
     """.trimIndent()
 
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val IniValueSuite by testSuite("Reading a setting out of an INI file") {
     test("the first key that is present wins, however late the other one is") {
         assertThat(iniValue(kdeConfig, listOf("LookAndFeelPackage", "ColorScheme")))

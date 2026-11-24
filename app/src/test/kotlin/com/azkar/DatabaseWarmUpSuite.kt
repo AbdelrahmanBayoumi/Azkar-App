@@ -18,6 +18,8 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
  * or a real H2 file would have to be raced against.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val DatabaseWarmUpSuite by testSuite("The database warm-up") {
     test("the warm-up runs on the injected dispatcher, not on the caller") {
         runTest {

@@ -18,7 +18,10 @@ import java.util.Locale
  * that order is the one the reminder queue recites in, which is why the custom order does not hoist
  * a pinned card out of it: two different orders for the same shelf is how the app ends up promising
  * one thing and doing another.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionOrderSuite by testSuite("The order the user gives the library") {
     val older = Instant.parse("2025-12-01T08:00:00Z")
 

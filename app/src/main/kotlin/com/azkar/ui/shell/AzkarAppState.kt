@@ -176,7 +176,7 @@ class AzkarAppState(
      * written by something that forgets the write.
      */
     private fun updateTypography(transform: AppTypography.() -> AppTypography) {
-        typography = typography.transform().coerced()
+        typography = transform(typography).coerced()
         persistTypography(typography)
     }
 }

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 val StyleScope.colors: AzkarColors
     get() = LocalAzkarColors.currentValue
 
-val StyleScope.shapes: Shapes
+val shapes: Shapes
     get() = AzkarShapes
 
 /**

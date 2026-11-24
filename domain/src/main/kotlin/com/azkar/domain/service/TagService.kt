@@ -141,15 +141,8 @@ class TagService(
     /** Returns the live tag identified by [id], or `null` when [id] is `null`, unknown or deleted. */
     suspend fun findById(id: Long?): Tag? = repository.findById(id)
 
-    /** Returns the live tag named [name], or `null` when unknown or deleted. */
-    suspend fun findByNameIgnoreCase(name: String): Tag? = repository.findByNameIgnoreCase(name)
-
     /** Returns every live tag. */
     suspend fun findAll(): List<Tag> = repository.findAll()
-
-    /** Returns the live tags whose name contains [fragment]. */
-    suspend fun findByNameContainingIgnoreCase(fragment: String): List<Tag> =
-        repository.findByNameContainingIgnoreCase(fragment)
 
     /** Every live tag with its usage counts. */
     suspend fun findSummaries(): List<TagSummary> = repository.findSummaries()

@@ -14,7 +14,10 @@ import org.assertj.core.api.Assertions.assertThat
  * Arabic, Hebrew, Syriac and Thaana all report right-to-left through *different* platform constants,
  * and a check that names only one of them passes the suite while leaving the other three laid out
  * backwards.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val BidiDirectionSuite by testSuite("Which way a typed name should be laid out") {
     testSuite("a letter decides, whichever script it is written in") {
         test("Arabic is right to left") {

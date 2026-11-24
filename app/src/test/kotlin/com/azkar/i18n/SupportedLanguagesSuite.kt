@@ -11,7 +11,10 @@ import java.util.Locale
  * re-picking the language they are already on from rebuilding the tree, so its "language only, not
  * the region" rule is a deliberate decision rather than a shortcut. The language profiles also
  * supply layout direction and typeface choices, with English as the fallback for unsupported languages.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val SupportedLanguagesSuite by testSuite("The supported languages") {
     test("Arabic runs right to left and English does not") {
         assertThat(ARABIC.isRightToLeft).isTrue()

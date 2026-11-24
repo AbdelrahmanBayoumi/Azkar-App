@@ -22,7 +22,10 @@ import java.util.Locale
  * count while the reader is on page four, and the two obvious mistakes — an empty page with no
  * explanation, and a "next" arrow that walks off the end — are both reachable without a database
  * being wrong.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TagsStateSuite by testSuite("The tag vocabulary") {
     /** Stamped with a chosen date, so a "newest" assertion cannot drift with the clock. */
     fun summary(
@@ -646,7 +649,10 @@ val TagsStateSuite by testSuite("The tag vocabulary") {
  * reaches the words on screen, and the name sort orders by them — and both have to be handed the
  * display name explicitly, because the stored name is folded lower-case and is the tag's *identity*
  * rather than its label.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TranslatedTagsSuite by testSuite("A tag list reads in the language on screen") {
     val arabic = Locale.forLanguageTag("ar")
     val english = Locale.ENGLISH

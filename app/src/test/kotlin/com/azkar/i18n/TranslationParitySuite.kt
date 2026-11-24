@@ -27,7 +27,10 @@ import javax.xml.parsers.DocumentBuilderFactory
  *
  * The files are found by walking up from the working directory rather than by a hard-coded relative
  * path, so the suite survives being run from the repository root as well as from the module.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val TranslationParitySuite by testSuite("English and Arabic say the same set of things") {
 
     val english by lazy { Bundle.read(ENGLISH_FILE) }

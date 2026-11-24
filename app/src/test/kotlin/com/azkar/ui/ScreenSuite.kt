@@ -301,6 +301,8 @@ private fun withScreenContainer(block: () -> Unit) {
  * Everything is asserted through semantics and callbacks, never through pixels.
  */
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val ScreenSuite by testSuite("Screen smoke") {
     test("the library lists the collections the fixture holds") {
         screenTest {

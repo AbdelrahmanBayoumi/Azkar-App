@@ -1,8 +1,10 @@
 package com.azkar.ui.notifications
 
 import dev.nucleusframework.autolaunch.AutoLaunch
+import dev.nucleusframework.autolaunch.AutoLaunchConfig
 import dev.nucleusframework.autolaunch.AutoLaunchResult
 import dev.nucleusframework.autolaunch.AutoLaunchState
+import dev.nucleusframework.core.runtime.ExecutableRuntime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -19,10 +21,12 @@ class StartupRegistration internal constructor(
     ) -> AutoLaunchResult = { if (it) AutoLaunch.enable() else AutoLaunch.disable() },
     private val legacyPaths: List<Path> =
         if (System.getProperty("nucleus.app.id") == "com.azkar.app") legacyRegistrationPaths() else emptyList(),
-    private val packaged: Boolean = System.getProperty("nucleus.executable.type") != null,
+    private val packaged: Boolean = configurePackagedLauncher(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     private val mutex = Mutex()
+
+    internal val isDevelopmentBuild: Boolean get() = !packaged
 
     suspend fun state(): Result<AutoLaunchState> =
         withContext(ioDispatcher) {
@@ -35,7 +39,7 @@ class StartupRegistration internal constructor(
         withContext(ioDispatcher) {
             mutex.withLock {
                 runCatching {
-                    check(packaged) { "Start-on-login is available from the installed desktop app." }
+                    if (!packaged) throw StartupRegistrationException(AutoLaunchResult.UNSUPPORTED)
                     val result = changeEnabled(enabled)
                     if (result != AutoLaunchResult.OK && result != AutoLaunchResult.UNCHANGED) {
                         throw StartupRegistrationException(result)
@@ -96,6 +100,16 @@ class StartupRegistration internal constructor(
         Files.readString(path).lineSequence().none {
             it.trim() in setOf("Hidden=true", "X-GNOME-Autostart-enabled=false")
         }
+}
+
+private fun configurePackagedLauncher(): Boolean {
+    // jpackage supplies the actual launcher path even for an app image without installer metadata.
+    val launcher = System.getProperty("jpackage.app-path")
+    if (launcher.isNullOrBlank()) return !ExecutableRuntime.isDev()
+    if (DesktopPlatform.current == DesktopPlatform.WINDOWS) {
+        AutoLaunchConfig.executablePath = launcher
+    }
+    return true
 }
 
 internal val AutoLaunchState.isStartupEnabled: Boolean

@@ -13,7 +13,10 @@ import java.util.Locale
  * The value object the whole domain is built on, so these tests are really about the
  * normalisation and the defensive copying its constructor promises — everything downstream
  * assumes a `RemembranceImpl` is already trimmed, already copied, and already validated.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val RemembranceImplSuite by testSuite("A remembrance built through RemembranceImpl") {
     test("defaults every optional field when nothing is supplied") {
         val remembrance = RemembranceImpl()

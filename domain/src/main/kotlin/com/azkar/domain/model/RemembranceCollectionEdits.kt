@@ -38,13 +38,6 @@ fun RemembranceCollection.renamed(
 ): RemembranceCollection =
     rebuilt(name = name, description = description, translations = translations, nameLocale = nameLocale)
 
-/** A copy of this collection pointing at a different cover picture, or at none. */
-fun RemembranceCollection.withCoverImage(coverImagePath: String?): RemembranceCollection =
-    rebuilt(coverImagePath = coverImagePath)
-
-/** A copy of this collection carrying exactly [tags]. */
-fun RemembranceCollection.withTags(tags: Set<Tag>): RemembranceCollection = rebuilt(tags = tags)
-
 /**
  * A copy of this collection holding [remembrance] as a member.
  *

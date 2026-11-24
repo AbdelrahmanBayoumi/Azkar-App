@@ -56,6 +56,8 @@ private fun trackedHeaderTest(block: SkikoComposeUiTest.() -> Unit) {
 }
 
 @OptIn(ExperimentalTestApi::class)
+// TestBalloon generates the test entry point, but the IDE does not see that usage.
+@Suppress("unused")
 val HeaderLayoutSuite by testSuite("The header's controls land where it says they do") {
     test("the settings gear sits at the far end, clear of the centred tabs") {
         trackedHeaderTest {

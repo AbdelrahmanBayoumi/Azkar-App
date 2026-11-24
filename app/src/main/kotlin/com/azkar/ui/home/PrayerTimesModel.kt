@@ -12,9 +12,9 @@ import com.azkar.ui.notifications.PrayerLocationSettings
 import com.azkar.ui.notifications.PrayerTimeCalculator
 import org.jetbrains.compose.resources.getString
 import java.time.Duration
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Locale
 
 /** The five fixed prayers, in the order `PrayerTimesController.bindPrayerRows` inserted them. */
@@ -61,7 +61,7 @@ data class CountdownState(
 data class NextPrayer(
     val key: PrayerKey,
     val name: String,
-    val at: LocalDateTime,
+    val at: ZonedDateTime,
     val remaining: Duration,
 )
 
@@ -127,22 +127,8 @@ class PrayerTimesModel(
             }
     }
 
-    /**
-     * The next upcoming prayer for [now], or null before [load] has resolved the localized names.
-     *
-     * A second caller of the times — the tray countdown — needs the answer as data rather than as
-     * a formatted table. It goes through here so both surfaces can never disagree about which
-     * prayer is next or how long there is left of it: the moment chosen is the same moment, and
-     * `remaining` is measured against the same `now` the caller passed.
-     */
-    fun nextPrayer(now: LocalDateTime): NextPrayer? {
-        if (prayers.isEmpty()) return null
-        val calculatedTimes = PrayerTimeCalculator.calculate(now.toLocalDate(), location)
-        return computeNextPrayer(now, calculatedTimes)
-    }
-
     /** Resolves the next upcoming prayer and formats the whole table for [now]. */
-    fun snapshot(now: LocalDateTime): PrayerTimesSnapshot {
+    fun snapshot(now: ZonedDateTime): PrayerTimesSnapshot {
         if (prayers.isEmpty()) return EMPTY_SNAPSHOT
         val calculatedTimes = PrayerTimeCalculator.calculate(now.toLocalDate(), location)
         val next = computeNextPrayer(now, calculatedTimes)
@@ -164,24 +150,28 @@ class PrayerTimesModel(
         return PrayerTimesSnapshot(
             rows = rows,
             countdown = CountdownState(formatDuration(next.remaining), next.remaining),
+            nextPrayer = next,
         )
     }
 
     private fun computeNextPrayer(
-        now: LocalDateTime,
+        now: ZonedDateTime,
         calculatedTimes: Map<PrayerKey, LocalTime>,
     ): NextPrayer {
-        val moments =
-            prayers.flatMap { prayer ->
-                val today = LocalDateTime.of(now.toLocalDate(), calculatedTimes.getValue(prayer.key))
-                listOf(today to prayer, today.plusDays(1) to prayer)
-            }
-        val nearest =
-            moments
+        val today = now.toLocalDate()
+        val nextToday =
+            prayers
+                .map { prayer -> today.atTime(calculatedTimes.getValue(prayer.key)).atZone(now.zone) to prayer }
                 .filter { (at, _) -> !at.isBefore(now) }
                 .minByOrNull { (at, _) -> at }
-                ?: moments.first()
-        val (at, prayer) = nearest
+        val (at, prayer) =
+            nextToday ?: run {
+                val tomorrow = today.plusDays(1)
+                val tomorrowTimes = PrayerTimeCalculator.calculate(tomorrow, location)
+                prayers
+                    .map { prayer -> tomorrow.atTime(tomorrowTimes.getValue(prayer.key)).atZone(now.zone) to prayer }
+                    .minBy { (at, _) -> at }
+            }
         return NextPrayer(
             key = prayer.key,
             name = prayer.name,
@@ -207,11 +197,12 @@ class PrayerTimesModel(
     )
 }
 
-/** The full table plus the countdown, the two things the home screen renders. */
+/** Today's local schedule and the next upcoming occurrence. */
 @Immutable
 data class PrayerTimesSnapshot(
     val rows: List<PrayerRowState>,
     val countdown: CountdownState,
+    val nextPrayer: NextPrayer? = null,
 )
 
 /**
@@ -267,7 +258,7 @@ class PrayerTimesState(
         running = false
     }
 
-    fun tick(now: LocalDateTime = LocalDateTime.now(ZoneId.of(location.zoneId))) {
+    fun tick(now: ZonedDateTime = ZonedDateTime.now(ZoneId.of(location.zoneId))) {
         val fresh = model.snapshot(now)
         snapshot =
             if (notificationFlags.isEmpty()) {

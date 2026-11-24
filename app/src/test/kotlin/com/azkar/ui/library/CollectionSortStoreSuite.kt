@@ -18,7 +18,10 @@ import org.assertj.core.api.Assertions.assertThat
  * IO that would put a filesystem between the test and the thing it is testing. A round trip is a
  * second reader over the same settings rather than a copy of a file: the in-memory store has no
  * one-instance-per-file rule, so there is nothing to copy.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val CollectionSortStoreSuite by testSuite("The stored order of the library") {
     test("a fresh install opens on the fullest shelves first") {
         withInMemorySettings { _, store, _ ->

@@ -1,5 +1,5 @@
 #!/usr/bin/env -S bash scripts/release/kotlin.sh
-@file:DependsOn("io.ktor:ktor-client-mock-jvm:3.3.3")
+@file:DependsOn("io.ktor:ktor-client-mock-jvm:3.6.1")
 @file:Import("../release/release-rules.main.kts", "../release/github-client.main.kts")
 
 import io.ktor.client.engine.mock.MockEngine

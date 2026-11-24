@@ -13,7 +13,10 @@ import org.assertj.core.api.Assertions.assertThat
  *
  * Names are asserted in their stored, folded form — what comes back is lower case however it was
  * asked for. Capitalisation is the presentation layer's business.
+ *
+ * TestBalloon generates the test entry point, but the IDE does not see that usage.
  */
+@Suppress("unused")
 val ExposedTagRepositorySuite by testSuite("ExposedTagRepository") {
     exposedRepositories {
         test("save(): persists a new tag and returns it with the generated id") { repositories ->
