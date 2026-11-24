@@ -11,6 +11,7 @@ val distributionPaths =
         "scripts",
         "build-logic",
         "app/build.gradle.kts",
+        "app/packaging",
         "build.gradle.kts",
         "settings.gradle.kts",
         "gradle",
@@ -77,8 +78,9 @@ fun selfTest() {
         checkedGit("config", "user.name", "Test")
         checkedGit("config", "user.email", "test@example.invalid")
         Files.createDirectories(root.resolve("docs"))
-        Files.createDirectories(root.resolve("scripts/release"))
-        Files.writeString(root.resolve("scripts/release/package.txt"), "tested")
+        val installHook = root.resolve("app/packaging/linux/gnomeExtension/scripts/gnome-extension-after-install.sh")
+        Files.createDirectories(installHook.parent)
+        Files.writeString(installHook, "tested")
         checkedGit("add", ".")
         checkedGit("commit", "-qm", "tested sources")
         val commit = checkedGit("rev-parse", "HEAD")
@@ -94,7 +96,7 @@ fun selfTest() {
         Files.writeString(record, valid.replace(commit, "0".repeat(40)))
         check(runCatching { verifyEvidence(root) }.isFailure)
         Files.writeString(record, valid)
-        Files.writeString(root.resolve("scripts/release/package.txt"), "changed")
+        Files.writeString(installHook, "changed")
         checkedGit("add", ".")
         checkedGit("commit", "-qm", "changed packaging")
         check(runCatching { verifyEvidence(root) }.isFailure)

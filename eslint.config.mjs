@@ -3,12 +3,15 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   globalIgnores([
-    "app/src/gnomeExtension/dist/",
+    "app/packaging/linux/gnomeExtension/dist/",
     "site/build/",
     "site/test-results/",
   ]),
   {
-    files: ["app/src/gnomeExtension/*.ts", "site/src/**/*.{ts,tsx}"],
+    files: [
+      "app/packaging/linux/gnomeExtension/*.ts",
+      "site/src/**/*.{ts,tsx}",
+    ],
     extends: [tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
@@ -19,7 +22,7 @@ export default defineConfig(
   },
   {
     files: [
-      "app/src/gnomeExtension/tests/**/*.ts",
+      "app/packaging/linux/gnomeExtension/tests/**/*.ts",
       "site/tests/**/*.ts",
       "site/e2e/**/*.ts",
       "site/playwright.config.ts",

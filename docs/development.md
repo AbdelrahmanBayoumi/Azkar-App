@@ -53,7 +53,7 @@ Render the download page and README images independently of tests:
 
 `app/src/gallery/kotlin/com/azkar/Gallery.kt` renders six scenes in both themes directly into
 `site/public/images/` using Roborazzi's Compose Desktop capture API. Gallery-only fixtures live under
-`app/src/galleryFixtures/`. The generator uses Compose's UI-test renderer without running a test
+`app/src/preview/galleryFixtures/`. The generator uses Compose's UI-test renderer without running a test
 suite. The release workflow uploads these freshly rendered images and publishes them to the site;
 the README uses the same hosted files.
 
@@ -91,7 +91,7 @@ Capture all Compose previews outside the IDE and update the committed images:
 ```
 
 The scanner covers private previews in `com.azkar.ui`, applies each preview's theme, locale, and
-size, and writes WebP images under `app/src/previewImages/`. Commit those generated images
+size, and writes WebP images under `app/src/preview/images/`. Commit those generated images
 with UI changes so their visual differences appear in GitHub. This is capture-only; no task compares
 the preview images against a baseline. Previews that open native desktop windows are included too.
 
@@ -110,7 +110,7 @@ Capture the GNOME extension's schedule and actions menus on Linux with GNOME She
 ```
 
 The task uses the bundled extension and fixture prayer data in an isolated GNOME Shell session.
-It writes `gnome-prayer-schedule.png` and `gnome-prayer-actions.png` to `app/src/previewImages/`.
+It writes `gnome-prayer-schedule.png` and `gnome-prayer-actions.png` to `app/src/preview/images/`.
 
 ## Project layout
 

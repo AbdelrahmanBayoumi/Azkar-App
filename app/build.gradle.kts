@@ -195,7 +195,7 @@ if (previewScannerEnabled) {
 }
 
 roborazzi {
-    outputDir.set(layout.projectDirectory.dir("src/previewImages"))
+    outputDir.set(layout.projectDirectory.dir("src/preview/images"))
     @OptIn(com.github.takahirom.roborazzi.ExperimentalRoborazziApi::class)
     generateComposePreviewDesktopTests {
         // Preview captures are committed for review, but are never compared as test goldens.
@@ -257,9 +257,9 @@ val gallery =
     }
 configurations[gallery.implementationConfigurationName].extendsFrom(configurations.implementation.get())
 kotlin {
-    sourceSets.named("test") { kotlin.srcDir("src/previewShared/kotlin") }
+    sourceSets.named("test") { kotlin.srcDir("src/preview/shared/kotlin") }
     sourceSets.named("gallery") {
-        kotlin.srcDirs("src/galleryFixtures/kotlin", "src/previewShared/kotlin")
+        kotlin.srcDirs("src/preview/galleryFixtures/kotlin", "src/preview/shared/kotlin")
     }
     target.compilations.named("gallery") { associateWith(target.compilations.getByName("main")) }
 }
@@ -323,7 +323,7 @@ compose.resources {
 // are load-bearing; everything below is covered by a broader rule.
 val alreadyKeptProviders =
     listOf(
-        // app/proguard-rules.pro
+        // app/packaging/proguard-rules.pro
         "ch.qos.logback.",
         "io.ktor.",
         "org.h2.",
@@ -414,7 +414,7 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
             commandLine(
                 rootProject.file("scripts/dev/capture-gnome-panel"),
                 resources.get().destinationDir.resolve("gnome/azkar-prayers@azkar.app"),
-                layout.projectDirectory.dir("src/previewImages").asFile,
+                layout.projectDirectory.dir("src/preview/images").asFile,
             )
         }
     }
@@ -433,9 +433,9 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
             )
         }
     val iconShape = Regex("<(path|line|rect|circle|polyline|polygon|ellipse) ")
-    val shellExtension = layout.projectDirectory.dir("src/desktopResources/linux/gnome")
     val extensionVersion = version.toString()
-    val extensionSource = layout.projectDirectory.dir("src/gnomeExtension")
+    val extensionSource = layout.projectDirectory.dir("packaging/linux/gnomeExtension")
+    val extensionResources = extensionSource.dir("resources")
     val extensionOutput = layout.buildDirectory.dir("generated/gnomeExtension")
     val extensionWorkspace = layout.buildDirectory.dir("gnomeExtension")
     val workspaceRoot = rootProject.layout.projectDirectory
@@ -451,10 +451,10 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
                 "-ec",
                 """
                 rm -rf -- "$2" "$3"
-                mkdir -p "$2/app/src/gnomeExtension" "$2/site"
+                mkdir -p "$2/app/packaging/linux/gnomeExtension" "$2/site"
                 cp "$4/package.json" "$4/pnpm-workspace.yaml" "$4/pnpm-lock.yaml" "$2/"
                 cp "$4/site/package.json" "$2/site/"
-                cp "$1"/*.ts "$1"/tsconfig.json "$1"/package.json "$2/app/src/gnomeExtension/"
+                cp "$1"/*.ts "$1"/tsconfig.json "$1"/package.json "$2/app/packaging/linux/gnomeExtension/"
                 cd "$2"
                 pnpm --filter azkar-tooling --filter azkar-gnome-extension install --frozen-lockfile --ignore-scripts
                 pnpm --filter azkar-gnome-extension run build --outDir "$3"
@@ -475,10 +475,13 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
         if (name == "prepareAppResources") {
             inputs.property("gnomeSymbolicIconFormat", "stroke-mask")
             inputs.property("gnomeExtensionVersion", extensionVersion)
-            filesMatching("gnome/azkar-prayers@azkar.app/metadata.json") {
-                val versionName = JsonOutput.toJson(extensionVersion)
-                filter { line: String ->
-                    line.replace("\"version-name\": \"development\"", "\"version-name\": $versionName")
+            from(extensionResources) {
+                into("gnome/azkar-prayers@azkar.app")
+                filesMatching("metadata.json") {
+                    val versionName = JsonOutput.toJson(extensionVersion)
+                    filter { line: String ->
+                        line.replace("\"version-name\": \"development\"", "\"version-name\": $versionName")
+                    }
                 }
             }
             from(panelIcons) {
@@ -508,7 +511,7 @@ if (providers.systemProperty("os.name").orNull.equals("Linux", ignoreCase = true
     tasks.matching { it.name in setOf("createDistributable", "createReleaseDistributable") }.configureEach {
         // Nucleus 2.5.18 treats appResourcesDir as internal on the jpackage task.
         inputs.property("gnomeExtensionVersion", extensionVersion)
-        inputs.dir(shellExtension).withPathSensitivity(PathSensitivity.RELATIVE)
+        inputs.dir(extensionResources).withPathSensitivity(PathSensitivity.RELATIVE)
         inputs.files(compileGnomeExtension).withPathSensitivity(PathSensitivity.RELATIVE)
         inputs.files(panelIcons).withPathSensitivity(PathSensitivity.RELATIVE)
         inputs.file(linuxIcon).withPathSensitivity(PathSensitivity.NONE)
@@ -531,13 +534,12 @@ nucleus.application {
                 isEnabled.set(true)
                 optimize.set(false)
                 obfuscate.set(false)
-                configurationFiles.from(project.file("proguard-rules.pro"))
+                configurationFiles.from(project.file("packaging/proguard-rules.pro"))
                 configurationFiles.from(collectProguardRules)
             }
         }
     }
     nativeDistributions {
-        appResourcesRootDir.set(layout.projectDirectory.dir("src/desktopResources"))
         modules("java.sql", "java.naming")
         if (installerPlatform.os == "linux") {
             // The session D-Bus transport reads the Unix UID for SASL EXTERNAL authentication.
@@ -574,8 +576,8 @@ nucleus.application {
             debMaintainer = "Azkar <support@azkar.app>"
             debPackageVersion = fullVersion
             rpmPackageVersion = nativePackageVersion
-            afterInstall.set(rootProject.file("packaging/linux/gnome-extension-after-install.sh"))
-            afterRemove.set(rootProject.file("packaging/linux/gnome-extension-after-remove.sh"))
+            afterInstall.set(project.file("packaging/linux/gnomeExtension/scripts/gnome-extension-after-install.sh"))
+            afterRemove.set(project.file("packaging/linux/gnomeExtension/scripts/gnome-extension-after-remove.sh"))
         }
         windows {
             iconFile.set(project.file("../assets/icons/azkar.ico"))

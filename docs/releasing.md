@@ -12,6 +12,8 @@ Linux repositories have Stable and Dev suites and retain only the newest package
 
 ## Local packaging
 
+The Linux DEB and RPM install and removal hooks live in `app/packaging/linux/gnomeExtension/scripts/`. The release shrinker rules live in `app/packaging/proguard-rules.pro`.
+
 Use JDK 25 (Zulu in CI; ProGuard needs `jmods`). Nucleus packages on the matching host OS:
 
 On Ubuntu/Debian, install the RPM build tool before building the full Linux format set:
@@ -40,7 +42,7 @@ Linux CI packages DEB, RPM and AppImage; Windows CI packages NSIS; macOS CI pack
 
 The release merger requires all eight platform/format artifacts and checks their exact versioned filenames, channel, manifest coverage, sizes and SHA-512 hashes. Duplicate filenames, missing architectures, unsafe URLs and unexpected files fail validation before output is written. Windows NSIS filenames include the Nucleus `-nsis` suffix, for example `azkar-0.1.2-windows-x64-nsis.exe`. Native EXE metadata may contain the numeric base version; macOS bundle versions offset the major by one (app 0.1.2 → bundle 1.1.2) because jpackage requires a positive major. App UI/JVM version and artifact names keep the original version; final update manifests always carry the full release version. Run its fixture tests with `./scripts/release/merge_nucleus_release.main.kts self-test` (requires `kotlinc`).
 
-The Linux packages include the Azkar GNOME Shell extension. DEB and RPM register the bundled files system-wide. AppImage installs a user copy when the prayer panel is enabled. If GNOME has yet to discover the files, sign out and back in, then launch Azkar. The panel uses AppIndicator while the extension is unavailable and respects an explicit disable in GNOME. Linux packaging requires Bun and pnpm to build the extension from `app/src/gnomeExtension`. Gradle installs the locked dependencies with pnpm, runs TypeScript with Bun, and bundles the generated `extension.js`. The extension and website use the shared [TypeScript workspace](development.md#typescript-workspace) for local checks and formatting.
+The Linux packages include the Azkar GNOME Shell extension. DEB and RPM register the bundled files system-wide. AppImage installs a user copy when the prayer panel is enabled. If GNOME has yet to discover the files, sign out and back in, then launch Azkar. The panel uses AppIndicator while the extension is unavailable and respects an explicit disable in GNOME. Linux packaging requires Bun and pnpm to build the extension from `app/packaging/linux/gnomeExtension`. Gradle installs the locked dependencies with pnpm, runs TypeScript with Bun, and bundles the generated `extension.js`. The extension and website use the shared [TypeScript workspace](development.md#typescript-workspace) for local checks and formatting.
 
 Linux staging also checks the actual DEB/RPM internal versions and architectures. Both use `~beta.N` internally so Dev sorts below the next Stable version. The RPM task receives the full SemVer through Nucleus's public task API because its DSL validator rejects prereleases before electron-builder can convert them. Packaging regenerates each format's working directory because Nucleus 2.5.18 otherwise reuses an existing `package.json` and fallback manifest across versions.
 

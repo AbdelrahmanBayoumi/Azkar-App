@@ -2,8 +2,8 @@
   "overrides": [
     {
       "files": [
-        "app/src/gnomeExtension/**/*.ts",
-        "app/src/desktopResources/linux/gnome/azkar-prayers@azkar.app/stylesheet.css"
+        "app/packaging/linux/gnomeExtension/**/*.ts",
+        "app/packaging/linux/gnomeExtension/resources/stylesheet.css"
       ],
       "options": {
         "printWidth": 120,
@@ -12,7 +12,7 @@
       }
     },
     {
-      "files": "app/src/gnomeExtension/*.json",
+      "files": "app/packaging/linux/gnomeExtension/*.json",
       "options": {
         "printWidth": 120
       }
