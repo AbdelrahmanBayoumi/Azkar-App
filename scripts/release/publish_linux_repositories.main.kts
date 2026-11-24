@@ -202,7 +202,9 @@ fun copyWebsite(
 ) {
     val required = listOf("download.html", "css/download.css", "js/theme.js", "js/download.js")
     required.forEach { asset ->
-        require(Files.isRegularFile(website.resolve(asset))) { "Website asset missing: $asset. Run bun run build in site/." }
+        require(
+            Files.isRegularFile(website.resolve(asset)),
+        ) { "Website asset missing: $asset. Run bun run build in site/." }
     }
     listOf("css", "js", "images").forEach { directory ->
         copyDirectory(website.resolve(directory), pages.resolve(directory))
@@ -271,7 +273,8 @@ fun selfTest() {
         check(runCatching { channelPackages("stable", stable) }.isFailure)
         val website = root.resolve("website")
         val pages = Files.createDirectories(root.resolve("pages"))
-        val publicFiles = listOf("download.html", "css/download.css", "js/theme.js", "js/download.js", "images/preview.webp")
+        val publicFiles =
+            listOf("download.html", "css/download.css", "js/theme.js", "js/download.js", "images/preview.webp")
         (publicFiles + listOf("src/download.ts", "node_modules/dependency/index.js", "package.json")).forEach { name ->
             val file = website.resolve(name)
             Files.createDirectories(file.parent)
